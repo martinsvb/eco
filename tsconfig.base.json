@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "*": ["node_modules/@types/*", "node_modules/*"],
       "@eco/config": ["libs/config/src/index.ts"],
       "@eco/types": ["libs/types/src/index.ts"]
     },
