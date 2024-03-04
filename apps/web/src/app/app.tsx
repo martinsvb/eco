@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AccountCmp } from './AccountCmp';
-import { api } from '@eco/config';
+import { endPoints } from '@eco/config';
 import { Account } from '@prisma/client';
+import { AccountCmp } from './AccountCmp';
 import { AccountsCmp } from './AccountsCmp';
 import { SocketCmp } from './SocketCmp';
 import { GoogleAccount } from './GoogleLogin';
@@ -23,7 +23,7 @@ export function App() {
   useEffect(() => {
     const loadAccount = async () => {
       try {
-        const response = await fetch(api.account);
+        const response = await fetch(`/api/${endPoints.account}`);
         const data = await response.json();
         console.log({ data, status: response.status });
         setAccount(data);
@@ -33,7 +33,7 @@ export function App() {
     };
     const loadAccounts = async () => {
       try {
-        const response = await fetch(api.accounts);
+        const response = await fetch(`/api/${endPoints.accounts}`);
         const data = await response.json();
         console.log({ data, status: response.status });
         setAccounts(data);
@@ -43,7 +43,7 @@ export function App() {
     };
     const loadUsers = async () => {
       try {
-        const response = await fetch(api.users, {
+        const response = await fetch(`/api/${endPoints.users}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

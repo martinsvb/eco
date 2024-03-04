@@ -1,4 +1,4 @@
-import { api } from '@eco/config';
+import { endPoints } from '@eco/config';
 import { GoogleLogin } from '@react-oauth/google';
 
 export const GoogleAccount = () => {
@@ -6,7 +6,7 @@ export const GoogleAccount = () => {
     <GoogleLogin
       onSuccess={async ({ credential }) => {
         try {
-          const response = await fetch(api.loginGoogle, {
+          const response = await fetch(`/api/${endPoints.loginGoogle}`, {
             method: 'POST',
             body: JSON.stringify({ token: credential }),
             headers: {

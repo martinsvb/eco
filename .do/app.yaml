@@ -23,7 +23,7 @@ services:
     run_command: node dist/apps/api/main.js
     http_port: 3333
     routes:
-      - path: /
+      - path: /api
     cors:
       allow_origins:
         - regex: .*
