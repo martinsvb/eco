@@ -7,11 +7,13 @@ import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
-import { apiPrefix, prismaExceptions } from '@eco/config';
+import { prismaExceptions } from '@eco/config';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const apiPrefix = process.env.NODE_ENV === 'development' ? 'api' : '';
 
   app.setGlobalPrefix(apiPrefix);
   const port = process.env.PORT || 3010;
