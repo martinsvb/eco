@@ -1,0 +1,47 @@
+name: Setup CI
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cancel previous runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Increase watcher limit
+      shell: bash
+      run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      uses: nrwl/nx-set-shas@v2
+      with:
+        main-branch-name: master
+
+    - name: Inject Nx Cloud token
+      shell: bash
+      env:
+        nx_cloud_token: ${{ secrets.NX_CLOUD_TOKEN }}
+      run: sed -i "s/nx_cloud_token/$nx_cloud_token/" $GITHUB_WORKSPACE/nx.json
+
+    - name: Setup node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 20.11.1
+
+    - name: Cache dependencies
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ./node_modules
+        key: modules-${{ hashFiles('package-lock.json') }}
+
+    - name: Install npm packages
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: npm i
