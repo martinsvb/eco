@@ -1,4 +1,4 @@
-name: stator
+name: eco
 
 static_sites:
   - name: web
