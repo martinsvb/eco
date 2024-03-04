@@ -5,7 +5,6 @@ import { Account } from '@prisma/client';
 import { AccountsCmp } from './AccountsCmp';
 import { SocketCmp } from './SocketCmp';
 import { GoogleAccount } from './GoogleLogin';
-import GoogleMaps from './GoogleMaps';
 import { token } from '../socket';
 
 export function App() {
@@ -62,7 +61,6 @@ export function App() {
       <AccountsCmp accounts={accounts} />
       <SocketCmp />
       <GoogleAccount />
-      {/* <GoogleMaps /> */}
     </div>
   );
 }
