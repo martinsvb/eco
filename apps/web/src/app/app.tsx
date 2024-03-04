@@ -62,7 +62,7 @@ export function App() {
       <AccountsCmp accounts={accounts} />
       <SocketCmp />
       <GoogleAccount />
-      <GoogleMaps />
+      {/* <GoogleMaps /> */}
     </div>
   );
 }
