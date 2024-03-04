@@ -24,7 +24,9 @@ export function App() {
     const loadAccount = async () => {
       try {
         const response = await fetch(api.account);
-        setAccount(await response.json());
+        const data = await response.json();
+        console.log({ data, status: response.status });
+        setAccount(data);
       } catch (error) {
         console.log({ error });
       }
@@ -32,7 +34,9 @@ export function App() {
     const loadAccounts = async () => {
       try {
         const response = await fetch(api.accounts);
-        setAccounts(await response.json());
+        const data = await response.json();
+        console.log({ data, status: response.status });
+        setAccounts(data);
       } catch (error) {
         console.log({ error });
       }
