@@ -1,0 +1,33 @@
+name: stator
+
+static_sites:
+  - name: web
+    environment_slug: html
+    github:
+      repo: martinsvb/eco
+      branch: master
+      deploy_on_push: true
+    build_command: npx nx build web
+    output_dir: /dist/apps/web
+    routes:
+      - path: /
+
+services:
+  - name: api
+    environment_slug: node-js
+    github:
+      repo: martinsvb/eco
+      branch: master
+      deploy_on_push: true
+    build_command: npx nx build api
+    run_command: node dist/apps/api/main.js
+    http_port: 3333
+    routes:
+      - path: /api
+    cors:
+      allow_origins:
+        - regex: .*
+
+databases:
+  - name: database
+    engine: PG
