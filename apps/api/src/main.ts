@@ -13,20 +13,22 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const apiPrefix = 'api';
+  const apiPrefix = process.env.NODE_ENV === 'development' ? 'api' : '';
 
   app.setGlobalPrefix(apiPrefix);
   const port = process.env.PORT || 3010;
 
-  const config = new DocumentBuilder()
-    .setTitle('Eco api')
-    .setDescription('The Eco API description')
-    .setVersion('1.0')
-    .addTag('Eco')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('documentation', app, document);
+  if (process.env.NODE_ENV === 'development') {
+    const config = new DocumentBuilder()
+      .setTitle('Eco api')
+      .setDescription('The Eco API description')
+      .setVersion('1.0')
+      .addTag('Eco')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup(apiPrefix, app, document);
+  }
 
   app.use(
     helmet({
