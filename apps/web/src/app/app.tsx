@@ -23,7 +23,7 @@ export function App() {
   useEffect(() => {
     const loadAccount = async () => {
       try {
-        const response = await fetch(endPoints.account);
+        const response = await fetch(`/api/${endPoints.account}`);
         const data = await response.json();
         console.log({ data, status: response.status });
         setAccount(data);
@@ -33,7 +33,7 @@ export function App() {
     };
     const loadAccounts = async () => {
       try {
-        const response = await fetch(endPoints.accounts);
+        const response = await fetch(`/api/${endPoints.accounts}`);
         const data = await response.json();
         console.log({ data, status: response.status });
         setAccounts(data);
@@ -43,7 +43,7 @@ export function App() {
     };
     const loadUsers = async () => {
       try {
-        const response = await fetch(endPoints.users, {
+        const response = await fetch(`/api/${endPoints.users}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
