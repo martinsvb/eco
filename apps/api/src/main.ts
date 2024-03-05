@@ -13,7 +13,7 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const apiPrefix = process.env.NODE_ENV === 'development' ? 'api' : '';
+  const apiPrefix = 'api';
 
   app.setGlobalPrefix(apiPrefix);
   const port = process.env.PORT || 3010;
@@ -26,7 +26,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/documentation', app, document);
+  SwaggerModule.setup('documentation', app, document);
 
   app.use(
     helmet({
