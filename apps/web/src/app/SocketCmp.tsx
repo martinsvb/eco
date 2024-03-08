@@ -48,7 +48,7 @@ export const SocketCmp = () => {
   );
 
   return (
-    <div>
+    <div style={{marginBottom: '8px'}}>
       <h2>Socket connection</h2>
       <p>Connected: {isConnected ? 'Y' : 'N'}</p>
       <div style={{ display: 'flex' }}>

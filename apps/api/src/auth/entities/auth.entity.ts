@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
 
 export class AuthEntity {
   @ApiProperty({ description: 'Application access token' })

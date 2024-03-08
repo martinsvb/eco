@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -19,18 +20,42 @@ export class AuthController {
 
   @Post('login')
   @ApiOkResponse({ type: AuthEntity })
-  login(@Body() { email, password }: LoginDto) {
-    return this.authService.login(email, password);
+  async login(@Res() res: Response, @Body() { email, password }: LoginDto) {
+    const { authEntity, refreshToken } = await this.authService.login(email, password);
+
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict'
+      }
+    );
+
+    res.send(authEntity);
   }
 
   @Post('/login-google')
   @ApiOkResponse({ type: AuthEntity })
-  async loginGoogle(@Body('token') token) {
+  async loginGoogle(@Res() res: Response, @Body('token') token) {
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    return this.authService.loginGoogle(ticket.getPayload());
+    const { authEntity, refreshToken } = await this.authService.loginGoogle(ticket.getPayload());
+
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict'
+      }
+    );
+
+    res.send(authEntity);
   }
 
   @Get('user')

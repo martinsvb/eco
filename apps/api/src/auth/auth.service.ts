@@ -11,6 +11,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { User } from '@prisma/client';
 import { TokenPayload } from 'google-auth-library';
 import { UserOrigins } from '@eco/types';
+import { v4 as uuidv4 } from 'uuid';
 import { AuthEntity } from './entities/auth.entity';
 import { LoginDto } from './dto/login.dto';
 import { VerifyDto } from './dto/verify.dto';
@@ -27,7 +28,11 @@ export class AuthService {
     return this.jwtService.sign({ userId: id, isEmailConfirmed })
   }
 
-  async login(email: string, password: string): Promise<AuthEntity> {
+  getRefreshToken(userId: string) {
+    return this.jwtService.sign({ id: userId, tokenId: uuidv4() }, { expiresIn: '7d' });
+  }
+
+  async login(email: string, password: string): Promise<{authEntity: AuthEntity, refreshToken: string}> {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -41,9 +46,12 @@ export class AuthService {
     }
 
     return {
-      accessToken: this.getAccessToken(user),
-      name: user.name,
-      picture: user.picture,
+      authEntity: {
+        accessToken: this.getAccessToken(user),
+        name: user.name,
+        picture: user.picture,
+      },
+      refreshToken: this.getRefreshToken(user.id)
     };
   }
 
@@ -51,7 +59,7 @@ export class AuthService {
     email,
     name,
     picture,
-  }: TokenPayload): Promise<AuthEntity> {
+  }: TokenPayload): Promise<{authEntity: AuthEntity, refreshToken: string}> {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
@@ -71,9 +79,12 @@ export class AuthService {
     }
 
     return {
-      accessToken: this.getAccessToken(user),
-      name: user.name,
-      picture: user.picture,
+      authEntity: {
+        accessToken: this.getAccessToken(user),
+        name: user.name,
+        picture: user.picture,
+      },
+      refreshToken: this.getRefreshToken(user.id)
     };
   }
 
@@ -107,10 +118,7 @@ export class AuthService {
   async signIn(user: User) {
     return {
       loggedInUser: user,
-      access_token: this.jwtService.sign({
-        email: user.email,
-        name: user.name,
-      }),
+      accessToken: this.getAccessToken(user),
     };
   }
 

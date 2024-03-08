@@ -5,7 +5,7 @@ import { AccountCmp } from './AccountCmp';
 import { AccountsCmp } from './AccountsCmp';
 import { SocketCmp } from './SocketCmp';
 import { GoogleAccount } from './GoogleLogin';
-import { token } from '../socket';
+import { Login } from './Login';
 
 export function App() {
   const [account, setAccount] = useState<Account>({
@@ -25,7 +25,6 @@ export function App() {
       try {
         const response = await fetch(`/api/${endPoints.account}`);
         const data = await response.json();
-        console.log({ data, status: response.status });
         setAccount(data);
       } catch (error) {
         console.log({ error });
@@ -35,28 +34,13 @@ export function App() {
       try {
         const response = await fetch(`/api/${endPoints.accounts}`);
         const data = await response.json();
-        console.log({ data, status: response.status });
         setAccounts(data);
-      } catch (error) {
-        console.log({ error });
-      }
-    };
-    const loadUsers = async () => {
-      try {
-        const response = await fetch(`/api/${endPoints.users}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        console.log({ data, status: response.status });
       } catch (error) {
         console.log({ error });
       }
     };
     loadAccount();
     loadAccounts();
-    loadUsers();
   }, []);
 
   return (
@@ -65,6 +49,7 @@ export function App() {
       <AccountsCmp accounts={accounts} />
       <SocketCmp />
       <GoogleAccount />
+      <Login />
     </div>
   );
 }
