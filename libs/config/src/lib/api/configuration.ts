@@ -1,4 +1,4 @@
-export enum HTTP_METHODS {
+export enum METHODS {
   GET = 'GET',
   POST = 'POST',
   PATCH = 'PATCH',
@@ -22,14 +22,15 @@ const baseHeaders = {
   "Content-Type": "application/json",
 }
 
-export const prepareFetchHeaders = <T>(
-  method: HTTP_METHODS,
+export const getHeaders = <T>(
+  method: METHODS,
   {body, signal, token}: {
     body?: T,
     signal?: RequestInit["signal"],
     token?: string
   },
 ) => {
+
   return {
     method,
     body: JSON.stringify(body),

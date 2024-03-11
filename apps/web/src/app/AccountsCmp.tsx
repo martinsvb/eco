@@ -1,37 +1,23 @@
-import { endPoints } from '@eco/config';
-import { useShallowEqualSelector, selectAccessToken } from '@eco/redux';
-import { Account } from '@prisma/client';
-import { useState, MouseEventHandler, useCallback } from 'react';
-import { prepareFetchHeaders, HTTP_METHODS } from '../api/configuration';
-import { checkResponse } from '../api/error/checkResponse';
+import { useShallowEqualSelector, useAppDispatch, selectAccounts, accountsApiThunk } from '@eco/redux';
+import { MouseEventHandler, useCallback } from 'react';
 
 export const AccountsCmp = () => {
-  const token = useShallowEqualSelector(selectAccessToken);
+  const dispatch = useAppDispatch();
 
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const accounts = useShallowEqualSelector(selectAccounts)
 
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
       event.preventDefault();
 
-      try {
-        const response = await fetch(
-          `/api/${endPoints.accounts}`,
-          prepareFetchHeaders(HTTP_METHODS.GET, {token})
-        );
-
-        checkResponse(response);
-        setAccounts(await response.json());
-      } catch (error) {
-        console.log({ error });
-      }
+      dispatch(accountsApiThunk());
     },
-    [token]
+    [dispatch]
   );
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', width: '200px', marginBottom: '8px', justifyContent: 'space-between'}}>
-      <button type="submit" disabled={!token} onClick={handleSubmit}>
+      <button type="submit" onClick={handleSubmit}>
         Load accounts
       </button>
       {accounts.length > 0 &&

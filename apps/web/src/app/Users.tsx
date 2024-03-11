@@ -1,9 +1,7 @@
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { User } from '@prisma/client';
-import { endPoints } from '@eco/config';
+import { METHODS, checkResponse, endPoints, getHeaders } from '@eco/config';
 import { selectAccessToken, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
-import { prepareFetchHeaders, HTTP_METHODS } from '../api/configuration';
-import { checkResponse } from '../api/error/checkResponse';
 
 export const Users = () => {
 
@@ -20,7 +18,7 @@ export const Users = () => {
       try {
         const response = await fetch(
           `/api/${endPoints.users}`,
-          prepareFetchHeaders(HTTP_METHODS.GET, {token})
+          getHeaders(METHODS.GET, {token})
         );
 
         checkResponse(response);

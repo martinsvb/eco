@@ -1,9 +1,5 @@
 import { ChangeEventHandler, MouseEventHandler, useCallback, useState } from 'react';
-import { endPoints } from '@eco/config';
-import { setUserAuth, useAppDispatch } from '@eco/redux';
-import { Auth } from '@eco/types';
-import { prepareFetchHeaders, HTTP_METHODS } from '../api/configuration';
-import { checkResponse } from '../api/error/checkResponse';
+import { loginApiThunk, useAppDispatch } from '@eco/redux';
 
 export const Login = () => {
 
@@ -20,21 +16,7 @@ export const Login = () => {
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
       event.preventDefault();
-
-      try {
-        const response = await fetch(
-          `/api/${endPoints.login}`,
-          prepareFetchHeaders(HTTP_METHODS.POST, {body: loginData})
-        );
-
-        checkResponse(response);
-
-        const data: Auth = await response.json();
-
-        dispatch(setUserAuth(data));
-      } catch (error) {
-        console.log({ error });
-      }
+      dispatch(loginApiThunk(loginData));
     },
     [dispatch, loginData]
   );
