@@ -1,14 +1,17 @@
+import { MouseEventHandler, useCallback, useState } from 'react';
+import { User } from '@prisma/client';
 import { endPoints } from '@eco/config';
-import { useShallowEqualSelector, selectAccessToken } from '@eco/redux';
-import { Account } from '@prisma/client';
-import { useState, MouseEventHandler, useCallback } from 'react';
+import { selectAccessToken, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { prepareFetchHeaders, HTTP_METHODS } from '../api/configuration';
 import { checkResponse } from '../api/error/checkResponse';
 
-export const AccountsCmp = () => {
+export const Users = () => {
+
   const token = useShallowEqualSelector(selectAccessToken);
 
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const dispatch = useAppDispatch();
 
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
@@ -16,26 +19,27 @@ export const AccountsCmp = () => {
 
       try {
         const response = await fetch(
-          `/api/${endPoints.accounts}`,
+          `/api/${endPoints.users}`,
           prepareFetchHeaders(HTTP_METHODS.GET, {token})
         );
 
         checkResponse(response);
-        setAccounts(await response.json());
+        setUsers(await response.json());
       } catch (error) {
         console.log({ error });
       }
     },
-    [token]
+    [dispatch, token]
   );
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', width: '200px', marginBottom: '8px', justifyContent: 'space-between'}}>
+    <div style={{display: 'flex', flexDirection: 'column', width: '200px', justifyContent: 'space-between'}}>
       <button type="submit" disabled={!token} onClick={handleSubmit}>
-        Load accounts
+        Load users
       </button>
-      {accounts.length > 0 &&
-        <div><pre>{JSON.stringify(accounts, undefined, 2)}</pre></div>
+
+      {users.length > 0 &&
+        <div><pre>{JSON.stringify(users, undefined, 2)}</pre></div>
       }
     </div>
   );

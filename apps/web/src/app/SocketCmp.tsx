@@ -1,8 +1,26 @@
 import { useState, useEffect, useCallback, MouseEventHandler } from 'react';
-import { socket } from '../socket';
+import { io } from 'socket.io-client';
 import { events } from '@eco/config';
+import { URL } from '../socket';
 
-export const SocketCmp = () => {
+interface SocketCmpProps {
+  accessToken: string;
+}
+
+export const SocketCmp = ({accessToken}: SocketCmpProps) => {
+
+  const socket = io(URL, {
+    autoConnect: false,
+    path: '',
+    transportOptions: {
+      polling: {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    },
+  });
+
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [value, setValue] = useState('');
 

@@ -17,6 +17,7 @@
     "paths": {
       "*": ["node_modules/@types/*", "node_modules/*"],
       "@eco/config": ["libs/config/src/index.ts"],
+      "@eco/redux": ["libs/redux/src/index.ts"],
       "@eco/types": ["libs/types/src/index.ts"]
     },
     "types": ["node"]

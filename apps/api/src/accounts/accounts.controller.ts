@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -19,6 +20,8 @@ import {
 } from '@nestjs/swagger';
 import { endPoints } from '@eco/config';
 import { AccountEntity } from './entities/account.entity';
+import { EmailGuard } from '../auth/email.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @ApiTags('Accounts')
 @Controller(endPoints.accounts)
@@ -26,6 +29,7 @@ export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiCreatedResponse({ type: AccountEntity })
   @ApiResponse({
     status: 201,
@@ -38,6 +42,7 @@ export class AccountsController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiOkResponse({ type: AccountEntity, isArray: true })
   @ApiResponse({
     status: 200,
@@ -49,6 +54,7 @@ export class AccountsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiOkResponse({ type: AccountEntity })
   @ApiResponse({
     status: 200,
@@ -63,6 +69,7 @@ export class AccountsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiOkResponse({ type: AccountEntity })
   @ApiResponse({
     status: 200,
@@ -78,6 +85,7 @@ export class AccountsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiOkResponse({ type: AccountEntity })
   @ApiResponse({
     status: 200,
