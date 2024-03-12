@@ -2,21 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Account } from '@prisma/client';
 import { RootState } from "../../store";
 import { REQUEST_STATUS } from "@eco/config";
-import { accountsApiThunk } from "./accountsThunks";
+import { accountsApiThunk } from "./accountThunks";
 
-export interface AccountsState {
+export interface AccountState {
   accounts: Account[];
   accountsReqStatus: REQUEST_STATUS;
 }
 
-export const initialState: AccountsState = {
+export const initialAccountState: AccountState = {
   accounts: [],
   accountsReqStatus: REQUEST_STATUS.IDDLE,
 };
 
-const accountsSlice = createSlice({
-  name: "accounts",
-  initialState,
+const accountSlice = createSlice({
+  name: "account",
+  initialState: initialAccountState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -33,8 +33,8 @@ const accountsSlice = createSlice({
   },
 });
 
-export default accountsSlice.reducer;
+export default accountSlice.reducer;
 
-export const selectAccounts = (state: RootState) => state.accounts.accounts;
+export const selectAccounts = (state: RootState) => state.account.accounts;
 
-export const selectUserAccountReqStatus = (state: RootState) => state.accounts.accountsReqStatus;
+export const selectUserAccountReqStatus = (state: RootState) => state.account.accountsReqStatus;

@@ -10,7 +10,7 @@ export interface AuthState {
   refreshReqStatus: REQUEST_STATUS;
 }
 
-export const initialState: AuthState = {
+export const initialAuthState: AuthState = {
   userAuth: {
     accessToken: '',
     name: null,
@@ -22,9 +22,9 @@ export const initialState: AuthState = {
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: initialAuthState,
   reducers: {
-    logout: () => initialState,
+    logout: () => initialAuthState,
   },
   extraReducers: (builder) => {
     builder

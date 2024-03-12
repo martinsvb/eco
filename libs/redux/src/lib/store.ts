@@ -6,16 +6,16 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import auth, { AuthState } from "./slices/auth/authSlice";
-import accounts, { AccountsState } from "./slices/accounts/accountsSlice";
+import account, { AccountState } from "./slices/account/accountSlice";
 import { apiErrorLogger } from "./apiErrorLogger";
 
 type Store = {
-  accounts: Reducer<AccountsState>;
+  account: Reducer<AccountState>;
   auth: Reducer<AuthState>;
 };
 
 const reducer = combineReducers<Store>({
-  accounts,
+  account,
   auth,
 });
 
