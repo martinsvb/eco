@@ -8,6 +8,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { prismaExceptions } from '@eco/config';
+import cookieParser from 'cookie-parser'
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -50,6 +51,8 @@ async function bootstrap() {
   app.useGlobalFilters(
     new PrismaClientExceptionFilter(httpAdapter, prismaExceptions)
   );
+
+  app.use(cookieParser());
 
   await app.listen(port);
   Logger.log(

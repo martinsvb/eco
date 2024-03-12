@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Auth } from '@eco/types';
 import { RootState } from "../../store";
 import { REQUEST_STATUS } from "@eco/config";
-import { loginApiThunk } from "./authThunks";
+import { loginApiThunk, refreshApiThunk } from "./authThunks";
 
 export interface AuthState {
   userAuth: Auth;
   userAuthReqStatus: REQUEST_STATUS;
+  refreshReqStatus: REQUEST_STATUS;
 }
 
 export const initialState: AuthState = {
@@ -16,6 +17,7 @@ export const initialState: AuthState = {
     picture: null
   },
   userAuthReqStatus: REQUEST_STATUS.IDDLE,
+  refreshReqStatus: REQUEST_STATUS.IDDLE,
 };
 
 const authSlice = createSlice({
@@ -35,6 +37,16 @@ const authSlice = createSlice({
       .addCase(loginApiThunk.fulfilled, (state, { payload }) => {
         state.userAuth = payload;
         state.userAuthReqStatus = REQUEST_STATUS.SUCCESS;
+      })
+      .addCase(refreshApiThunk.pending, (state) => {
+        state.refreshReqStatus = REQUEST_STATUS.PENDING;
+      })
+      .addCase(refreshApiThunk.rejected, (state) => {
+        state.refreshReqStatus = REQUEST_STATUS.ERROR;
+      })
+      .addCase(refreshApiThunk.fulfilled, (state, { payload }) => {
+        state.userAuth.accessToken = payload;
+        state.refreshReqStatus = REQUEST_STATUS.SUCCESS;
       });
   },
 });

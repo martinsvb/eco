@@ -8,11 +8,21 @@ export const loginApiThunk = createAsyncThunk<Auth, {email: string, password: st
   async (body, { rejectWithValue, signal }) => {
     try {
       return await checkResponse(
-        await fetch(
-          `/api/${endPoints.login}`,
-          getHeaders(METHODS.POST, {body, signal})
-        )
+        await fetch(`/api/${endPoints.login}`, getHeaders(METHODS.POST, {body, signal}))
       ).json();
+    } catch (error: unknown) {
+      return rejectWithValue(JSON.stringify(is(Object, error) ? error.apiErrorData : null));
+    }
+  }
+);
+
+export const refreshApiThunk = createAsyncThunk<string>(
+  'auth/refresh',
+  async (body, { rejectWithValue, signal }) => {
+    try {
+      return await checkResponse(
+        await fetch(`/api/${endPoints.refresh}`, getHeaders(METHODS.POST, {signal}))
+      ).text();
     } catch (error: unknown) {
       return rejectWithValue(JSON.stringify(is(Object, error) ? error.apiErrorData : null));
     }

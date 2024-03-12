@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import { User } from '@prisma/client';
 import { TokenPayload } from 'google-auth-library';
+import { isTokenValid } from '@eco/config';
 import { UserOrigins } from '@eco/types';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthEntity } from './entities/auth.entity';
@@ -32,6 +33,25 @@ export class AuthService {
     return this.jwtService.sign({ id: userId, tokenId: uuidv4() }, { expiresIn: '7d' });
   }
 
+  getAuthData(user: User) {
+    return {
+      authEntity: {
+        accessToken: this.getAccessToken(user),
+        name: user.name,
+        picture: user.picture,
+      },
+      refreshToken: this.getRefreshToken(user.id)
+    }
+  }
+
+  decodeRefreshToken(token: string) {
+    try {
+      return this.jwtService.verify(token);
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
+
   async login(email: string, password: string): Promise<{authEntity: AuthEntity, refreshToken: string}> {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
@@ -45,14 +65,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    return {
-      authEntity: {
-        accessToken: this.getAccessToken(user),
-        name: user.name,
-        picture: user.picture,
-      },
-      refreshToken: this.getRefreshToken(user.id)
-    };
+    return this.getAuthData(user);
   }
 
   async loginGoogle({
@@ -78,12 +91,24 @@ export class AuthService {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
 
+    return this.getAuthData(user);
+  }
+
+  async refresh(oldRefreshToken: string): Promise<{accessToken: string, refreshToken: string}> {
+    const decoded = this.decodeRefreshToken(oldRefreshToken);
+
+    if (!isTokenValid(decoded)) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: decoded.id } });
+
+    if (!user) {
+      throw new NotFoundException(`No user found for id: ${decoded.id}`);
+    }
+
     return {
-      authEntity: {
-        accessToken: this.getAccessToken(user),
-        name: user.name,
-        picture: user.picture,
-      },
+      accessToken: this.getAccessToken(user),
       refreshToken: this.getRefreshToken(user.id)
     };
   }

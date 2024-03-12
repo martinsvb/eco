@@ -1,5 +1,6 @@
 import { Injectable, CanActivate } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { isTokenValid } from '@eco/config';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -16,10 +17,9 @@ export class WsGuard implements CanActivate {
 
     try {
       const decoded = this.jwtService.decode(token);
-      const now = Number((Date.now() / 1000).toFixed(0));
       const user = await this.usersService.findOne(decoded.userId);
 
-      return !!decoded && decoded.exp > now && !!user && user.isEmailConfirmed;
+      return isTokenValid(decoded) && !!user && user.isEmailConfirmed;
     } catch (ex) {
       return false;
     }

@@ -1,27 +1,19 @@
 import { Account } from '@prisma/client';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { is } from 'ramda';
-import { jwtDecode } from 'jwt-decode';
-import { checkResponse, endPoints, getHeaders, METHODS } from '@eco/config';
-import { RootState } from '../../store';
+import { checkResponse, endPoints, getHeaders, METHODS, getErrorValue } from '@eco/config';
+import { tokenValidation } from '../../tokenValidation';
 
 export const accountsApiThunk = createAsyncThunk<Account[]>(
   'accounts/get',
-  async (body, { getState, rejectWithValue, signal }) => {
+  async (body, { dispatch, getState, rejectWithValue, signal }) => {
     try {
-      const { auth } = getState() as RootState;
-      const decoded = jwtDecode(auth.userAuth.accessToken);
-      const now = Number((Date.now() / 1000).toFixed(0));
-      console.log({decoded, now, valid: decoded.exp! > now});
+      const token = await tokenValidation(dispatch, getState);
 
       return await checkResponse(
-        await fetch(
-          `/api/${endPoints.accounts}`,
-          getHeaders(METHODS.GET, {signal, token: auth.userAuth.accessToken})
-        )
+        await fetch(`/api/${endPoints.accounts}`, getHeaders(METHODS.GET, {signal, token}))
       ).json();
     } catch (error: unknown) {
-      return rejectWithValue(JSON.stringify(is(Object, error) ? error.apiErrorData : null));
+      return rejectWithValue(getErrorValue(error));
     }
   }
 );
