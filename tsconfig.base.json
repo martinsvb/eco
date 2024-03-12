@@ -20,7 +20,7 @@
       "@eco/redux": ["libs/redux/src/index.ts"],
       "@eco/types": ["libs/types/src/index.ts"]
     },
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "tmp"]
 }

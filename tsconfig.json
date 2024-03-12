@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "tmp"]
 }
