@@ -60,7 +60,7 @@ export class AuthController {
     
     this.setRefreshtoken(res, refreshToken);
     
-    res.send(accessToken);
+    res.send({accessToken});
   }
 
   @Get('user')

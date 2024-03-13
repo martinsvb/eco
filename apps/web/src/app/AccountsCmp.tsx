@@ -1,4 +1,4 @@
-import { useShallowEqualSelector, useAppDispatch, selectAccounts, accountsApiThunk } from '@eco/redux';
+import { useShallowEqualSelector, useAppDispatch, selectAccounts, apiGetAccounts } from '@eco/redux';
 import { MouseEventHandler, useCallback } from 'react';
 
 export const AccountsCmp = () => {
@@ -9,8 +9,7 @@ export const AccountsCmp = () => {
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
       event.preventDefault();
-
-      dispatch(accountsApiThunk());
+      dispatch(apiGetAccounts(''));
     },
     [dispatch]
   );

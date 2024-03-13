@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
 import { Auth } from '@eco/types';
-import { RootState } from "../../store";
-import { REQUEST_STATUS } from "@eco/config";
-import { loginApiThunk, refreshApiThunk } from "./authThunks";
+import { loginPost, refreshPost } from "./authApi";
+import { createSlice } from '../createSlice';
 
 export interface AuthState {
   userAuth: Auth;
-  userAuthReqStatus: REQUEST_STATUS;
-  refreshReqStatus: REQUEST_STATUS;
+  loginError: unknown | null;
+  loginLoading: boolean;
+  refreshError: unknown | null;
+  refreshLoading: boolean;
 }
 
 export const initialAuthState: AuthState = {
@@ -16,47 +16,60 @@ export const initialAuthState: AuthState = {
     name: null,
     picture: null
   },
-  userAuthReqStatus: REQUEST_STATUS.IDDLE,
-  refreshReqStatus: REQUEST_STATUS.IDDLE,
+  loginError: null,
+  loginLoading: false,
+  refreshError: null,
+  refreshLoading: false,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
-  reducers: {
-    logout: () => initialAuthState,
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginApiThunk.pending, (state) => {
-        state.userAuthReqStatus = REQUEST_STATUS.PENDING;
-      })
-      .addCase(loginApiThunk.rejected, (state) => {
-        state.userAuthReqStatus = REQUEST_STATUS.ERROR;
-      })
-      .addCase(loginApiThunk.fulfilled, (state, { payload }) => {
-        state.userAuth = payload;
-        state.userAuthReqStatus = REQUEST_STATUS.SUCCESS;
-      })
-      .addCase(refreshApiThunk.pending, (state) => {
-        state.refreshReqStatus = REQUEST_STATUS.PENDING;
-      })
-      .addCase(refreshApiThunk.rejected, (state) => {
-        state.refreshReqStatus = REQUEST_STATUS.ERROR;
-      })
-      .addCase(refreshApiThunk.fulfilled, (state, { payload }) => {
-        state.userAuth.accessToken = payload;
-        state.refreshReqStatus = REQUEST_STATUS.SUCCESS;
-      });
+  reducers: (create) => ({
+    logout: create.reducer(() => initialAuthState),
+    apiPostLogin: create.asyncThunk(
+      loginPost,
+      {
+        pending: (state) => {
+          state.loginLoading = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.loginError = payload ?? error;
+        },        
+        fulfilled: (state, { payload }) => {
+          state.userAuth = payload;
+        },
+        settled: (state) => {
+          state.loginLoading = false;
+        },
+      },
+    ),
+    apiPostRefresh: create.asyncThunk(
+      refreshPost,
+      {
+        pending: (state) => {
+          state.refreshLoading = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.refreshError = payload ?? error;
+        },        
+        fulfilled: (state, { payload }) => {
+          state.userAuth.accessToken = payload.accessToken;
+        },
+        settled: (state) => {
+          state.refreshLoading = false;
+        },
+      },
+    )
+  }),
+  selectors: {
+    selectUserAuth: (state) => state.userAuth,
+    selectAccessToken: (state) => state.userAuth.accessToken,
   },
 });
 
-export const { logout } = authSlice.actions;
-
 export default authSlice.reducer;
 
-export const selectUserAuth = (state: RootState) => state.auth.userAuth;
+export const { apiPostLogin, apiPostRefresh } = authSlice.actions;
 
-export const selectAccessToken = (state: RootState) => state.auth.userAuth.accessToken;
-
-export const selectUserAuthReqStatus = (state: RootState) => state.auth.userAuthReqStatus;
+export const { selectAccessToken, selectUserAuth } = authSlice.selectors

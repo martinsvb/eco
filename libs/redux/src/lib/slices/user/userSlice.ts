@@ -1,40 +1,48 @@
-import { createSlice } from "@reduxjs/toolkit";
 import { User } from '@prisma/client';
-import { RootState } from "../../store";
-import { REQUEST_STATUS } from "@eco/config";
-import { usersApiThunk } from "./userThunks";
+import { usersGet } from "./userApi";
+import { createSlice } from '../createSlice';
 
 export interface UserState {
   users: User[];
-  usersReqStatus: REQUEST_STATUS;
+  getUsersError: unknown | null;
+  getUsersLoading: boolean;
 }
 
 export const initialUserState: UserState = {
   users: [],
-  usersReqStatus: REQUEST_STATUS.IDDLE,
+  getUsersError: null,
+  getUsersLoading: false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(usersApiThunk.pending, (state) => {
-        state.usersReqStatus = REQUEST_STATUS.PENDING;
-      })
-      .addCase(usersApiThunk.rejected, (state) => {
-        state.usersReqStatus = REQUEST_STATUS.ERROR;
-      })
-      .addCase(usersApiThunk.fulfilled, (state, { payload }) => {
-        state.users = payload;
-        state.usersReqStatus = REQUEST_STATUS.SUCCESS;
-      });
+  reducers: (create) => ({
+    apiGetUsers: create.asyncThunk(
+      usersGet,
+      {
+        pending: (state) => {
+          state.getUsersLoading = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.getUsersError = payload ?? error;
+        },
+        fulfilled: (state, { payload }) => {
+          state.users = payload;
+        },
+        settled: (state) => {
+          state.getUsersLoading = false;
+        },
+      },
+    )
+  }),
+  selectors: {
+    selectUsers: (state) => state.users,
   },
 });
 
 export default userSlice.reducer;
 
-export const selectUsers = (state: RootState) => state.user.users;
+export const { apiGetUsers } = userSlice.actions
 
-export const selectUserUserReqStatus = (state: RootState) => state.user.usersReqStatus;
+export const { selectUsers } = userSlice.selectors

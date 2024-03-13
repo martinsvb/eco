@@ -6,29 +6,19 @@ export enum METHODS {
   DELETE = 'DELETE',
 }
 
-export enum REQUEST_STATUS {
-  ERROR = 'error',
-  PENDING = 'pending',
-  SUCCESS = 'success',
-  IDDLE = 'iddle',
-}
-
-export interface ApiRequestStatus<RequestPayload = unknown> {
-  status: REQUEST_STATUS;
-  payload?: RequestPayload;
-}
-
 const baseHeaders = {
   "Content-Type": "application/json",
 }
 
-export const getHeaders = <T>(
+type HeadersPayload<T> = {
+  body?: T,
+  signal?: RequestInit["signal"],
+  token?: string
+}
+
+export const headers = <T>(
   method: METHODS,
-  {body, signal, token}: {
-    body?: T,
-    signal?: RequestInit["signal"],
-    token?: string
-  },
+  {body, signal, token}: HeadersPayload<T>,
 ) => {
 
   return {
@@ -44,3 +34,13 @@ export const getHeaders = <T>(
     signal,
   };
 };
+
+export const getHeaders = <T>(payload: HeadersPayload<T>) => headers(METHODS.GET, payload);
+
+export const delHeaders = <T>(payload: HeadersPayload<T>) => headers(METHODS.DELETE, payload);
+
+export const patchHeaders = <T>(payload: HeadersPayload<T>) => headers(METHODS.PATCH, payload);
+
+export const postHeaders = <T>(payload: HeadersPayload<T>) => headers(METHODS.POST, payload);
+
+export const putHeaders = <T>(payload: HeadersPayload<T>) => headers(METHODS.PUT, payload);

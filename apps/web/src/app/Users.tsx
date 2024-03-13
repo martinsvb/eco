@@ -1,5 +1,5 @@
 import { MouseEventHandler, useCallback } from 'react';
-import { selectUsers, useAppDispatch, useShallowEqualSelector, usersApiThunk } from '@eco/redux';
+import { selectUsers, useAppDispatch, useShallowEqualSelector, apiGetUsers } from '@eco/redux';
 
 export const Users = () => {
 
@@ -10,8 +10,7 @@ export const Users = () => {
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
       event.preventDefault();
-
-      dispatch(usersApiThunk());
+      dispatch(apiGetUsers(''));
     },
     [dispatch]
   );

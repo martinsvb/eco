@@ -1,40 +1,48 @@
-import { createSlice } from "@reduxjs/toolkit";
 import { Account } from '@prisma/client';
-import { RootState } from "../../store";
-import { REQUEST_STATUS } from "@eco/config";
-import { accountsApiThunk } from "./accountThunks";
+import { accountsGet } from "./accountApi";
+import { createSlice } from "../createSlice";
 
 export interface AccountState {
   accounts: Account[];
-  accountsReqStatus: REQUEST_STATUS;
+  getAccountsError: unknown | null;
+  getAccountsLoading: boolean;
 }
 
 export const initialAccountState: AccountState = {
   accounts: [],
-  accountsReqStatus: REQUEST_STATUS.IDDLE,
+  getAccountsError: null,
+  getAccountsLoading: false,
 };
 
 const accountSlice = createSlice({
   name: "account",
   initialState: initialAccountState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(accountsApiThunk.pending, (state) => {
-        state.accountsReqStatus = REQUEST_STATUS.PENDING;
-      })
-      .addCase(accountsApiThunk.rejected, (state) => {
-        state.accountsReqStatus = REQUEST_STATUS.ERROR;
-      })
-      .addCase(accountsApiThunk.fulfilled, (state, { payload }) => {
-        state.accounts = payload;
-        state.accountsReqStatus = REQUEST_STATUS.SUCCESS;
-      });
+  reducers: (create) => ({
+    apiGetAccounts: create.asyncThunk(
+      accountsGet,
+      {
+        pending: (state) => {
+          state.getAccountsLoading = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.getAccountsError = payload ?? error;
+        },
+        fulfilled: (state, { payload }) => {
+          state.accounts = payload;
+        },
+        settled: (state) => {
+          state.getAccountsLoading = false;
+        },
+      },
+    )
+  }),
+  selectors: {
+    selectAccounts: (state) => state.accounts,
   },
 });
 
 export default accountSlice.reducer;
 
-export const selectAccounts = (state: RootState) => state.account.accounts;
+export const { apiGetAccounts } = accountSlice.actions
 
-export const selectUserAccountReqStatus = (state: RootState) => state.account.accountsReqStatus;
+export const { selectAccounts } = accountSlice.selectors

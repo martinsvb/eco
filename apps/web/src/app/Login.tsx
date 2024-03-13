@@ -1,5 +1,5 @@
 import { ChangeEventHandler, MouseEventHandler, useCallback, useState } from 'react';
-import { loginApiThunk, useAppDispatch } from '@eco/redux';
+import { apiPostLogin, useAppDispatch } from '@eco/redux';
 
 export const Login = () => {
 
@@ -16,7 +16,7 @@ export const Login = () => {
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
       event.preventDefault();
-      dispatch(loginApiThunk(loginData));
+      dispatch(apiPostLogin(loginData));
     },
     [dispatch, loginData]
   );
