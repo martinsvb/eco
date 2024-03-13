@@ -3,16 +3,7 @@ import { Account } from '@prisma/client';
 import { endPoints } from '@eco/config';
 
 export const AccountCmp = () => {
-  const [account, setAccount] = useState<Account>({
-    id: '',
-    name: '',
-    iban: '',
-    description: null,
-    active: false,
-    ownerId: 'testId',
-    createdAt: new Date(),
-    updatedAt: null,
-  });
+  const [account, setAccount] = useState<Account | null>(null);
 
   useEffect(() => {
     const loadAccount = async () => {
@@ -30,7 +21,7 @@ export const AccountCmp = () => {
   return (
     <div>
       <h1>
-        Account: {account.name}, {account.id}
+        Account: {account?.name}, {account?.id}
       </h1>
     </div>
   );

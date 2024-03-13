@@ -1,13 +1,9 @@
-import { MouseEventHandler, useCallback, useState } from 'react';
-import { User } from '@prisma/client';
-import { METHODS, checkResponse, endPoints, getHeaders } from '@eco/config';
-import { selectAccessToken, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { MouseEventHandler, useCallback } from 'react';
+import { selectUsers, useAppDispatch, useShallowEqualSelector, usersApiThunk } from '@eco/redux';
 
 export const Users = () => {
 
-  const token = useShallowEqualSelector(selectAccessToken);
-
-  const [users, setUsers] = useState<User[]>([]);
+  const users = useShallowEqualSelector(selectUsers);
 
   const dispatch = useAppDispatch();
 
@@ -15,24 +11,14 @@ export const Users = () => {
     async (event) => {
       event.preventDefault();
 
-      try {
-        const response = await fetch(
-          `/api/${endPoints.users}`,
-          getHeaders(METHODS.GET, {token})
-        );
-
-        checkResponse(response);
-        setUsers(await response.json());
-      } catch (error) {
-        console.log({ error });
-      }
+      dispatch(usersApiThunk());
     },
-    [dispatch, token]
+    [dispatch]
   );
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', width: '200px', justifyContent: 'space-between'}}>
-      <button type="submit" disabled={!token} onClick={handleSubmit}>
+      <button type="submit" onClick={handleSubmit}>
         Load users
       </button>
 

@@ -7,16 +7,19 @@ import {
 } from "@reduxjs/toolkit";
 import auth, { AuthState } from "./slices/auth/authSlice";
 import account, { AccountState } from "./slices/account/accountSlice";
+import user, { UserState } from "./slices/user/userSlice";
 import { apiErrorLogger } from "./apiErrorLogger";
 
 type Store = {
   account: Reducer<AccountState>;
   auth: Reducer<AuthState>;
+  user: Reducer<UserState>;
 };
 
 const reducer = combineReducers<Store>({
   account,
   auth,
+  user,
 });
 
 export const store = configureStore({
