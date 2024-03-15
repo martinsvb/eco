@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { apiPostLoginGoogle, useAppDispatch } from '@eco/redux';
+import { apiPostLoginGoogle, setLoginGoogleError, useAppDispatch } from '@eco/redux';
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 
 export const GoogleLoginCmp = () => {
@@ -13,12 +13,17 @@ export const GoogleLoginCmp = () => {
     [dispatch]
   );
 
+  const handleError = useCallback(
+    () => {
+      dispatch(setLoginGoogleError('Login Failed'));
+    },
+    [dispatch]
+  );
+
   return (
     <GoogleLogin
       onSuccess={handleSuccess}
-      onError={() => {
-        console.log('Login Failed');
-      }}
+      onError={handleError}
     />
   );
 };

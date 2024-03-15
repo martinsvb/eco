@@ -1,6 +1,7 @@
 import { Auth } from '@eco/types';
 import { loginGooglePost, loginPost, refreshPost } from "./authApi";
 import { createSlice } from '../createSlice';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 export interface AuthState {
   userAuth: Auth;
@@ -31,6 +32,9 @@ const authSlice = createSlice({
   initialState: initialAuthState,
   reducers: (create) => ({
     logout: create.reducer(() => initialAuthState),
+    setLoginGoogleError: create.reducer((state, {payload}: PayloadAction<string>) => {
+      state.loginGoogleError = payload
+    }),
     apiPostLogin: create.asyncThunk(
       loginPost,
       {
@@ -86,11 +90,22 @@ const authSlice = createSlice({
   selectors: {
     selectUserAuth: (state) => state.userAuth,
     selectAccessToken: (state) => state.userAuth.accessToken,
+    selectIsUserLoggedIn: (state) => !!state.userAuth.accessToken,
   },
 });
 
 export default authSlice.reducer;
 
-export const { apiPostLogin, apiPostLoginGoogle, apiPostRefresh } = authSlice.actions;
+export const {
+  apiPostLogin,
+  apiPostLoginGoogle,
+  apiPostRefresh,
+  logout,
+  setLoginGoogleError
+} = authSlice.actions;
 
-export const { selectAccessToken, selectUserAuth } = authSlice.selectors
+export const {
+  selectAccessToken,
+  selectUserAuth,
+  selectIsUserLoggedIn
+} = authSlice.selectors
