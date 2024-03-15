@@ -1,7 +1,7 @@
 import { ChangeEventHandler, MouseEventHandler, useCallback, useState } from 'react';
 import { apiPostLogin, useAppDispatch } from '@eco/redux';
 
-export const Login = () => {
+export const LoginForm = () => {
 
   const [loginData, setLoginData] = useState({email: '', password: ''});
 
