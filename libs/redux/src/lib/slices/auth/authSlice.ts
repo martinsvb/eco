@@ -1,11 +1,13 @@
 import { Auth } from '@eco/types';
-import { loginPost, refreshPost } from "./authApi";
+import { loginGooglePost, loginPost, refreshPost } from "./authApi";
 import { createSlice } from '../createSlice';
 
 export interface AuthState {
   userAuth: Auth;
   loginError: unknown | null;
   loginLoading: boolean;
+  loginGoogleError: unknown | null;
+  loginGoogleLoading: boolean;
   refreshError: unknown | null;
   refreshLoading: boolean;
 }
@@ -18,6 +20,8 @@ export const initialAuthState: AuthState = {
   },
   loginError: null,
   loginLoading: false,
+  loginGoogleError: null,
+  loginGoogleLoading: false,
   refreshError: null,
   refreshLoading: false,
 };
@@ -41,6 +45,23 @@ const authSlice = createSlice({
         },
         settled: (state) => {
           state.loginLoading = false;
+        },
+      },
+    ),
+    apiPostLoginGoogle: create.asyncThunk(
+      loginGooglePost,
+      {
+        pending: (state) => {
+          state.loginGoogleLoading = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.loginGoogleError = payload ?? error;
+        },        
+        fulfilled: (state, { payload }) => {
+          state.userAuth = payload;
+        },
+        settled: (state) => {
+          state.loginGoogleLoading = false;
         },
       },
     ),
@@ -70,6 +91,6 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export const { apiPostLogin, apiPostRefresh } = authSlice.actions;
+export const { apiPostLogin, apiPostLoginGoogle, apiPostRefresh } = authSlice.actions;
 
 export const { selectAccessToken, selectUserAuth } = authSlice.selectors

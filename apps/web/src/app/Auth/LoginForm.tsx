@@ -12,7 +12,6 @@ export const LoginForm = () => {
     setLoginData((prevData) => ({...prevData, [name]: value}));
   }, []);
 
-
   const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
     async (event) => {
       event.preventDefault();

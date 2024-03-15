@@ -12,6 +12,17 @@ export const loginPost = async (
   }
 }
 
+export const loginGooglePost = async (
+  body: {token?: string},
+  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    return await checkResponse(await fetch(`/api/${endPoints.loginGoogle}`, postHeaders({body, signal}))).json();
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
 export const refreshPost = async (
   id: string,
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
