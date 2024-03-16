@@ -7,7 +7,7 @@ import Content from './layout/Content';
 export default () => {
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+      <CssBaseline enableColorScheme />
       <Header />
       <LeftSidebar />
       <Content />
