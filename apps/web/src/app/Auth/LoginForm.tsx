@@ -1,33 +1,71 @@
-import { ChangeEventHandler, MouseEventHandler, useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, Stack, TextField } from '@mui/material';
 import { apiPostLogin, useAppDispatch } from '@eco/redux';
+import { LoginData, LoginItems, getLoginValidationSchema } from '@eco/types';
 
 export const LoginForm = () => {
 
-  const [loginData, setLoginData] = useState({email: '', password: ''});
-
   const dispatch = useAppDispatch();
 
-  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
-    const { name, value } = e.target;
-    setLoginData((prevData) => ({...prevData, [name]: value}));
-  }, []);
+  const { control, formState: { errors, isValid }, watch } = useForm<LoginData>({
+    resolver: yupResolver(getLoginValidationSchema()),
+    mode: 'onChange',
+    values: {
+      [LoginItems.email]: '',
+      [LoginItems.password]: ''
+    }
+  });
 
-  const handleSubmit = useCallback<MouseEventHandler<HTMLButtonElement>>(
-    async (event) => {
-      event.preventDefault();
-      dispatch(apiPostLogin(loginData));
+  const data = watch();
+
+  const handleSubmit = useCallback(
+    () => {
+      dispatch(apiPostLogin(data));
     },
-    [dispatch, loginData]
+    [dispatch, data]
   );
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', width: '200px', height: '80px', marginBottom: '8px', justifyContent: 'space-between'}}>
-      <input name='email' onChange={handleChange} />
-      <input name='password' type='password' onChange={handleChange} />
-
-      <button type="submit" disabled={!loginData.email && ! loginData.password} onClick={handleSubmit}>
-        Log in
-      </button>
-    </div>
+    <Stack>
+      <Controller
+        name={LoginItems.email}
+        control={control}
+        defaultValue={data?.email || ''}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{mb: 2}}
+            required
+            label="Email"
+            error={Boolean(errors.email)}
+            helperText={errors.email?.message}
+          />
+        )}
+      />
+      <Controller
+        name={LoginItems.password}
+        control={control}
+        defaultValue={data?.password || ''}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{mb: 2}}
+            required
+            label="password"
+            error={Boolean(errors.password)}
+            helperText={errors.password?.message}
+          />
+        )}
+      />
+      <Button
+        disabled={!isValid}
+        variant="contained"
+        onClick={handleSubmit}
+      >
+        Login
+      </Button>
+    </Stack>
   );
 };

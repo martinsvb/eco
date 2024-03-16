@@ -6,11 +6,18 @@ export const Login = () => {
 
   return (
     <Stack
-      divider={<Divider orientation="horizontal" flexItem />}
-      spacing={2}
+      height="calc(100vh - 180px)"
+      justifyContent="center"
+      alignItems="center"
     >
-      <GoogleLoginCmp />
-      <LoginForm />
+      <Stack
+        width={300}
+        divider={<Divider orientation="horizontal" flexItem />}
+        spacing={2}
+      >
+        <GoogleLoginCmp />
+        <LoginForm />
+      </Stack>
     </Stack>
   );
 };

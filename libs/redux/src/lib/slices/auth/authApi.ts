@@ -1,8 +1,9 @@
 import { checkResponse, endPoints, getErrorValue, postHeaders } from '@eco/config';
+import { LoginData } from '@eco/types';
 import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsyncThunk';
 
 export const loginPost = async (
-  body: {email: string, password: string},
+  body: LoginData,
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
