@@ -1,10 +1,14 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
 import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { routes } from '@eco/config';
 
-const UserMenu = () => {
+interface UserMenuProps {
+  isMobile?: boolean;
+}
+
+const UserMenu = ({isMobile}: UserMenuProps) => {
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -39,26 +43,34 @@ const UserMenu = () => {
     []
   );
 
+  const anchorOrigin: PopoverOrigin = isMobile
+    ? {
+      vertical: 'bottom',
+      horizontal: 'right',
+    }
+    : {
+      vertical: 'top',
+      horizontal: 'right',
+    };
+
+  const userInitials = user.name?.split(' ').map((namePart) => namePart[0]).join('') || 'U';
+
   return (
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt={user.name?.split(' ').map((namePart) => namePart[0]).join('') || 'U'} src={user.picture || ''} />
+          <Avatar alt={userInitials} src={user.picture || ''}>
+            {userInitials}
+          </Avatar>
         </IconButton>
       </Tooltip>
       <Menu
-        sx={{ mt: '45px' }}
+        sx={isMobile ? { mb: '45px' } : { mt: '45px' }}
         id="menu-appbar"
         anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+        anchorOrigin={anchorOrigin}
         keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+        transformOrigin={anchorOrigin}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >

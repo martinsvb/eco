@@ -1,16 +1,15 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import LeftSidebar from './layout/LeftSidebar';
-import Header from './layout/Header';
-import Content from './layout/Content';
+import { Theme, useMediaQuery } from '@mui/material';
+import Desktop from './layout/Desktop';
+import Mobile from './layout/Mobile';
 
 export default () => {
+  const isMobilePortrait = useMediaQuery((theme: Theme) => {
+    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
+  });
+
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline enableColorScheme />
-      <Header />
-      <LeftSidebar />
-      <Content />
-    </Box>
+    isMobilePortrait
+      ? <Mobile />
+      : <Desktop />
   );
 }
