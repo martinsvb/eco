@@ -1,5 +1,4 @@
-export interface Auth {
-    accessToken: string;
+export interface BasicUser {
     name: string | null;
     picture: string | null;
 }

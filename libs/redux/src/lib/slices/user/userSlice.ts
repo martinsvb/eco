@@ -18,6 +18,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
   reducers: (create) => ({
+    resetUsers: create.reducer(() => initialUserState),
     apiGetUsers: create.asyncThunk(
       usersGet,
       {
@@ -43,6 +44,6 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { apiGetUsers } = userSlice.actions
+export const { apiGetUsers, resetUsers } = userSlice.actions
 
 export const { selectUsers } = userSlice.selectors

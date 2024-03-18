@@ -1,15 +1,7 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer, Toolbar, Box, List } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import LoginIcon from '@mui/icons-material/Login';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { routes } from '@eco/config';
 import { selectIsUserLoggedIn, useShallowEqualSelector } from '@eco/redux';
@@ -66,11 +58,7 @@ export const LeftSidebar = () => {
               to={`${routes.base}${routes.accounts}`}
             />
             :
-            <NavItem
-              icon={<LoginIcon />}
-              text="Login"
-              to={`${routes.base}${routes.login}`}
-            />
+            null
           }
         </List>
       </Box>

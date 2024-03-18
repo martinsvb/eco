@@ -1,10 +1,11 @@
-import { Auth } from '@eco/types';
+import { BasicUser } from '@eco/types';
 import { loginGooglePost, loginPost, refreshPost } from "./authApi";
 import { createSlice } from '../createSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 export interface AuthState {
-  userAuth: Auth;
+  accessToken: string;
+  user: BasicUser;
   loginError: unknown | null;
   loginLoading: boolean;
   loginGoogleError: unknown | null;
@@ -14,8 +15,8 @@ export interface AuthState {
 }
 
 export const initialAuthState: AuthState = {
-  userAuth: {
-    accessToken: '',
+  accessToken: '',
+  user: {
     name: null,
     picture: null
   },
@@ -44,8 +45,9 @@ const authSlice = createSlice({
         rejected: (state, { error, payload }) => {
           state.loginError = payload ?? error;
         },        
-        fulfilled: (state, { payload }) => {
-          state.userAuth = payload;
+        fulfilled: (state, { payload: { accessToken, user } }) => {
+          state.accessToken = accessToken
+          state.user = user;
         },
         settled: (state) => {
           state.loginLoading = false;
@@ -61,8 +63,9 @@ const authSlice = createSlice({
         rejected: (state, { error, payload }) => {
           state.loginGoogleError = payload ?? error;
         },        
-        fulfilled: (state, { payload }) => {
-          state.userAuth = payload;
+        fulfilled: (state, { payload: { accessToken, user } }) => {
+          state.accessToken = accessToken
+          state.user = user;
         },
         settled: (state) => {
           state.loginGoogleLoading = false;
@@ -78,8 +81,9 @@ const authSlice = createSlice({
         rejected: (state, { error, payload }) => {
           state.refreshError = payload ?? error;
         },        
-        fulfilled: (state, { payload }) => {
-          state.userAuth.accessToken = payload.accessToken;
+        fulfilled: (state, { payload: { accessToken, user } }) => {
+          state.accessToken = accessToken
+          state.user = user;
         },
         settled: (state) => {
           state.refreshLoading = false;
@@ -88,9 +92,9 @@ const authSlice = createSlice({
     )
   }),
   selectors: {
-    selectUserAuth: (state) => state.userAuth,
-    selectAccessToken: (state) => state.userAuth.accessToken,
-    selectIsUserLoggedIn: (state) => !!state.userAuth.accessToken,
+    selectUserAuth: (state) => state.user,
+    selectAccessToken: (state) => state.accessToken,
+    selectIsUserLoggedIn: (state) => !!state.accessToken,
   },
 });
 

@@ -1,12 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BasicUserEntity } from '../../users/entities/user.entity';
 
-export class AuthEntity {
+export class AccessTokenAuthEntity {
   @ApiProperty({ description: 'Application access token' })
   accessToken: string;
-
-  @ApiProperty({ description: 'User name', required: false })
-  name: string | null;
-
-  @ApiProperty({ description: 'User picture', required: false })
-  picture: string | null;
 }
+
+export class RefreshTokenAuthEntity {
+  @ApiProperty({ description: 'Application refresh token' })
+  refreshToken: string;
+}
+
+export class AuthEntity extends AccessTokenAuthEntity {
+  @ApiProperty({ type: BasicUserEntity })
+  user?: BasicUserEntity;
+}
+
+export class FullAuthEntity {
+  @ApiProperty({ type: AuthEntity })
+  auth?: AuthEntity;
+
+  @ApiProperty({ type: RefreshTokenAuthEntity })
+  refreshToken: string;
+} 

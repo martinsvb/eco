@@ -18,6 +18,7 @@ const accountSlice = createSlice({
   name: "account",
   initialState: initialAccountState,
   reducers: (create) => ({
+    resetAccounts: create.reducer(() => initialAccountState),
     apiGetAccounts: create.asyncThunk(
       accountsGet,
       {
@@ -43,6 +44,6 @@ const accountSlice = createSlice({
 
 export default accountSlice.reducer;
 
-export const { apiGetAccounts } = accountSlice.actions
+export const { apiGetAccounts, resetAccounts } = accountSlice.actions
 
 export const { selectAccounts } = accountSlice.selectors
