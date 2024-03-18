@@ -1,7 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { routes } from "@eco/config";
 import App from "../app/app";
-import { Login } from "../app/Auth/Login";
 import { Home } from "../app/Home";
 import { AccountsCmp } from "../app/AccountsCmp";
 import { Users } from "../app/Users";
