@@ -2,7 +2,7 @@ import { forwardRef, useCallback, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Dialog, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import { Login } from '../Auth/Login';
+import Login from '../Auth/Login';
 
 const Transition = forwardRef((
   props: TransitionProps & {

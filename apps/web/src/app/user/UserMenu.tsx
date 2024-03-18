@@ -12,8 +12,6 @@ const UserMenu = () => {
 
   const user = useShallowEqualSelector(selectUserAuth);
 
-  console.log({user})
-
   const navigate = useNavigate();
 
   const handleOpenUserMenu = useCallback(
@@ -45,7 +43,7 @@ const UserMenu = () => {
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt={user.name || 'U'} src={user.picture || ''} />
+          <Avatar alt={user.name?.split(' ').map((namePart) => namePart[0]).join('') || 'U'} src={user.picture || ''} />
         </IconButton>
       </Tooltip>
       <Menu

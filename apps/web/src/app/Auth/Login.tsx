@@ -1,14 +1,16 @@
+import { memo } from 'react';
 import { alpha, Divider, Paper, Stack, useMediaQuery, useTheme } from '@mui/material';
-import { GoogleLoginCmp } from './GoogleLogin';
-import { LoginForm } from './LoginForm';
+import GoogleLoginCmp from './GoogleLogin';
+import LoginForm from './LoginForm';
 
 interface LoginProps {
   handleClose: () => void;
 }
 
-export const Login = ({handleClose}: LoginProps) => {
+const Login = ({handleClose}: LoginProps) => {
 
   const { palette, shape } = useTheme();
+
   const isLightMode = useMediaQuery('(prefers-color-scheme: light)');
 
   return (
@@ -37,3 +39,5 @@ export const Login = ({handleClose}: LoginProps) => {
     </Stack>
   );
 };
+
+export default memo(Login);

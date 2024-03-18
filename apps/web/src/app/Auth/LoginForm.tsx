@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField } from '@mui/material';
@@ -10,7 +10,7 @@ interface LoginFormProps {
   handleClose: () => void;
 }
 
-export const LoginForm = ({handleClose}: LoginFormProps) => {
+const LoginForm = ({handleClose}: LoginFormProps) => {
 
   const dispatch = useAppDispatch();
 
@@ -92,3 +92,5 @@ export const LoginForm = ({handleClose}: LoginFormProps) => {
     </form>
   );
 };
+
+export default memo(LoginForm);
