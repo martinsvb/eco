@@ -11,13 +11,10 @@ const LoginWrapper = ({children}: LoginWrapperProps) => {
   const isUserLoggedIn = useShallowEqualSelector(selectIsUserLoggedIn);
 
   return (
-    <>
-      {isUserLoggedIn ?
-        children
-        :
-        <LoginButton />
-      }
-    </>
+    isUserLoggedIn ?
+      children
+      :
+      <LoginButton />
   );
 }
 

@@ -6,11 +6,15 @@ import { apiPostLogin, useAppDispatch } from '@eco/redux';
 import { LoginData, LoginItems, getLoginValidationSchema } from '@eco/types';
 import { useLoginSuccess } from './useLoginSuccess';
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  handleClose: () => void;
+}
+
+export const LoginForm = ({handleClose}: LoginFormProps) => {
 
   const dispatch = useAppDispatch();
 
-  useLoginSuccess();
+  useLoginSuccess(handleClose);
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<LoginData>({
     resolver: yupResolver(getLoginValidationSchema()),
@@ -68,14 +72,22 @@ export const LoginForm = () => {
             />
           )}
         />
-        <Button
-          disabled={!isValid}
-          type="submit"
-          variant="contained"
-          onClick={handleClick}
-        >
-          Login
-        </Button>
+        <Stack direction="row" justifyContent="space-between">
+          <Button
+            disabled={!isValid}
+            type="submit"
+            variant="contained"
+            onClick={handleClick}
+          >
+            Login
+          </Button>
+          <Button
+            variant="text"
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        </Stack>
       </Stack>
     </form>
   );

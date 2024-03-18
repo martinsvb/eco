@@ -3,11 +3,15 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { apiPostLoginGoogle, setLoginGoogleError, useAppDispatch } from '@eco/redux';
 import { useLoginSuccess } from './useLoginSuccess';
 
-export const GoogleLoginCmp = () => {
+interface GoogleLoginCmpProps {
+  handleClose: () => void;
+}
+
+export const GoogleLoginCmp = ({handleClose}: GoogleLoginCmpProps) => {
 
   const dispatch = useAppDispatch();
 
-  useLoginSuccess();
+  useLoginSuccess(handleClose);
 
   const handleSuccess = useCallback(
     async ({ credential }: CredentialResponse) => {

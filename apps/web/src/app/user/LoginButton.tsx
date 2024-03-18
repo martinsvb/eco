@@ -1,26 +1,53 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { forwardRef, useCallback, useState } from 'react';
 import Button from '@mui/material/Button';
-import { routes } from '@eco/config';
+import { Dialog, Slide } from '@mui/material';
+import { TransitionProps } from '@mui/material/transitions';
+import { Login } from '../Auth/Login';
+
+const Transition = forwardRef((
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>,
+) => {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const LoginButton = () => {
 
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
-  const handleClick = useCallback(
+  const handleClickOpen = useCallback(
     () => {
-      navigate(`${routes.base}${routes.login}`);
+      setOpen(true);
     },
-    [navigate]
-  )
+    []
+  );
+
+  const handleClose = useCallback(
+    () => {
+      setOpen(false);
+    },
+    []
+  );
 
   return (
-    <Button
-      color="inherit"
-      onClick={handleClick}
-    >
-      Login
-    </Button>
+    <>
+      <Button
+        color="inherit"
+        onClick={handleClickOpen}
+      >
+        Login
+      </Button>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <Login handleClose={handleClose} />
+      </Dialog>
+    </>
   );
 }
 
