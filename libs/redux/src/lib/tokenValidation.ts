@@ -8,11 +8,11 @@ export const tokenValidation = async (
     getState: () => unknown
 ): Promise<string> => {
     const { auth } = getState() as RootState;
-    let { accessToken: token } = auth.userAuth;
-    if (!isTokenValid(decodeToken(auth.userAuth.accessToken))) {
+    let { accessToken: token } = auth;
+    if (!isTokenValid(decodeToken(token))) {
       await dispatch(apiPostRefresh(''));
       const { auth } = getState() as RootState;
-      token = auth.userAuth.accessToken;
+      token = auth.accessToken;
     }
   
     return token;
