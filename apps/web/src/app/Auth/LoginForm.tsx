@@ -5,6 +5,7 @@ import { Button, Stack, TextField } from '@mui/material';
 import { apiPostLogin, useAppDispatch } from '@eco/redux';
 import { LoginData, LoginItems, getLoginValidationSchema } from '@eco/types';
 import { useLoginSuccess } from './useLoginSuccess';
+import { useTranslation } from 'react-i18next';
 
 interface LoginFormProps {
   handleClose: () => void;
@@ -15,6 +16,8 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
   const dispatch = useAppDispatch();
 
   useLoginSuccess(handleClose);
+
+  const { t } = useTranslation();
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<LoginData>({
     resolver: yupResolver(getLoginValidationSchema()),
@@ -50,7 +53,7 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
               {...field}
               sx={{mb: 2}}
               required
-              label="Email"
+              label={t('labels:email')}
               error={Boolean(errors.email)}
               helperText={errors.email?.message}
             />
@@ -65,7 +68,7 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
               {...field}
               sx={{mb: 2}}
               required
-              label="password"
+              label={t('labels:password')}
               error={Boolean(errors.password)}
               helperText={errors.password?.message}
               type="password"
