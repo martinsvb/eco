@@ -4,8 +4,10 @@
   "login": "Přihlásit",
   "loginButton": "Přihlášení",
   "name": "Jméno",
+  "otp": "OTP kód",
   "password": "Heslo",
   "passwordConfirmation": "Potvrzení hesla",
   "register": "Registrovat",
-  "registerButton": "Registrace"
+  "registerButton": "Registrace",
+  "verify": "Ověřit"
 }

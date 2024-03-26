@@ -66,6 +66,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@mui/system": "^5.15.14",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nx/cypress": "17.2.0",

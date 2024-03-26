@@ -46,4 +46,8 @@ export default () => defineConfig({
       provider: 'v8',
     },
   },
+
+  optimizeDeps: {
+    include: ['@mui/material/Tooltip', '@emotion/styled', '@mui/material/Unstable_Grid2'],
+  },
 });

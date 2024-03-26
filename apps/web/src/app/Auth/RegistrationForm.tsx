@@ -6,44 +6,52 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField } from '@mui/material';
 import { apiPostRegister, useAppDispatch } from '@eco/redux';
-import { RegisterData, RegisterItems } from '@eco/types';
-import { getRegisterValidationSchema } from '@eco/validation';
+import { RegistrationData, RegistrationItems } from '@eco/types';
+import { getRegistrationValidationSchema } from '@eco/validation';
+import { useSnackbar } from 'notistack';
 
-interface RegisterFormProps {
+interface RegistrationFormProps {
   handleClose: () => void;
 }
 
-const RegisterForm = ({handleClose}: RegisterFormProps) => {
+const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
 
-  const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<RegisterData>({
-    resolver: yupResolver(getRegisterValidationSchema()),
-    mode: 'onChange',
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<RegistrationData>({
+    resolver: yupResolver(getRegistrationValidationSchema()),
+    mode: 'onBlur',
     values: {
-      [RegisterItems.email]: '',
-      [RegisterItems.name]: '',
-      [RegisterItems.password]: '',
-      [RegisterItems.passwordConfirmation]: '',
+      [RegistrationItems.email]: '',
+      [RegistrationItems.name]: '',
+      [RegistrationItems.password]: '',
+      [RegistrationItems.passwordConfirmation]: '',
     }
   });
 
   const data = watch();
 
   const submit = useCallback(
-    (data: RegisterData) => {
-      dispatch(apiPostRegister(omit([RegisterItems.passwordConfirmation], data)));
+    (data: RegistrationData) => {
+      dispatch(apiPostRegister({
+        body: omit([RegistrationItems.passwordConfirmation], data),
+        onSuccess: () => {
+          enqueueSnackbar(t('registration:registered', {variant: 'success'}));
+        }
+      }));
     },
-    [dispatch]
+    [dispatch, enqueueSnackbar]
   );
 
   const handleClick = useCallback(
     () => {
-      dispatch(apiPostRegister(omit([RegisterItems.passwordConfirmation], data)));
+      submit(data);
     },
-    [dispatch, data]
+    [dispatch, enqueueSnackbar, data]
   );
 
   return (
@@ -51,7 +59,7 @@ const RegisterForm = ({handleClose}: RegisterFormProps) => {
       <Grid container rowSpacing={4} columnSpacing={2}>
         <Grid md={6} xs={12}>
           <Controller
-            name={RegisterItems.email}
+            name={RegistrationItems.email}
             control={control}
             defaultValue={data.email}
             render={({ field }) => (
@@ -67,7 +75,7 @@ const RegisterForm = ({handleClose}: RegisterFormProps) => {
         </Grid>
         <Grid md={6} xs={12}>
           <Controller
-            name={RegisterItems.name}
+            name={RegistrationItems.name}
             control={control}
             defaultValue={data.name}
             render={({ field }) => (
@@ -82,7 +90,7 @@ const RegisterForm = ({handleClose}: RegisterFormProps) => {
         </Grid>
         <Grid md={6} xs={12}>
           <Controller
-            name={RegisterItems.password}
+            name={RegistrationItems.password}
             control={control}
             defaultValue={data.password}
             render={({ field }) => (
@@ -99,7 +107,7 @@ const RegisterForm = ({handleClose}: RegisterFormProps) => {
         </Grid>
         <Grid md={6} xs={12}>
           <Controller
-            name={RegisterItems.passwordConfirmation}
+            name={RegistrationItems.passwordConfirmation}
             control={control}
             defaultValue={data.passwordConfirmation}
             render={({ field }) => (
@@ -109,7 +117,7 @@ const RegisterForm = ({handleClose}: RegisterFormProps) => {
                 label={t('labels:passwordConfirmation')}
                 error={Boolean(errors.passwordConfirmation)}
                 helperText={errors.passwordConfirmation?.message}
-                type="passwordConfirmation"
+                type="password"
               />
             )}
           />
@@ -138,4 +146,4 @@ const RegisterForm = ({handleClose}: RegisterFormProps) => {
   );
 };
 
-export default memo(RegisterForm);
+export default memo(RegistrationForm);

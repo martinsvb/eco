@@ -4,8 +4,10 @@
   "login": "Login",
   "loginButton": "Login",
   "name": "Name",
+  "otp": "OTP code",
   "password": "Password",
   "passwordConfirmation": "Password confirmation",
   "register": "Regiter",
-  "registerButton": "Register"
+  "registerButton": "Register",
+  "verify": "Verify"
 }

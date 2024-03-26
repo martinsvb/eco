@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
-import { Box, IconButton, Toolbar, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { selectIsUserLoggedIn, useShallowEqualSelector } from '@eco/redux';
+import { selectIsUserLoggedIn, selectRegistration, useShallowEqualSelector } from '@eco/redux';
 import UserMenu from '../user/UserMenu';
 import LoginButton from '../user/LoginButton';
+import RegisterButton from '../user/RegistrationButton';
+import { RegistrationState } from '@eco/types';
 
 interface AppToolbarProps {
   isMobile?: boolean;
@@ -13,6 +15,8 @@ interface AppToolbarProps {
 const AppToolbar = ({isMobile, setOpen}: AppToolbarProps) => {
 
   const isUserLoggedIn = useShallowEqualSelector(selectIsUserLoggedIn);
+
+  const state = useShallowEqualSelector(selectRegistration);
 
   const handleOpen = useCallback(
     () => {
@@ -36,10 +40,14 @@ const AppToolbar = ({isMobile, setOpen}: AppToolbarProps) => {
         </Typography>
       </Box>
       <Box sx={{flexGrow: 0}}>
-        {isUserLoggedIn ?
+        {isUserLoggedIn && state === RegistrationState.none ?
           <UserMenu isMobile={isMobile} />
           :
-          <LoginButton />
+          <Stack direction="row">
+            <LoginButton isMobile={isMobile} />
+            {!isMobile && <Typography variant='h6' mx={1}>|</Typography>}
+            <RegisterButton isMobile={isMobile} />
+          </Stack>
         }
       </Box>
     </Toolbar>

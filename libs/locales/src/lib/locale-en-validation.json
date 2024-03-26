@@ -1,5 +1,6 @@
 {
   "email": "Invalid e-mail",
   "required": "{{Field}} is required",
+  "numLength": "Length must be {{length}} digits",
   "equal": "Fields {{Field1}} a {{Field2}} must equal"
 }

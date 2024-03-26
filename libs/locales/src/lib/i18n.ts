@@ -3,9 +3,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import { languages } from './languages';
 import labelsCs from './locale-cs-labels.json';
+import registrationCs from './locale-cs-registration.json';
 import translationCs from './locale-cs-translation.json';
 import validationCs from './locale-cs-validation.json';
 import labelsEn from './locale-en-labels.json';
+import registrationEn from './locale-en-registration.json';
 import translationEn from './locale-en-translation.json';
 import validationEn from './locale-en-validation.json';
 
@@ -27,11 +29,13 @@ i18n
     resources: {
       cs: {
         translation: translationCs,
+        registration: registrationCs,
         labels: labelsCs,
         validation: validationCs,
       },
       en: {
         translation: translationEn,
+        registration: registrationEn,
         labels: labelsEn,
         validation: validationEn,
       },

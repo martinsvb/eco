@@ -2,10 +2,12 @@ import { forwardRef, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, IconButton, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import LoginIcon from '@mui/icons-material/Login';
-import Login from '../Auth/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { setRegistration, useAppDispatch } from '@eco/redux';
+import { RegistrationState } from '@eco/types';
+import Registration from '../Auth/Registration';
 
-interface LoginButtonProps {
+interface RegistrationButtonProps {
   isMobile?: boolean;
 }
 
@@ -18,41 +20,45 @@ const Transition = forwardRef((
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const LoginButton = ({isMobile}: LoginButtonProps) => {
+const RegistrationButton = ({isMobile}: RegistrationButtonProps) => {
 
   const [open, setOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
 
   const handleClickOpen = useCallback(
     () => {
+      dispatch(setRegistration(RegistrationState.registration));
       setOpen(true);
     },
-    []
+    [dispatch]
   );
 
   const handleClose = useCallback(
     () => {
+      dispatch(setRegistration(RegistrationState.none));
       setOpen(false);
     },
-    []
+    [dispatch]
   );
 
   return (
     <>
       {isMobile ?
         <IconButton
-          aria-label={t('labels:loginButton')}
+          aria-label={t('labels:registerButton')}
           onClick={handleClickOpen}
         >
-          <LoginIcon />
+          <HowToRegIcon />
         </IconButton>
         :
         <Button
           color="inherit"
           onClick={handleClickOpen}
         >
-          {t('labels:loginButton')}
+          {t('labels:registerButton')}
         </Button>
       }
       <Dialog
@@ -61,10 +67,10 @@ const LoginButton = ({isMobile}: LoginButtonProps) => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <Login handleClose={handleClose} />
+        <Registration handleClose={handleClose} />
       </Dialog>
     </>
   );
 }
 
-export default LoginButton;
+export default RegistrationButton;

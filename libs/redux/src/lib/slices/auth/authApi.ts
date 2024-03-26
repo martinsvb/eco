@@ -1,6 +1,7 @@
 import { checkResponse, endPoints, getErrorValue, postHeaders } from '@eco/config';
-import { LoginData, RegisterData, RegisterItems } from '@eco/types';
+import { LoginData, RegistrationData, RegistrationItems, RegistrationState, VerificationPayload } from '@eco/types';
 import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsyncThunk';
+import { setRegistration, setRegistrationEmail } from './authSlice';
 
 export const loginPost = async (
   body: LoginData,
@@ -39,11 +40,29 @@ export const refreshPost = async (
 }
 
 export const registerPost = async (
-  body: Omit<RegisterData, RegisterItems.passwordConfirmation>,
-  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+  {body, onSuccess}: {body: Omit<RegistrationData, RegistrationItems.passwordConfirmation>, onSuccess: () => void},
+  { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const data = await checkResponse(await fetch(`/api/${endPoints.register}`, postHeaders({body, signal}))).json();
+    dispatch(setRegistration(RegistrationState.verification));
+    dispatch(setRegistrationEmail(body.email));
+    onSuccess();
+    return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const verifyPost = async (
+  {body, onSuccess}: {body: VerificationPayload, onSuccess: () => void},
+  { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const data = await checkResponse(await fetch(`/api/${endPoints.verify}`, postHeaders({body, signal}))).json();
+    dispatch(setRegistration(RegistrationState.none));
+    dispatch(setRegistrationEmail(null));
+    onSuccess();
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
