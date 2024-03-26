@@ -7,7 +7,7 @@ import { store } from '@eco/redux';
 import { Provider } from 'react-redux';
 import { router } from './Router/routerConfiguration';
 import MuiProviders from './MuiProviders';
-import i18n from './app/locales/i18n';
+import i18n from '@eco/locales';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -1,11 +1,11 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import { LANGUAGES } from './languages';
-import labelsCs from './locales-cs-labels.json';
-import translationCs from './locales-cs-translation.json';
-import labelsEn from './locales-en-labels.json';
-import translationEn from './locales-en-translation.json';
+import { languages } from './languages';
+import labelsCs from './locale-cs-labels.json';
+import translationCs from './locale-cs-translation.json';
+import labelsEn from './locale-en-labels.json';
+import translationEn from './locale-en-translation.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -32,7 +32,7 @@ i18n
         labels: labelsEn,
       },
     },
-    fallbackLng: LANGUAGES.cs,
+    fallbackLng: languages.en,
     interpolation: {
       // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
       escapeValue: false,

@@ -19,5 +19,13 @@
     "src/**/*.spec.jsx",
     "src/**/*.test.jsx"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../../libs/locales/src/lib/i18n.ts",
+    "../../libs/locales/src/lib/languages.ts",
+    "../../libs/locales/src/lib/i18next-parser.config.js"
+  ]
 }

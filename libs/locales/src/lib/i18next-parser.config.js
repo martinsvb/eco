@@ -48,7 +48,7 @@ module.exports = {
     // Supports $LOCALE and $NAMESPACE injection
     // Supports JSON (.json) and YAML (.yml) file formats
     // Where to write the locale files relative to process.cwd()
-    output: 'src/locales/locale-$LOCALE-$NAMESPACE.json',
+    output: 'libs/locales/src/lib/locale-$LOCALE-$NAMESPACE.json',
   
     // An array of globs that describe where to look for source files
     // relative to the location of the configuration file

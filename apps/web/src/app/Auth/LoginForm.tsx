@@ -1,11 +1,11 @@
 import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField } from '@mui/material';
 import { apiPostLogin, useAppDispatch } from '@eco/redux';
 import { LoginData, LoginItems, getLoginValidationSchema } from '@eco/types';
 import { useLoginSuccess } from './useLoginSuccess';
-import { useTranslation } from 'react-i18next';
 
 interface LoginFormProps {
   handleClose: () => void;
@@ -82,13 +82,13 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
             variant="contained"
             onClick={handleClick}
           >
-            Login
+            {t('labels:login')}
           </Button>
           <Button
             variant="text"
             onClick={handleClose}
           >
-            Close
+            {t('labels:close')}
           </Button>
         </Stack>
       </Stack>

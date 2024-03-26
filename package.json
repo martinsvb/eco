@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "locales": "i18next apps/web/src/app/**/*.{ts,tsx} --config apps/web/src/app/locales/i18next-parser.config.js"
+    "locales-web": "i18next apps/web/src/app/**/*.{ts,tsx} --config libs/locales/src/lib/i18next-parser.config.js"
   },
   "private": true,
   "dependencies": {

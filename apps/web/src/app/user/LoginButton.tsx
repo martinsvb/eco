@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { Dialog, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import Login from '../Auth/Login';
+import { useTranslation } from 'react-i18next';
 
 const Transition = forwardRef((
   props: TransitionProps & {
@@ -16,6 +17,8 @@ const Transition = forwardRef((
 const LoginButton = () => {
 
   const [open, setOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   const handleClickOpen = useCallback(
     () => {
@@ -37,7 +40,7 @@ const LoginButton = () => {
         color="inherit"
         onClick={handleClickOpen}
       >
-        Login
+        {t('labels:loginButton')}
       </Button>
       <Dialog
         fullScreen
