@@ -4,7 +4,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField } from '@mui/material';
 import { apiPostLogin, useAppDispatch } from '@eco/redux';
-import { LoginData, LoginItems, getLoginValidationSchema } from '@eco/types';
+import { LoginData, LoginItems } from '@eco/types';
+import { getLoginValidationSchema } from '@eco/validation';
 import { useLoginSuccess } from './useLoginSuccess';
 
 interface LoginFormProps {

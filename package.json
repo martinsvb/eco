@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "locales-web": "i18next apps/web/src/app/**/*.{ts,tsx} --config libs/locales/src/lib/i18next-parser.config.js"
+    "locales-web": "i18next apps/web/src/app/**/*.{ts,tsx} --config libs/locales/src/lib/i18next-parser.config.js",
+    "locales-validation": "i18next libs/validation/src/**/*.{ts} --config libs/locales/src/lib/i18next-parser.config.js"
   },
   "private": true,
   "dependencies": {

@@ -19,7 +19,8 @@
       "@eco/config": ["libs/config/src/index.ts"],
       "@eco/locales": ["libs/locales/src/index.ts"],
       "@eco/redux": ["libs/redux/src/index.ts"],
-      "@eco/types": ["libs/types/src/index.ts"]
+      "@eco/types": ["libs/types/src/index.ts"],
+      "@eco/validation": ["libs/validation/src/index.ts"]
     },
     "types": ["node", "jest"]
   },

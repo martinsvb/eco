@@ -4,8 +4,10 @@ import { initReactI18next } from 'react-i18next';
 import { languages } from './languages';
 import labelsCs from './locale-cs-labels.json';
 import translationCs from './locale-cs-translation.json';
+import validationCs from './locale-cs-validation.json';
 import labelsEn from './locale-en-labels.json';
 import translationEn from './locale-en-translation.json';
+import validationEn from './locale-en-validation.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -26,10 +28,12 @@ i18n
       cs: {
         translation: translationCs,
         labels: labelsCs,
+        validation: validationCs,
       },
       en: {
         translation: translationEn,
         labels: labelsEn,
+        validation: validationEn,
       },
     },
     fallbackLng: languages.en,
