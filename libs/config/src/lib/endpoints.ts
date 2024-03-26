@@ -4,5 +4,6 @@ export const endPoints = {
   login: 'auth/login',
   loginGoogle: 'auth/login-google',
   refresh: 'auth/refresh',
+  register: 'auth/register',
   users: 'users',
 };

@@ -3,5 +3,9 @@
   "email": "E-mail",
   "login": "Login",
   "loginButton": "Login",
-  "password": "Password"
+  "name": "Name",
+  "password": "Password",
+  "passwordConfirmation": "Password confirmation",
+  "register": "Regiter",
+  "registerButton": "Register"
 }

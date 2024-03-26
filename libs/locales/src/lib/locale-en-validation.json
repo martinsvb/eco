@@ -1,4 +1,5 @@
 {
   "email": "Invalid e-mail",
-  "required": "{{Field}} is required"
+  "required": "{{Field}} is required",
+  "equal": "Fields {{Field1}} a {{Field2}} must equal"
 }

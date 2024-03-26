@@ -1,5 +1,5 @@
 import { checkResponse, endPoints, getErrorValue, postHeaders } from '@eco/config';
-import { LoginData } from '@eco/types';
+import { LoginData, RegisterData, RegisterItems } from '@eco/types';
 import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsyncThunk';
 
 export const loginPost = async (
@@ -7,7 +7,8 @@ export const loginPost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    return await checkResponse(await fetch(`/api/${endPoints.login}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(await fetch(`/api/${endPoints.login}`, postHeaders({body, signal}))).json();
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }
@@ -18,7 +19,8 @@ export const loginGooglePost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    return await checkResponse(await fetch(`/api/${endPoints.loginGoogle}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(await fetch(`/api/${endPoints.loginGoogle}`, postHeaders({body, signal}))).json();
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }
@@ -29,7 +31,20 @@ export const refreshPost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    return await checkResponse(await fetch(`/api/${endPoints.refresh}`, postHeaders({signal}))).json();
+    const data = await checkResponse(await fetch(`/api/${endPoints.refresh}`, postHeaders({signal}))).json();
+    return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const registerPost = async (
+  body: Omit<RegisterData, RegisterItems.passwordConfirmation>,
+  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const data = await checkResponse(await fetch(`/api/${endPoints.register}`, postHeaders({body, signal}))).json();
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

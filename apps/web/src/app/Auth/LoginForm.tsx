@@ -31,9 +31,12 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
 
   const data = watch();
 
-  const submit = useCallback((data: LoginData) => {
-    dispatch(apiPostLogin(data));
-  }, [dispatch]);
+  const submit = useCallback(
+    (data: LoginData) => {
+      dispatch(apiPostLogin(data));
+    },
+    [dispatch]
+  );
 
   const handleClick = useCallback(
     () => {

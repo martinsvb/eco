@@ -4,8 +4,9 @@ import { User } from '@prisma/client';
 import { Response, Request } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import { AccessTokenAuthEntity, AuthEntity } from './entities/auth.entity';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 import { VerifyDto } from './dto/verify.dto';
 
 const client = new OAuth2Client(
@@ -71,7 +72,7 @@ export class AuthController {
 
   @Post('register')
   @ApiOkResponse({ type: AuthEntity })
-  async register(@Body() registrationData: LoginDto) {
+  async register(@Body() registrationData: RegisterDto) {
     const { auth } = await this.authService.register(registrationData);
     return auth;
   }

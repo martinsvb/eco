@@ -16,6 +16,7 @@ import { nanoid } from 'nanoid'
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
 import { LoginDto } from './dto/login.dto';
 import { VerifyDto } from './dto/verify.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -115,7 +116,7 @@ export class AuthService {
     };
   }
 
-  async register({email, password}: LoginDto): Promise<FullAuthEntity> {
+  async register({email, name, password}: RegisterDto): Promise<FullAuthEntity> {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
@@ -123,6 +124,7 @@ export class AuthService {
       user = await this.prisma.user.create({
         data: {
           email,
+          name,
           password: await bcrypt.hash(password, parseInt(process.env.HASHING_ROUNDS, 10)),
           origin: UserOrigins.internal,
           otp

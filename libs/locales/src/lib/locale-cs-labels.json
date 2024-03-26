@@ -3,5 +3,9 @@
   "email": "E-mail",
   "login": "Přihlásit",
   "loginButton": "Přihlášení",
-  "password": "Heslo"
+  "name": "Jméno",
+  "password": "Heslo",
+  "passwordConfirmation": "Potvrzení hesla",
+  "register": "Registrovat",
+  "registerButton": "Registrace"
 }

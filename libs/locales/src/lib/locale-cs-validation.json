@@ -1,4 +1,5 @@
 {
   "email": "Neplatný formát e-mailové adresy",
-  "required": "{{Field}} je povinný údaj"
+  "required": "{{Field}} je povinný údaj",
+  "equal": "Pole {{Field1}} a {{Field2}} musí být schodná"
 }

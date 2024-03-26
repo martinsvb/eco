@@ -1,5 +1,5 @@
 import { BasicUser } from '@eco/types';
-import { loginGooglePost, loginPost, refreshPost } from "./authApi";
+import { loginGooglePost, loginPost, refreshPost, registerPost } from "./authApi";
 import { createSlice } from '../createSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 
@@ -89,7 +89,25 @@ const authSlice = createSlice({
           state.refreshLoading = false;
         },
       },
-    )
+    ),
+    apiPostRegister: create.asyncThunk(
+      registerPost,
+      {
+        pending: (state) => {
+          state.loginLoading = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.loginError = payload ?? error;
+        },        
+        fulfilled: (state, { payload: { accessToken, user } }) => {
+          state.accessToken = accessToken
+          state.user = user;
+        },
+        settled: (state) => {
+          state.loginLoading = false;
+        },
+      },
+    ),
   }),
   selectors: {
     selectUserAuth: (state) => state.user,
@@ -104,6 +122,7 @@ export const {
   apiPostLogin,
   apiPostLoginGoogle,
   apiPostRefresh,
+  apiPostRegister,
   logout,
   setLoginGoogleError
 } = authSlice.actions;
