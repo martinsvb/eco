@@ -25,7 +25,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<VerificationData>({
     resolver: yupResolver(getVerificationValidationSchema()),
-    mode: 'onBlur',
+    mode: 'onTouched',
     values: {
       [VerificationItems.otp]: '',
     } as unknown as VerificationData

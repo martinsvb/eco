@@ -116,15 +116,15 @@ export class AuthService {
     };
   }
 
-  async register({email, name, password}: RegisterDto): Promise<FullAuthEntity> {
+  async register({email, password, ...rest}: RegisterDto): Promise<FullAuthEntity> {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
       const otp = Math.floor(100000 + Math.random() * 900000);
       user = await this.prisma.user.create({
         data: {
+          ...rest,
           email,
-          name,
           password: await bcrypt.hash(password, parseInt(process.env.HASHING_ROUNDS, 10)),
           origin: UserOrigins.internal,
           otp

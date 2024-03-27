@@ -14,14 +14,10 @@ export const getRegistrationValidationSchema = () => {
       .required(t('validation:required', {Field: t('labels:password')})),
     [RegistrationItems.passwordConfirmation]: yup.string()
       .required(t('validation:required', {Field: t('labels:passwordConfirmation')}))
-      .when(RegistrationItems.password, ([password], schema) => {
-        return schema.test({
-          test: passwordConfirmation => {
-            return !!password && !!passwordConfirmation && password === passwordConfirmation
-          },
-          message: t('validation:equal', {Field1: t('labels:password'), Field2: t('labels:passwordConfirmation')})
-        })
-      }),
+      .oneOf(
+        [yup.ref(RegistrationItems.password)],
+        t('validation:equal', {Field: t('labels:password')})
+      ),
   });
 }
 

@@ -72,15 +72,15 @@ export class AuthController {
 
   @Post('register')
   @ApiOkResponse({ type: AuthEntity })
-  async register(@Body() registrationData: RegisterDto) {
-    const { auth } = await this.authService.register(registrationData);
+  async register(@Body() body: RegisterDto) {
+    const { auth } = await this.authService.register(body);
     return auth;
   }
 
   @Post('verify')
   @ApiOkResponse({ type: AuthEntity })
-  async verify(@Body() verificationData: VerifyDto) {
-    const auth = await this.authService.verify(verificationData);
+  async verify(@Body() body: VerifyDto) {
+    const auth = await this.authService.verify(body);
     return auth;
   }
 }

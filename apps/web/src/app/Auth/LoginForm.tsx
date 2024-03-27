@@ -22,7 +22,7 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<LoginData>({
     resolver: yupResolver(getLoginValidationSchema()),
-    mode: 'onBlur',
+    mode: 'onTouched',
     values: {
       [LoginItems.email]: '',
       [LoginItems.password]: ''

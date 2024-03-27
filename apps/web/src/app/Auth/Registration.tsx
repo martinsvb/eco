@@ -5,12 +5,14 @@ import { selectRegistration, useShallowEqualSelector } from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import RegistrationForm from './RegistrationForm';
 import VerificationForm from './VerificationForm';
+import { unsplashUrl } from '@eco/config';
 
 interface RegistrationProps {
   handleClose: () => void;
+  isMobile?: boolean;
 }
 
-const Registration = ({handleClose}: RegistrationProps) => {
+const Registration = ({handleClose, isMobile}: RegistrationProps) => {
 
   const { palette, shape } = useTheme();
 
@@ -36,11 +38,11 @@ const Registration = ({handleClose}: RegistrationProps) => {
       justifyContent="center"
       alignItems="center"
       sx={{
-        background: 'url(https://source.unsplash.com/featured/1920x1080)',
+        background: unsplashUrl,
       }}
     >
       <Stack
-        width={600}
+        width={isMobile ? 300 : 600}
         component={Paper}
         spacing={4}
         padding={4}

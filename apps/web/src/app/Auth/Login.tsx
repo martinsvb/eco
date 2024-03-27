@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { alpha, Divider, Paper, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { unsplashUrl } from '@eco/config';
 import GoogleLoginCmp from './GoogleLogin';
 import LoginForm from './LoginForm';
 
@@ -19,7 +20,7 @@ const Login = ({handleClose}: LoginProps) => {
       justifyContent="center"
       alignItems="center"
       sx={{
-        background: 'url(https://source.unsplash.com/featured/1920x1080)',
+        background: unsplashUrl,
       }}
     >
       <Stack

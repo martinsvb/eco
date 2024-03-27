@@ -1,14 +1,14 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
-import { omit } from 'ramda';
+import { compose, filter, isEmpty, not, omit } from 'ramda';
+import { Button, Stack, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Stack, TextField } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { apiPostRegister, useAppDispatch } from '@eco/redux';
 import { RegistrationData, RegistrationItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
-import { useSnackbar } from 'notistack';
 
 interface RegistrationFormProps {
   handleClose: () => void;
@@ -24,7 +24,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<RegistrationData>({
     resolver: yupResolver(getRegistrationValidationSchema()),
-    mode: 'onBlur',
+    mode: 'onTouched',
     values: {
       [RegistrationItems.email]: '',
       [RegistrationItems.name]: '',
@@ -38,7 +38,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
   const submit = useCallback(
     (data: RegistrationData) => {
       dispatch(apiPostRegister({
-        body: omit([RegistrationItems.passwordConfirmation], data),
+        body: filter(compose(not, isEmpty) ,omit([RegistrationItems.passwordConfirmation], data)),
         onSuccess: () => {
           enqueueSnackbar(t('registration:registered', {variant: 'success'}));
         }

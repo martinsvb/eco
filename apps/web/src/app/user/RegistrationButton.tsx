@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Dialog, IconButton, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import { setRegistration, useAppDispatch } from '@eco/redux';
+import { setRegistration, setRegistrationEmail, useAppDispatch } from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import Registration from '../Auth/Registration';
 
@@ -31,6 +31,7 @@ const RegistrationButton = ({isMobile}: RegistrationButtonProps) => {
   const handleClickOpen = useCallback(
     () => {
       dispatch(setRegistration(RegistrationState.registration));
+      dispatch(setRegistrationEmail(null));
       setOpen(true);
     },
     [dispatch]
@@ -67,7 +68,7 @@ const RegistrationButton = ({isMobile}: RegistrationButtonProps) => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <Registration handleClose={handleClose} />
+        <Registration handleClose={handleClose} isMobile={isMobile} />
       </Dialog>
     </>
   );
