@@ -8,17 +8,20 @@ import {
   Delete,
   NotFoundException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
-import { AccountsService } from './accounts.service';
-import { CreateAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request } from 'express';
+import { User } from '@prisma/client';
 import { endPoints } from '@eco/config';
+import { AccountsService } from './accounts.service';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccountEntity } from './entities/account.entity';
 import { EmailGuard } from '../auth/email.guard';
 import { JwtAuthGuard } from '../auth/jwt.guard';
@@ -48,8 +51,8 @@ export class AccountsController {
     status: 200,
     description: 'Accounts has been successfully loaded.',
   })
-  async findAll() {
-    const accounts = await this.accountsService.findAll();
+  async findAll(@Req() {user}: Request) {
+    const accounts = await this.accountsService.findAll(user as User);
     return accounts.map((account) => new AccountEntity(account));
   }
 

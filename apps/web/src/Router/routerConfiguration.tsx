@@ -2,7 +2,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import { routes } from "@eco/config";
 import App from "../app/app";
 import { Home } from "../app/Home";
-import { AccountsCmp } from "../app/AccountsCmp";
+import { Accounts } from "../app/accounts/Accounts";
 import { Users } from "../app/Users";
 
 export const router = createBrowserRouter([
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
         { index: true, element: <Navigate to={`${routes.base}${routes.home}`} replace /> },
         {
           path: routes.accounts,
-          element: <AccountsCmp />,
+          element: <Accounts />,
         },
         {
           path: routes.home,
