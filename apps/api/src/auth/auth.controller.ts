@@ -72,15 +72,25 @@ export class AuthController {
 
   @Post('register')
   @ApiOkResponse({ type: AuthEntity })
-  async register(@Body() body: RegisterDto) {
-    const { auth } = await this.authService.register(body);
-    return auth;
+  async register(@Res() res: Response, @Body() body: RegisterDto) {
+    await this.authService.register(body);
+
+    res.send({registered: true});
   }
 
   @Post('verify')
   @ApiOkResponse({ type: AuthEntity })
-  async verify(@Body() body: VerifyDto) {
-    const auth = await this.authService.verify(body);
-    return auth;
+  async verify(@Res() res: Response, @Body() body: VerifyDto) {
+    const { auth, refreshToken } = await this.authService.verify(body);
+
+    this.setRefreshtoken(res, refreshToken);
+
+    res.send(auth);
+  }
+
+  @Post('resend')
+  async resend(@Body('email') email) {
+    await this.authService.resendVerification(email);
+    return {resent: true};
   }
 }

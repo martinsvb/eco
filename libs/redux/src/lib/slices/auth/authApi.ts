@@ -68,3 +68,16 @@ export const verifyPost = async (
     return rejectWithValue(getErrorValue(error));
   }
 }
+
+export const resendPost = async (
+  {body, onSuccess}: {body: Pick<VerificationPayload, RegistrationItems.email>, onSuccess: () => void},
+  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const data = await checkResponse(await fetch(`/api/${endPoints.resend}`, postHeaders({body, signal}))).json();
+    onSuccess();
+    return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}

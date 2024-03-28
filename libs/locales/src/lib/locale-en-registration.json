@@ -1,6 +1,8 @@
 {
   "inProgress": "User registration",
   "registered": "User has been registered successfully",
+  "resent": "Verification code has been resent on your e-mail",
   "verification": "User verification",
+  "verificationInfo": "Verification code has been sent on your e-mail",
   "verified": "User has been verified successfully"
 }

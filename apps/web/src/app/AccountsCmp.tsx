@@ -26,7 +26,7 @@ export const AccountsCmp = () => {
       <Typography variant='h3' mb={2}>Accounts</Typography>
       <LoginWrapper>
         {accounts.map(({name, iban}) => (
-          <Card variant="outlined" sx={{mb: 2}}>
+          <Card key={iban} variant="outlined" sx={{mb: 2}}>
             <CardContent>
               <Typography variant="h5" component="div">
                 {name}

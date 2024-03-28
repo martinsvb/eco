@@ -14,7 +14,6 @@ import { isTokenValid } from '@eco/config';
 import { UserOrigins } from '@eco/types';
 import { nanoid } from 'nanoid'
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
-import { LoginDto } from './dto/login.dto';
 import { VerifyDto } from './dto/verify.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -46,6 +45,8 @@ export class AuthService {
       refreshToken: this.getRefreshToken(user.id)
     }
   }
+
+  getOtpCode = () => Math.floor(100000 + Math.random() * 900000);
 
   decodeRefreshToken(token: string) {
     try {
@@ -120,7 +121,7 @@ export class AuthService {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
-      const otp = Math.floor(100000 + Math.random() * 900000);
+      const otp = this.getOtpCode();
       user = await this.prisma.user.create({
         data: {
           ...rest,
@@ -130,7 +131,7 @@ export class AuthService {
           otp
         },
       });
-      this.sendVerificationLink(email, otp)
+      this.sendVerification(email, otp)
     }
 
     if (!user) {
@@ -147,7 +148,22 @@ export class AuthService {
     };
   }
 
-  sendVerificationLink(email: string, otp: number) {
+  async resendVerification(email: string) {
+    const otp = this.getOtpCode();
+
+    await this.prisma.user.update({
+      where: {
+        email
+      },
+      data: {
+        otp
+      }
+    });
+
+    this.sendVerification(email, otp);
+  }
+
+  sendVerification(email: string, otp: number) {
  
     return this.mailerService
       .sendMail({
@@ -174,7 +190,15 @@ export class AuthService {
       throw new UnauthorizedException('Invalid otp code');
     }
 
-    await this.prisma.user.update({ where: { email }, data: {isEmailConfirmed: true} })
+    user = await this.prisma.user.update({
+      where: {
+        email
+      },
+      data: {
+        isEmailConfirmed: true,
+        otp: null
+      }
+    });
 
     return this.getAuthData(user);
   }

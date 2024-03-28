@@ -9,5 +9,6 @@
   "passwordConfirmation": "Potvrzení hesla",
   "register": "Registrovat",
   "registerButton": "Registrace",
+  "resend": "Znovu odeslat kód",
   "verify": "Ověřit"
 }

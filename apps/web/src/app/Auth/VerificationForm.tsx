@@ -4,8 +4,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { is } from 'ramda';
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Stack, TextField } from '@mui/material';
-import { apiPostVerify, selectRegistrationEmail, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import {
+  apiPostResend, apiPostVerify, selectRegistrationEmail, useAppDispatch, useShallowEqualSelector
+} from '@eco/redux';
 import { VerificationData, VerificationItems } from '@eco/types';
 import { getVerificationValidationSchema } from '@eco/validation';
 
@@ -39,7 +41,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
         dispatch(apiPostVerify({
           body: {otp: Number(otp), email},
           onSuccess: () => {
-            enqueueSnackbar(t('registration:verified', {variant: 'success'}));
+            enqueueSnackbar(t('registration:verified'), {variant: 'success'});
           }
         }));
       }
@@ -54,9 +56,24 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
     [dispatch, enqueueSnackbar, data, email]
   );
 
+  const handleResend = useCallback(
+    () => {
+      if (is(String, email)) {
+        dispatch(apiPostResend({
+          body: {email},
+          onSuccess: () => {
+            enqueueSnackbar(t('registration:resent'), {variant: 'success'});
+          }
+        }));
+      }
+    },
+    [dispatch, email]
+  );
+
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Stack>
+        <Typography variant="body1" mb={2}>{t('registration:verificationInfo')}</Typography>
         <Controller
           name={VerificationItems.otp}
           control={control}
@@ -74,19 +91,27 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
         />
         <Stack direction="row" justifyContent="space-between">
           <Button
-            disabled={!isValid}
-            type="submit"
-            variant="contained"
-            onClick={handleClick}
+            variant="outlined"
+            onClick={handleResend}
           >
-            {t('labels:verify')}
+            {t('labels:resend')}
           </Button>
-          <Button
-            variant="text"
-            onClick={handleClose}
-          >
-            {t('labels:close')}
-          </Button>
+          <Box>
+            <Button
+              disabled={!isValid}
+              type="submit"
+              variant="contained"
+              onClick={handleClick}
+            >
+              {t('labels:verify')}
+            </Button>
+            <Button
+              variant="text"
+              onClick={handleClose}
+            >
+              {t('labels:close')}
+            </Button>
+          </Box>
         </Stack>
       </Stack>
     </form>

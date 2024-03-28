@@ -1,17 +1,13 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { BasicUser, RegistrationState } from '@eco/types';
-import { loginGooglePost, loginPost, refreshPost, registerPost, verifyPost } from "./authApi";
+import { AuthOperations, BasicUser, RegistrationState } from '@eco/types';
+import { loginGooglePost, loginPost, refreshPost, registerPost, resendPost, verifyPost } from "./authApi";
 import { createSlice } from '../createSlice';
 
 export interface AuthState {
   accessToken: string;
   user: BasicUser;
-  loginError: unknown | null;
-  loginLoading: boolean;
-  loginGoogleError: unknown | null;
-  loginGoogleLoading: boolean;
-  refreshError: unknown | null;
-  refreshLoading: boolean;
+  error: {[key: string]: unknown | null};
+  loading: {[key: string]: boolean};
   registration: RegistrationState;
   registrationEmail: string | null;
 }
@@ -22,12 +18,8 @@ export const initialAuthState: AuthState = {
     name: null,
     picture: null
   },
-  loginError: null,
-  loginLoading: false,
-  loginGoogleError: null,
-  loginGoogleLoading: false,
-  refreshError: null,
-  refreshLoading: false,
+  error: {},
+  loading: {},
   registration: RegistrationState.none,
   registrationEmail: null,
 };
@@ -38,7 +30,7 @@ const authSlice = createSlice({
   reducers: (create) => ({
     logout: create.reducer(() => initialAuthState),
     setLoginGoogleError: create.reducer((state, {payload}: PayloadAction<string>) => {
-      state.loginGoogleError = payload
+      state.error[AuthOperations.loginGoogle] = payload
     }),
     setRegistration: create.reducer((state, {payload}: PayloadAction<RegistrationState>) => {
       state.registration = payload
@@ -50,17 +42,17 @@ const authSlice = createSlice({
       loginPost,
       {
         pending: (state) => {
-          state.loginLoading = true;
+          state.loading[AuthOperations.login] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.loginError = payload ?? error;
+          state.error[AuthOperations.login] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           state.accessToken = accessToken
           state.user = user;
         },
         settled: (state) => {
-          state.loginLoading = false;
+          state.loading[AuthOperations.login] = false;
         },
       },
     ),
@@ -68,17 +60,17 @@ const authSlice = createSlice({
       loginGooglePost,
       {
         pending: (state) => {
-          state.loginGoogleLoading = true;
+          state.loading[AuthOperations.loginGoogle] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.loginGoogleError = payload ?? error;
+          state.error[AuthOperations.loginGoogle] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           state.accessToken = accessToken
           state.user = user;
         },
         settled: (state) => {
-          state.loginGoogleLoading = false;
+          state.loading[AuthOperations.loginGoogle] = false;
         },
       },
     ),
@@ -86,17 +78,17 @@ const authSlice = createSlice({
       refreshPost,
       {
         pending: (state) => {
-          state.refreshLoading = true;
+          state.loading[AuthOperations.refresh] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.refreshError = payload ?? error;
+          state.error[AuthOperations.refresh] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           state.accessToken = accessToken
           state.user = user;
         },
         settled: (state) => {
-          state.refreshLoading = false;
+          state.loading[AuthOperations.refresh] = false;
         },
       },
     ),
@@ -104,17 +96,13 @@ const authSlice = createSlice({
       registerPost,
       {
         pending: (state) => {
-          state.loginLoading = true;
+          state.loading[AuthOperations.register] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.loginError = payload ?? error;
-        },        
-        fulfilled: (state, { payload: { accessToken, user } }) => {
-          state.accessToken = accessToken
-          state.user = user;
+          state.error[AuthOperations.register] = payload ?? error;
         },
         settled: (state) => {
-          state.loginLoading = false;
+          state.loading[AuthOperations.register] = false;
         },
       },
     ),
@@ -122,17 +110,31 @@ const authSlice = createSlice({
       verifyPost,
       {
         pending: (state) => {
-          state.loginLoading = true;
+          state.loading[AuthOperations.verify] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.loginError = payload ?? error;
+          state.error[AuthOperations.verify] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           state.accessToken = accessToken
           state.user = user;
         },
         settled: (state) => {
-          state.loginLoading = false;
+          state.loading[AuthOperations.verify] = false;
+        },
+      },
+    ),
+    apiPostResend: create.asyncThunk(
+      resendPost,
+      {
+        pending: (state) => {
+          state.loading[AuthOperations.resend] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.error[AuthOperations.resend] = payload ?? error;
+        },
+        settled: (state) => {
+          state.loading[AuthOperations.resend] = false;
         },
       },
     ),
@@ -141,6 +143,7 @@ const authSlice = createSlice({
     selectUserAuth: (state) => state.user,
     selectAccessToken: (state) => state.accessToken,
     selectIsUserLoggedIn: (state) => !!state.accessToken,
+    selectIsAuthLoading: (state, operation: AuthOperations) => !!state.loading[operation],
     selectRegistration: (state) => state.registration,
     selectRegistrationEmail: (state) => state.registrationEmail,
   },
@@ -153,6 +156,7 @@ export const {
   apiPostLoginGoogle,
   apiPostRefresh,
   apiPostRegister,
+  apiPostResend,
   apiPostVerify,
   logout,
   setLoginGoogleError,
@@ -164,6 +168,7 @@ export const {
   selectAccessToken,
   selectUserAuth,
   selectIsUserLoggedIn,
+  selectIsAuthLoading,
   selectRegistration,
   selectRegistrationEmail
 } = authSlice.selectors

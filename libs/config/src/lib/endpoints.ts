@@ -5,6 +5,7 @@ export const endPoints = {
   loginGoogle: 'auth/login-google',
   refresh: 'auth/refresh',
   register: 'auth/register',
+  resend: 'auth/resend',
   verify: 'auth/verify',
   users: 'users',
 };

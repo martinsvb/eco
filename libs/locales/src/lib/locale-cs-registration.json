@@ -1,6 +1,8 @@
 {
   "inProgress": "Registrace uživatele",
   "registered": "Uživatel byl úspěšně zaregistrován",
+  "resent": "Kód pro ověření byl znovu odeslán na váš e-mail",
   "verification": "Ověření uživatele",
+  "verificationInfo": "Na váš e-mail byl odeslán kód pro ověření",
   "verified": "Uživatel byl úspěšně ověřen"
 }

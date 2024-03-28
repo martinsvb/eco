@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
 import { Button, Stack, TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
-import { apiPostRegister, useAppDispatch } from '@eco/redux';
-import { RegistrationData, RegistrationItems } from '@eco/types';
+import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { AuthOperations, RegistrationData, RegistrationItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
 
 interface RegistrationFormProps {
@@ -21,6 +22,8 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
   const { t } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const isLoading = useShallowEqualSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<RegistrationData>({
     resolver: yupResolver(getRegistrationValidationSchema()),
@@ -40,7 +43,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
       dispatch(apiPostRegister({
         body: filter(compose(not, isEmpty) ,omit([RegistrationItems.passwordConfirmation], data)),
         onSuccess: () => {
-          enqueueSnackbar(t('registration:registered', {variant: 'success'}));
+          enqueueSnackbar(t('registration:registered'), {variant: 'success'});
         }
       }));
     },
@@ -124,15 +127,16 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="flex-end">
-            <Button
+            <LoadingButton
               disabled={!isValid}
+              loading={isLoading}
               type="submit"
               variant="contained"
               onClick={handleClick}
               sx={{mr: 1}}
             >
               {t('labels:register')}
-            </Button>
+            </LoadingButton>
             <Button
               variant="text"
               onClick={handleClose}

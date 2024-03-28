@@ -9,5 +9,6 @@
   "passwordConfirmation": "Password confirmation",
   "register": "Regiter",
   "registerButton": "Register",
+  "resend": "Resend code",
   "verify": "Verify"
 }
