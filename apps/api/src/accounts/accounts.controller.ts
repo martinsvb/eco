@@ -38,9 +38,9 @@ export class AccountsController {
     status: 201,
     description: 'Account has been successfully created.',
   })
-  async create(@Body() createAccountDto: CreateAccountDto) {
+  async create(@Req() {user}: Request, @Body() createAccountDto: CreateAccountDto) {
     return new AccountEntity(
-      await this.accountsService.create(createAccountDto)
+      await this.accountsService.create(createAccountDto, user as User)
     );
   }
 

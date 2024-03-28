@@ -1,3 +1,8 @@
 {
+  "createAccount": "Create new bank account",
+  "created": "Bank account was created successfully",
+  "newAccountClose": "Close",
+  "newAccountTitle": "New bank account",
+  "refresh": "Refresh",
   "title": "Bank accounts"
 }

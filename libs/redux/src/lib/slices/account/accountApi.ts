@@ -1,6 +1,7 @@
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { checkResponse, endPoints, getHeaders, getErrorValue } from '@eco/config';
+import { checkResponse, endPoints, getHeaders, getErrorValue, postHeaders } from '@eco/config';
 import { tokenValidation } from '../../tokenValidation';
+import { AccountData } from '@eco/types';
 
 export const accountsGet = async (
   id: string,
@@ -10,6 +11,25 @@ export const accountsGet = async (
     const token = await tokenValidation(dispatch, getState);
 
     return await checkResponse(await fetch(`/api/${endPoints.accounts}`, getHeaders({signal, token}))).json();
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const accountsPost = async (
+  {body, onSuccess}: {body: AccountData, onSuccess: () => void},
+  { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const token = await tokenValidation(dispatch, getState);
+
+    const data = await checkResponse(
+      await fetch(`/api/${endPoints.accounts}`, postHeaders({body, signal, token}))
+    ).json();
+
+    onSuccess();
+
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

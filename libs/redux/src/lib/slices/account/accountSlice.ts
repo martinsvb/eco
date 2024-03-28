@@ -1,21 +1,22 @@
 import { Account } from '@prisma/client';
-import { accountsGet } from "./accountApi";
+import { accountsGet, accountsPost } from "./accountApi";
 import { createSlice } from "../createSlice";
+import { ApiOperations } from '@eco/types';
 
 export interface AccountState {
   accounts: Account[];
-  getAccountsError: unknown | null;
-  getAccountsLoading: boolean;
+  error: {[key: string]: unknown | null};
+  loading: {[key: string]: boolean};
 }
 
 export const initialAccountState: AccountState = {
   accounts: [],
-  getAccountsError: null,
-  getAccountsLoading: false,
+  error: {},
+  loading: {},
 };
 
 const accountSlice = createSlice({
-  name: "account",
+  name: 'account',
   initialState: initialAccountState,
   reducers: (create) => ({
     resetAccounts: create.reducer(() => initialAccountState),
@@ -23,27 +24,45 @@ const accountSlice = createSlice({
       accountsGet,
       {
         pending: (state) => {
-          state.getAccountsLoading = true;
+          state.loading[ApiOperations.getList] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.getAccountsError = payload ?? error;
+          state.error[ApiOperations.getList] = payload ?? error;
         },
         fulfilled: (state, { payload }) => {
           state.accounts = payload;
         },
         settled: (state) => {
-          state.getAccountsLoading = false;
+          state.loading[ApiOperations.getList] = false;
+        },
+      },
+    ),
+    apiPostAccount: create.asyncThunk(
+      accountsPost,
+      {
+        pending: (state) => {
+          state.loading[ApiOperations.create] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.error[ApiOperations.create] = payload ?? error;
+        },
+        fulfilled: (state, { payload }) => {
+          state.accounts.unshift(payload);
+        },
+        settled: (state) => {
+          state.loading[ApiOperations.create] = false;
         },
       },
     )
   }),
   selectors: {
     selectAccounts: (state) => state.accounts,
+    selectIsAccountsLoading: (state, operation: ApiOperations) => !!state.loading[operation],
   },
 });
 
 export default accountSlice.reducer;
 
-export const { apiGetAccounts, resetAccounts } = accountSlice.actions
+export const { apiGetAccounts, apiPostAccount, resetAccounts } = accountSlice.actions
 
-export const { selectAccounts } = accountSlice.selectors
+export const { selectAccounts, selectIsAccountsLoading } = accountSlice.selectors

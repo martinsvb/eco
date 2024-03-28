@@ -1,11 +1,22 @@
-import { useEffect } from 'react';
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { Box, Card, CardContent, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import AddIcon from '@mui/icons-material/Add';
+import { ApiOperations } from '@eco/types';
+import { routes } from '@eco/config';
 import {
-  useShallowEqualSelector, useAppDispatch, selectAccounts, apiGetAccounts, selectIsUserLoggedIn
+  useShallowEqualSelector,
+  useAppDispatch,
+  selectAccounts,
+  apiGetAccounts,
+  selectIsUserLoggedIn,
+  useAppSelector,
+  selectIsAccountsLoading
 } from '@eco/redux';
 import LoginWrapper from '../user/LoginWrapper';
-import { useTranslation } from 'react-i18next';
 
 export const Accounts = () => {
 
@@ -13,9 +24,13 @@ export const Accounts = () => {
 
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+
   const isUserLoggedIn = useShallowEqualSelector(selectIsUserLoggedIn);
 
-  const accounts = useShallowEqualSelector(selectAccounts)
+  const accounts = useShallowEqualSelector(selectAccounts);
+
+  const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.getList));
 
   useEffect(
     () => {
@@ -26,14 +41,59 @@ export const Accounts = () => {
     [accounts, isUserLoggedIn, dispatch]
   );
 
+  const handleNew = useCallback(
+    () => {
+      navigate(`${routes.base}${routes.accountsNew}`);
+    },
+    [navigate]
+  );
+
+  const handleRefresh = useCallback(
+    () => {
+      dispatch(apiGetAccounts(''));
+    },
+    [dispatch]
+  );
+
   return (
     <Box>
-      <Typography variant='h3' mb={2}>{t('accounts:title')}</Typography>
+      <Stack direction="row" justifyContent="space-between" mb={2}>
+        <Typography variant='h3'>{t('accounts:title')}</Typography>
+        {isLoading ?
+          <CircularProgress
+            sx={{
+              alignSelf: 'baseline'
+            }}
+          />
+          :
+          isUserLoggedIn && 
+            <Box>
+              <IconButton
+                aria-label={t('accounts:createAccount')}
+                onClick={handleNew}
+                sx={{
+                  alignSelf: 'baseline'
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+              <IconButton
+                aria-label={t('accounts:refresh')}
+                onClick={handleRefresh}
+                sx={{
+                  alignSelf: 'baseline'
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
+            </Box>
+        }
+      </Stack>
       <LoginWrapper>
         <Grid container rowSpacing={4} columnSpacing={2}>
           {accounts.map(({name, iban}) => (
-            <Grid xl={3} lg={4} md={6} xs={12}>
-              <Card key={iban} variant="outlined" sx={{mb: 2}}>
+            <Grid key={iban} xl={3} lg={4} md={6} xs={12}>
+              <Card variant="outlined" sx={{mb: 2}}>
                 <CardContent>
                   <Typography variant="h5" component="div" mb={1}>
                     {name}

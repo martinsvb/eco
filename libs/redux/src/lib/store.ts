@@ -2,21 +2,16 @@ import {
   Action,
   combineReducers,
   configureStore,
-  Reducer,
   ThunkAction,
 } from "@reduxjs/toolkit";
-import auth, { AuthState } from "./slices/auth/authSlice";
-import account, { AccountState } from "./slices/account/accountSlice";
-import user, { UserState } from "./slices/user/userSlice";
+import accountsApi from "./api/accounts";
+import auth from "./slices/auth/authSlice";
+import account from "./slices/account/accountSlice";
+import user from "./slices/user/userSlice";
 import { apiErrorLogger } from "./apiErrorLogger";
 
-type Store = {
-  account: Reducer<AccountState>;
-  auth: Reducer<AuthState>;
-  user: Reducer<UserState>;
-};
-
-const reducer = combineReducers<Store>({
+const reducer = combineReducers({
+  [accountsApi.reducerPath]: accountsApi.reducer,
   account,
   auth,
   user,
@@ -25,7 +20,10 @@ const reducer = combineReducers<Store>({
 export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(apiErrorLogger);
+    return getDefaultMiddleware().concat(
+      apiErrorLogger,
+      accountsApi.middleware
+    );
   }
 });
 

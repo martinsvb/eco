@@ -3,6 +3,7 @@ import { routes } from "@eco/config";
 import App from "../app/app";
 import { Home } from "../app/Home";
 import { Accounts } from "../app/accounts/Accounts";
+import { AccountsNew } from "../app/accounts/AccountsNew";
 import { Users } from "../app/Users";
 
 export const router = createBrowserRouter([
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
         {
           path: routes.accounts,
           element: <Accounts />,
+        },
+        {
+          path: routes.accountsNew,
+          element: <AccountsNew />,
         },
         {
           path: routes.home,

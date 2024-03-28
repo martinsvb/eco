@@ -1,6 +1,9 @@
 {
   "close": "Zavřít",
+  "create": "Vytvořit",
+  "description": "Popis",
   "email": "E-mail",
+  "iban": "Iban",
   "login": "Přihlásit",
   "loginButton": "Přihlášení",
   "name": "Jméno",

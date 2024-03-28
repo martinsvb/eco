@@ -1,6 +1,9 @@
 {
   "close": "Close",
+  "create": "Create",
+  "description": "Description",
   "email": "E-mail",
+  "iban": "Iban",
   "login": "Login",
   "loginButton": "Login",
   "name": "Name",
