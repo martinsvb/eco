@@ -19,7 +19,7 @@ const Desktop = () => {
         <AppToolbar />
       </AppBar>
       <DesktopNavigationSidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ height: '100vh', flexGrow: 1, p: 2}}>
         <Toolbar />
         <Outlet />
       </Box>

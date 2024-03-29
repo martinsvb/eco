@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
-import { Stack, TextField } from '@mui/material';
+import { Button, Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -55,6 +55,13 @@ const AccountForm = () => {
       submit(data);
     },
     [dispatch, enqueueSnackbar, data]
+  );
+
+  const handleClose = useCallback(
+    () => {
+      navigate(`${routes.base}${routes.accounts}`);
+    },
+    [navigate]
   );
 
   return (
@@ -122,6 +129,12 @@ const AccountForm = () => {
             >
               {t('labels:create')}
             </LoadingButton>
+            <Button
+              variant="text"
+              onClick={handleClose}
+            >
+              {t('labels:close')}
+            </Button>
           </Stack>
         </Grid>
       </Grid>

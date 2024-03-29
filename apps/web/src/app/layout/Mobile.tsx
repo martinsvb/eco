@@ -15,7 +15,7 @@ const Mobile = () => {
         component="main" 
         sx={{
           p: 2,
-          pb: 50
+          height: 'calc(100vh - 56px)'
         }}
       >
         <Outlet />

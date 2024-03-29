@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box, Card, CardContent, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
+import { Card, CardContent, CircularProgress, Fab, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
@@ -17,6 +17,7 @@ import {
   selectIsAccountsLoading
 } from '@eco/redux';
 import LoginWrapper from '../user/LoginWrapper';
+import { Buttons } from '../components/buttons/Buttons';
 
 export const Accounts = () => {
 
@@ -26,7 +27,7 @@ export const Accounts = () => {
 
   const navigate = useNavigate();
 
-  const isUserLoggedIn = useShallowEqualSelector(selectIsUserLoggedIn);
+  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
   const accounts = useShallowEqualSelector(selectAccounts);
 
@@ -56,57 +57,58 @@ export const Accounts = () => {
   );
 
   return (
-    <Box>
-      <Stack direction="row" justifyContent="space-between" mb={2}>
-        <Typography variant='h3'>{t('accounts:title')}</Typography>
-        {isLoading ?
-          <CircularProgress
-            sx={{
-              alignSelf: 'baseline'
-            }}
-          />
-          :
-          isUserLoggedIn && 
-            <Box>
-              <IconButton
-                aria-label={t('accounts:createAccount')}
-                onClick={handleNew}
-                sx={{
-                  alignSelf: 'baseline'
-                }}
-              >
-                <AddIcon />
-              </IconButton>
-              <IconButton
-                aria-label={t('accounts:refresh')}
-                onClick={handleRefresh}
-                sx={{
-                  alignSelf: 'baseline'
-                }}
-              >
-                <RefreshIcon />
-              </IconButton>
-            </Box>
-        }
-      </Stack>
+    <>
+      <Typography variant='h3' mb={2}>{t('accounts:title')}</Typography>
       <LoginWrapper>
-        <Grid container rowSpacing={4} columnSpacing={2}>
-          {accounts.map(({name, iban}) => (
-            <Grid key={iban} xl={3} lg={4} md={6} xs={12}>
-              <Card variant="outlined" sx={{mb: 2}}>
-                <CardContent>
-                  <Typography variant="h5" component="div" mb={1}>
-                    {name}
-                  </Typography>
-                  <Typography variant='body1' color="text.secondary" gutterBottom>
-                    {iban}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <>
+          <Grid container rowSpacing={4} columnSpacing={2}>
+            {accounts.map(({name, iban}) => (
+              <Grid key={iban} xl={3} lg={4} md={6} xs={12}>
+                <Card variant="outlined" sx={{mb: 2}}>
+                  <CardContent>
+                    <Typography variant="h5" component="div" mb={1}>
+                      {name}
+                    </Typography>
+                    <Typography variant='body1' color="text.secondary" gutterBottom>
+                      {iban}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+          <Buttons>
+            {isLoading ?
+              <CircularProgress
+                sx={{
+                  alignSelf: 'baseline'
+                }}
+              />
+              :
+              isUserLoggedIn && 
+                <Stack alignItems='center'>
+                  <IconButton
+                    aria-label={t('accounts:refresh')}
+                    onClick={handleRefresh}
+                    size='large'
+                    sx={{
+                      mb: 2
+                    }}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                  <Fab
+                    aria-label={t('accounts:createAccount')}
+                    onClick={handleNew}
+                    color='primary'
+                  >
+                    <AddIcon />
+                  </Fab>
+                </Stack>
+            }
+          </Buttons>
+        </>
       </LoginWrapper>
-    </Box>
+    </>
   );
 };
