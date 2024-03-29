@@ -1,23 +1,26 @@
-import { Box, styled } from "@mui/material";
+import { Box, Theme, useMediaQuery } from "@mui/material";
 import { ReactNode } from "react";
-
-const StyledBox = styled(Box)({
-  position: 'absolute',
-  zIndex: 1,
-  bottom: 16,
-  right: 16,
-  margin: '0 auto',
-});
 
 interface ButtonsProps {
   children: ReactNode;
 }
 
 export const Buttons = ({children}: ButtonsProps) => {
+  const isMobilePortrait = useMediaQuery((theme: Theme) => {
+    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
+  });
 
   return (
-    <StyledBox>
+    <Box
+      sx={{
+        position: 'absolute',
+        zIndex: 1,
+        bottom: isMobilePortrait ? 72 : 16,
+        right: 16,
+        margin: '0 auto',
+      }}
+    >
       {children}
-    </StyledBox>
+    </Box>
   );
 }
