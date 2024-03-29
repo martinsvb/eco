@@ -6,7 +6,6 @@ import { Button, Stack, TextField } from '@mui/material';
 import { apiPostLogin, useAppDispatch } from '@eco/redux';
 import { LoginData, LoginItems } from '@eco/types';
 import { getLoginValidationSchema } from '@eco/validation';
-import { useLoginSuccess } from './useLoginSuccess';
 
 interface LoginFormProps {
   handleClose: () => void;
@@ -15,8 +14,6 @@ interface LoginFormProps {
 const LoginForm = ({handleClose}: LoginFormProps) => {
 
   const dispatch = useAppDispatch();
-
-  useLoginSuccess(handleClose);
 
   const { t } = useTranslation();
 

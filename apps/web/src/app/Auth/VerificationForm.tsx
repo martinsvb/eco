@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import {
-  apiPostResend, apiPostVerify, selectRegistrationEmail, useAppDispatch, useShallowEqualSelector
+  apiPostResend, apiPostVerify, selectRegistrationEmail, useAppDispatch, useAppSelector
 } from '@eco/redux';
 import { VerificationData, VerificationItems } from '@eco/types';
 import { getVerificationValidationSchema } from '@eco/validation';
@@ -19,7 +19,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
 
   const dispatch = useAppDispatch();
 
-  const email = useShallowEqualSelector(selectRegistrationEmail);
+  const email = useAppSelector(selectRegistrationEmail);
 
   const { t } = useTranslation();
 

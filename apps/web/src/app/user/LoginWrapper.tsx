@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { selectIsUserLoggedIn, useShallowEqualSelector } from '@eco/redux';
+import { selectIsUserLoggedIn, useAppSelector } from '@eco/redux';
 import LoginButton from './LoginButton';
 import { Stack, Typography } from '@mui/material';
 import RegisterButton from './RegistrationButton';
@@ -10,7 +10,7 @@ interface LoginWrapperProps {
 
 const LoginWrapper = ({children}: LoginWrapperProps) => {
 
-  const isUserLoggedIn = useShallowEqualSelector(selectIsUserLoggedIn);
+  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
   return (
     isUserLoggedIn ?

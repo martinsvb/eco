@@ -34,7 +34,7 @@ const Login = ({handleClose}: LoginProps) => {
           borderRadius: shape.borderRadius / 2
         }}
       >
-        <GoogleLoginCmp handleClose={handleClose} />
+        <GoogleLoginCmp />
         <LoginForm handleClose={handleClose} />
       </Stack>
     </Stack>

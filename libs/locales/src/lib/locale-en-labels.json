@@ -6,6 +6,7 @@
   "iban": "Iban",
   "login": "Login",
   "loginButton": "Login",
+  "logout": "Logout",
   "name": "Name",
   "otp": "OTP code",
   "password": "Password",

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
 import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { routes } from '@eco/config';
+import { useTranslation } from 'react-i18next';
 
 interface UserMenuProps {
   isMobile?: boolean;
@@ -17,6 +18,8 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
   const user = useShallowEqualSelector(selectUserAuth);
 
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const handleOpenUserMenu = useCallback(
     (event: MouseEvent<HTMLElement>) => {
@@ -75,7 +78,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
         onClose={handleCloseUserMenu}
       >
         <MenuItem onClick={handleLogout}>
-          <Typography textAlign="center">Logout</Typography>
+          <Typography textAlign="center">{t('labels:logout')}</Typography>
         </MenuItem>
       </Menu>
     </Box>

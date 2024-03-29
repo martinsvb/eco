@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { CssBaseline, AppBar, Box } from '@mui/material';
-import AppToolbar from './AppToolbar';
+import AppToolbarMobile from './AppToolbarMobile';
 import MobileNavigationSidebar from './MobileNavigationSidebar';
 
 const Mobile = () => {
@@ -31,8 +31,7 @@ const Mobile = () => {
           bottom: 0
         }}
       >
-        <AppToolbar
-          isMobile
+        <AppToolbarMobile
           setOpen={setOpen}
         />
       </AppBar>

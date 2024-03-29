@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { alpha, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { selectRegistration, useShallowEqualSelector } from '@eco/redux';
+import { selectRegistration, useAppSelector } from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import RegistrationForm from './RegistrationForm';
 import VerificationForm from './VerificationForm';
@@ -18,7 +18,7 @@ const Registration = ({handleClose, isMobile}: RegistrationProps) => {
 
   const isLightMode = useMediaQuery('(prefers-color-scheme: light)');
 
-  const state = useShallowEqualSelector(selectRegistration);
+  const state = useAppSelector(selectRegistration);
 
   const { t } = useTranslation();
 

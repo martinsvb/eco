@@ -7,7 +7,7 @@ import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
-import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, RegistrationData, RegistrationItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
 
@@ -23,7 +23,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const isLoading = useShallowEqualSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
+  const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<RegistrationData>({
     resolver: yupResolver(getRegistrationValidationSchema()),

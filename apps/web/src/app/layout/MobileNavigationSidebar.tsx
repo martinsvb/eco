@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, memo, useCallback } from 'react';
 import { Drawer, Toolbar } from '@mui/material';
 import AppNavigation from './AppNavigation';
 
-const drawerWidth = 300;
+const drawerWidth = 240;
 
 interface MobileNavigationSidebarProps {
   open: boolean;

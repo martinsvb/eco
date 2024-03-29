@@ -1,10 +1,11 @@
-import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { ReactNode, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { routes } from '@eco/config';
-import { selectIsUserLoggedIn, useShallowEqualSelector } from '@eco/redux';
+import { selectIsUserLoggedIn, useAppSelector } from '@eco/redux';
 
 interface NavItemProps {
   icon: ReactNode;
@@ -29,25 +30,37 @@ const NavItem = ({icon, text, to}: NavItemProps) => {
 
 export const AppNavigation = () => {
 
-  const isUserLoggedIn = useShallowEqualSelector(selectIsUserLoggedIn);
+  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
+
+  const { t } = useTranslation();
+
+  const navigate = useNavigate();
+
+  useEffect(
+    () => {
+      if (isUserLoggedIn) {
+        navigate(`${routes.base}${routes.accounts}`);
+      }
+    },
+    [isUserLoggedIn, navigate]
+  );
 
   return (
     <Box sx={{ overflow: 'auto' }}>
       <List>
-        <NavItem
-          icon={<HomeIcon />}
-          text="Home"
-          to={`${routes.base}${routes.home}`}
-        />
         {isUserLoggedIn
           ?
           <NavItem
             icon={<AccountBalanceWalletIcon />}
-            text="Accounts"
+            text={t('accounts')}
             to={`${routes.base}${routes.accounts}`}
           />
           :
-          null
+          <NavItem
+            icon={<HomeIcon />}
+            text={t('home')}
+            to={`${routes.base}${routes.home}`}
+          />
         }
       </List>
     </Box>
