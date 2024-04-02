@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField } from '@mui/material';
-import { apiPostLogin, useAppDispatch } from '@eco/redux';
-import { LoginData, LoginItems } from '@eco/types';
+import { apiPostLogin, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
+import { AuthOperations, LoginData, LoginItems } from '@eco/types';
 import { getLoginValidationSchema } from '@eco/validation';
+import { LoadingButton } from '@mui/lab';
 
 interface LoginFormProps {
   handleClose: () => void;
@@ -16,6 +17,8 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
+
+  const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
   const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<LoginData>({
     resolver: yupResolver(getLoginValidationSchema()),
@@ -77,14 +80,15 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
           )}
         />
         <Stack direction="row" justifyContent="space-between">
-          <Button
+          <LoadingButton
             disabled={!isValid}
+            loading={isLoading}
             type="submit"
             variant="contained"
             onClick={handleClick}
           >
             {t('labels:login')}
-          </Button>
+          </LoadingButton>
           <Button
             variant="text"
             onClick={handleClose}

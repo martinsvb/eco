@@ -126,7 +126,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
           />
         </Grid>
         <Grid xs={12}>
-          <Stack direction="row" justifyContent="flex-end">
+          <Stack direction="row" justifyContent="space-between">
             <LoadingButton
               disabled={!isValid}
               loading={isLoading}

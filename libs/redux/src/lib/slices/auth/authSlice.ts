@@ -88,10 +88,9 @@ const authSlice = createSlice({
         rejected: (state, { error, payload }) => {
           state.error[AuthOperations.refresh] = payload ?? error;
         },        
-        fulfilled: (state, { payload: { accessToken, user } }) => {
+        fulfilled: (state, { payload: { accessToken } }) => {
           localStorage.setItem(AuthItems.Token, accessToken);
           state.accessToken = accessToken
-          state.user = user;
         },
         settled: (state) => {
           state.loading[AuthOperations.refresh] = false;

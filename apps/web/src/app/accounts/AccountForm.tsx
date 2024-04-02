@@ -1,11 +1,9 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
-import {
-  Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Theme, useMediaQuery
-} from '@mui/material';
+import { Button, Stack, Theme, useMediaQuery } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,6 +13,8 @@ import { apiPostAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
 import { allowedCurrencies, routes } from '@eco/config';
+import ControllerTextField from '../components/formControls/ControllerTextField';
+import ControllerSelect from '../components/formControls/ControllerSelect';
 
 const AccountForm = () => {
 
@@ -74,91 +74,60 @@ const AccountForm = () => {
 
   const currencies = CurrencyList.getAll();
 
+  const language = i18n.language.includes('-') ? i18n.language.split('-')[0] : i18n.language;
+
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Grid container rowSpacing={2} columnSpacing={2} width={isMobilePortrait ? '100%' : 800}>
         <Grid md={6} xs={12}>
-          <Controller
+          <ControllerTextField
             name={AccountItems.name}
             control={control}
-            defaultValue={data.name}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                required
-                label={t('labels:name')}
-                error={Boolean(errors.name)}
-                helperText={errors.name?.message}
-              />
-            )}
+            fieldProps={{
+              fullWidth: true,
+              required: true,
+              label: t('labels:name')
+            }}
           />
         </Grid>
         <Grid md={6} xs={12}>
-          <Controller
+          <ControllerTextField
             name={AccountItems.iban}
             control={control}
-            defaultValue={data.iban}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                required
-                label={t('labels:iban')}
-                error={Boolean(errors.iban)}
-                helperText={errors.iban?.message}
-                inputProps={{
-                  maxLength: 34
-                }}
-              />
-            )}
+            fieldProps={{
+              fullWidth: true,
+              required: true,
+              label: t('labels:iban')
+            }}
           />
         </Grid>
         <Grid md={6} xs={12}>
-          {!!currencies[i18n.language] &&
-            <FormControl fullWidth>
-              <InputLabel>{t('labels:currency')}</InputLabel>
-              <Controller
-                name={AccountItems.currency}
-                control={control}
-                defaultValue={data.iban}
-                render={({ field: { onChange, value} }) => (
-                  <Select 
-                    value={value}
-                    onChange={onChange}
-                    required
-                  >
-                    {Object.entries(currencies[i18n.language])
-                      .filter(([currency]) => allowedCurrencies.includes(currency))
-                      .map(([currency, {name}]) => (
-                        <MenuItem key={currency} value={currency}>
-                          {name}
-                        </MenuItem>
-                      ))
-                    }
-                  </Select>
-                )}
-              />
-            </FormControl>
+          {!!currencies[language] &&
+            <ControllerSelect
+              name={AccountItems.currency}
+              control={control}
+              fieldProps={{
+                required: true,
+                variant: 'standard',
+                label: t('labels:currency'),
+                values: Object.entries(currencies[language])
+                  .filter(([currency]) => allowedCurrencies.includes(currency))
+                  .map(([id, {name}]) => ({id, label: name}))
+              }}
+            />
           }
         </Grid>
         <Grid md={6} xs={12}>
-          <Controller
-              name={AccountItems.description}
-              control={control}
-              defaultValue={data.description}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  multiline
-                  minRows={2}
-                  label={t('labels:description')}
-                  error={Boolean(errors.description)}
-                  helperText={errors.description?.message}
-                />
-              )}
-            />
+          <ControllerTextField
+            name={AccountItems.description}
+            control={control}
+            fieldProps={{
+              fullWidth: true,
+              multiline: true,
+              minRows: 2,
+              label: t('labels:description')
+            }}
+          />
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="flex-end">
