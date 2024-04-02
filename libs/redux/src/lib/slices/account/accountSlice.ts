@@ -1,7 +1,7 @@
 import { Account } from '@prisma/client';
+import { ApiOperations } from '@eco/types';
 import { accountsGet, accountsPost } from "./accountApi";
 import { createSlice } from "../createSlice";
-import { ApiOperations } from '@eco/types';
 
 export interface AccountState {
   accounts: Account[];
@@ -56,7 +56,7 @@ const accountSlice = createSlice({
     )
   }),
   selectors: {
-    selectAccounts: (state) => state.accounts,
+    selectAccounts: (state) => ({accounts: state.accounts, isLoading: !!state.loading[ApiOperations.getList]}),
     selectIsAccountsLoading: (state, operation: ApiOperations) => !!state.loading[operation],
   },
 });

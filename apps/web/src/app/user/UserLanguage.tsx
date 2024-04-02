@@ -17,11 +17,21 @@ const UserLanguage = () => {
 
   return (
     <ButtonGroup
-      variant="text"
+      size="small"
       aria-label={t('labels:languageSelection')}
     >
-      <Button onClick={(e) => handleClick(e, Languages.en)}>En</Button>
-      <Button onClick={(e) => handleClick(e, Languages.cs)}>Cs</Button>
+      <Button
+        variant={i18n.language === Languages.en ? 'contained' : 'outlined'}
+        onClick={(e) => handleClick(e, Languages.en)}
+      >
+        {t('labels:en')}
+      </Button>
+      <Button
+        variant={i18n.language === Languages.cs ? 'contained' : 'outlined'}
+        onClick={(e) => handleClick(e, Languages.cs)}
+      >
+        {t('labels:cs')}
+      </Button>
     </ButtonGroup>
   );
 }

@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
-import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
+import {
+  Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Theme, useMediaQuery
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,6 +25,10 @@ const AccountForm = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
+
+  const isMobilePortrait = useMediaQuery((theme: Theme) => {
+    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
+  });
 
   const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.create));
 
@@ -70,7 +76,7 @@ const AccountForm = () => {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <Grid container rowSpacing={2} columnSpacing={2}>
+      <Grid container rowSpacing={2} columnSpacing={2} width={isMobilePortrait ? '100%' : 800}>
         <Grid md={6} xs={12}>
           <Controller
             name={AccountItems.name}
@@ -84,23 +90,6 @@ const AccountForm = () => {
                 label={t('labels:name')}
                 error={Boolean(errors.name)}
                 helperText={errors.name?.message}
-              />
-            )}
-          />
-        </Grid>
-        <Grid md={6} xs={12}>
-          <Controller
-            name={AccountItems.description}
-            control={control}
-            defaultValue={data.description}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                multiline
-                label={t('labels:description')}
-                error={Boolean(errors.description)}
-                helperText={errors.description?.message}
               />
             )}
           />
@@ -130,28 +119,46 @@ const AccountForm = () => {
             <FormControl fullWidth>
               <InputLabel>{t('labels:currency')}</InputLabel>
               <Controller
-                name={AccountItems.iban}
+                name={AccountItems.currency}
                 control={control}
                 defaultValue={data.iban}
                 render={({ field: { onChange, value} }) => (
                   <Select 
                     value={value}
                     onChange={onChange}
-                    label="Campaign Budget" 
-                    labelId="campaign_budget_label"
+                    required
                   >
                     {Object.entries(currencies[i18n.language])
-                    .filter(([currency]) => allowedCurrencies.includes(currency))
-                    .map(([currency, {name}]) => (
-                      <MenuItem key={currency} value={currency}>
-                        {name}
-                      </MenuItem>
-                    ))}
+                      .filter(([currency]) => allowedCurrencies.includes(currency))
+                      .map(([currency, {name}]) => (
+                        <MenuItem key={currency} value={currency}>
+                          {name}
+                        </MenuItem>
+                      ))
+                    }
                   </Select>
                 )}
               />
             </FormControl>
           }
+        </Grid>
+        <Grid md={6} xs={12}>
+          <Controller
+              name={AccountItems.description}
+              control={control}
+              defaultValue={data.description}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  label={t('labels:description')}
+                  error={Boolean(errors.description)}
+                  helperText={errors.description?.message}
+                />
+              )}
+            />
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="flex-end">

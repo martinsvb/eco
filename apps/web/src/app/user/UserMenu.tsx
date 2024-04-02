@@ -1,6 +1,7 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { routes } from '@eco/config';
 import { useTranslation } from 'react-i18next';
@@ -78,11 +79,12 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem onClick={handleLogout}>
-          <Typography textAlign="center">{t('labels:logout')}</Typography>
+        <MenuItem>
+          <UserLanguage />
         </MenuItem>
         <MenuItem onClick={handleLogout}>
-          <UserLanguage />
+          <LogoutIcon sx={{mr: 1}} />
+          <Typography textAlign="center">{t('labels:logout')}</Typography>
         </MenuItem>
       </Menu>
     </Box>

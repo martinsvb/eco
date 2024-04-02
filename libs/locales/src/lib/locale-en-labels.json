@@ -1,9 +1,11 @@
 {
   "close": "Close",
   "create": "Create",
+  "cs": "Cs",
   "currency": "Currency",
   "description": "Description",
   "email": "E-mail",
+  "en": "En",
   "iban": "Iban",
   "languageSelection": "Language selection",
   "login": "Login",

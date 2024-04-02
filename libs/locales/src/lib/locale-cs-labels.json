@@ -1,9 +1,11 @@
 {
   "close": "Zavřít",
   "create": "Vytvořit",
+  "cs": "Cs",
   "currency": "Měna",
   "description": "Popis",
   "email": "E-mail",
+  "en": "En",
   "iban": "Iban",
   "languageSelection": "Výběr jazyka",
   "login": "Přihlásit",

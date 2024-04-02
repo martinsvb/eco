@@ -5,7 +5,6 @@ import { Card, CardContent, CircularProgress, Fab, IconButton, Stack, Typography
 import Grid from '@mui/material/Unstable_Grid2';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
-import { ApiOperations } from '@eco/types';
 import { routes } from '@eco/config';
 import {
   useShallowEqualSelector,
@@ -14,7 +13,6 @@ import {
   apiGetAccounts,
   selectIsUserLoggedIn,
   useAppSelector,
-  selectIsAccountsLoading
 } from '@eco/redux';
 import LoginWrapper from '../user/LoginWrapper';
 import { Buttons } from '../components/buttons/Buttons';
@@ -29,9 +27,7 @@ export const Accounts = () => {
 
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
-  const accounts = useShallowEqualSelector(selectAccounts);
-
-  const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.getList));
+  const { accounts, isLoading } = useShallowEqualSelector(selectAccounts);
 
   useEffect(
     () => {
@@ -58,7 +54,7 @@ export const Accounts = () => {
 
   return (
     <>
-      <Typography variant='h3' mb={2}>{t('accounts:title')}</Typography>
+      <Typography variant='h3' mb={4}>{t('accounts:title')}</Typography>
       <LoginWrapper>
         <>
           <Grid container rowSpacing={2} columnSpacing={2}>
