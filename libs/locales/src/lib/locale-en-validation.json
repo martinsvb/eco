@@ -2,5 +2,7 @@
   "email": "Invalid e-mail",
   "required": "{{Field}} is required",
   "numLength": "Length must be {{length}} digits",
+  "minLength": "Minimal length must be {{length}} characters",
+  "maxLength": "Maximal length must be {{length}} characters",
   "equal": "Value must equal with {{Field}}"
 }

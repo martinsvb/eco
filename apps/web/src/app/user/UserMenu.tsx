@@ -4,6 +4,7 @@ import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOr
 import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { routes } from '@eco/config';
 import { useTranslation } from 'react-i18next';
+import UserLanguage from './UserLanguage';
 
 interface UserMenuProps {
   isMobile?: boolean;
@@ -79,6 +80,9 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       >
         <MenuItem onClick={handleLogout}>
           <Typography textAlign="center">{t('labels:logout')}</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <UserLanguage />
         </MenuItem>
       </Menu>
     </Box>

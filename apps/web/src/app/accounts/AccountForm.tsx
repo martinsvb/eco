@@ -3,21 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
+import CurrencyList from 'currency-list'
 import { useSnackbar } from 'notistack';
 import { apiPostAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
-import { routes } from '@eco/config';
+import { allowedCurrencies, routes } from '@eco/config';
 
 const AccountForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -31,6 +32,7 @@ const AccountForm = () => {
     values: {
       [AccountItems.iban]: '',
       [AccountItems.name]: '',
+      [AccountItems.currency]: '',
       [AccountItems.description]: '',
     }
   });
@@ -64,9 +66,11 @@ const AccountForm = () => {
     [navigate]
   );
 
+  const currencies = CurrencyList.getAll();
+
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <Grid container rowSpacing={4} columnSpacing={2}>
+      <Grid container rowSpacing={2} columnSpacing={2}>
         <Grid md={6} xs={12}>
           <Controller
             name={AccountItems.name}
@@ -86,6 +90,23 @@ const AccountForm = () => {
         </Grid>
         <Grid md={6} xs={12}>
           <Controller
+            name={AccountItems.description}
+            control={control}
+            defaultValue={data.description}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                multiline
+                label={t('labels:description')}
+                error={Boolean(errors.description)}
+                helperText={errors.description?.message}
+              />
+            )}
+          />
+        </Grid>
+        <Grid md={6} xs={12}>
+          <Controller
             name={AccountItems.iban}
             control={control}
             defaultValue={data.iban}
@@ -97,25 +118,40 @@ const AccountForm = () => {
                 label={t('labels:iban')}
                 error={Boolean(errors.iban)}
                 helperText={errors.iban?.message}
+                inputProps={{
+                  maxLength: 34
+                }}
               />
             )}
           />
         </Grid>
-        <Grid xs={12}>
-          <Controller
-            name={AccountItems.description}
-            control={control}
-            defaultValue={data.description}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label={t('labels:description')}
-                error={Boolean(errors.description)}
-                helperText={errors.description?.message}
+        <Grid md={6} xs={12}>
+          {!!currencies[i18n.language] &&
+            <FormControl fullWidth>
+              <InputLabel>{t('labels:currency')}</InputLabel>
+              <Controller
+                name={AccountItems.iban}
+                control={control}
+                defaultValue={data.iban}
+                render={({ field: { onChange, value} }) => (
+                  <Select 
+                    value={value}
+                    onChange={onChange}
+                    label="Campaign Budget" 
+                    labelId="campaign_budget_label"
+                  >
+                    {Object.entries(currencies[i18n.language])
+                    .filter(([currency]) => allowedCurrencies.includes(currency))
+                    .map(([currency, {name}]) => (
+                      <MenuItem key={currency} value={currency}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
               />
-            )}
-          />
+            </FormControl>
+          }
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="flex-end">

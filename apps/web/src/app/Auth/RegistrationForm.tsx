@@ -59,7 +59,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <Grid container rowSpacing={4} columnSpacing={2}>
+      <Grid container rowSpacing={2} columnSpacing={2}>
         <Grid md={6} xs={12}>
           <Controller
             name={RegistrationItems.email}

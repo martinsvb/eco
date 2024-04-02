@@ -61,7 +61,7 @@ export const Accounts = () => {
       <Typography variant='h3' mb={2}>{t('accounts:title')}</Typography>
       <LoginWrapper>
         <>
-          <Grid container rowSpacing={4} columnSpacing={2}>
+          <Grid container rowSpacing={2} columnSpacing={2}>
             {accounts.map(({name, iban}) => (
               <Grid key={iban} xl={3} lg={4} md={6} xs={12}>
                 <Card variant="outlined" sx={{mb: 2}}>

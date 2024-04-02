@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import { languages } from './languages';
+import { Languages } from './languages';
 import accountsCs from './locale-cs-accounts.json';
 import labelsCs from './locale-cs-labels.json';
 import registrationCs from './locale-cs-registration.json';
@@ -44,7 +44,7 @@ i18n
         validation: validationEn,
       },
     },
-    fallbackLng: languages.en,
+    fallbackLng: Languages.en,
     interpolation: {
       // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
       escapeValue: false,
