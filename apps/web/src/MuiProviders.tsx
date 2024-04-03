@@ -1,13 +1,13 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import ms from 'ms';
-import { SnackbarProvider } from 'notistack';
+import { csCZ, enUS } from '@mui/material/locale';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ms from 'ms';
+import { SnackbarProvider } from 'notistack';
 import { LocalStorageItems, THEME_MODE } from '@eco/config';
-import { csCZ, enUS } from '@mui/material/locale';
 import { Languages } from '@eco/locales';
 
 interface MuiProvidersProps {
