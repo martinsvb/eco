@@ -122,6 +122,7 @@ const AccountForm = () => {
             control={control}
             fieldProps={{
               fullWidth: true,
+              multiline: true,
               label: t('labels:description')
             }}
           />

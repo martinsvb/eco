@@ -1,5 +1,8 @@
 {
   "close": "Zavřít",
+  "colorModeDark": "Tmavý režim",
+  "colorModeLight": "Světlý režim",
+  "colorModeSystem": "Dle nastavení operačního systému",
   "create": "Vytvořit",
   "cs": "Cs",
   "currency": "Měna",

@@ -6,6 +6,7 @@ import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useS
 import { routes } from '@eco/config';
 import { useTranslation } from 'react-i18next';
 import UserLanguage from './UserLanguage';
+import UserColorMode from './UserColorMode';
 
 interface UserMenuProps {
   isMobile?: boolean;
@@ -79,6 +80,9 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
+        <MenuItem>
+          <UserColorMode />
+        </MenuItem>
         <MenuItem>
           <UserLanguage />
         </MenuItem>

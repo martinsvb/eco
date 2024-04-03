@@ -1,13 +1,8 @@
 import { Palette } from '@mui/material/styles';
 import { Shape } from '@mui/system';
-import { THEME_MODE } from '@eco/config';
 
 export const getBaseFormControlShape = (palette: Palette, shape: Shape, error?: boolean) => {
-  const borderColor = error
-    ? palette.error.main
-    : palette.mode === THEME_MODE.LIGHT
-      ? palette.grey[500]
-      : palette.common.white;
+  const borderColor = error ? palette.error.main : palette.grey[500];
 
   return {
     borderRadius: shape.borderRadius,
@@ -25,5 +20,5 @@ export const getLabelShape = (marginTop: string) => ({
 });
 
 export const getFocusedBorder = (palette: Palette, error?: boolean) => (
-  `1px solid ${error ? palette.error.main : palette.primary.main}`
+  `2px solid ${error ? palette.error.main : palette.primary.main}`
 );

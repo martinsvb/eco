@@ -9,7 +9,6 @@ const UserLanguage = () => {
 
   const handleClick = useCallback(
     (e: MouseEvent<HTMLButtonElement>, value: Languages) => {
-      e.stopPropagation();
       i18n.changeLanguage(value)
     },
     [i18n]

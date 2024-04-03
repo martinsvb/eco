@@ -1,5 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AuthItems, AuthOperations, BasicUser, RegistrationState } from '@eco/types';
+import { LocalStorageItems } from '@eco/config';
+import { AuthOperations, BasicUser, RegistrationState } from '@eco/types';
 import { loginGooglePost, loginPost, refreshPost, registerPost, resendPost, verifyPost } from "./authApi";
 import { createSlice } from '../createSlice';
 
@@ -29,7 +30,7 @@ const authSlice = createSlice({
   initialState: initialAuthState,
   reducers: (create) => ({
     logout: create.reducer(() => {
-      localStorage.removeItem(AuthItems.Token);
+      localStorage.removeItem(LocalStorageItems.Token);
       return initialAuthState
     }),
     setLoginGoogleError: create.reducer((state, {payload}: PayloadAction<string>) => {
@@ -51,7 +52,7 @@ const authSlice = createSlice({
           state.error[AuthOperations.login] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          localStorage.setItem(AuthItems.Token, accessToken);
+          localStorage.setItem(LocalStorageItems.Token, accessToken);
           state.accessToken = accessToken
           state.user = user;
         },
@@ -70,7 +71,7 @@ const authSlice = createSlice({
           state.error[AuthOperations.loginGoogle] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          localStorage.setItem(AuthItems.Token, accessToken);
+          localStorage.setItem(LocalStorageItems.Token, accessToken);
           state.accessToken = accessToken
           state.user = user;
         },
@@ -89,7 +90,7 @@ const authSlice = createSlice({
           state.error[AuthOperations.refresh] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken } }) => {
-          localStorage.setItem(AuthItems.Token, accessToken);
+          localStorage.setItem(LocalStorageItems.Token, accessToken);
           state.accessToken = accessToken
         },
         settled: (state) => {
@@ -121,7 +122,7 @@ const authSlice = createSlice({
           state.error[AuthOperations.verify] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          localStorage.setItem(AuthItems.Token, accessToken);
+          localStorage.setItem(LocalStorageItems.Token, accessToken);
           state.accessToken = accessToken
           state.user = user;
         },
@@ -148,7 +149,7 @@ const authSlice = createSlice({
   selectors: {
     selectUserAuth: (state) => state.user,
     selectAccessToken: (state) => state.accessToken,
-    selectIsUserLoggedIn: (state) => !!state.accessToken || !!localStorage.getItem(AuthItems.Token),
+    selectIsUserLoggedIn: (state) => !!state.accessToken || !!localStorage.getItem(LocalStorageItems.Token),
     selectIsAuthLoading: (state, operation: AuthOperations) => !!state.loading[operation],
     selectRegistration: (state) => state.registration,
     selectRegistrationEmail: (state) => state.registrationEmail,

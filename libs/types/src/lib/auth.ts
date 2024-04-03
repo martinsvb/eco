@@ -11,7 +11,3 @@ export enum AuthOperations {
     resend = 'resend',
     verify = 'verify'
 }
-
-export enum AuthItems {
-    Token = 'accessToken'
-}
