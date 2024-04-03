@@ -1,5 +1,6 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ms from 'ms';
 import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
@@ -63,7 +64,10 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
 
   return (
     <Box sx={{ flexGrow: 0 }}>
-      <Tooltip title="Open settings">
+      <Tooltip
+        title={t('labels:userMenu')}
+        enterDelay={ms('0.1s')}
+      >
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar alt={userInitials} src={user.picture || ''}>
             {userInitials}
@@ -80,13 +84,13 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem>
+        <MenuItem sx={{minHeight: 52}}>
           <UserColorMode />
         </MenuItem>
-        <MenuItem>
+        <MenuItem sx={{minHeight: 52, py: 1, justifyContent: 'center'}}>
           <UserLanguage />
         </MenuItem>
-        <MenuItem onClick={handleLogout}>
+        <MenuItem sx={{minHeight: 52, py: 2}} onClick={handleLogout}>
           <LogoutIcon sx={{mr: 1}} />
           <Typography textAlign="center">{t('labels:logout')}</Typography>
         </MenuItem>

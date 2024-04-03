@@ -1,7 +1,7 @@
 {
   "close": "Close",
-  "colorModeDark": "Dark color mode",
-  "colorModeLight": "Liht color mode",
+  "colorModeDark": "Dark mode",
+  "colorModeLight": "Liht mode",
   "colorModeSystem": "System color mode",
   "create": "Create",
   "cs": "Cs",
@@ -21,5 +21,6 @@
   "register": "Regiter",
   "registerButton": "Register",
   "resend": "Resend code",
+  "userMenu": "User menu",
   "verify": "Verify"
 }

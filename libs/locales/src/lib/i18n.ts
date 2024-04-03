@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+import { LocalStorageItems } from "@eco/config";
 import { Languages } from './languages';
 import accountsCs from './locale-cs-accounts.json';
 import labelsCs from './locale-cs-labels.json';
@@ -20,7 +21,7 @@ declare module 'i18next' {
 }
 
 i18n.on('languageChanged', (lng: string) => {
-  localStorage.setItem('i18nextLng', lng);
+  localStorage.setItem(LocalStorageItems.Language, lng);
 });
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
