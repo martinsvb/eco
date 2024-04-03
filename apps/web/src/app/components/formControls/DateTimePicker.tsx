@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { FC, memo, useCallback } from 'react';
+import { FC, memo } from 'react';
 import {
   DateTimePicker as MuiDateTimePicker,
   DateTimePickerProps as MuiDateTimePickerProps,
@@ -7,24 +7,15 @@ import {
 import TextField from './TextField';
 import { BaseFormControlProps } from './formControlsTypes';
 
-type MuiDateTimePickerFilteredProps = Omit<MuiDateTimePickerProps<Date>, 'name' | 'id' | 'onChange' | 'renderInput'>;
+type MuiDateTimePickerFilteredProps = Omit<MuiDateTimePickerProps<Date>, 'renderInput'>;
 
 const DateTimePicker: FC<BaseFormControlProps & MuiDateTimePickerFilteredProps> = memo(
-  ({ FormHelperTextProps, helperText, id, label, name, onFormControlChange, value, ...rest }) => {
-    const handleChange = useCallback(
-      (date: Date | null, keyboardInputValue?: string) => {
-        if (onFormControlChange) {
-          onFormControlChange({ name, value: date, datePickers: { keyboardInputValue } });
-        }
-      },
-      [name, onFormControlChange]
-    );
+  ({ FormHelperTextProps, helperText, id, label, name, value, ...rest }) => {
 
     return (
       <MuiDateTimePicker
         {...rest}
         label={label}
-        onChange={handleChange}
         value={value}
         renderInput={({ disabled, error, inputProps, InputProps, inputRef }) => {
           return (

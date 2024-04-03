@@ -1,31 +1,19 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// @ts-nocheck
-import { FC, memo, useCallback } from 'react';
+//@ts-nocheck
+import { FC, memo } from 'react';
 import { TimePicker as MuiTimePicker, TimePickerProps as MuiTimePickerProps } from '@mui/x-date-pickers/TimePicker';
 
 import TextField from './TextField';
 import { BaseFormControlProps } from './formControlsTypes';
 
-type MuiTimePickerFilteredProps = Omit<MuiTimePickerProps<Date>, 'name' | 'id' | 'onChange' | 'renderInput'>;
+type MuiTimePickerFilteredProps = Omit<MuiTimePickerProps<Date>, 'renderInput'>;
 
 const DatePicker: FC<BaseFormControlProps & MuiTimePickerFilteredProps> = memo(
-  ({ FormHelperTextProps, helperText, id, label, name, onFormControlChange, value, ...rest }) => {
-    const handleChange = useCallback(
-      (date: Date | null, keyboardInputValue?: string) => {
-        if (onFormControlChange) {
-          onFormControlChange({ name, value: date, datePickers: { keyboardInputValue } });
-        }
-      },
-      [name, onFormControlChange]
-    );
+  ({ FormHelperTextProps, helperText, id, label, name, value, ...rest }) => {
 
     return (
       <MuiTimePicker
         {...rest}
         label={label}
-        onChange={handleChange}
         value={value}
         renderInput={({ disabled, error, inputProps, InputProps, inputRef }) => (
           <TextField

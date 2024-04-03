@@ -1,14 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { ElementType, FC, SyntheticEvent, useCallback } from 'react';
+import { ElementType, FC } from 'react';
 import MuiAutocomplete, {
-  AutocompleteChangeDetails,
-  AutocompleteChangeReason,
   AutocompleteProps as MuiAutocompleteProps,
   AutocompleteRenderGetTagProps,
 } from '@mui/material/Autocomplete';
@@ -21,7 +13,7 @@ import { BaseFormControlProps } from './formControlsTypes';
 
 type MuiAutocompleteFilteredProps = Omit<
   MuiAutocompleteProps<AutocompleteValue, boolean | undefined, boolean | undefined, boolean | undefined, ElementType>,
-  'onChange' | 'renderInpout'
+  'renderInpout'
 >;
 
 interface AutocompleteProps {
@@ -37,33 +29,10 @@ const Autocomplete: FC<BaseFormControlProps & AutocompleteProps & MuiAutocomplet
   id,
   label,
   name,
-  onFormControlChange,
   renderInput,
   value,
   ...rest
 }) => {
-  const handleChange = useCallback(
-    (
-      event: SyntheticEvent<Element, Event>,
-      // todo: !provide correct interface
-      autoCompleteValue: AutocompleteValue,
-      reason: AutocompleteChangeReason,
-      details?: AutocompleteChangeDetails<any>
-    ) => {
-      if (onFormControlChange) {
-        onFormControlChange({
-          name,
-          value: autoCompleteValue,
-          autocomplete: {
-            event,
-            reason,
-            details,
-          },
-        });
-      }
-    },
-    [name, onFormControlChange]
-  );
 
   const handleDelete = (event, tagIdx) => {
     if (onFormControlChange) {
@@ -83,9 +52,6 @@ const Autocomplete: FC<BaseFormControlProps & AutocompleteProps & MuiAutocomplet
     <MuiAutocomplete
       {...rest}
       id={id}
-      // todo: correct handler value type
-      // @ts-ignore
-      onChange={handleChange}
       isOptionEqualToValue={(option, currentValue) =>
         typeof option === 'object' && typeof currentValue === 'object' && option?.id === currentValue?.id
       }

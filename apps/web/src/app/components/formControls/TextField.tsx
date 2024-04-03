@@ -7,9 +7,11 @@ import HelperText from './HelperText';
 import { getBaseFormControlShape, getFocusedBorder, getLabelShape } from './formControlsSettings';
 import { BaseFormControlProps } from './formControlsTypes';
 
-export interface CustomTextFieldProps extends Omit<InputBaseProps, 'name'> {
+export interface CustomTextFieldProps extends InputBaseProps {
   noNumberArrows?: boolean;
 }
+
+export type TextFieldProps = BaseFormControlProps & CustomTextFieldProps;
 
 const noNumberArrowsStyle = {
   appearance: 'none',
@@ -40,7 +42,7 @@ const BootstrapInput = styled<FC<CustomTextFieldProps>>(InputBase, {
   '& .MuiInputBase-input::-webkit-inner-spin-button': noNumberArrows ? noNumberArrowsStyle : undefined,
 }));
 
-const TextField: FC<BaseFormControlProps & CustomTextFieldProps> = forwardRef(
+const TextField: FC<TextFieldProps> = forwardRef(
   (
     {
       defaultValue,
@@ -72,7 +74,12 @@ const TextField: FC<BaseFormControlProps & CustomTextFieldProps> = forwardRef(
           {...formControlStates}
           {...rest}
         />
-        <HelperText helperText={helperText} FormHelperTextProps={FormHelperTextProps} error={error} id={id} />
+        <HelperText
+          helperText={helperText}
+          FormHelperTextProps={FormHelperTextProps}
+          error={error}
+          id={id}
+        />
       </FormControl>
     );
   }

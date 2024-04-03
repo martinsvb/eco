@@ -11,9 +11,9 @@ import { BaseFormControlProps } from './formControlsTypes';
 
 export type SelectedValue = number | string | undefined;
 
-export type SelectProps = {
+export interface SelectProps extends Omit<MuiSelectProps<SelectedValue>, 'variant'> {
   values: SelectValue[];
-} & MuiSelectProps<SelectedValue>;
+};
 
 // eslint-disable-next-line no-undef
 const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Element>(MuiSelect)(
@@ -51,14 +51,27 @@ const Select: FC<BaseFormControlProps & SelectProps> = forwardRef(
         <InputLabel {...formControlStates} shrink id={`select-label-${id}`}>
           {rest.label}
         </InputLabel>
-        <BootstrapSelect id={id} labelId={`select-label-${id}`} name={name} ref={ref} {...rest}>
+        <BootstrapSelect
+          id={id}
+          labelId={`select-label-${id}`}
+          name={name}
+          ref={ref}
+          variant="standard"
+          {...formControlStates}
+          {...rest}
+        >
           {values.map(({ id: itemId, label: itemLabel }) => (
             <MenuItem key={`${itemId}`} value={itemId}>
               {itemLabel}
             </MenuItem>
           ))}
         </BootstrapSelect>
-        <HelperText helperText={helperText} FormHelperTextProps={FormHelperTextProps} error={error} id={id} />
+        <HelperText
+          helperText={helperText}
+          FormHelperTextProps={FormHelperTextProps}
+          error={error}
+          id={id}
+        />
       </FormControl>
     );
   }

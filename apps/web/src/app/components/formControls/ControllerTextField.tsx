@@ -1,6 +1,5 @@
-import { TextFieldProps } from "@mui/material";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
-import TextField from "./TextField";
+import TextField, { TextFieldProps } from "./TextField";
 
 export type CustomFieldProps = {
   noNumberArrows?: boolean;
@@ -22,8 +21,12 @@ const ControllerTextField = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        //@ts-ignore
-        <TextField {...field} {...fieldProps} error={Boolean(error)} helperText={error?.message} />
+        <TextField
+          {...field}
+          {...fieldProps}
+          error={Boolean(error)}
+          helperText={error?.message}
+        />
       )}
     />
   );

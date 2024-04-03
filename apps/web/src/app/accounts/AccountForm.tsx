@@ -108,7 +108,6 @@ const AccountForm = () => {
               control={control}
               fieldProps={{
                 required: true,
-                variant: 'standard',
                 label: t('labels:currency'),
                 values: Object.entries(currencies[language])
                   .filter(([currency]) => allowedCurrencies.includes(currency))
@@ -123,8 +122,6 @@ const AccountForm = () => {
             control={control}
             fieldProps={{
               fullWidth: true,
-              multiline: true,
-              minRows: 2,
               label: t('labels:description')
             }}
           />

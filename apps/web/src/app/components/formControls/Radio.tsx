@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, memo, useCallback } from 'react';
+import { FC, memo } from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel, { FormLabelProps } from '@mui/material/FormLabel';
@@ -22,23 +22,12 @@ const Radio: FC<BaseFormControlProps & RadioProps & FormLabelProps & RadioGroupP
   id,
   name,
   muiRadioProps,
-  onFormControlChange,
   options,
   required,
   row,
   value,
   ...rest
 }) => {
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      if (onFormControlChange) {
-        const { value: newValue } = event.target;
-
-        onFormControlChange({ name, value: newValue, hasError: !!required && !newValue });
-      }
-    },
-    [name, onFormControlChange, required]
-  );
 
   const formControlStates = { disabled, error, required };
 
@@ -54,7 +43,6 @@ const Radio: FC<BaseFormControlProps & RadioProps & FormLabelProps & RadioGroupP
         name={name}
         row={row}
         value={value}
-        onChange={handleChange}
         {...rest}
       >
         {options.map((option) => (

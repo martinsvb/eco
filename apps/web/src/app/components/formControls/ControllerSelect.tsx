@@ -17,7 +17,12 @@ const ControllerSelect = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <Select {...field} {...fieldProps} error={Boolean(error)} helperText={error?.message} />
+        <Select
+          {...field}
+          {...fieldProps}
+          error={Boolean(error)}
+          helperText={error?.message}
+        />
       )}
     />
   );

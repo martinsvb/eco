@@ -3,9 +3,10 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 import { BaseFormControlProps } from './formControlsTypes';
 
-type HelperTextProps = Pick<BaseFormControlProps, 'id' | 'FormHelperTextProps' | 'helperText'>;
+type HelperTextProps = Pick<BaseFormControlProps, 'FormHelperTextProps' | 'helperText'>;
 
 interface HelperTextStatesProps {
+  id?: string;
   error?: boolean;
 }
 
