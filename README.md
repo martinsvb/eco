@@ -81,6 +81,7 @@ npx prisma migrate dev --name "init"
 npx prisma migrate dev --create-only
 npx prisma migrate reset
 npx prisma db push
+npx prisma db seed
 npm install nestjs-prisma
 
 ```
