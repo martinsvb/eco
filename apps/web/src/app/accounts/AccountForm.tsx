@@ -76,7 +76,7 @@ const AccountForm = () => {
             body,
             id,
             onSuccess: () => {
-              enqueueSnackbar(t('accounts:edited'), {variant: 'success'});
+              enqueueSnackbar(t('accounts:updated'), {variant: 'success'});
             }
           })
         );
@@ -175,6 +175,13 @@ const AccountForm = () => {
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="end">
+            <Button
+              variant="text"
+              onClick={handleClose}
+              sx={{mr: 1}}
+            >
+              {t('labels:close')}
+            </Button> 
             <LoadingButton
               disabled={!isValid}
               loading={isLoading}
@@ -185,12 +192,6 @@ const AccountForm = () => {
             >
               {id ? t('labels:edit') : t('labels:create')}
             </LoadingButton>
-            <Button
-              variant="text"
-              onClick={handleClose}
-            >
-              {t('labels:close')}
-            </Button>
           </Stack>
         </Grid>
       </Grid>

@@ -6,6 +6,7 @@ import { Card, CardActions, CardContent, Chip, IconButton, Stack, Tooltip, Typog
 import EditIcon from '@mui/icons-material/Edit';
 import { routes } from '@eco/config';
 import ms from 'ms';
+import AccountDeleteButton from './AccountDeleteButton';
 
 export const AccountItem = ({id, name, iban, currency}: Account) => {
 
@@ -46,6 +47,7 @@ export const AccountItem = ({id, name, iban, currency}: Account) => {
             <EditIcon />
           </IconButton>
         </Tooltip>
+        <AccountDeleteButton id={id} />
       </CardActions>
     </Card>
   );

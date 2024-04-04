@@ -1,6 +1,6 @@
 import { Account } from '@prisma/client';
 import { ApiOperations } from '@eco/types';
-import { accountGet, accountsGet, accountsPatch, accountsPost } from "./accountApi";
+import { accountDelete, accountGet, accountsGet, accountsPatch, accountsPost } from "./accountApi";
 import { createSlice } from "../createSlice";
 import { PayloadAction } from '@reduxjs/toolkit';
 
@@ -70,7 +70,7 @@ const accountSlice = createSlice({
           state.error[ApiOperations.create] = payload ?? error;
         },
         fulfilled: (state, { payload }) => {
-          state.accounts.unshift(payload);
+          state.accounts.push(payload);
         },
         settled: (state) => {
           state.loading[ApiOperations.create] = false;
@@ -96,6 +96,25 @@ const accountSlice = createSlice({
           state.loading[ApiOperations.edit] = false;
         },
       },
+    ),
+    apiDeleteAccount: create.asyncThunk(
+      accountDelete,
+      {
+        pending: (state) => {
+          state.loading[ApiOperations.deleteItem] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.error[ApiOperations.deleteItem] = payload ?? error;
+        },
+        fulfilled: (state, { payload }) => {
+          if (payload.id) {
+            state.accounts = state.accounts.filter(({id}) => id !== payload.id);
+          }
+        },
+        settled: (state) => {
+          state.loading[ApiOperations.deleteItem] = false;
+        },
+      },
     )
   }),
   selectors: {
@@ -112,6 +131,7 @@ export const {
   apiGetAccounts,
   apiPostAccount,
   apiPatchAccount,
+  apiDeleteAccount,
   resetAccounts,
   setAccount
 } = accountSlice.actions;

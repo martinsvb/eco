@@ -112,6 +112,13 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="end">
+            <Button
+              variant="text"
+              onClick={handleClose}
+              sx={{mr: 1}}
+            >
+              {t('labels:close')}
+            </Button>
             <LoadingButton
               disabled={!isValid}
               loading={isLoading}
@@ -122,12 +129,6 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             >
               {t('labels:register')}
             </LoadingButton>
-            <Button
-              variant="text"
-              onClick={handleClose}
-            >
-              {t('labels:close')}
-            </Button>
           </Stack>
         </Grid>
       </Grid>

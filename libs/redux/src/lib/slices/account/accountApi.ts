@@ -1,5 +1,5 @@
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { checkResponse, endPoints, getHeaders, getErrorValue, postHeaders, patchHeaders } from '@eco/config';
+import { checkResponse, endPoints, getHeaders, getErrorValue, postHeaders, patchHeaders, delHeaders } from '@eco/config';
 import { tokenValidation } from '../../tokenValidation';
 import { AccountData } from '@eco/types';
 
@@ -62,6 +62,19 @@ export const accountsPatch = async (
     onSuccess();
 
     return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const accountDelete = async (
+  {id, onSuccess}: {id: string, onSuccess: () => void},
+  { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const token = await tokenValidation(dispatch, getState);
+
+    return await checkResponse(await fetch(`/api/${endPoints.accounts}/${id}`, delHeaders({signal, token}))).json();
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

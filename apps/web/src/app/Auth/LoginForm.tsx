@@ -73,6 +73,13 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
           }}
         />
         <Stack direction="row" justifyContent="end">
+          <Button
+            variant="text"
+            onClick={handleClose}
+            sx={{mr: 1}}
+          >
+            {t('labels:close')}
+          </Button>
           <LoadingButton
             disabled={!isValid}
             loading={isLoading}
@@ -82,12 +89,6 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
           >
             {t('labels:login')}
           </LoadingButton>
-          <Button
-            variant="text"
-            onClick={handleClose}
-          >
-            {t('labels:close')}
-          </Button>
         </Stack>
       </Stack>
     </form>

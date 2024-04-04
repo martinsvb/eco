@@ -95,18 +95,18 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
           </Button>
           <Box>
             <Button
+              variant="text"
+              onClick={handleClose}
+            >
+              {t('labels:close')}
+            </Button>
+            <Button
               disabled={!isValid}
               type="submit"
               variant="contained"
               onClick={handleClick}
             >
               {t('labels:verify')}
-            </Button>
-            <Button
-              variant="text"
-              onClick={handleClose}
-            >
-              {t('labels:close')}
             </Button>
           </Box>
         </Stack>

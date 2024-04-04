@@ -3,4 +3,5 @@ export enum ApiOperations {
   getItem = 'getItem',
   create = 'create',
   edit = 'edit',
+  deleteItem = 'deleteItem',
 }
