@@ -19,8 +19,8 @@ services:
       repo: martinsvb/eco
       branch: master
       deploy_on_push: true
-    build_command: npx nx build api
-    run_command: npx prisma generate && node dist/apps/api/main.js
+    build_command: npx prisma generate && npx nx build api
+    run_command: node dist/apps/api/main.js
     http_port: 3333
     routes:
       - path: /api
