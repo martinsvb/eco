@@ -79,6 +79,7 @@ npm i helmet
 npm install prisma --save-dev
 npx prisma migrate dev --name "init"
 npx prisma migrate dev --create-only
+npx prisma db push
 npm install nestjs-prisma
 
 ```
