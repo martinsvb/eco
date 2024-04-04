@@ -1,12 +1,13 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { apiPostLogin, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, LoginData, LoginItems } from '@eco/types';
 import { getLoginValidationSchema } from '@eco/validation';
-import { LoadingButton } from '@mui/lab';
+import ControllerTextField from '../components/formControls/ControllerTextField';
 
 interface LoginFormProps {
   handleClose: () => void;
@@ -48,36 +49,28 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Stack>
-        <Controller
+        <ControllerTextField
           name={LoginItems.email}
           control={control}
           defaultValue={data.email}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{mb: 2}}
-              required
-              label={t('labels:email')}
-              error={Boolean(errors.email)}
-              helperText={errors.email?.message}
-            />
-          )}
+          fieldProps={{
+            sx: {mb: 2},
+            required: true,
+            label: t('labels:email'),
+            id: LoginItems.email
+          }}
         />
-        <Controller
+        <ControllerTextField
           name={LoginItems.password}
           control={control}
           defaultValue={data.password}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{mb: 2}}
-              required
-              label={t('labels:password')}
-              error={Boolean(errors.password)}
-              helperText={errors.password?.message}
-              type="password"
-            />
-          )}
+          fieldProps={{
+            sx: {mb: 2},
+            required: true,
+            label: t('labels:password'),
+            id: LoginItems.password,
+            type: 'password'
+          }}
         />
         <Stack direction="row" justifyContent="space-between">
           <LoadingButton

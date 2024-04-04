@@ -1,8 +1,8 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack';
 import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, RegistrationData, RegistrationItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
+import ControllerTextField from '../components/formControls/ControllerTextField';
 
 interface RegistrationFormProps {
   handleClose: () => void;
@@ -61,68 +62,52 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
     <form onSubmit={handleSubmit(submit)}>
       <Grid container rowSpacing={2} columnSpacing={2}>
         <Grid md={6} xs={12}>
-          <Controller
+          <ControllerTextField
             name={RegistrationItems.email}
             control={control}
             defaultValue={data.email}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                required
-                label={t('labels:email')}
-                error={Boolean(errors.email)}
-                helperText={errors.email?.message}
-              />
-            )}
+            fieldProps={{
+              required: true,
+              label: t('labels:email'),
+              id: RegistrationItems.email
+            }}
           />
         </Grid>
         <Grid md={6} xs={12}>
-          <Controller
+          <ControllerTextField
             name={RegistrationItems.name}
             control={control}
             defaultValue={data.name}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label={t('labels:name')}
-                error={Boolean(errors.name)}
-                helperText={errors.name?.message}
-              />
-            )}
+            fieldProps={{
+              label: t('labels:name'),
+              id: RegistrationItems.name
+            }}
           />
         </Grid>
         <Grid md={6} xs={12}>
-          <Controller
+          <ControllerTextField
             name={RegistrationItems.password}
             control={control}
             defaultValue={data.password}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                required
-                label={t('labels:password')}
-                error={Boolean(errors.password)}
-                helperText={errors.password?.message}
-                type="password"
-              />
-            )}
+            fieldProps={{
+              required: true,
+              label: t('labels:password'),
+              id: RegistrationItems.password,
+              type: 'password'
+            }}
           />
         </Grid>
         <Grid md={6} xs={12}>
-          <Controller
+          <ControllerTextField
             name={RegistrationItems.passwordConfirmation}
             control={control}
             defaultValue={data.passwordConfirmation}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                required
-                label={t('labels:passwordConfirmation')}
-                error={Boolean(errors.passwordConfirmation)}
-                helperText={errors.passwordConfirmation?.message}
-                type="password"
-              />
-            )}
+            fieldProps={{
+              required: true,
+              label: t('labels:passwordConfirmation'),
+              id: RegistrationItems.passwordConfirmation,
+              type: 'password'
+            }}
           />
         </Grid>
         <Grid xs={12}>

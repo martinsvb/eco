@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { alpha, Divider, Paper, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { alpha, Divider, Paper, Stack, useTheme } from '@mui/material';
 import { unsplashUrl } from '@eco/config';
 import GoogleLoginCmp from './GoogleLogin';
 import LoginForm from './LoginForm';
@@ -11,8 +11,6 @@ interface LoginProps {
 const Login = ({handleClose}: LoginProps) => {
 
   const { palette, shape } = useTheme();
-
-  const isLightMode = useMediaQuery('(prefers-color-scheme: light)');
 
   return (
     <Stack
@@ -30,7 +28,7 @@ const Login = ({handleClose}: LoginProps) => {
         spacing={2}
         padding={4}
         sx={{
-          backgroundColor: alpha(palette.common[isLightMode ? 'white' : 'black'], .8),
+          backgroundColor: alpha(palette.background.default, .8),
           borderRadius: shape.borderRadius / 2
         }}
       >

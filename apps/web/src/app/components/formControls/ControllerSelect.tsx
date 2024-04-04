@@ -1,17 +1,15 @@
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import Select, { SelectProps } from "./Select";
 
-export interface CustomFieldControllerProps<T extends FieldValues> {
-  name: Path<T>;
-  control: Control<T>;
+export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
   fieldProps: SelectProps;
-}
+} & Omit<ControllerProps<V, N>, 'render'>;
 
-const ControllerSelect = <T extends FieldValues>({
+const ControllerSelect = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
-}: CustomFieldControllerProps<T>) => {
+}: CustomFieldControllerProps<V, N>) => {
   return (
     <Controller
       name={name}

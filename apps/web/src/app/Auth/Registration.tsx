@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { alpha, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { alpha, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { selectRegistration, useAppSelector } from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import RegistrationForm from './RegistrationForm';
@@ -15,8 +15,6 @@ interface RegistrationProps {
 const Registration = ({handleClose, isMobile}: RegistrationProps) => {
 
   const { palette, shape } = useTheme();
-
-  const isLightMode = useMediaQuery('(prefers-color-scheme: light)');
 
   const state = useAppSelector(selectRegistration);
 
@@ -47,7 +45,7 @@ const Registration = ({handleClose, isMobile}: RegistrationProps) => {
         spacing={4}
         padding={4}
         sx={{
-          backgroundColor: alpha(palette.common[isLightMode ? 'white' : 'black'], .8),
+          backgroundColor: alpha(palette.background.default, .8),
           borderRadius: shape.borderRadius / 2
         }}
       >

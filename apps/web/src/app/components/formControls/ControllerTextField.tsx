@@ -1,21 +1,20 @@
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import TextField, { TextFieldProps } from "./TextField";
 
 export type CustomFieldProps = {
   noNumberArrows?: boolean;
 } & TextFieldProps;
 
-export interface CustomFieldControllerProps<T extends FieldValues> {
-  name: Path<T>;
-  control: Control<T>;
+export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
   fieldProps: CustomFieldProps;
-}
+} & Omit<ControllerProps<V, N>, 'render'>;
 
-const ControllerTextField = <T extends FieldValues>({
+const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
-}: CustomFieldControllerProps<T>) => {
+  ...rest
+}: CustomFieldControllerProps<V, N>) => {
   return (
     <Controller
       name={name}
@@ -28,6 +27,7 @@ const ControllerTextField = <T extends FieldValues>({
           helperText={error?.message}
         />
       )}
+      {...rest}
     />
   );
 };

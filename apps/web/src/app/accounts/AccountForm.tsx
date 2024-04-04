@@ -83,10 +83,12 @@ const AccountForm = () => {
           <ControllerTextField
             name={AccountItems.name}
             control={control}
+            defaultValue={data.name}
             fieldProps={{
               fullWidth: true,
               required: true,
-              label: t('labels:name')
+              label: t('labels:name'),
+              id: AccountItems.name
             }}
           />
         </Grid>
@@ -94,10 +96,12 @@ const AccountForm = () => {
           <ControllerTextField
             name={AccountItems.iban}
             control={control}
+            defaultValue={data.iban}
             fieldProps={{
               fullWidth: true,
               required: true,
-              label: t('labels:iban')
+              label: t('labels:iban'),
+              id: AccountItems.iban
             }}
           />
         </Grid>
@@ -106,9 +110,11 @@ const AccountForm = () => {
             <ControllerSelect
               name={AccountItems.currency}
               control={control}
+              defaultValue={data.currency}
               fieldProps={{
                 required: true,
                 label: t('labels:currency'),
+                id: AccountItems.currency,
                 values: Object.entries(currencies[language])
                   .filter(([currency]) => allowedCurrencies.includes(currency))
                   .map(([id, {name}]) => ({id, label: name}))
@@ -120,10 +126,12 @@ const AccountForm = () => {
           <ControllerTextField
             name={AccountItems.description}
             control={control}
+            defaultValue={data.description}
             fieldProps={{
               fullWidth: true,
               multiline: true,
-              label: t('labels:description')
+              label: t('labels:description'),
+              id: AccountItems.description
             }}
           />
         </Grid>

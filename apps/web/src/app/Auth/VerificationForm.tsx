@@ -1,15 +1,16 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { is } from 'ramda';
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import {
   apiPostResend, apiPostVerify, selectRegistrationEmail, useAppDispatch, useAppSelector
 } from '@eco/redux';
 import { VerificationData, VerificationItems } from '@eco/types';
 import { getVerificationValidationSchema } from '@eco/validation';
+import ControllerTextField from '../components/formControls/ControllerTextField';
 
 interface VerificationFormProps {
   handleClose: () => void;
@@ -74,20 +75,16 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
     <form onSubmit={handleSubmit(submit)}>
       <Stack>
         <Typography variant="body1" mb={2}>{t('registration:verificationInfo')}</Typography>
-        <Controller
+        <ControllerTextField
           name={VerificationItems.otp}
           control={control}
           defaultValue={data.otp}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{mb: 2}}
-              required
-              label={t('labels:otp')}
-              error={Boolean(errors.otp)}
-              helperText={errors.otp?.message}
-            />
-          )}
+          fieldProps={{
+            sx: {mb: 2},
+            required: true,
+            label: t('labels:otp'),
+            id: VerificationItems.otp
+          }}
         />
         <Stack direction="row" justifyContent="space-between">
           <Button
