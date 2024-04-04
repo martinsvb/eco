@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -36,13 +36,15 @@ export const AppNavigation = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   useEffect(
     () => {
-      if (isUserLoggedIn) {
+      if (isUserLoggedIn && [routes.base, `${routes.base}${routes.home}`].includes(location.pathname)) {
         navigate(`${routes.base}${routes.accounts}`);
       }
     },
-    [isUserLoggedIn, navigate]
+    [isUserLoggedIn, navigate, location]
   );
 
   return (

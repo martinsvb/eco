@@ -1,15 +1,18 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { compose, filter, isEmpty, not, omit } from 'ramda';
+import { useNavigate, useParams } from 'react-router-dom';
+import { compose, filter, isEmpty, map, not, omit, pick } from 'ramda';
 import { Button, Stack, Theme, useMediaQuery } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CurrencyList from 'currency-list'
 import { useSnackbar } from 'notistack';
-import { apiPostAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
+import {
+  apiPatchAccount,
+  apiPostAccount, selectAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector, useShallowEqualSelector
+} from '@eco/redux';
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
 import { allowedCurrencies, routes } from '@eco/config';
@@ -26,36 +29,71 @@ const AccountForm = () => {
 
   const navigate = useNavigate();
 
+  const { id } = useParams();
+
   const isMobilePortrait = useMediaQuery((theme: Theme) => {
     return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
   });
 
-  const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.create));
+  const isLoading = useAppSelector(
+    (state) => selectIsAccountsLoading(state, id ? ApiOperations.edit : ApiOperations.create)
+  );
+
+  const account = useShallowEqualSelector(selectAccount);
+
+  const values = useMemo(
+    () => {
+      return account ?
+        map((item) => item || '', pick(
+          [AccountItems.iban, AccountItems.name, AccountItems.currency, AccountItems.description],
+          account
+        )) as AccountData
+        :
+        {
+          [AccountItems.iban]: '',
+          [AccountItems.name]: '',
+          [AccountItems.currency]: '',
+          [AccountItems.description]: '',
+        }
+    },
+    [account]
+  );
 
   const { control, formState: { isValid }, handleSubmit, watch } = useForm<AccountData>({
     resolver: yupResolver(getAccountValidationSchema()),
     mode: 'onTouched',
-    values: {
-      [AccountItems.iban]: '',
-      [AccountItems.name]: '',
-      [AccountItems.currency]: '',
-      [AccountItems.description]: '',
-    }
+    values
   });
 
   const data = watch();
 
   const submit = useCallback(
     (data: AccountData) => {
-      dispatch(apiPostAccount({
-        body: filter(compose(not, isEmpty), omit([AccountItems.description], data)),
-        onSuccess: () => {
-          enqueueSnackbar(t('accounts:created'), {variant: 'success'});
-          navigate(`${routes.base}${routes.accounts}`);
-        }
-      }));
+      const body = filter(compose(not, isEmpty), omit([AccountItems.description], data));
+      if (id) {
+        dispatch(
+          apiPatchAccount({
+            body,
+            id,
+            onSuccess: () => {
+              enqueueSnackbar(t('accounts:edited'), {variant: 'success'});
+            }
+          })
+        );
+      }
+      else {
+        dispatch(
+          apiPostAccount({
+            body,
+            onSuccess: () => {
+              enqueueSnackbar(t('accounts:created'), {variant: 'success'});
+              navigate(`${routes.base}${routes.accounts}`);
+            }
+          })
+        );
+      } 
     },
-    [dispatch, enqueueSnackbar, navigate]
+    [dispatch, enqueueSnackbar, navigate, id]
   );
 
   const handleClick = useCallback(
@@ -145,7 +183,7 @@ const AccountForm = () => {
               onClick={handleClick}
               sx={{mr: 1}}
             >
-              {t('labels:create')}
+              {id ? t('labels:edit') : t('labels:create')}
             </LoadingButton>
             <Button
               variant="text"
