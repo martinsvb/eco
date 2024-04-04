@@ -1,8 +1,6 @@
 // prisma/seed.ts
 
 import { PrismaClient } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
-import { UserOrigins } from 'libs/types/src';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
