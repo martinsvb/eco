@@ -8,6 +8,7 @@ export class AccountService {
       id: 'test',
       iban: 'CZ0000000000000000000000',
       name: 'test',
+      currency: 'EUR',
       description: 'test account',
       active: false,
       ownerId: 'testId',

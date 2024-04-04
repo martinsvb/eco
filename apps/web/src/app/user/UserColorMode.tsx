@@ -5,7 +5,8 @@ import Brightness2Icon from '@mui/icons-material/Brightness2';
 import Brightness5Icon from '@mui/icons-material/Brightness5';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import ms from 'ms';
-import { LocalStorageItems, THEME_MODE } from '@eco/config';
+import { LocalStorageItems } from '@eco/config';
+import { THEME_MODE } from '../../config';
 
 const UserColorMode = () => {
 

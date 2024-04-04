@@ -1,14 +1,15 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { csCZ, enUS } from '@mui/material/locale';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ms from 'ms';
 import { SnackbarProvider } from 'notistack';
-import { LocalStorageItems, THEME_MODE } from '@eco/config';
+import { LocalStorageItems } from '@eco/config';
 import { Languages } from '@eco/locales';
+import { THEME_MODE } from './config';
 
 interface MuiProvidersProps {
   children: ReactNode;
@@ -53,14 +54,14 @@ const MuiProviders: FC<MuiProvidersProps> = ({ children }) => {
 
   return (
     <ThemeProvider
-      theme={createTheme(
+      theme={responsiveFontSizes(createTheme(
         {
           palette: {
             mode
           }
         },
         muiLocales
-      )}
+      ))}
     >
       <SnackbarProvider
         anchorOrigin={{
