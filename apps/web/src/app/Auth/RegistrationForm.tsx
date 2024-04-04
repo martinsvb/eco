@@ -26,7 +26,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
-  const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<RegistrationData>({
+  const { control, formState: { isValid }, handleSubmit, watch } = useForm<RegistrationData>({
     resolver: yupResolver(getRegistrationValidationSchema()),
     mode: 'onTouched',
     values: {

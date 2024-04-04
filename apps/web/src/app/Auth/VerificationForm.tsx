@@ -26,7 +26,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<VerificationData>({
+  const { control, formState: { isValid }, handleSubmit, watch } = useForm<VerificationData>({
     resolver: yupResolver(getVerificationValidationSchema()),
     mode: 'onTouched',
     values: {

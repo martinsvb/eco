@@ -32,7 +32,7 @@ const AccountForm = () => {
 
   const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.create));
 
-  const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<AccountData>({
+  const { control, formState: { isValid }, handleSubmit, watch } = useForm<AccountData>({
     resolver: yupResolver(getAccountValidationSchema()),
     mode: 'onTouched',
     values: {

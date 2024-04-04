@@ -21,7 +21,7 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
 
   const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
-  const { control, formState: { errors, isValid }, handleSubmit, watch } = useForm<LoginData>({
+  const { control, formState: { isValid }, handleSubmit, watch } = useForm<LoginData>({
     resolver: yupResolver(getLoginValidationSchema()),
     mode: 'onTouched',
     values: {
