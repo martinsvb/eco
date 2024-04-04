@@ -136,7 +136,7 @@ const AccountForm = () => {
           />
         </Grid>
         <Grid xs={12}>
-          <Stack direction="row" justifyContent="flex-end">
+          <Stack direction="row" justifyContent="end">
             <LoadingButton
               disabled={!isValid}
               loading={isLoading}

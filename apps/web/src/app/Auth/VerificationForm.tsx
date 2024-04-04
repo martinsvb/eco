@@ -86,7 +86,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
             id: VerificationItems.otp
           }}
         />
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" justifyContent="end">
           <Button
             variant="outlined"
             onClick={handleResend}

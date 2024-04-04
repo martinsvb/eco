@@ -72,7 +72,7 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
             type: 'password'
           }}
         />
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" justifyContent="end">
           <LoadingButton
             disabled={!isValid}
             loading={isLoading}
