@@ -17,6 +17,12 @@ export class CreateAccountDto {
 
   @IsString()
   @IsNotEmpty()
+  @MinLength(3)
+  @ApiProperty({ description: 'Account currency' })
+  currency: string;
+
+  @IsString()
+  @IsNotEmpty()
   @MinLength(24)
   @MaxLength(34)
   @ApiProperty({ description: 'Account iban' })

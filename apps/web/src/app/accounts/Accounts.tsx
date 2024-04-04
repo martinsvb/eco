@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CircularProgress, Fab, IconButton, Stack, Typography } from '@mui/material';
+import { Card, CardContent, Chip, CircularProgress, Fab, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
@@ -58,13 +58,16 @@ export const Accounts = () => {
       <LoginWrapper>
         <>
           <Grid container rowSpacing={2} columnSpacing={2}>
-            {accounts.map(({name, iban}) => (
+            {accounts.map(({name, iban, currency}) => (
               <Grid key={iban} xl={3} lg={4} md={6} xs={12}>
                 <Card variant="outlined" sx={{mb: 2}}>
                   <CardContent>
-                    <Typography variant="h5" component="div" mb={1}>
-                      {name}
-                    </Typography>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography variant="h5" component="div" mb={1}>
+                        {name}
+                      </Typography>
+                      <Chip label={currency} />
+                    </Stack>
                     <Typography variant='body1' color="text.secondary" gutterBottom>
                       {iban}
                     </Typography>

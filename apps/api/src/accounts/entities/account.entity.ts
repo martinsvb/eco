@@ -18,6 +18,9 @@ export class AccountEntity implements Account {
   @ApiProperty({ description: 'Account name' })
   name: string;
 
+  @ApiProperty({ description: 'Account currency' })
+  currency: string;
+
   @ApiProperty({ description: 'Account description', required: false })
   description: string | null;
 

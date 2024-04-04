@@ -34,6 +34,7 @@ async function main() {
     data: {
       name: 'Account 1',
       iban: 'CZ0000000000000000000001',
+      currency: 'EUR',
       ownerId: user1.id,
     },
   });
@@ -42,6 +43,7 @@ async function main() {
     data: {
       name: 'Account 2',
       iban: 'CZ0000000000000000000002',
+      currency: 'EUR',
       ownerId: user2.id,
     },
   });

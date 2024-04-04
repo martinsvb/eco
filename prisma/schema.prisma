@@ -14,10 +14,11 @@ model Account {
   id                      String      @id @default(uuid())
   iban                    String      @unique
   name                    String
+  currency                String
   description             String?
   active                  Boolean     @default(false)
   createdAt               DateTime    @default(now())
-  updatedAt               DateTime?    @updatedAt
+  updatedAt               DateTime?   @updatedAt
   owner                   User?       @relation(fields: [ownerId], references: [id])
   ownerId                 String?
 }

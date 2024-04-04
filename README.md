@@ -78,6 +78,7 @@ npm i helmet
 
 npm install prisma --save-dev
 npx prisma migrate dev --name "init"
+npx prisma migrate dev --create-only
 npm install nestjs-prisma
 
 ```
@@ -198,6 +199,15 @@ export class PrismaModule {}
 npx @nestjs/cli generate resource
 
 npx @nestjs/cli generate filter prisma-client-exception
+
+## Added the required column to the table without a default value. There are rows in this table,it is not possible to execute this step
+
+In order to run this migration, you need to:
+Create the fields first as optional and then run migrate
+Fill the fields first with the required date.
+Remove the optional (?) from the field.
+
+Prisma automatically adds @updatedAt (it's not done at the database level) so these steps need to be followed.
 
 # Websockets
 
