@@ -6,8 +6,9 @@ const prisma = new PrismaClient();
 async function main() {
   const users = await prisma.user.findMany();
   const accounts = await prisma.account.findMany();
+  const contents = await prisma.content.findMany();
 
-  console.log({ accounts, users });
+  console.log({ accounts, contents, users });
 }
 
 // execute the main function
