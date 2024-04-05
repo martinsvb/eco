@@ -82,6 +82,7 @@ npx prisma migrate dev --create-only
 npx prisma migrate reset
 npx prisma db push
 npx prisma db seed
+npx tsx prisma/data.ts
 npx prisma generate
 npm install nestjs-prisma
 
