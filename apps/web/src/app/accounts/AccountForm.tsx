@@ -188,7 +188,6 @@ const AccountForm = () => {
               type="submit"
               variant="contained"
               onClick={handleClick}
-              sx={{mr: 1}}
             >
               {id ? t('labels:edit') : t('labels:create')}
             </LoadingButton>

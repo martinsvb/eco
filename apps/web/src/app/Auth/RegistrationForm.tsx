@@ -125,7 +125,6 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
               type="submit"
               variant="contained"
               onClick={handleClick}
-              sx={{mr: 1}}
             >
               {t('labels:register')}
             </LoadingButton>
