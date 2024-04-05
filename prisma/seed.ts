@@ -2,7 +2,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { UserOrigins } from 'libs/types/src';
+import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.user.deleteMany();
   await prisma.account.deleteMany();
+  await prisma.content.deleteMany();
 
   const user1 = await prisma.user.create({
     data: {
@@ -48,7 +49,34 @@ async function main() {
     },
   });
 
-  console.log({ account1, account2, user1, user2 });
+  const content1 = await prisma.content.create({
+    data: {
+      title: 'Test 1',
+      text: 'Test content 1',
+      type: ContentTypes.Article,
+      state: ContentState.Done,
+      authorId: user1.id
+    },
+  });
+
+  const content2 = await prisma.content.create({
+    data: {
+      title: 'Test 2',
+      text: 'Test content 2',
+      type: ContentTypes.Article,
+      state: ContentState.Done,
+      authorId: user2.id
+    },
+  });
+
+  console.log({
+    account1,
+    account2,
+    content1,
+    content2,
+    user1,
+    user2
+  });
 }
 
 // execute the main function

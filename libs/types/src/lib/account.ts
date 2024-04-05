@@ -2,7 +2,7 @@ export enum AccountItems {
   iban = 'iban',
   name = 'name',
   description = 'description',
-  currency = 'currency'
+  currency = 'currency',
 }
 
 export interface AccountData {

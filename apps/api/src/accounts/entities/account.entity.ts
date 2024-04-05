@@ -25,7 +25,7 @@ export class AccountEntity implements Account {
   description: string | null;
 
   @ApiProperty({ description: 'Active state', required: false })
-  active: boolean;
+  active?: boolean;
 
   @ApiProperty({ required: false, nullable: true })
   ownerId: string | null;

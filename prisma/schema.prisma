@@ -11,28 +11,42 @@ datasource db {
 }
 
 model Account {
-  id                      String      @id @default(uuid())
-  iban                    String      @unique
-  name                    String
-  currency                String
-  description             String?
-  active                  Boolean     @default(false)
-  createdAt               DateTime    @default(now())
-  updatedAt               DateTime?   @updatedAt
-  owner                   User?       @relation(fields: [ownerId], references: [id])
-  ownerId                 String?
+  id          String    @id @default(uuid())
+  iban        String    @unique
+  name        String
+  currency    String
+  description String?
+  active      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  owner       User?     @relation(fields: [ownerId], references: [id])
+  ownerId     String?
+}
+
+model Content {
+  id        String    @id @default(uuid())
+  title     String
+  text      String
+  type      String
+  state     String?   @default("created")
+  published Boolean?  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
 }
 
 model User {
-  id                      String      @id @default(uuid())
-  name                    String?
-  picture                 String?
-  email                   String      @unique
-  isEmailConfirmed        Boolean     @default(false)
-  origin                  String
-  otp                     Int?
-  password                String?
-  createdAt               DateTime    @default(now())
-  updatedAt               DateTime?   @updatedAt
-  accounts                Account[]
+  id               String    @id @default(uuid())
+  name             String?
+  picture          String?
+  email            String    @unique
+  isEmailConfirmed Boolean   @default(false)
+  origin           String
+  otp              Int?
+  password         String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
+  accounts         Account[]
+  Content          Content[]
 }

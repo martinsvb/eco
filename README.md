@@ -117,8 +117,6 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/eco?schema=public"
 
 ```
 
-npx prisma migrate dev --name "init"
-
 touch prisma/seed.ts
 
 ```
@@ -173,8 +171,6 @@ eco\package.json
 }
 
 ```
-
-npx prisma db seed
 
 npx @nestjs/cli generate module prisma
 npx @nestjs/cli generate service prisma
