@@ -11,6 +11,7 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiResponse,
@@ -33,6 +34,7 @@ export class ContentController {
 
   @Post()
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ContentEntity })
   @ApiResponse({
     status: 201,
@@ -44,20 +46,22 @@ export class ContentController {
     );
   }
 
-  @Get()
+  @Get('list/:type')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ContentEntity, isArray: true })
   @ApiResponse({
     status: 200,
-    description: 'Contents has been successfully loaded.',
+    description: 'Content list has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request) {
-    const contents = await this.contentService.findAll(user as User);
+  async findAll(@Req() {user}: Request, @Param('type') type: string) {
+    const contents = await this.contentService.findAll(user as User, type);
     return contents.map((content) => new ContentEntity(content));
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ContentEntity })
   @ApiResponse({
     status: 200,
@@ -73,6 +77,7 @@ export class ContentController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ContentEntity })
   @ApiResponse({
     status: 200,
@@ -89,6 +94,7 @@ export class ContentController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ContentEntity })
   @ApiResponse({
     status: 200,

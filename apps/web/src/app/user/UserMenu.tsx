@@ -3,7 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import ms from 'ms';
 import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { logout, resetAccounts, resetUsers, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import {
+  logout,
+  resetAccounts,
+  resetContent,
+  resetUsers,
+  selectUserAuth,
+  useAppDispatch,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { routes } from '@eco/config';
 import { useTranslation } from 'react-i18next';
 import UserLanguage from './UserLanguage';
@@ -44,6 +52,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       setAnchorElUser(null);
       dispatch(logout());
       dispatch(resetAccounts());
+      dispatch(resetContent());
       dispatch(resetUsers());
       navigate(`${routes.base}${routes.home}`);
     },

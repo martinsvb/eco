@@ -1,6 +1,6 @@
 export enum ContentTypes {
   Article = 'article',
-  Todo = 'todo',
+  Task = 'task',
   New = 'new',
 }
 
@@ -9,4 +9,20 @@ export enum ContentState {
   InProgress = 'inProgress',
   Done = 'done',
   Deleted = 'deleted',
+}
+
+export enum ContentItems {
+  Title = 'title',
+  Text = 'text',
+  Type = 'type',
+  State = 'state',
+  Published = 'published',
+}
+
+export interface ContentData {
+  [ContentItems.Title]: string;
+  [ContentItems.Text]: string;
+  [ContentItems.Type]: ContentTypes;
+  [ContentItems.State]?: string;
+  [ContentItems.Published]?: boolean;
 }

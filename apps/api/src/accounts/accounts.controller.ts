@@ -11,6 +11,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiResponse,
@@ -33,6 +34,7 @@ export class AccountsController {
 
   @Post()
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: AccountEntity })
   @ApiResponse({
     status: 201,
@@ -46,6 +48,7 @@ export class AccountsController {
 
   @Get()
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: AccountEntity, isArray: true })
   @ApiResponse({
     status: 200,
@@ -58,6 +61,7 @@ export class AccountsController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: AccountEntity })
   @ApiResponse({
     status: 200,
@@ -73,6 +77,7 @@ export class AccountsController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: AccountEntity })
   @ApiResponse({
     status: 200,
@@ -89,6 +94,7 @@ export class AccountsController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: AccountEntity })
   @ApiResponse({
     status: 200,

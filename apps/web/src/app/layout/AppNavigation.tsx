@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { routes } from '@eco/config';
 import { selectIsUserLoggedIn, useAppSelector } from '@eco/redux';
 
@@ -52,11 +53,18 @@ export const AppNavigation = () => {
       <List>
         {isUserLoggedIn
           ?
-          <NavItem
-            icon={<AccountBalanceWalletIcon />}
-            text={t('accounts')}
-            to={`${routes.base}${routes.accounts}`}
-          />
+          <>
+            <NavItem
+              icon={<AccountBalanceWalletIcon />}
+              text={t('accounts')}
+              to={`${routes.base}${routes.accounts}`}
+            />
+            <NavItem
+              icon={<FormatListBulletedIcon />}
+              text={t('tasks')}
+              to={`${routes.base}${routes.content.task.list}`}
+            />
+          </>
           :
           <NavItem
             icon={<HomeIcon />}

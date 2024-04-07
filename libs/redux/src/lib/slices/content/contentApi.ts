@@ -8,44 +8,49 @@ import {
   patchHeaders,
   delHeaders
 } from '@eco/config';
-import { AccountData } from '@eco/types';
 import { tokenValidation } from '../../tokenValidation';
+import { ContentData, ContentItems } from '@eco/types';
 
-export const accountsGet = async (
-  id: string,
+export const contentListGet = async (
+  {type}: Pick<ContentData, ContentItems.Type>,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
+    const data = await checkResponse(
+      await fetch(`/api/${endPoints.content}/list/${type}`, getHeaders({signal, token}))
+    ).json();
 
-    return await checkResponse(await fetch(`/api/${endPoints.accounts}`, getHeaders({signal, token}))).json();
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }
 }
 
-export const accountGet = async (
-  id: string,
+export const contentGet = async (
+  {body, id}: {body: Pick<ContentData, ContentItems.Type>, id: string},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
-    return await checkResponse(await fetch(`/api/${endPoints.accounts}/${id}`, getHeaders({signal, token}))).json();
+    return await checkResponse(
+      await fetch(`/api/${endPoints.content}/${id}`, getHeaders({body, signal, token}))
+    ).json();
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }
 }
 
-export const accountsPost = async (
-  {body, onSuccess}: {body: AccountData, onSuccess: () => void},
+export const contentPost = async (
+  {body, onSuccess}: {body: ContentData, onSuccess: () => void},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
     const data = await checkResponse(
-      await fetch(`/api/${endPoints.accounts}`, postHeaders({body, signal, token}))
+      await fetch(`/api/${endPoints.content}`, postHeaders({body, signal, token}))
     ).json();
 
     onSuccess();
@@ -56,15 +61,15 @@ export const accountsPost = async (
   }
 }
 
-export const accountsPatch = async (
-  {body, id, onSuccess}: {body: Partial<AccountData>, id: string, onSuccess: () => void},
+export const contentPatch = async (
+  {body, id, onSuccess}: {body: Partial<ContentData>, id: string, onSuccess: () => void},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
     const data = await checkResponse(
-      await fetch(`/api/${endPoints.accounts}/${id}`, patchHeaders({body, signal, token}))
+      await fetch(`/api/${endPoints.content}/${id}`, patchHeaders({body, signal, token}))
     ).json();
 
     onSuccess();
@@ -75,14 +80,16 @@ export const accountsPatch = async (
   }
 }
 
-export const accountDelete = async (
+export const contentDelete = async (
   {id, onSuccess}: {id: string, onSuccess: () => void},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
-    return await checkResponse(await fetch(`/api/${endPoints.accounts}/${id}`, delHeaders({signal, token}))).json();
+    return await checkResponse(
+      await fetch(`/api/${endPoints.content}/${id}`, delHeaders({signal, token}))
+    ).json();
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

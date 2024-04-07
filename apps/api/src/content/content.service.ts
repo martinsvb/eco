@@ -12,8 +12,13 @@ export class ContentService {
     return this.prisma.content.create({ data: {...createContentDto, authorId: id} });
   }
 
-  findAll({id}: User) {
-    return this.prisma.content.findMany({where: { authorId: id }});
+  findAll({id}: User, type: string) {
+    return this.prisma.content.findMany({
+      where: {
+        authorId: id,
+        type
+      }
+    });
   }
 
   findOne(id: string) {

@@ -4,11 +4,13 @@ import { initReactI18next } from 'react-i18next';
 import { LocalStorageItems } from "@eco/config";
 import { Languages } from './languages';
 import accountsCs from './locale-cs-accounts.json';
+import contentCs from './locale-cs-content.json';
 import labelsCs from './locale-cs-labels.json';
 import registrationCs from './locale-cs-registration.json';
 import translationCs from './locale-cs-translation.json';
 import validationCs from './locale-cs-validation.json';
 import accountsEn from './locale-en-accounts.json';
+import contentEn from './locale-en-content.json';
 import labelsEn from './locale-en-labels.json';
 import registrationEn from './locale-en-registration.json';
 import translationEn from './locale-en-translation.json';
@@ -34,6 +36,7 @@ i18n
         translation: translationCs,
         registration: registrationCs,
         accounts: accountsCs,
+        content: contentCs,
         labels: labelsCs,
         validation: validationCs,
       },
@@ -41,6 +44,7 @@ i18n
         translation: translationEn,
         registration: registrationEn,
         accounts: accountsEn,
+        content: contentEn,
         labels: labelsEn,
         validation: validationEn,
       },

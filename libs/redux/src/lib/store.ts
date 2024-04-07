@@ -4,15 +4,15 @@ import {
   configureStore,
   ThunkAction,
 } from "@reduxjs/toolkit";
-import accountsApi from "./api/accounts";
 import auth from "./slices/auth/authSlice";
 import account from "./slices/account/accountSlice";
+import content from "./slices/content/contentSlice";
 import user from "./slices/user/userSlice";
 import { apiErrorLogger } from "./apiErrorLogger";
 
 const reducer = combineReducers({
-  [accountsApi.reducerPath]: accountsApi.reducer,
   account,
+  content,
   auth,
   user,
 });
@@ -21,8 +21,7 @@ export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(
-      apiErrorLogger,
-      accountsApi.middleware
+      apiErrorLogger
     );
   }
 });

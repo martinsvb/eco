@@ -1,8 +1,8 @@
 import { Account } from '@prisma/client';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { ApiOperations } from '@eco/types';
 import { accountDelete, accountGet, accountsGet, accountsPatch, accountsPost } from "./accountApi";
 import { createSlice } from "../createSlice";
-import { PayloadAction } from '@reduxjs/toolkit';
 
 export interface AccountState {
   account: Account | null;
