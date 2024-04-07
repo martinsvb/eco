@@ -1,22 +1,20 @@
-import { ContentTypes } from '@eco/types';
-
 export const routes = {
     base: '/',
     accounts: 'accounts',
     accountsNew: 'accounts/new',
     accountsEdit: 'accounts/edit/:id',
     content: {
-        [ContentTypes.Article]: {
+        article: {
             list: 'articles',
             new: 'articles/new',
             edit: 'articles/edit/:id',
         },
-        [ContentTypes.Task]: {
+        task: {
             list: 'tasks',
             new: 'tasks/new',
             edit: 'tasks/edit/:id',
         },
-        [ContentTypes.New]: {
+        new: {
             list: 'news',
             new: 'news/new',
             edit: 'news/edit/:id',
