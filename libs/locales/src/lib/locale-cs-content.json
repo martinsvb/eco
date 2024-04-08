@@ -1,5 +1,13 @@
 {
+  "created": "Obsah byl úspěšně vytvořen",
   "createTask": "Vytvořit nový úkol",
+  "editArticleTitle": "Úprava článku",
+  "editNewTitle": "Úprava novinky",
+  "editTaskTitle": "Úprava úkolu",
+  "newArticleTitle": "Nový článek",
+  "newNewTitle": "Vytvořit novinku",
+  "newTaskTitle": "Nový úkol",
   "refresh": "Obnovit",
-  "title": "Úkoly"
+  "title": "Úkoly",
+  "updated": "Obsah byl úspěšně změněn"
 }

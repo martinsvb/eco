@@ -1,14 +1,14 @@
 import { Content } from '@prisma/client';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { ApiOperations, ContentTypes } from '@eco/types';
-import { contentListGet } from "./contentApi";
+import { contentGet, contentListGet, contentPatch, contentPost } from "./contentApi";
 import { createSlice } from "../createSlice";
 
 export interface ContentState {
   content: {
-    [ContentTypes.Article]: Content | null;
-    [ContentTypes.Task]: Content | null;
-    [ContentTypes.New]: Content | null;
+    [ContentTypes.Article]: {data: Content | null, loaded: boolean};
+    [ContentTypes.Task]: {data: Content | null, loaded: boolean};
+    [ContentTypes.New]: {data: Content | null, loaded: boolean};
   };
   contentList: {
     [ContentTypes.Article]: {data: Content[], loaded: boolean};
@@ -29,9 +29,9 @@ export interface ContentState {
 
 export const initialContentState: ContentState = {
   content: {
-    [ContentTypes.Article]: null,
-    [ContentTypes.Task]: null,
-    [ContentTypes.New]: null,
+    [ContentTypes.Article]: {data: null, loaded: false},
+    [ContentTypes.Task]: {data: null, loaded: false},
+    [ContentTypes.New]: {data: null, loaded: false},
   },
   contentList: {
     [ContentTypes.Article]: {data: [], loaded: false},
@@ -59,7 +59,7 @@ const contentSlice = createSlice({
       state,
       {payload: {data, type}}: PayloadAction<{data: Content | null, type: ContentTypes}>
     ) => {
-      state.content[type] = data;
+      state.content[type].data = data;
     }),
     apiGetContentList: create.asyncThunk(
       contentListGet,
@@ -79,9 +79,68 @@ const contentSlice = createSlice({
         },
       },
     ),
+    apiGetContent: create.asyncThunk(
+      contentGet,
+      {
+        pending: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.getItem] = true;
+        },
+        rejected: (state, { error, payload, meta: { arg: { type } } }) => {
+          state.error[type][ApiOperations.getItem] = payload ?? error;
+        },
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          state.contentList[type].data = payload;
+          state.contentList[type].loaded = true;
+        },
+        settled: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.getItem] = false;
+        },
+      },
+    ),
+    apiPostContent: create.asyncThunk(
+      contentPost,
+      {
+        pending: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.create] = true;
+        },
+        rejected: (state, { error, payload, meta: { arg: { type } } }) => {
+          state.error[type][ApiOperations.create] = payload ?? error;
+        },
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          state.contentList[type].data.push(payload);
+        },
+        settled: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.create] = false;
+        },
+      },
+    ),
+    apiPatchContent: create.asyncThunk(
+      contentPatch,
+      {
+        pending: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.edit] = true;
+        },
+        rejected: (state, { error, payload, meta: { arg: { type } } }) => {
+          state.error[type][ApiOperations.edit] = payload ?? error;
+        },
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          const index = state.contentList[type].data.findIndex(({id}) => id === payload.id);
+          if (index > -1) {
+            state.contentList[type].data[index] = payload;
+          }
+        },
+        settled: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.edit] = false;
+        },
+      },
+    ),
   }),
   selectors: {
-    selectContent: (state, type: ContentTypes) => state.content[type],
+    selectContent: (state, type: ContentTypes) => ({
+      data: state.content[type].data,
+      loaded: state.contentList[type].loaded,
+      isLoading: !!state.loading[type][ApiOperations.getItem]
+    }),
     selectContentList: (state, type: ContentTypes) => ({
       data: state.contentList[type].data,
       loaded: state.contentList[type].loaded,
@@ -97,6 +156,9 @@ export default contentSlice.reducer;
 
 export const {
   apiGetContentList,
+  apiGetContent,
+  apiPostContent,
+  apiPatchContent,
   resetContent,
   setContent
 } = contentSlice.actions;

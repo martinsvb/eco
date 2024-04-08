@@ -5,7 +5,7 @@ import App from "../app/app";
 import { Home } from "../app/Home";
 import { Accounts, AccountsNew, AccountsEdit } from "../app/accounts";
 import { Users } from "../app/Users";
-import { ContentList } from "../app/content";
+import { ContentEdit, ContentList, ContentNew } from "../app/content";
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +28,14 @@ export const router = createBrowserRouter([
         {
           path: routes.content.task.list,
           element: <ContentList type={ContentTypes.Task} />,
+        },
+        {
+          path: routes.content.task.new,
+          element: <ContentNew type={ContentTypes.Task} />,
+        },
+        {
+          path: routes.content.task.edit,
+          element: <ContentEdit type={ContentTypes.Task} />,
         },
         {
           path: routes.home,

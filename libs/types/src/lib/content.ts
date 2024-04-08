@@ -21,8 +21,5 @@ export enum ContentItems {
 
 export interface ContentData {
   [ContentItems.Title]: string;
-  [ContentItems.Text]: string;
-  [ContentItems.Type]: ContentTypes;
-  [ContentItems.State]?: string;
-  [ContentItems.Published]?: boolean;
+  [ContentItems.Text]?: string;
 }

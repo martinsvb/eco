@@ -1,5 +1,13 @@
 {
+  "created": "Content was successfully created",
   "createTask": "Create new task",
+  "editArticleTitle": "Edit article",
+  "editNewTitle": "Edit new",
+  "editTaskTitle": "Edit task",
+  "newArticleTitle": "New article",
+  "newNewTitle": "Create new",
+  "newTaskTitle": "New task",
   "refresh": "Refresh",
-  "title": "Tasks"
+  "title": "Tasks",
+  "updated": "Content was successfully updated"
 }
