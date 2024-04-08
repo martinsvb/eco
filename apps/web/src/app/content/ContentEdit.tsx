@@ -1,11 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography } from '@mui/material';
-import LoginWrapper from '../user/LoginWrapper';
-import ContentForm from './ContentForm';
-import { apiGetContent, setContent, useAppDispatch } from '@eco/redux';
 import { useParams } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import { apiGetContent, setContent, useAppDispatch } from '@eco/redux';
 import { ContentTypes } from '@eco/types';
+import ContentForm from './ContentForm';
+import LoginWrapper from '../user/LoginWrapper';
 
 interface ContentEditProps {
   type: ContentTypes;
@@ -40,14 +40,14 @@ export const ContentEdit = ({type}: ContentEditProps) => {
         [ContentTypes.Task]: t('content:editTaskTitle'),
       };
 
-      return contentTitles[type] || 'content:new';
+      return contentTitles[type] || t('content:edit');
     },
     [type]
   );
 
   return (
     <>
-      <Typography variant='h3' mb={4}>{title}</Typography>
+      <Typography variant='h3' mb={3}>{title}</Typography>
       <LoginWrapper>
         <ContentForm type={type} />
       </LoginWrapper>

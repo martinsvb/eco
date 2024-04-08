@@ -23,18 +23,23 @@ const Desktop = () => {
       <Box
         component="main"
         sx={{
-          height: '100vh',
           flexGrow: 1,
-          p: 2,
-          overflowY: 'auto',
-          ...getScrollbarDesign({
-            trackColor: palette.background.default,
-            thumbColor: palette.getContrastText(palette.background.default),
-          }),
         }}
       >
         <Toolbar />
-        <Outlet />
+        <Box
+          sx={{
+            height: 'calc(100vh - 64px)',
+            p: 2,
+            overflowY: 'auto',
+            ...getScrollbarDesign({
+              trackColor: palette.background.default,
+              thumbColor: palette.grey[500],
+            })
+          }}
+        >
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

@@ -1,7 +1,7 @@
 import { Content } from '@prisma/client';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { ApiOperations, ContentTypes } from '@eco/types';
-import { contentGet, contentListGet, contentPatch, contentPost } from "./contentApi";
+import { contentDelete, contentGet, contentListGet, contentPatch, contentPost } from "./contentApi";
 import { createSlice } from "../createSlice";
 
 export interface ContentState {
@@ -89,8 +89,8 @@ const contentSlice = createSlice({
           state.error[type][ApiOperations.getItem] = payload ?? error;
         },
         fulfilled: (state, { payload, meta: { arg: { type } } }) => {
-          state.contentList[type].data = payload;
-          state.contentList[type].loaded = true;
+          state.content[type].data = payload;
+          state.content[type].loaded = true;
         },
         settled: (state, { meta: { arg: { type } } }) => {
           state.loading[type][ApiOperations.getItem] = false;
@@ -134,21 +134,44 @@ const contentSlice = createSlice({
         },
       },
     ),
+    apiDeleteContent: create.asyncThunk(
+      contentDelete,
+      {
+        pending: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.deleteItem] = true;
+        },
+        rejected: (state, { error, payload, meta: { arg: { type } } }) => {
+          state.error[type][ApiOperations.deleteItem] = payload ?? error;
+        },
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          if (payload.id) {
+            state.contentList[type].data = state.contentList[type].data.filter(({id}) => id !== payload.id);
+          }
+        },
+        settled: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.deleteItem] = false;
+        },
+      },
+    ),
   }),
   selectors: {
-    selectContent: (state, type: ContentTypes) => ({
-      data: state.content[type].data,
-      loaded: state.contentList[type].loaded,
-      isLoading: !!state.loading[type][ApiOperations.getItem]
-    }),
-    selectContentList: (state, type: ContentTypes) => ({
-      data: state.contentList[type].data,
-      loaded: state.contentList[type].loaded,
-      isLoading: !!state.loading[type][ApiOperations.getList]
-    }),
-    selectIsContentsLoading: (state, type: ContentTypes, operation: ApiOperations) => (
-      !!state.loading[type][operation]
-    ),
+    selectContent: (state, type: ContentTypes) => {
+      return {
+        data: state.content[type].data,
+        loaded: state.contentList[type].loaded,
+        isLoading: !!state.loading[type][ApiOperations.getItem]
+      }
+    },
+    selectContentList: (state, type: ContentTypes) => {
+      return {
+        data: state.contentList[type].data,
+        loaded: state.contentList[type].loaded,
+        isLoading: !!state.loading[type][ApiOperations.getList]
+      }
+    },
+    selectIsContentsLoading: (state, type: ContentTypes, operation: ApiOperations) => {
+      return !!state.loading[type][operation];
+    },
   },
 });
 
@@ -159,6 +182,7 @@ export const {
   apiGetContent,
   apiPostContent,
   apiPatchContent,
+  apiDeleteContent,
   resetContent,
   setContent
 } = contentSlice.actions;

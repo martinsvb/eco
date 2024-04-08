@@ -1,13 +1,23 @@
 {
   "created": "Obsah byl úspěšně vytvořen",
   "createTask": "Vytvořit nový úkol",
+  "delete-question-text": "Opravdu si přejete vymazat vybraný obsah?",
+  "delete-question-title": "Smazání obsahu",
+  "deleted": "Obsah byl smazán",
+  "edit": "Úprava obsahu",
   "editArticleTitle": "Úprava článku",
   "editNewTitle": "Úprava novinky",
   "editTaskTitle": "Úprava úkolu",
+  "new": "Nový obsah",
   "newArticleTitle": "Nový článek",
   "newNewTitle": "Vytvořit novinku",
   "newTaskTitle": "Nový úkol",
   "refresh": "Obnovit",
+  "taskSwitch": "Přepínač stavu úkolu",
+  "taskSwitchDone": "Přepnout úkol do stavu hotový",
+  "taskSwitchedDone": "Úkol přepnut do stavu hotový",
+  "taskSwitchedInProgress": "Úkol vrácen do řešení",
+  "taskSwitchInProgress": "Vrátit úkol do řešení",
   "title": "Úkoly",
   "updated": "Obsah byl úspěšně změněn"
 }

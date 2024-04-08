@@ -21,14 +21,14 @@ export const ContentNew = ({type}: ContentNewProps) => {
         [ContentTypes.Task]: t('content:newTaskTitle'),
       };
 
-      return contentTitles[type] || 'content:new';
+      return contentTitles[type] || t('content:new');
     },
     [type]
   );
 
   return (
     <>
-      <Typography variant='h3' mb={4}>{title}</Typography>
+      <Typography variant='h3' mb={3}>{title}</Typography>
       <LoginWrapper>
         <ContentForm type={type} />
       </LoginWrapper>

@@ -5,15 +5,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import ms from 'ms';
 import { useSnackbar } from 'notistack';
-import { apiDeleteAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
-import { ApiOperations } from '@eco/types';
+import { apiDeleteContent, selectIsContentsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
+import { ApiOperations, ContentTypes } from '@eco/types';
 import AppDialog, { useDialog } from '../components/dialog/AppDialog';
 
-interface AccountDeleteButtonProps {
+interface ContentDeleteButtonProps {
   id: string;
+  type: ContentTypes;
 }
 
-const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
+const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
 
   const { open, setOpen, handleClickOpen, handleClose } = useDialog();
 
@@ -23,15 +24,15 @@ const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
 
   const dispatch = useAppDispatch();
 
-  const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.deleteItem));
+  const isLoading = useAppSelector((state) => selectIsContentsLoading(state, type, ApiOperations.deleteItem));
 
   const handleDelete = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      dispatch(apiDeleteAccount({
+      dispatch(apiDeleteContent({
         id,
+        type,
         onSuccess: () => {
-          enqueueSnackbar(t('accounts:deleted'), {variant: 'success'});
+          enqueueSnackbar(t('content:deleted'), {variant: 'success'});
           setOpen(false);
         }
       }));
@@ -47,7 +48,7 @@ const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
       >
         <IconButton
           aria-label={t('labels:delete')}
-          id="account-delete-button"
+          id="content-delete-button"
           onClick={handleClickOpen}
         >
           <DeleteIcon />
@@ -58,13 +59,13 @@ const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
           <>
             <Button
               autoFocus
-              id="account-delete-button-close"
+              id="content-delete-button-close"
               onClick={handleClose}
             >
               {t('labels:close')}
             </Button>
             <LoadingButton
-              id="account-delete-button-submit"
+              id="content-delete-button-submit"
               loading={isLoading}
               type="submit"
               variant="contained"
@@ -74,13 +75,13 @@ const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
             </LoadingButton>
           </>
         }
-        id="account-delete"
-        dialogTitle={t('accounts:delete-question-title')}
-        contentText={t('accounts:delete-question-text')}
+        id="content-delete"
+        dialogTitle={t('content:delete-question-title')}
+        contentText={t('content:delete-question-text')}
         open={open}
       />
     </>
   );
 }
 
-export default AccountDeleteButton;
+export default ContentDeleteButton;

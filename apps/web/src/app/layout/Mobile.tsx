@@ -22,7 +22,7 @@ const Mobile = () => {
           overflowY: 'auto',
           ...getScrollbarDesign({
             trackColor: palette.background.default,
-            thumbColor: palette.getContrastText(palette.background.default),
+            thumbColor: palette.grey[500],
           }),
         }}
       >

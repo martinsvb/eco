@@ -83,7 +83,7 @@ export const contentPatch = async (
 }
 
 export const contentDelete = async (
-  {id, onSuccess}: {id: string, onSuccess: () => void},
+  {id, onSuccess}: {id: string, onSuccess: () => void} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {

@@ -55,7 +55,7 @@ export const Accounts = () => {
 
   return (
     <>
-      <Typography variant='h3' mb={4}>{t('accounts:title')}</Typography>
+      <Typography variant='h3' mb={3}>{t('accounts:title')}</Typography>
       <LoginWrapper>
         <>
           <Grid container rowSpacing={2} columnSpacing={2}>

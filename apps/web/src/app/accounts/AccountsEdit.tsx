@@ -29,7 +29,7 @@ export const AccountsEdit = () => {
 
   return (
     <>
-      <Typography variant='h3' mb={4}>{t('accounts:editAccountTitle')}</Typography>
+      <Typography variant='h3' mb={3}>{t('accounts:editAccountTitle')}</Typography>
       <LoginWrapper>
         <AccountForm />
       </LoginWrapper>

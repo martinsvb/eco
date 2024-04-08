@@ -2,7 +2,6 @@ import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Fab, IconButton, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
 import { routes } from '@eco/config';
@@ -15,8 +14,9 @@ import {
   useAppSelector,
 } from '@eco/redux';
 import { ContentTypes } from '@eco/types';
-import LoginWrapper from '../user/LoginWrapper';
 import { Buttons } from '../components/buttons/Buttons';
+import LoginWrapper from '../user/LoginWrapper';
+import { TaskList } from './TaskList';
 
 interface ContentListProps {
   type: ContentTypes;
@@ -59,16 +59,12 @@ export const ContentList = ({type}: ContentListProps) => {
 
   return (
     <>
-      <Typography variant='h3' mb={4}>{t('content:title')}</Typography>
+      <Typography variant='h3' mb={3}>{t('content:title')}</Typography>
       <LoginWrapper>
         <>
-          <Grid container rowSpacing={2} columnSpacing={2}>
-            {data.map((content) => (
-              <Grid key={content.id} xl={3} lg={4} md={6} xs={12}>
-                <p>{content.title}</p>
-              </Grid>
-            ))}
-          </Grid>
+          {type === ContentTypes.Task &&
+            <TaskList data={data} />
+          }
           <Buttons>
             {isLoading ?
               <CircularProgress

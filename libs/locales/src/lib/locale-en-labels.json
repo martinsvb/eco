@@ -8,10 +8,12 @@
   "currency": "Currency",
   "delete": "Delete",
   "description": "Description",
+  "done": "Done",
   "edit": "Edit",
   "email": "E-mail",
   "en": "En",
   "iban": "Iban",
+  "inProgress": "In progress",
   "languageSelection": "Language selection",
   "login": "Login",
   "loginButton": "Login",
@@ -23,8 +25,8 @@
   "register": "Regiter",
   "registerButton": "Register",
   "resend": "Resend code",
-  "text": "__NOT_TRANSLATED__",
-  "title": "__NOT_TRANSLATED__",
+  "text": "Text",
+  "title": "Title",
   "userMenu": "User menu",
   "verify": "Verify"
 }
