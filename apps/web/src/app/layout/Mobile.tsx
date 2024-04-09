@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { CssBaseline, AppBar, Box, useTheme } from '@mui/material';
+import { CssBaseline, AppBar, Box, useTheme, Toolbar } from '@mui/material';
 import { getScrollbarDesign } from '@eco/config';
 import AppToolbarMobile from './AppToolbarMobile';
 import MobileNavigationSidebar from './MobileNavigationSidebar';
@@ -15,18 +15,25 @@ const Mobile = () => {
     <>
       <CssBaseline enableColorScheme />
       <Box
-        component="main" 
         sx={{
-          p: 2,
-          height: 'calc(100vh - 56px)',
-          overflowY: 'auto',
-          ...getScrollbarDesign({
-            trackColor: palette.background.default,
-            thumbColor: palette.grey[500],
-          }),
+          flexGrow: 1,
         }}
       >
-        <Outlet />
+        <Box
+          component="main"
+          sx={{
+            height: 'calc(100vh - 56px)',
+            p: 2,
+            overflowY: 'auto',
+            ...getScrollbarDesign({
+              trackColor: palette.background.default,
+              thumbColor: palette.grey[500],
+            })
+          }}
+        >
+          <Outlet />
+        </Box>
+        <Toolbar />
       </Box>
       <MobileNavigationSidebar
         open={open}

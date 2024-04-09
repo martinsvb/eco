@@ -21,13 +21,13 @@ const Desktop = () => {
       </AppBar>
       <DesktopNavigationSidebar />
       <Box
-        component="main"
         sx={{
           flexGrow: 1,
         }}
       >
         <Toolbar />
         <Box
+          component="main"
           sx={{
             height: 'calc(100vh - 64px)',
             p: 2,
