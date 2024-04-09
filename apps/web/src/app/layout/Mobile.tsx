@@ -15,24 +15,19 @@ const Mobile = () => {
     <>
       <CssBaseline enableColorScheme />
       <Box
+        component="main"
         sx={{
+          height: 'calc(100vh - 56px)',
           flexGrow: 1,
+          p: 2,
+          overflowY: 'auto',
+          ...getScrollbarDesign({
+            trackColor: palette.background.default,
+            thumbColor: palette.grey[500],
+          })
         }}
       >
-        <Box
-          component="main"
-          sx={{
-            height: 'calc(100vh - 56px)',
-            p: 2,
-            overflowY: 'auto',
-            ...getScrollbarDesign({
-              trackColor: palette.background.default,
-              thumbColor: palette.grey[500],
-            })
-          }}
-        >
-          <Outlet />
-        </Box>
+        <Outlet />
         <Toolbar />
       </Box>
       <MobileNavigationSidebar
