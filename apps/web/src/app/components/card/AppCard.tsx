@@ -38,7 +38,7 @@ export const AppCard = ({actions, cardTitle, background, label, cardContent}: Ap
       </CardContent>
       <CardActions
         sx={{
-          justifyContent: 'end'
+          justifyContent: 'center'
         }}
       >
         {actions}
