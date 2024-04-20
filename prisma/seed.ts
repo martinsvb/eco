@@ -2,6 +2,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { adminRights, allowedCountries, readerRights } from 'libs/config/src';
 import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
 
 // initialize Prisma Client
@@ -11,6 +12,21 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.account.deleteMany();
   await prisma.content.deleteMany();
+  await prisma.company.deleteMany();
+
+  const company1 = await prisma.company.create({
+    data: {
+      name: 'Company 1',
+      country: allowedCountries[0]
+    },
+  });
+
+  const company2 = await prisma.company.create({
+    data: {
+      name: 'Company 2',
+      country: allowedCountries[0]
+    },
+  });
 
   const user1 = await prisma.user.create({
     data: {
@@ -19,6 +35,8 @@ async function main() {
       origin: UserOrigins.internal,
       password: await bcrypt.hash('user1password', parseInt(process.env.HASHING_ROUNDS, 10)),
       isEmailConfirmed: true,
+      companyId: company1.id,
+      rights: adminRights,
     },
   });
 
@@ -28,6 +46,20 @@ async function main() {
       email: 'user2@email.com',
       origin: UserOrigins.internal,
       password: await bcrypt.hash('user2password', parseInt(process.env.HASHING_ROUNDS, 10)),
+      companyId: company2.id,
+      rights: adminRights,
+    },
+  });
+
+  const user3 = await prisma.user.create({
+    data: {
+      name: 'User 3',
+      email: 'user3@email.com',
+      origin: UserOrigins.internal,
+      password: await bcrypt.hash('user3password', parseInt(process.env.HASHING_ROUNDS, 10)),
+      isEmailConfirmed: true,
+      companyId: company1.id,
+      rights: readerRights,
     },
   });
 
@@ -36,7 +68,8 @@ async function main() {
       name: 'Account 1',
       iban: 'CZ0000000000000000000001',
       currency: 'EUR',
-      ownerId: user1.id,
+      creatorId: user1.id,
+      companyId: company1.id,
     },
   });
 
@@ -45,7 +78,8 @@ async function main() {
       name: 'Account 2',
       iban: 'CZ0000000000000000000002',
       currency: 'EUR',
-      ownerId: user2.id,
+      creatorId: user2.id,
+      companyId: company2.id,
     },
   });
 
@@ -55,7 +89,8 @@ async function main() {
       text: 'Test content 1',
       type: ContentTypes.Article,
       state: ContentState.Done,
-      authorId: user1.id
+      authorId: user1.id,
+      companyId: company1.id,
     },
   });
 
@@ -65,17 +100,21 @@ async function main() {
       text: 'Test content 2',
       type: ContentTypes.Article,
       state: ContentState.Done,
-      authorId: user2.id
+      authorId: user2.id,
+      companyId: company2.id,
     },
   });
 
   console.log({
     account1,
     account2,
+    company1,
+    company2,
     content1,
     content2,
     user1,
-    user2
+    user2,
+    user3
   });
 }
 

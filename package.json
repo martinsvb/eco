@@ -37,6 +37,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
+    "countries-list": "^3.1.0",
     "currency-list": "^1.0.8",
     "dayjs": "^1.11.10",
     "google-auth-library": "^9.6.2",

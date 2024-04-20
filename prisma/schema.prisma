@@ -19,8 +19,10 @@ model Account {
   active      Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  owner       User?     @relation(fields: [ownerId], references: [id])
-  ownerId     String?
+  creator     User      @relation(fields: [creatorId], references: [id])
+  creatorId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  companyId   String
 }
 
 model Content {
@@ -34,6 +36,8 @@ model Content {
   updatedAt DateTime? @updatedAt
   author    User      @relation(fields: [authorId], references: [id])
   authorId  String
+  company   Company   @relation(fields: [companyId], references: [id])
+  companyId String
 }
 
 model User {
@@ -42,11 +46,28 @@ model User {
   picture          String?
   email            String    @unique
   isEmailConfirmed Boolean   @default(false)
+  contact          Json?
   origin           String
   otp              Int?
   password         String?
+  rights           Json?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]
-  Content          Content[]
+  content          Content[]
+  company          Company  @relation(fields: [companyId], references: [id])
+  companyId        String
+}
+
+model Company {
+  id               String    @id @default(uuid())
+  name             String
+  country          String
+  contact          Json?
+  identification   Json?  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
+  accounts         Account[]
+  content          Content[]
+  users            User[]
 }
