@@ -3,6 +3,7 @@ export const routes = {
     accounts: 'accounts',
     accountsNew: 'accounts/new',
     accountsEdit: 'accounts/edit/:id',
+    companies: 'companies',
     content: {
         article: {
             list: 'articles',

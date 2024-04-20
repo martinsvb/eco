@@ -49,7 +49,6 @@ export const approvalEditorRights = {
 export const approvalEditorScopes = {
   accounts: approvalEditorRights,
   tasks: approvalEditorRights,
-  users: approvalEditorRights,
 }
 
 export const approvalEditorUserRights = {
@@ -57,7 +56,13 @@ export const approvalEditorUserRights = {
   companyAdmin: false
 }
 
-export const adminRights = {
-  scopes: approvalEditorScopes,
+export const adminScopes = {
+  accounts: approvalEditorRights,
+  tasks: approvalEditorRights,
+  users: approvalEditorRights,
+}
+
+export const adminUserRights = {
+  scopes: adminScopes,
   companyAdmin: true
 }

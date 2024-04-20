@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class BasicUserEntity {
@@ -23,7 +23,7 @@ export class UserEntity extends BasicUserEntity implements User {
   createdAt: Date;
 
   @ApiProperty({ description: 'Date of update' })
-  updatedAt: Date;
+  updatedAt: Date | null;
 
   @ApiProperty({ description: 'User email' })
   email: string;
@@ -36,6 +36,15 @@ export class UserEntity extends BasicUserEntity implements User {
 
   @ApiProperty({ description: 'User origin' })
   origin: string;
+
+  @ApiProperty({ description: 'Company id' })
+  companyId: string;
+
+  @ApiProperty({ description: 'User contact' })
+  contact: Prisma.JsonValue | null;
+
+  @ApiProperty({ description: 'User rigts' })
+  rights: Prisma.JsonValue;
 
   @ApiProperty({ description: 'User password' })
   @Exclude()

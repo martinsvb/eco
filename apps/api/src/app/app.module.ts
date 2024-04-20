@@ -10,6 +10,7 @@ import { AppController } from './app.controller';
 import { AccountModule } from '../account/account.module';
 import { AccountsModule } from '../accounts/accounts.module';
 import { AuthModule } from '../auth/auth.module';
+import { CompaniesModule } from '../companies/companies.module';
 import { ContentModule } from '../content/content.module';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
@@ -38,6 +39,7 @@ import { EventsModule } from '../events/events.module';
     AccountModule,
     AccountsModule,
     AuthModule,
+    CompaniesModule,
     ContentModule,
     EventsModule,
     UsersModule,

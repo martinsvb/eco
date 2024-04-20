@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
 import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto {
@@ -11,8 +12,9 @@ export class CreateUserDto {
   @ApiProperty({ description: 'Date of creation' })
   createdAt: Date;
 
+  @IsOptional()
   @ApiProperty({ description: 'Date of update' })
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @IsEmail()
   @ApiProperty({ description: 'User email' })
@@ -29,10 +31,21 @@ export class CreateUserDto {
   otp: number | null;
 
   @IsString()
-  @IsOptional()
   @IsNotEmpty()
   @ApiProperty({ description: 'User origin' })
   origin: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ description: 'User company origin' })
+  companyId: string;
+
+  @IsOptional()
+  @ApiProperty({ description: 'User contact' })
+  contact?: Prisma.JsonValue;
+
+  @ApiProperty({ description: 'User rigts' })
+  rights: Prisma.JsonValue;
 
   @IsString()
   @IsNotEmpty()

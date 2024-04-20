@@ -8,19 +8,19 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createAccountDto: CreateAccountDto, {id}: User) {
-    return this.prisma.account.create({ data: {...createAccountDto, ownerId: id} });
+  create(createAccountDto: CreateAccountDto, {id, companyId}: User) {
+    return this.prisma.account.create({ data: {...createAccountDto, creatorId: id, companyId} });
   }
 
-  findAll({id}: User) {
-    return this.prisma.account.findMany({where: { ownerId: id }});
+  findAll({companyId}: User) {
+    return this.prisma.account.findMany({where: { companyId }});
   }
 
   findOne(id: string) {
     return this.prisma.account.findUnique({
       where: { id },
       include: {
-        owner: true,
+        creator: true,
       },
     });
   }

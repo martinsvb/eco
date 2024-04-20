@@ -2,7 +2,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { adminRights, allowedCountries, readerUserRights } from 'libs/config/src';
+import { adminUserRights, allowedCountries, readerUserRights } from 'libs/config/src';
 import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
 
 // initialize Prisma Client
@@ -36,7 +36,7 @@ async function main() {
       password: await bcrypt.hash('user1password', parseInt(process.env.HASHING_ROUNDS, 10)),
       isEmailConfirmed: true,
       companyId: company1.id,
-      rights: adminRights,
+      rights: adminUserRights,
     },
   });
 
@@ -47,7 +47,7 @@ async function main() {
       origin: UserOrigins.internal,
       password: await bcrypt.hash('user2password', parseInt(process.env.HASHING_ROUNDS, 10)),
       companyId: company2.id,
-      rights: adminRights,
+      rights: adminUserRights,
     },
   });
 

@@ -1,6 +1,7 @@
 export const endPoints = {
   account: 'account',
   accounts: 'accounts',
+  companies: 'companies',
   content: 'content',
   login: 'auth/login',
   loginGoogle: 'auth/login-google',

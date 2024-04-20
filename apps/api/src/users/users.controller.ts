@@ -15,6 +15,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { endPoints } from '@eco/config';
 import { UserOrigins } from '@eco/types';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,11 +25,13 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 import { EmailGuard } from '../auth/email.guard';
 
 @ApiTags('Users')
-@Controller('users')
+@Controller(endPoints.users)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: UserEntity })
   @ApiResponse({
     status: 201,

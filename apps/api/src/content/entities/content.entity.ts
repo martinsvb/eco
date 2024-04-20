@@ -33,6 +33,9 @@ export class ContentEntity implements Content {
   @ApiProperty({ description: 'Content author', type: UserEntity })
   author: UserEntity;
 
+  @ApiProperty({ description: 'Company id' })
+  companyId: string;
+
   constructor({ author, ...data }: Partial<ContentEntity>) {
     Object.assign(this, data);
 

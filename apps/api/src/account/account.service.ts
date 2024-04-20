@@ -11,7 +11,8 @@ export class AccountService {
       currency: 'EUR',
       description: 'test account',
       active: false,
-      ownerId: 'testId',
+      creatorId: 'testId',
+      companyId: 'testCompanyId',
       createdAt: new Date(),
       updatedAt: null,
     };

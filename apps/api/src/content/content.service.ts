@@ -8,14 +8,14 @@ import { UpdateContentDto } from './dto/update-content.dto';
 export class ContentService {
   constructor(private prisma: PrismaService) {}
 
-  create(createContentDto: CreateContentDto, {id}: User) {
-    return this.prisma.content.create({ data: {...createContentDto, authorId: id} });
+  create(createContentDto: CreateContentDto, {id, companyId}: User) {
+    return this.prisma.content.create({ data: {...createContentDto, authorId: id, companyId} });
   }
 
-  findAll({id}: User, type: string) {
+  findAll({companyId}: User, type: string) {
     return this.prisma.content.findMany({
       where: {
-        authorId: id,
+        companyId,
         type
       }
     });

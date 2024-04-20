@@ -50,7 +50,7 @@ model User {
   origin           String
   otp              Int?
   password         String?
-  rights           Json?
+  rights           Json
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]

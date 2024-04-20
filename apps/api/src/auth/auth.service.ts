@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import { User } from '@prisma/client';
 import { TokenPayload } from 'google-auth-library';
-import { isTokenValid } from '@eco/config';
+import { allowedCountries, editorUserRights, isTokenValid } from '@eco/config';
 import { UserOrigins } from '@eco/types';
 import { nanoid } from 'nanoid'
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
@@ -80,6 +80,12 @@ export class AuthService {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
+      const company = await this.prisma.company.create({
+        data: {
+          name,
+          country: allowedCountries[0],
+        },
+      });
       user = await this.prisma.user.create({
         data: {
           email,
@@ -87,6 +93,8 @@ export class AuthService {
           name,
           origin: UserOrigins.google,
           picture,
+          companyId: company.id,
+          rights: editorUserRights,
         },
       });
     }
@@ -117,17 +125,34 @@ export class AuthService {
     };
   }
 
-  async register({email, password, ...rest}: RegisterDto): Promise<FullAuthEntity> {
+  async register({
+    email,
+    password,
+    companyName,
+    country,
+    contact,
+    identification,
+    ...rest
+  }: RegisterDto): Promise<FullAuthEntity> {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
       const otp = this.getOtpCode();
+      const company = await this.prisma.company.create({
+        data: {
+          name: companyName,
+          country,
+          contact,
+          identification
+        },
+      });
       user = await this.prisma.user.create({
         data: {
           ...rest,
           email,
           password: await bcrypt.hash(password, parseInt(process.env.HASHING_ROUNDS, 10)),
           origin: UserOrigins.internal,
+          companyId: company.id,
           otp
         },
       });

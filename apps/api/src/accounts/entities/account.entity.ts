@@ -28,16 +28,19 @@ export class AccountEntity implements Account {
   active: boolean | null;
 
   @ApiProperty({ required: false, nullable: true })
-  ownerId: string | null;
+  creatorId: string | null;
 
   @ApiProperty({ required: false, type: UserEntity })
-  owner?: UserEntity;
+  creator?: UserEntity;
 
-  constructor({ owner, ...data }: Partial<AccountEntity>) {
+  @ApiProperty({ description: 'Company id' })
+  companyId: string;
+
+  constructor({ creator, ...data }: Partial<AccountEntity>) {
     Object.assign(this, data);
 
-    if (owner) {
-      this.owner = new UserEntity(owner);
+    if (creator) {
+      this.creator = new UserEntity(creator);
     }
   }
 }
