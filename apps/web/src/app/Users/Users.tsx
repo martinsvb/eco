@@ -1,30 +1,26 @@
 import { useCallback, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Fab, IconButton, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { routes } from '@eco/config';
-import { useShallowEqualSelector, useAppDispatch, selectAccounts, apiGetAccounts } from '@eco/redux';
+import { t } from 'i18next';
+import { selectUsers, useAppDispatch, useShallowEqualSelector, apiGetUsers } from '@eco/redux';
 import { ScopeItems } from '@eco/types';
+import { routes } from '@eco/config';
 import { Buttons } from '../components/buttons/Buttons';
-import { AccountItem } from './AccountItem';
 
-export const Accounts = () => {
+export const Users = () => {
 
-  const { t } = useTranslation();
+  const { users, isLoading, loaded } = useShallowEqualSelector(selectUsers);
 
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
-  const { accounts, isLoading, loaded } = useShallowEqualSelector(selectAccounts);
-
   useEffect(
     () => {
       if (!loaded) {
-        dispatch(apiGetAccounts(''));
+        dispatch(apiGetUsers(''));
       }
     },
     [loaded, dispatch]
@@ -39,28 +35,24 @@ export const Accounts = () => {
 
   const handleRefresh = useCallback(
     () => {
-      dispatch(apiGetAccounts(''));
+      dispatch(apiGetUsers(''));
     },
     [dispatch]
   );
 
   return (
     <>
-      <Typography variant='h3' mb={3}>{t('accounts:title')}</Typography>
+      <Typography variant='h3' mb={3}>{t('users:title')}</Typography>
       <>
-        <Grid container rowSpacing={2} columnSpacing={2}>
-          {accounts.map((account) => (
-            <Grid key={account.id} xl={3} lg={4} md={6} xs={12}>
-              <AccountItem {...account} />
-            </Grid>
-          ))}
-        </Grid>
+        {users.length > 0 &&
+          <div><pre>{JSON.stringify(users, undefined, 2)}</pre></div>
+        }
         <Buttons
           isLoading={isLoading}
           scope={ScopeItems.Accounts}
           refreshButton={
             <IconButton
-              aria-label={t('accounts:refresh')}
+              aria-label={t('users:refresh')}
               onClick={handleRefresh}
               size='large'
               sx={{
@@ -72,7 +64,7 @@ export const Accounts = () => {
           }
           createButton={
             <Fab
-              aria-label={t('accounts:createAccount')}
+              aria-label={t('users:createAccount')}
               onClick={handleNew}
               color='primary'
             >

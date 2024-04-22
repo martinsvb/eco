@@ -5,8 +5,10 @@ import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from 
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import GroupIcon from '@mui/icons-material/Group';
 import { routes } from '@eco/config';
-import { selectIsUserLoggedIn, useAppSelector } from '@eco/redux';
+import { selectIsUserLoggedIn, selectUserAuth, useAppSelector, useShallowEqualSelector } from '@eco/redux';
+import { ScopeItems } from '@eco/types';
 
 interface NavItemProps {
   icon: ReactNode;
@@ -32,6 +34,8 @@ const NavItem = ({icon, text, to}: NavItemProps) => {
 export const AppNavigation = () => {
 
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
+
+  const { rights } = useShallowEqualSelector(selectUserAuth);
 
   const { t } = useTranslation();
 
@@ -64,6 +68,13 @@ export const AppNavigation = () => {
               text={t('accounts')}
               to={routes.accounts}
             />
+            {rights.scopes[ScopeItems.Users]?.read &&
+              <NavItem
+                icon={<GroupIcon />}
+                text={t('users')}
+                to={routes.users}
+              />
+            }
           </>
           :
           <NavItem

@@ -1,17 +1,20 @@
 import { User } from '@prisma/client';
 import { usersGet } from "./userApi";
 import { createSlice } from '../createSlice';
+import { ApiOperations } from '@eco/types';
 
 export interface UserState {
   users: User[];
-  getUsersError: unknown | null;
-  getUsersLoading: boolean;
+  error: {[key: string]: unknown | null};
+  loading: {[key: string]: boolean};
+  loaded: {[key: string]: boolean};
 }
 
 export const initialUserState: UserState = {
   users: [],
-  getUsersError: null,
-  getUsersLoading: false,
+  error: {},
+  loading: {},
+  loaded: {},
 };
 
 const userSlice = createSlice({
@@ -23,22 +26,27 @@ const userSlice = createSlice({
       usersGet,
       {
         pending: (state) => {
-          state.getUsersLoading = true;
+          state.loading[ApiOperations.getList] = true;
         },
         rejected: (state, { error, payload }) => {
-          state.getUsersError = payload ?? error;
+          state.error[ApiOperations.getList] = payload ?? error;
         },
         fulfilled: (state, { payload }) => {
           state.users = payload;
+          state.loaded[ApiOperations.getList] = true;
         },
         settled: (state) => {
-          state.getUsersLoading = false;
+          state.loading[ApiOperations.getList] = false;
         },
       },
     )
   }),
   selectors: {
-    selectUsers: (state) => state.users,
+    selectUsers: (state) => ({
+      users: state.users,
+      isLoading: !!state.loading[ApiOperations.getList],
+      loaded: !!state.loaded[ApiOperations.getItem],
+    }),
   },
 });
 

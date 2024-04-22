@@ -2,7 +2,7 @@ export const routes = {
     base: '/',
     accounts: '/accounts',
     accountsNew: '/accounts/new',
-    accountsEdit: 'accounts/edit/:id',
+    accountsEdit: '/accounts/edit/:id',
     companies: '/companies',
     content: {
         article: {
@@ -23,4 +23,6 @@ export const routes = {
     },
     home: '/home',
     users: '/users',
+    usersNew: '/users/new',
+    usersEdit: '/users/edit/:id',
 }

@@ -13,7 +13,7 @@ export class AccountsService {
   }
 
   findAll({companyId}: User) {
-    return this.prisma.account.findMany({where: { companyId }});
+    return this.prisma.account.findMany({ where: { companyId } });
   }
 
   findOne(id: string) {

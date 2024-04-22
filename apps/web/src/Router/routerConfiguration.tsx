@@ -4,7 +4,7 @@ import { ContentTypes } from "@eco/types";
 import App from "../app/app";
 import { Home } from "../app/Home";
 import { Accounts, AccountsNew, AccountsEdit } from "../app/accounts";
-import { Users } from "../app/Users";
+import { Users } from "../app/Users/Users";
 import { ContentEdit, ContentList, ContentNew } from "../app/content";
 import LoginWrapper from "../app/user/LoginWrapper";
 

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,6 +16,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request } from 'express';
+import { User } from '@prisma/client';
 import { endPoints } from '@eco/config';
 import { UserOrigins } from '@eco/types';
 import { UsersService } from './users.service';
@@ -54,8 +57,8 @@ export class UsersController {
     status: 200,
     description: 'Users has been successfully loaded.',
   })
-  async findAll() {
-    const users = await this.usersService.findAll();
+  async findAll(@Req() {user}: Request) {
+    const users = await this.usersService.findAll(user as User);
     return users.map((user) => new UserEntity(user));
   }
 
