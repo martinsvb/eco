@@ -1,6 +1,9 @@
+import { UserRights } from "..";
+
 export interface BasicUser {
     name: string | null;
     picture: string | null;
+    rights: UserRights;
 }
 
 export enum AuthOperations {

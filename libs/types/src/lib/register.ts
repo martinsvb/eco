@@ -3,6 +3,8 @@ export enum RegistrationItems {
   name = 'name',
   password = 'password',
   passwordConfirmation = 'passwordConfirmation',
+  companyName = 'companyName',
+  country = 'country'
 }
 
 export interface RegistrationData {
@@ -10,6 +12,8 @@ export interface RegistrationData {
   [RegistrationItems.name]?: string;
   [RegistrationItems.password]: string;
   [RegistrationItems.passwordConfirmation]: string;
+  [RegistrationItems.companyName]: string;
+  [RegistrationItems.country]: string;
 }
 
 export enum RegistrationState {

@@ -8,6 +8,9 @@ export class BasicUserEntity {
 
   @ApiProperty({ description: 'User picture', required: false })
   picture: string | null;
+
+  @ApiProperty({ description: 'User rigts' })
+  rights: Prisma.JsonValue;
 }
 
 export class UserEntity extends BasicUserEntity implements User {

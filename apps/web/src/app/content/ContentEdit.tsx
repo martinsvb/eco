@@ -5,7 +5,6 @@ import { Typography } from '@mui/material';
 import { apiGetContent, setContent, useAppDispatch } from '@eco/redux';
 import { ContentTypes } from '@eco/types';
 import ContentForm from './ContentForm';
-import LoginWrapper from '../user/LoginWrapper';
 
 interface ContentEditProps {
   type: ContentTypes;
@@ -48,9 +47,7 @@ export const ContentEdit = ({type}: ContentEditProps) => {
   return (
     <>
       <Typography variant='h3' mb={3}>{title}</Typography>
-      <LoginWrapper>
-        <ContentForm type={type} />
-      </LoginWrapper>
+      <ContentForm type={type} />
     </>
   );
 };

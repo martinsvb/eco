@@ -98,8 +98,7 @@ const ContentForm = ({type}: ContentFormProps) => {
             type,
             onSuccess: () => {
               enqueueSnackbar(t('content:created'), {variant: 'success'});
-              const pathname = routes.content[type].list;
-              navigate(`${routes.base}${pathname}`);
+              navigate(routes.content[type].list);
             }
           })
         );
@@ -117,8 +116,7 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const handleClose = useCallback(
     () => {
-      const pathname = routes.content[type].list;
-      navigate(`${routes.base}${pathname}`);
+      navigate(routes.content[type].list);
     },
     [navigate, type]
   );

@@ -10,9 +10,7 @@ export const AccountsNew = () => {
   return (
     <>
       <Typography variant='h3' mb={3}>{t('accounts:newAccountTitle')}</Typography>
-      <LoginWrapper>
-        <AccountForm />
-      </LoginWrapper>
+      <AccountForm />
     </>
   );
 };

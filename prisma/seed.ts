@@ -87,7 +87,7 @@ async function main() {
     data: {
       title: 'Test 1',
       text: 'Test content 1',
-      type: ContentTypes.Article,
+      type: ContentTypes.Task,
       state: ContentState.Done,
       authorId: user1.id,
       companyId: company1.id,
@@ -98,7 +98,7 @@ async function main() {
     data: {
       title: 'Test 2',
       text: 'Test content 2',
-      type: ContentTypes.Article,
+      type: ContentTypes.Task,
       state: ContentState.Done,
       authorId: user2.id,
       companyId: company2.id,

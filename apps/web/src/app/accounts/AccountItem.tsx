@@ -19,7 +19,7 @@ export const AccountItem = ({id, name, iban, currency}: Account) => {
  
   const handleEdit = useCallback(
     () => {
-      navigate(`${routes.base}${routes.accountsEdit.replace(':id', id)}`);
+      navigate(routes.accountsEdit.replace(':id', id));
     },
     [navigate, id]
   );

@@ -11,7 +11,12 @@ import CurrencyList from 'currency-list'
 import { useSnackbar } from 'notistack';
 import {
   apiPatchAccount,
-  apiPostAccount, selectAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector, useShallowEqualSelector
+  apiPostAccount,
+  selectAccount,
+  selectIsAccountsLoading,
+  useAppDispatch,
+  useAppSelector,
+  useShallowEqualSelector
 } from '@eco/redux';
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
@@ -87,7 +92,7 @@ const AccountForm = () => {
             body,
             onSuccess: () => {
               enqueueSnackbar(t('accounts:created'), {variant: 'success'});
-              navigate(`${routes.base}${routes.accounts}`);
+              navigate(routes.accounts);
             }
           })
         );
@@ -105,7 +110,7 @@ const AccountForm = () => {
 
   const handleClose = useCallback(
     () => {
-      navigate(`${routes.base}${routes.accounts}`);
+      navigate(routes.accounts);
     },
     [navigate]
   );

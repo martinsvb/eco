@@ -41,8 +41,8 @@ export const AppNavigation = () => {
 
   useEffect(
     () => {
-      if (isUserLoggedIn && [routes.base, `${routes.base}${routes.home}`].includes(location.pathname)) {
-        navigate(`${routes.base}${routes.accounts}`);
+      if (isUserLoggedIn && [routes.base, routes.home].includes(location.pathname)) {
+        navigate(routes.content.task.list);
       }
     },
     [isUserLoggedIn, navigate, location]
@@ -55,21 +55,21 @@ export const AppNavigation = () => {
           ?
           <>
             <NavItem
-              icon={<AccountBalanceWalletIcon />}
-              text={t('accounts')}
-              to={`${routes.base}${routes.accounts}`}
-            />
-            <NavItem
               icon={<FormatListBulletedIcon />}
               text={t('tasks')}
-              to={`${routes.base}${routes.content.task.list}`}
+              to={routes.content.task.list}
+            />
+            <NavItem
+              icon={<AccountBalanceWalletIcon />}
+              text={t('accounts')}
+              to={routes.accounts}
             />
           </>
           :
           <NavItem
             icon={<HomeIcon />}
             text={t('home')}
-            to={`${routes.base}${routes.home}`}
+            to={routes.home}
           />
         }
       </List>

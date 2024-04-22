@@ -16,7 +16,7 @@ export const loginPost = async (
 }
 
 export const loginGooglePost = async (
-  body: {token?: string},
+  body: {idToken?: string, language: string},
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {

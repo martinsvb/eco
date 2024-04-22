@@ -7,10 +7,14 @@ import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
+import { countries } from 'countries-list';
 import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, RegistrationData, RegistrationItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
+import { allowedCountries } from '@eco/config';
+import { Languages } from '@eco/locales';
 import ControllerTextField from '../components/formControls/ControllerTextField';
+import ControllerSelect from '../components/formControls/ControllerSelect';
 
 interface RegistrationFormProps {
   handleClose: () => void;
@@ -20,7 +24,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const dispatch = useAppDispatch();
 
-  const { t } = useTranslation();
+  const { t, i18n: { language } } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -34,6 +38,8 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
       [RegistrationItems.name]: '',
       [RegistrationItems.password]: '',
       [RegistrationItems.passwordConfirmation]: '',
+      [RegistrationItems.companyName]: '',
+      [RegistrationItems.country]: '',
     }
   });
 
@@ -42,7 +48,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
   const submit = useCallback(
     (data: RegistrationData) => {
       dispatch(apiPostRegister({
-        body: filter(compose(not, isEmpty) ,omit([RegistrationItems.passwordConfirmation], data)),
+        body: filter(compose(not, isEmpty), omit([RegistrationItems.passwordConfirmation], data)),
         onSuccess: () => {
           enqueueSnackbar(t('registration:registered'), {variant: 'success'});
         }
@@ -107,6 +113,34 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
               label: t('labels:passwordConfirmation'),
               id: RegistrationItems.passwordConfirmation,
               type: 'password'
+            }}
+          />
+        </Grid>
+        <Grid md={6} xs={12}>
+          <ControllerTextField
+            name={RegistrationItems.companyName}
+            control={control}
+            defaultValue={data.companyName}
+            fieldProps={{
+              required: true,
+              label: t('labels:companyName'),
+              id: RegistrationItems.companyName
+            }}
+          />
+        </Grid>
+        <Grid md={6} xs={12}>
+          <ControllerSelect
+            name={RegistrationItems.country}
+            control={control}
+            defaultValue={data.country}
+            fieldProps={{
+              required: true,
+              label: t('labels:country'),
+              id: RegistrationItems.country,
+              values: allowedCountries.map((id) => ({
+                id,
+                label: countries[id][language === Languages.en ? 'name' : 'native']
+              }))
             }}
           />
         </Grid>

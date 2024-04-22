@@ -20,8 +20,7 @@ export const ContentEditButton = ({id, type}: ContentEditButtonProps) => {
  
   const handleEdit = useCallback(
     () => {
-      const pathname = routes.content[type].edit;
-      navigate(`${routes.base}${pathname.replace(':id', id)}`);
+      navigate(routes.content[type].edit.replace(':id', id));
     },
     [navigate, id, type]
   );

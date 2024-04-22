@@ -7,4 +7,3 @@ export * from './lib/localstorage';
 export * from './lib/prisma';
 export * from './lib/routes';
 export * from './lib/socket';
-export * from './lib/user';

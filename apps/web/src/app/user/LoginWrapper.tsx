@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
+import { Stack, Typography } from '@mui/material';
 import { selectIsUserLoggedIn, useAppSelector } from '@eco/redux';
 import LoginButton from './LoginButton';
-import { Stack, Typography } from '@mui/material';
 import RegisterButton from './RegistrationButton';
 
 interface LoginWrapperProps {

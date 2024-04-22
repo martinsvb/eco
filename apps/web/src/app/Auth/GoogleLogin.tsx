@@ -1,16 +1,19 @@
 import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { apiPostLoginGoogle, setLoginGoogleError, useAppDispatch } from '@eco/redux';
 
 const GoogleLoginCmp = () => {
 
+  const { i18n: { language } } = useTranslation();
+
   const dispatch = useAppDispatch();
 
   const handleSuccess = useCallback(
     async ({ credential }: CredentialResponse) => {
-      dispatch(apiPostLoginGoogle({ token: credential }));
+      dispatch(apiPostLoginGoogle({ idToken: credential, language }));
     },
-    [dispatch]
+    [dispatch, language]
   );
 
   const handleError = useCallback(

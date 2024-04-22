@@ -54,7 +54,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       dispatch(resetAccounts());
       dispatch(resetContent());
       dispatch(resetUsers());
-      navigate(`${routes.base}${routes.home}`);
+      navigate(routes.home);
     },
     []
   );

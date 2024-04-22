@@ -6,36 +6,37 @@ import { Home } from "../app/Home";
 import { Accounts, AccountsNew, AccountsEdit } from "../app/accounts";
 import { Users } from "../app/Users";
 import { ContentEdit, ContentList, ContentNew } from "../app/content";
+import LoginWrapper from "../app/user/LoginWrapper";
 
 export const router = createBrowserRouter([
     {
       path: routes.base,
       element: <App />,
       children: [
-        { index: true, element: <Navigate to={`${routes.base}${routes.home}`} replace /> },
+        { index: true, element: <Navigate to={routes.home} replace /> },
         {
           path: routes.accounts,
-          element: <Accounts />,
+          element: <LoginWrapper><Accounts /></LoginWrapper>,
         },
         {
           path: routes.accountsNew,
-          element: <AccountsNew />,
+          element: <LoginWrapper><AccountsNew /></LoginWrapper>,
         },
         {
           path: routes.accountsEdit,
-          element: <AccountsEdit />,
+          element: <LoginWrapper><AccountsEdit /></LoginWrapper>,
         },
         {
           path: routes.content.task.list,
-          element: <ContentList type={ContentTypes.Task} />,
+          element: <LoginWrapper><ContentList type={ContentTypes.Task} /></LoginWrapper>,
         },
         {
           path: routes.content.task.new,
-          element: <ContentNew type={ContentTypes.Task} />,
+          element: <LoginWrapper><ContentNew type={ContentTypes.Task} /></LoginWrapper>,
         },
         {
           path: routes.content.task.edit,
-          element: <ContentEdit type={ContentTypes.Task} />,
+          element: <LoginWrapper><ContentEdit type={ContentTypes.Task} /></LoginWrapper>,
         },
         {
           path: routes.home,
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
         },
         {
           path: routes.users,
-          element: <Users />,
+          element: <LoginWrapper><Users /></LoginWrapper>,
         },
       ],
     },

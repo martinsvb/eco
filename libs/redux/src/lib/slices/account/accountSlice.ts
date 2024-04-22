@@ -9,6 +9,7 @@ export interface AccountState {
   accounts: Account[];
   error: {[key: string]: unknown | null};
   loading: {[key: string]: boolean};
+  loaded: {[key: string]: boolean};
 }
 
 export const initialAccountState: AccountState = {
@@ -16,6 +17,7 @@ export const initialAccountState: AccountState = {
   accounts: [],
   error: {},
   loading: {},
+  loaded: {},
 };
 
 const accountSlice = createSlice({
@@ -37,6 +39,7 @@ const accountSlice = createSlice({
         },
         fulfilled: (state, { payload }) => {
           state.accounts = payload;
+          state.loaded[ApiOperations.getList] = true;
         },
         settled: (state) => {
           state.loading[ApiOperations.getList] = false;
@@ -54,6 +57,7 @@ const accountSlice = createSlice({
         },
         fulfilled: (state, { payload }) => {
           state.account = payload;
+          state.loaded[ApiOperations.getItem] = true;
         },
         settled: (state) => {
           state.loading[ApiOperations.getItem] = false;
@@ -119,7 +123,11 @@ const accountSlice = createSlice({
   }),
   selectors: {
     selectAccount: (state) => state.account,
-    selectAccounts: (state) => ({accounts: state.accounts, isLoading: !!state.loading[ApiOperations.getList]}),
+    selectAccounts: (state) => ({
+      accounts: state.accounts,
+      isLoading: !!state.loading[ApiOperations.getList],
+      loaded: !!state.loaded[ApiOperations.getItem],
+    }),
     selectIsAccountsLoading: (state, operation: ApiOperations) => !!state.loading[operation],
   },
 });

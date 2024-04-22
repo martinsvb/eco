@@ -1,14 +1,23 @@
-import { Box, Theme, useMediaQuery } from "@mui/material";
 import { ReactNode } from "react";
+import { Box, CircularProgress, Stack, Theme, useMediaQuery } from "@mui/material";
+import { useAppSelector, selectIsUserLoggedIn, useShallowEqualSelector, selectUserAuth } from "@eco/redux";
+import { ScopeItems } from "@eco/types";
 
 interface ButtonsProps {
-  children: ReactNode;
+  isLoading: boolean;
+  scope: ScopeItems;
+  refreshButton: ReactNode;
+  createButton: ReactNode;
 }
 
-export const Buttons = ({children}: ButtonsProps) => {
+export const Buttons = ({isLoading, scope, refreshButton, createButton}: ButtonsProps) => {
   const isMobilePortrait = useMediaQuery((theme: Theme) => {
     return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
   });
+
+  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
+
+  const { rights } = useShallowEqualSelector(selectUserAuth);
 
   return (
     <Box
@@ -20,7 +29,21 @@ export const Buttons = ({children}: ButtonsProps) => {
         margin: '0 auto',
       }}
     >
-      {children}
+      {isLoading ?
+        <CircularProgress
+          sx={{
+            alignSelf: 'baseline'
+          }}
+        />
+        :
+        isUserLoggedIn
+          ?
+            <Stack alignItems='center'>
+              {refreshButton}
+              {rights.scopes[scope]?.create && createButton}
+            </Stack>
+          : null
+      }
     </Box>
   );
 }

@@ -1,3 +1,5 @@
+import { ScopeItems } from "..";
+
 export enum ContentTypes {
   Article = 'article',
   Task = 'task',
@@ -23,4 +25,10 @@ export interface ContentData {
   [ContentItems.Title]: string;
   [ContentItems.Text]?: string;
   [ContentItems.State]?: ContentState;
+}
+
+export const contentScopes = {
+  [ContentTypes.Article]: ScopeItems.Tasks,
+  [ContentTypes.Task]: ScopeItems.Tasks,
+  [ContentTypes.New]: ScopeItems.Tasks,
 }

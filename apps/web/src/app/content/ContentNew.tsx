@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
-import LoginWrapper from '../user/LoginWrapper';
 import ContentForm from './ContentForm';
 import { ContentTypes } from '@eco/types';
 
@@ -29,9 +28,7 @@ export const ContentNew = ({type}: ContentNewProps) => {
   return (
     <>
       <Typography variant='h3' mb={3}>{title}</Typography>
-      <LoginWrapper>
-        <ContentForm type={type} />
-      </LoginWrapper>
+      <ContentForm type={type} />
     </>
   );
 };

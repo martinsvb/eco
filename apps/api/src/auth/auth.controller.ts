@@ -43,12 +43,12 @@ export class AuthController {
 
   @Post('/login-google')
   @ApiOkResponse({ type: AuthEntity })
-  async loginGoogle(@Res() res: Response, @Body('token') token) {
+  async loginGoogle(@Res() res: Response, @Body('idToken') idToken, @Body('language') language) {
     const ticket = await client.verifyIdToken({
-      idToken: token,
+      idToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    const { auth, refreshToken } = await this.authService.loginGoogle(ticket.getPayload());
+    const { auth, refreshToken } = await this.authService.loginGoogle(ticket.getPayload(), language);
 
     this.setRefreshtoken(res, refreshToken);
 

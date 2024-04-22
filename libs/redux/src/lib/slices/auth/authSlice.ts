@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { LocalStorageItems, decodeToken, isTokenValid } from '@eco/config';
-import { AuthOperations, BasicUser, RegistrationState } from '@eco/types';
+import { AuthOperations, BasicUser, RegistrationState, UserRoles, userRights } from '@eco/types';
 import { loginGooglePost, loginPost, refreshPost, registerPost, resendPost, verifyPost } from "./authApi";
 import { createSlice } from '../createSlice';
 
@@ -17,7 +17,8 @@ export const initialAuthState: AuthState = {
   accessToken: '',
   user: {
     name: null,
-    picture: null
+    picture: null,
+    rights: userRights[UserRoles.Editor]
   },
   error: {},
   loading: {},
@@ -59,7 +60,7 @@ const authSlice = createSlice({
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           setAccessToken(accessToken);
-          state.accessToken = accessToken
+          state.accessToken = accessToken;
           state.user = user;
         },
         settled: (state) => {
@@ -78,7 +79,7 @@ const authSlice = createSlice({
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           setAccessToken(accessToken);
-          state.accessToken = accessToken
+          state.accessToken = accessToken;
           state.user = user;
         },
         settled: (state) => {
@@ -97,7 +98,7 @@ const authSlice = createSlice({
         },        
         fulfilled: (state, { payload: { accessToken } }) => {
           setAccessToken(accessToken);
-          state.accessToken = accessToken
+          state.accessToken = accessToken;
         },
         settled: (state) => {
           state.loading[AuthOperations.refresh] = false;
@@ -129,7 +130,7 @@ const authSlice = createSlice({
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
           setAccessToken(accessToken);
-          state.accessToken = accessToken
+          state.accessToken = accessToken;
           state.user = user;
         },
         settled: (state) => {
@@ -158,7 +159,7 @@ const authSlice = createSlice({
     selectIsUserLoggedIn: (state) => {
       let token: string | null = state.accessToken;
       if (!token) {
-        token = localStorage.getItem(LocalStorageItems.Token)
+        token = localStorage.getItem(LocalStorageItems.Token);
       }
 
       return !!token && isTokenValid(decodeToken(token));

@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
-import LoginWrapper from '../user/LoginWrapper';
 import AccountForm from './AccountForm';
 import { useEffect } from 'react';
 import { apiGetAccount, setAccount, useAppDispatch } from '@eco/redux';
@@ -30,9 +29,7 @@ export const AccountsEdit = () => {
   return (
     <>
       <Typography variant='h3' mb={3}>{t('accounts:editAccountTitle')}</Typography>
-      <LoginWrapper>
-        <AccountForm />
-      </LoginWrapper>
+      <AccountForm />
     </>
   );
 };

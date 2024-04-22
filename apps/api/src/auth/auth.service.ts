@@ -10,9 +10,10 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import { User } from '@prisma/client';
 import { TokenPayload } from 'google-auth-library';
-import { allowedCountries, editorUserRights, isTokenValid } from '@eco/config';
-import { UserOrigins } from '@eco/types';
+import { allowedCountries, isTokenValid } from '@eco/config';
+import { UserOrigins, UserRoles, userRights } from '@eco/types';
 import { nanoid } from 'nanoid'
+import { ICountry, TCountryCode, TLanguageCode, countries } from 'countries-list';
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
 import { VerifyDto } from './dto/verify.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -40,6 +41,7 @@ export class AuthService {
         user: {
           name: user.name,
           picture: user.picture,
+          rights: user.rights,
         },
       },
       refreshToken: this.getRefreshToken(user.id)
@@ -72,18 +74,28 @@ export class AuthService {
     return this.getAuthData(user);
   }
 
-  async loginGoogle({
-    email,
-    name,
-    picture,
-  }: TokenPayload): Promise<FullAuthEntity> {
+  async loginGoogle(
+    {
+      email,
+      name,
+      picture,
+    }: TokenPayload,
+    language: TLanguageCode
+  ): Promise<FullAuthEntity> {
     let user = await this.prisma.user.findUnique({ where: { email } });
+
+    const country = Object.entries(countries).reduce(
+      (acc, [id, {languages}]: [TCountryCode, ICountry]) => (
+        languages.includes(language) && allowedCountries.includes(id) ? id : acc
+      ),
+      allowedCountries[0]
+    );
 
     if (!user && email) {
       const company = await this.prisma.company.create({
         data: {
           name,
-          country: allowedCountries[0],
+          country,
         },
       });
       user = await this.prisma.user.create({
@@ -94,7 +106,7 @@ export class AuthService {
           origin: UserOrigins.google,
           picture,
           companyId: company.id,
-          rights: editorUserRights,
+          rights: userRights[UserRoles.Admin],
         },
       });
     }
@@ -153,6 +165,7 @@ export class AuthService {
           password: await bcrypt.hash(password, parseInt(process.env.HASHING_ROUNDS, 10)),
           origin: UserOrigins.internal,
           companyId: company.id,
+          rights: userRights[UserRoles.Admin],
           otp
         },
       });

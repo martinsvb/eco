@@ -18,6 +18,10 @@ export const getRegistrationValidationSchema = () => {
         [yup.ref(RegistrationItems.password)],
         t('validation:equal', {Field: t('labels:password')})
       ),
+    [RegistrationItems.companyName]: yup.string()
+      .required(t('validation:required', {Field: t('labels:companyName')})),
+    [RegistrationItems.country]: yup.string()
+      .required(t('validation:required', {Field: t('labels:country')})),
   });
 }
 
