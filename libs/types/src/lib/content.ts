@@ -28,7 +28,7 @@ export interface ContentData {
 }
 
 export const contentScopes = {
-  [ContentTypes.Article]: ScopeItems.Tasks,
+  [ContentTypes.Article]: ScopeItems.Articles,
   [ContentTypes.Task]: ScopeItems.Tasks,
-  [ContentTypes.New]: ScopeItems.Tasks,
+  [ContentTypes.New]: ScopeItems.News,
 }
