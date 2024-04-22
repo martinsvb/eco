@@ -1,4 +1,4 @@
-import { ScopeItems } from "..";
+import { ScopeItems } from "./user";
 
 export enum ContentTypes {
   Article = 'article',
