@@ -8,9 +8,9 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'nestjs-prisma';
 import { Server, Socket } from 'socket.io';
 import { events } from '@eco/config';
-import { UsersService } from '../users/users.service';
 import { WsGuard } from '../auth/wsGuard';
 
 @WebSocketGateway({
@@ -27,9 +27,9 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
     private jwtService: JwtService,
-    private usersService: UsersService
+    private prisma: PrismaService
   ) {
-    this.wsGuard = new WsGuard(this.jwtService, this.usersService);
+    this.wsGuard = new WsGuard(this.jwtService, this.prisma);
   }
 
   async handleConnection(client: Socket) {

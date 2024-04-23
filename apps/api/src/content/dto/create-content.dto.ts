@@ -1,3 +1,4 @@
+import { ContentTypes } from '@eco/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
@@ -15,7 +16,7 @@ export class CreateContentDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ description: 'Content type' })
-  type: string;
+  type: ContentTypes;
 
   @IsString()
   @IsOptional()

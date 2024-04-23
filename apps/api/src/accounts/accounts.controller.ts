@@ -18,8 +18,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-import { User } from '@prisma/client';
 import { endPoints } from '@eco/config';
+import { UserFull } from '@eco/types';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -42,7 +42,7 @@ export class AccountsController {
   })
   async create(@Req() {user}: Request, @Body() createAccountDto: CreateAccountDto) {
     return new AccountEntity(
-      await this.accountsService.create(createAccountDto, user as User)
+      await this.accountsService.create(createAccountDto, user as UserFull)
     );
   }
 
@@ -55,7 +55,7 @@ export class AccountsController {
     description: 'Accounts has been successfully loaded.',
   })
   async findAll(@Req() {user}: Request) {
-    const accounts = await this.accountsService.findAll(user as User);
+    const accounts = await this.accountsService.findAll(user as UserFull);
     return accounts.map((account) => new AccountEntity(account));
   }
 
@@ -67,8 +67,8 @@ export class AccountsController {
     status: 200,
     description: 'Account has been successfully loaded.',
   })
-  async findOne(@Param('id') id: string) {
-    const account = new AccountEntity(await this.accountsService.findOne(id));
+  async findOne(@Req() {user}: Request, @Param('id') id: string) {
+    const account = new AccountEntity(await this.accountsService.findOne(id, user as UserFull));
     if (!account) {
       throw new NotFoundException(`Account with ${id} does not exist.`);
     }
@@ -84,11 +84,12 @@ export class AccountsController {
     description: 'Account has been successfully updated.',
   })
   async update(
+    @Req() {user}: Request,
     @Param('id') id: string,
     @Body() updateAccountDto: UpdateAccountDto
   ) {
     return new AccountEntity(
-      await this.accountsService.update(id, updateAccountDto)
+      await this.accountsService.update(id, updateAccountDto, user as UserFull)
     );
   }
 
@@ -100,7 +101,7 @@ export class AccountsController {
     status: 200,
     description: 'Account has been successfully deleted.',
   })
-  async remove(@Param('id') id: string) {
-    return new AccountEntity(await this.accountsService.remove(id));
+  async remove(@Req() {user}: Request, @Param('id') id: string) {
+    return new AccountEntity(await this.accountsService.remove(id, user as UserFull));
   }
 }

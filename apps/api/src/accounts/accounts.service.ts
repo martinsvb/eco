@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { User } from '@prisma/client';
+import { RightsItems, ScopeItems, UserFull, checkRigts } from '@eco/types';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
@@ -8,15 +8,18 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createAccountDto: CreateAccountDto, {id, companyId}: User) {
+  create(createAccountDto: CreateAccountDto, { id, companyId, rights }: UserFull) {
+    checkRigts(rights, ScopeItems.Accounts, RightsItems.Create);
     return this.prisma.account.create({ data: {...createAccountDto, creatorId: id, companyId} });
   }
 
-  findAll({companyId}: User) {
+  findAll({ companyId, rights }: UserFull) {
+    checkRigts(rights, ScopeItems.Accounts, RightsItems.Read);
     return this.prisma.account.findMany({ where: { companyId } });
   }
 
-  findOne(id: string) {
+  findOne(id: string, { rights }: UserFull) {
+    checkRigts(rights, ScopeItems.Accounts, RightsItems.Read);
     return this.prisma.account.findUnique({
       where: { id },
       include: {
@@ -25,14 +28,16 @@ export class AccountsService {
     });
   }
 
-  update(id: string, updateAccountDto: UpdateAccountDto) {
+  update(id: string, updateAccountDto: UpdateAccountDto, { rights }: UserFull) {
+    checkRigts(rights, ScopeItems.Accounts, RightsItems.Edit);
     return this.prisma.account.update({
       where: { id },
       data: updateAccountDto,
     });
   }
 
-  remove(id: string) {
+  remove(id: string, { rights }: UserFull) {
+    checkRigts(rights, ScopeItems.Accounts, RightsItems.Delete);
     return this.prisma.account.delete({ where: { id } });
   }
 }

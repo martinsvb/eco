@@ -1,15 +1,16 @@
 import { ReactNode } from 'react';
-import { Card, CardActions, CardContent, CardProps, Chip, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Card, CardActions, CardContent, CardProps, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 interface AppCardProps extends CardProps {
   actions: ReactNode;
+  actionsAvailable?: boolean;
   cardTitle: ReactNode;
   label?: ReactNode;
   cardContent: ReactNode;
   background?: string;
 }
 
-export const AppCard = ({actions, cardTitle, background, label, cardContent}: AppCardProps) => {
+export const AppCard = ({actions, actionsAvailable, cardTitle, background, label, cardContent}: AppCardProps) => {
 
   const { breakpoints } = useTheme();
 
@@ -36,13 +37,15 @@ export const AppCard = ({actions, cardTitle, background, label, cardContent}: Ap
           {cardContent}
         </Typography>
       </CardContent>
-      <CardActions
-        sx={{
-          justifyContent: 'center'
-        }}
-      >
-        {actions}
-      </CardActions>
+      {!!actionsAvailable &&
+        <CardActions
+          sx={{
+            justifyContent: 'center'
+          }}
+        >
+          {actions}
+        </CardActions>
+      }
     </Card>
   );
 };

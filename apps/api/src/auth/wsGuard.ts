@@ -1,13 +1,13 @@
 import { Injectable, CanActivate } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'nestjs-prisma';
 import { isTokenValid } from '@eco/config';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class WsGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private usersService: UsersService
+    private prisma: PrismaService
   ) {}
 
   isTokenValid = async (token?: string) => {
@@ -17,7 +17,7 @@ export class WsGuard implements CanActivate {
 
     try {
       const decoded = this.jwtService.decode(token);
-      const user = await this.usersService.findOne(decoded.userId);
+      const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
 
       return isTokenValid(decoded) && !!user && user.isEmailConfirmed;
     } catch (ex) {

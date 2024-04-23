@@ -17,9 +17,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-import { User } from '@prisma/client';
 import { endPoints } from '@eco/config';
-import { UserOrigins } from '@eco/types';
+import { UserFull, UserOrigins } from '@eco/types';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -40,12 +39,12 @@ export class UsersController {
     status: 201,
     description: 'User has been successfully created.',
   })
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Req() {user}: Request, @Body() createUserDto: CreateUserDto) {
     return new UserEntity(
       await this.usersService.create({
         ...createUserDto,
         origin: UserOrigins.internal,
-      })
+      }, user as UserFull)
     );
   }
 
@@ -58,8 +57,8 @@ export class UsersController {
     description: 'Users has been successfully loaded.',
   })
   async findAll(@Req() {user}: Request) {
-    const users = await this.usersService.findAll(user as User);
-    return users.map((user) => new UserEntity(user));
+    const users = await this.usersService.findAll(user as UserFull);
+    return users.map((data) => new UserEntity(data));
   }
 
   @Get(':id')
@@ -71,8 +70,8 @@ export class UsersController {
     status: 200,
     description: 'User has been successfully loaded.',
   })
-  async findOne(@Param('id') id: string) {
-    return new UserEntity(await this.usersService.findOne(id));
+  async findOne(@Req() {user}: Request, @Param('id') id: string) {
+    return new UserEntity(await this.usersService.findOne(id, user as UserFull));
   }
 
   @Patch(':id')
@@ -84,8 +83,8 @@ export class UsersController {
     status: 200,
     description: 'User has been successfully updated.',
   })
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return new UserEntity(await this.usersService.update(id, updateUserDto));
+  async update(@Req() {user}: Request, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return new UserEntity(await this.usersService.update(id, updateUserDto, user as UserFull));
   }
 
   @Delete(':id')
@@ -97,7 +96,7 @@ export class UsersController {
     status: 200,
     description: 'User has been successfully deleted.',
   })
-  async remove(@Param('id') id: string) {
-    return new UserEntity(await this.usersService.remove(id));
+  async remove(@Req() {user}: Request, @Param('id') id: string) {
+    return new UserEntity(await this.usersService.remove(id, user as UserFull));
   }
 }

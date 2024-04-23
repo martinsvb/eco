@@ -2,10 +2,11 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Account } from '@prisma/client';
-import { Chip, IconButton, Tooltip, alpha, useTheme } from '@mui/material';
+import { Chip, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { routes } from '@eco/config';
 import ms from 'ms';
+import { routes } from '@eco/config';
+import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
 import AccountDeleteButton from './AccountDeleteButton';
 import { AppCard } from '../components/card/AppCard';
 
@@ -15,8 +16,8 @@ export const AccountItem = ({id, name, iban, currency}: Account) => {
 
   const navigate = useNavigate();
 
-  const { palette } = useTheme();
- 
+  const { rights: { scopes: { accounts } } } = useShallowEqualSelector(selectUserAuth);
+
   const handleEdit = useCallback(
     () => {
       navigate(routes.accountsEdit.replace(':id', id));
@@ -28,20 +29,22 @@ export const AccountItem = ({id, name, iban, currency}: Account) => {
     <AppCard
       actions={
         <>
-          <Tooltip
-            title={t('labels:edit')}
-            enterDelay={ms('0.1s')}
-          >
-            <IconButton onClick={handleEdit}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <AccountDeleteButton id={id} />
+          {accounts.edit &&
+            <Tooltip
+              title={t('labels:edit')}
+              enterDelay={ms('0.1s')}
+            >
+              <IconButton onClick={handleEdit}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          }
+          {accounts.delete && <AccountDeleteButton id={id} />}
         </>
       }
+      actionsAvailable={accounts.edit || accounts.delete}
       cardTitle={name}
       cardContent={iban}
-      background={alpha(palette.info.light, .5)}
       label={<Chip label={currency} />}
     />
   );

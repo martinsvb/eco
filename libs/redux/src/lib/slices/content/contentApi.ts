@@ -30,14 +30,14 @@ export const contentListGet = async (
 }
 
 export const contentGet = async (
-  {id}: {id: string} & ContentTypePayload,
+  {id, type}: {id: string} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
     return await checkResponse(
-      await fetch(`/api/${endPoints.content}/${id}`, getHeaders({signal, token}))
+      await fetch(`/api/${endPoints.content}/${id}/${type}`, getHeaders({signal, token}))
     ).json();
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -64,14 +64,14 @@ export const contentPost = async (
 }
 
 export const contentPatch = async (
-  {body, id, onSuccess}: {body: Partial<ContentData>, id: string, onSuccess: () => void} & ContentTypePayload,
+  {body, type, id, onSuccess}: {body: Partial<ContentData>, id: string, onSuccess: () => void} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
     const data = await checkResponse(
-      await fetch(`/api/${endPoints.content}/${id}`, patchHeaders({body, signal, token}))
+      await fetch(`/api/${endPoints.content}/${id}/${type}`, patchHeaders({body, signal, token}))
     ).json();
 
     onSuccess();
@@ -83,14 +83,14 @@ export const contentPatch = async (
 }
 
 export const contentDelete = async (
-  {id, onSuccess}: {id: string, onSuccess: () => void} & ContentTypePayload,
+  {id, type}: {id: string, onSuccess: () => void} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
     return await checkResponse(
-      await fetch(`/api/${endPoints.content}/${id}`, delHeaders({signal, token}))
+      await fetch(`/api/${endPoints.content}/${id}/${type}`, delHeaders({signal, token}))
     ).json();
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));

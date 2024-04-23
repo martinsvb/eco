@@ -1,6 +1,17 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { User } from '@prisma/client';
+
 export enum UserOrigins {
   internal = 'internal',
   google = 'google',
+}
+
+export enum RightsItems {
+  Create = 'create',
+  Edit = 'edit',
+  Read = 'read',
+  Delete = 'delete',
+  Approve = 'approve',
 }
 
 export enum ScopeItems {
@@ -13,11 +24,11 @@ export enum ScopeItems {
 }
 
 export interface Rights {
-  create: boolean;
-  edit: boolean;
-  read: boolean;
-  delete: boolean;
-  approve: boolean;
+  [RightsItems.Create]: boolean;
+  [RightsItems.Edit]: boolean;
+  [RightsItems.Read]: boolean;
+  [RightsItems.Delete]: boolean;
+  [RightsItems.Approve]: boolean;
 }
 
 export interface Scopes {
@@ -33,6 +44,12 @@ export interface UserRights {
   scopes: Scopes;
   companyAdmin: boolean;
 }
+
+export type RightsType = {
+  rights: UserRights;
+}
+
+export type UserFull = User & RightsType;
 
 export enum UserRoles {
   Reader = 'reader',
@@ -99,5 +116,11 @@ export const userRights = {
   [UserRoles.Admin]: {
     scopes: adminScopes,
     companyAdmin: true
+  }
+}
+
+export const checkRigts = ({scopes}: UserRights, scope: ScopeItems, operation: RightsItems) => {
+  if (!scopes[scope]?.[operation]) {
+    throw new HttpException(`Forbidden ${scope} ${operation}`, HttpStatus.FORBIDDEN);
   }
 }

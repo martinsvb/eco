@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Fab, IconButton, Typography } from '@mui/material';
+import { alpha, Fab, IconButton, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -18,6 +18,8 @@ export const Accounts = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
+
+  const { palette, shape } = useTheme();
 
   const { accounts, isLoading, loaded } = useShallowEqualSelector(selectAccounts);
 
@@ -48,7 +50,17 @@ export const Accounts = () => {
     <>
       <Typography variant='h3' mb={3}>{t('accounts:title')}</Typography>
       <>
-        <Grid container rowSpacing={2} columnSpacing={2}>
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={2}
+          mr={2}
+          p={2}
+          sx={{
+            background: alpha(palette.info.light, .5),
+            borderRadius: shape.borderRadius / 4
+          }}
+        >
           {accounts.map((account) => (
             <Grid key={account.id} xl={3} lg={4} md={6} xs={12}>
               <AccountItem {...account} />
