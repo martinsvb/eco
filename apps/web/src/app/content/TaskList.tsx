@@ -24,10 +24,11 @@ export const TaskList = ({data}: TaskListProps) => {
     <Stack
       direction={isMobile ? 'column' : 'row'}
       width={isMobile ? '100%' : 800}
-      minHeight={isMobile ? 'calc(100vh - 120px)' : 'calc(100vh - 180px)'}
+      minHeight={isMobile ? undefined : 'calc(100vh - 180px)'}
     >
       <Stack
         mr={2}
+        mb={isMobile ? 2 : undefined}
         p={2}
         width={isMobile ? '100%' : 400}
         sx={{

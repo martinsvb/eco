@@ -85,6 +85,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             control={control}
             defaultValue={data.name}
             fieldProps={{
+              required: true,
               label: t('labels:name'),
               id: RegistrationItems.name
             }}

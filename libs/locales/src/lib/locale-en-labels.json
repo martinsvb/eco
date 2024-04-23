@@ -1,4 +1,5 @@
 {
+  "actions": "Actions",
   "close": "Close",
   "colorModeDark": "Dark mode",
   "colorModeLight": "Liht mode",
@@ -6,6 +7,7 @@
   "companyName": "Company name",
   "country": "Country",
   "create": "Create",
+  "createdAt": "Created at",
   "cs": "Cs",
   "currency": "Currency",
   "delete": "Delete",
@@ -16,6 +18,7 @@
   "en": "En",
   "iban": "Iban",
   "inProgress": "In progress",
+  "isEmailConfirmed": "Confirmed",
   "languageSelection": "Language selection",
   "login": "Login",
   "loginButton": "Login",

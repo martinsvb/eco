@@ -1,6 +1,20 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { User } from '@prisma/client';
 
+export enum UserItems {
+  Name = 'name',
+  CreatedAt = 'createdAt',
+  UpdatedAt = 'updatedAt',
+  Email = 'email',
+  IsEmailConfirmed = 'isEmailConfirmed',
+  Otp = 'otp',
+  Origin = 'origin',
+  CompanyId = 'companyId',
+  Contact = 'contact',
+  Rights = 'rights',
+  Picture = 'picture',
+}
+
 export enum UserOrigins {
   internal = 'internal',
   google = 'google',

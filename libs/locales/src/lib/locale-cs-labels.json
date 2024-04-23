@@ -1,4 +1,5 @@
 {
+  "actions": "Akce",
   "close": "Zavřít",
   "colorModeDark": "Tmavý režim",
   "colorModeLight": "Světlý režim",
@@ -6,6 +7,7 @@
   "companyName": "Název společnosti",
   "country": "Země",
   "create": "Vytvořit",
+  "createdAt": "Datum vytvoření",
   "cs": "Cs",
   "currency": "Měna",
   "delete": "Smazat",
@@ -16,6 +18,7 @@
   "en": "En",
   "iban": "Iban",
   "inProgress": "V řešení",
+  "isEmailConfirmed": "Ověřen",
   "languageSelection": "Výběr jazyka",
   "login": "Přihlásit",
   "loginButton": "Přihlášení",
