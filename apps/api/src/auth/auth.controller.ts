@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Response, Request } from 'express';
 import { OAuth2Client } from 'google-auth-library';
@@ -8,6 +8,9 @@ import { AccessTokenAuthEntity, AuthEntity } from './entities/auth.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyDto } from './dto/verify.dto';
+import { EmailGuard } from './email.guard';
+import { JwtAuthGuard } from './jwt.guard';
+import { BasicUserEntity } from '../users/entities/user.entity';
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -66,8 +69,11 @@ export class AuthController {
   }
 
   @Get('user')
-  async getLoggedInUser(@Req() req: any) {
-    return this.authService.signIn(req.user as User);
+  @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: BasicUserEntity })
+  getLoggedInUser(@Req() {user}: Request) {
+    return this.authService.loggedIn(user as User);
   }
 
   @Post('register')

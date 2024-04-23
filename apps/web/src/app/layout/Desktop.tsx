@@ -1,12 +1,23 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppBar, Box, CssBaseline, Toolbar, useTheme } from '@mui/material';
 import DesktopNavigationSidebar from './DesktopNavigationSidebar';
 import AppToolbar from './AppToolbar';
 import { getScrollbarDesign } from '@eco/config';
+import { apiGetAuthUser, useAppDispatch } from '@eco/redux';
 
 const Desktop = () => {
 
   const { palette, zIndex } = useTheme();
+
+  const dispatch = useAppDispatch();
+
+  useEffect(
+    () => {
+      dispatch(apiGetAuthUser(''));
+    },
+    []
+  );
 
   return (
     <Box sx={{ display: 'flex' }}>

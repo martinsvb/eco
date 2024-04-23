@@ -8,6 +8,7 @@ export const endPoints = {
   refresh: 'auth/refresh',
   register: 'auth/register',
   resend: 'auth/resend',
+  user: 'auth/user',
   verify: 'auth/verify',
   users: 'users',
 };

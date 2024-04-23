@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { RouterProvider } from "react-router-dom";
 import { I18nextProvider } from 'react-i18next';
@@ -14,15 +13,13 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || ''}>
-        <MuiProviders>
-          <I18nextProvider i18n={i18n}>
-            <RouterProvider router={router} />
-          </I18nextProvider>
-        </MuiProviders>
-      </GoogleOAuthProvider>
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || ''}>
+      <MuiProviders>
+        <I18nextProvider i18n={i18n}>
+          <RouterProvider router={router} />
+        </I18nextProvider>
+      </MuiProviders>
+    </GoogleOAuthProvider>
+  </Provider>
 );

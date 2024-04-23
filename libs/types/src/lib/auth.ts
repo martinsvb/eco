@@ -12,5 +12,6 @@ export enum AuthOperations {
     refresh = 'refresh',
     register = 'register',
     resend = 'resend',
+    user = 'user',
     verify = 'verify'
 }

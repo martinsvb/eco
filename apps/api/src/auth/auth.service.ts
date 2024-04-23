@@ -179,10 +179,17 @@ export class AuthService {
     return this.getAuthData(user);
   }
 
-  async signIn(user: User) {
+  async loggedIn({id}: User) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('No user found');
+    }
+
     return {
-      loggedInUser: user,
-      accessToken: this.getAccessToken(user),
+      name: user.name,
+      picture: user.picture,
+      rights: user.rights,
     };
   }
 

@@ -1,7 +1,8 @@
-import { checkResponse, endPoints, getErrorValue, postHeaders } from '@eco/config';
+import { LocalStorageItems, checkResponse, endPoints, getErrorValue, getHeaders, postHeaders } from '@eco/config';
 import { LoginData, RegistrationData, RegistrationItems, RegistrationState, VerificationPayload } from '@eco/types';
 import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { setRegistration, setRegistrationEmail } from './authSlice';
+import { initialAuthState, setRegistration, setRegistrationEmail } from './authSlice';
+import { tokenValidation } from '../../tokenValidation';
 
 export const loginPost = async (
   body: LoginData,
@@ -77,6 +78,21 @@ export const resendPost = async (
     const data = await checkResponse(await fetch(`/api/${endPoints.resend}`, postHeaders({body, signal}))).json();
     onSuccess();
     return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const authUserGet = async (
+  id: string,
+  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const token = localStorage.getItem(LocalStorageItems.Token);
+
+    return token
+      ? await checkResponse(await fetch(`/api/${endPoints.user}`, getHeaders({signal, token}))).json()
+      : initialAuthState.user;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }
