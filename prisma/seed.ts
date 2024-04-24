@@ -38,6 +38,7 @@ async function main() {
       isEmailConfirmed: true,
       companyId: company1.id,
       rights: userRights[UserRoles.Admin],
+      role: UserRoles.Admin,
     },
   });
 
@@ -49,6 +50,7 @@ async function main() {
       password: await bcrypt.hash('user2password', parseInt(process.env.HASHING_ROUNDS, 10)),
       companyId: company2.id,
       rights: userRights[UserRoles.Admin],
+      role: UserRoles.Admin,
     },
   });
 
@@ -61,6 +63,7 @@ async function main() {
       isEmailConfirmed: true,
       companyId: company1.id,
       rights: userRights[UserRoles.Reader],
+      role: UserRoles.Reader,
     },
   });
 

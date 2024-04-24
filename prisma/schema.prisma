@@ -46,11 +46,12 @@ model User {
   picture          String?
   email            String    @unique
   isEmailConfirmed Boolean   @default(false)
-  contact          Json?
+  phone            Int?
   origin           String
   otp              Int?
   password         String?
   rights           Json
+  role             String
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]
@@ -61,7 +62,7 @@ model User {
 
 model Company {
   id               String    @id @default(uuid())
-  name             String
+  name             String    @unique
   country          String
   contact          Json?
   identification   Json?  

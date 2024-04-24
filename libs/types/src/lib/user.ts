@@ -59,11 +59,12 @@ export interface UserRights {
   companyAdmin: boolean;
 }
 
-export type RightsType = {
+export type UserDetail = {
   rights: UserRights;
+  role: UserRoles;
 }
 
-export type UserFull = User & RightsType;
+export type UserFull = User & UserDetail;
 
 export enum UserRoles {
   Reader = 'reader',
@@ -83,6 +84,8 @@ const readerRights = {
 const readerScopes = {
   accounts: readerRights,
   tasks: readerRights,
+  users: readerRights,
+  companies: readerRights,
 }
 
 const editorRights = {
@@ -96,6 +99,8 @@ const editorRights = {
 const editorScopes = {
   accounts: editorRights,
   tasks: editorRights,
+  users: readerRights,
+  companies: readerRights,
 }
 
 const approvalEditorRights = {
@@ -106,12 +111,8 @@ const approvalEditorRights = {
 const approvalEditorScopes = {
   accounts: approvalEditorRights,
   tasks: approvalEditorRights,
-}
-
-const adminScopes = {
-  accounts: approvalEditorRights,
-  tasks: approvalEditorRights,
   users: approvalEditorRights,
+  companies: approvalEditorRights,
 }
 
 export const userRights = {
@@ -128,7 +129,7 @@ export const userRights = {
     companyAdmin: false
   },
   [UserRoles.Admin]: {
-    scopes: adminScopes,
+    scopes: approvalEditorScopes,
     companyAdmin: true
   }
 }
