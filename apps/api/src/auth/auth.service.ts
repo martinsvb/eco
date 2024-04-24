@@ -42,6 +42,7 @@ export class AuthService {
           name: user.name,
           picture: user.picture,
           rights: user.rights,
+          role: user.role,
         },
       },
       refreshToken: this.getRefreshToken(user.id)
@@ -107,6 +108,7 @@ export class AuthService {
           picture,
           companyId: company.id,
           rights: userRights[UserRoles.Admin],
+          role: UserRoles.Admin,
         },
       });
     }
@@ -166,6 +168,7 @@ export class AuthService {
           origin: UserOrigins.internal,
           companyId: company.id,
           rights: userRights[UserRoles.Admin],
+          role: UserRoles.Admin,
           otp
         },
       });
@@ -190,6 +193,7 @@ export class AuthService {
       name: user.name,
       picture: user.picture,
       rights: user.rights,
+      role: user.role,
     };
   }
 

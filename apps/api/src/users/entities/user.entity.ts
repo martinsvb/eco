@@ -11,6 +11,9 @@ export class BasicUserEntity {
 
   @ApiProperty({ description: 'User rigts' })
   rights: Prisma.JsonValue;
+
+  @ApiProperty({ description: 'User role' })
+  role: string;
 }
 
 export class UserEntity extends BasicUserEntity implements User {
@@ -34,6 +37,9 @@ export class UserEntity extends BasicUserEntity implements User {
   @ApiProperty({ description: 'User email confirmation state', required: false })
   isEmailConfirmed: boolean;
 
+  @ApiProperty({ description: 'User phone', required: false })
+  phone: number | null;
+
   @ApiProperty({ description: 'OTP code', required: false })
   otp: number | null;
 
@@ -42,9 +48,6 @@ export class UserEntity extends BasicUserEntity implements User {
 
   @ApiProperty({ description: 'Company id' })
   companyId: string;
-
-  @ApiProperty({ description: 'User contact' })
-  contact: Prisma.JsonValue | null;
 
   @ApiProperty({ description: 'User rigts' })
   rights: Prisma.JsonValue;

@@ -7,11 +7,12 @@ export enum UserItems {
   UpdatedAt = 'updatedAt',
   Email = 'email',
   IsEmailConfirmed = 'isEmailConfirmed',
+  Phone = 'phone',
   Otp = 'otp',
   Origin = 'origin',
   CompanyId = 'companyId',
-  Contact = 'contact',
   Rights = 'rights',
+  Role = 'role',
   Picture = 'picture',
 }
 
@@ -138,4 +139,8 @@ export const checkRigts = ({scopes}: UserRights, scope: ScopeItems, operation: R
   if (!scopes[scope]?.[operation]) {
     throw new HttpException(`Forbidden ${scope} ${operation}`, HttpStatus.FORBIDDEN);
   }
+}
+
+export const getUserInitials = (name?: string | null) => {
+  return name?.split(' ').map((namePart) => namePart[0]).join('') || 'U';
 }

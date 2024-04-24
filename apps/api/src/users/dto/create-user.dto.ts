@@ -27,6 +27,11 @@ export class CreateUserDto {
 
   @IsNumber()
   @IsOptional()
+  @ApiProperty({ description: 'User phone', required: false })
+  phone: number | null;
+
+  @IsNumber()
+  @IsOptional()
   @ApiProperty({ description: 'OTP code', required: false })
   otp: number | null;
 
@@ -40,12 +45,13 @@ export class CreateUserDto {
   @ApiProperty({ description: 'User company origin' })
   companyId: string;
 
-  @IsOptional()
-  @ApiProperty({ description: 'User contact' })
-  contact?: Prisma.JsonValue;
-
   @ApiProperty({ description: 'User rigts' })
   rights: Prisma.JsonValue;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ description: 'User role' })
+  role: string;
 
   @IsString()
   @IsNotEmpty()

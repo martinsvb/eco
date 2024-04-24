@@ -1,60 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Fab, IconButton, Typography } from '@mui/material';
+import { Box, Fab, IconButton, Theme, Typography, useMediaQuery } from '@mui/material';
 import {
-  GridRowsProp,
   GridRowModesModel,
   GridRowModes,
   DataGrid,
-  GridColDef,
-  GridToolbarContainer,
-  GridActionsCellItem,
   GridEventListener,
-  GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-  GridSlots,
 } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { selectUsers, useAppDispatch, useShallowEqualSelector, apiGetUsers } from '@eco/redux';
-import { ScopeItems, UserItems } from '@eco/types';
-import { routes } from '@eco/config';
-import { Buttons } from '../components/buttons/Buttons';
 import { nanoid } from '@reduxjs/toolkit';
-
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
-}
-
-const EditToolbar = (props: EditToolbarProps) => {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = nanoid();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
+import { selectUsers, useAppDispatch, useShallowEqualSelector, apiGetUsers } from '@eco/redux';
+import { ScopeItems } from '@eco/types';
+import { Buttons } from '../components/buttons/Buttons';
+import { useUsersColumns } from './UsersColumns';
 
 export const Users = () => {
 
@@ -65,6 +27,10 @@ export const Users = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
+
+  const isMobilePortrait = useMediaQuery((theme: Theme) => {
+    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
+  });
 
   useEffect(
     () => {
@@ -77,7 +43,11 @@ export const Users = () => {
 
   const handleNew = useCallback(
     () => {
-      navigate(routes.accountsNew);
+      const id = nanoid();
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      }));
     },
     [navigate]
   );
@@ -89,8 +59,7 @@ export const Users = () => {
     [dispatch]
   );
 
-  const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const { columns, rowModesModel, setRowModesModel } = useUsersColumns();
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -98,111 +67,13 @@ export const Users = () => {
     }
   };
 
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id: GridRowId) => () => {
-    console.log({id});
-  };
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-  };
-
   const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    return updatedRow;
+    return { ...newRow, isNew: false };
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-
-  const columns: GridColDef[] = [
-    {
-      field: UserItems.Name,
-      headerName: t('labels:name'),
-      width: 180,
-      editable: true
-    },
-    {
-      field: UserItems.Email,
-      headerName: t('labels:email'),
-      width: 240,
-      align: 'left',
-      headerAlign: 'left',
-      editable: true,
-    },
-    {
-      field: UserItems.IsEmailConfirmed,
-      headerName: t('labels:isEmailConfirmed'),
-      type: 'boolean',
-      width: 80,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: UserItems.CreatedAt,
-      headerName: t('labels:createdAt'),
-      type: 'date',
-      valueGetter: (value) => new Date(value),
-      width: 180,
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: t('labels:actions'),
-      width: 100,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
 
   return (
     <>
@@ -210,8 +81,9 @@ export const Users = () => {
       <>
         <Box
           sx={{
-            height: 'calc(100vh - 180px)',
-            width: '100%',
+            height: `calc(100vh - ${isMobilePortrait ? 200 : 180}px)`,
+            width: `calc(100vw - ${isMobilePortrait ? 100 : 350}px)`,
+            boxShadow: 2,
             '& .actions': {
               color: 'text.secondary',
             },
@@ -229,12 +101,6 @@ export const Users = () => {
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
-            slots={{
-              toolbar: EditToolbar as GridSlots['toolbar'],
-            }}
-            slotProps={{
-              toolbar: { setRows, setRowModesModel },
-            }}
           />
         </Box>
         <Buttons

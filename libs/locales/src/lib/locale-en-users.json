@@ -1,5 +1,9 @@
 {
   "createAccount": "Create new user",
   "refresh": "Refresh",
+  "roleAdmin": "Administrator",
+  "roleApprovalEditor": "Edit and approve",
+  "roleEditor": "Edit",
+  "roleReader": "Read",
   "title": "Users"
 }

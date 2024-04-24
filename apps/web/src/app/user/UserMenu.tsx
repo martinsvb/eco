@@ -16,6 +16,7 @@ import { routes } from '@eco/config';
 import { useTranslation } from 'react-i18next';
 import UserLanguage from './UserLanguage';
 import UserColorMode from './UserColorMode';
+import { getUserInitials } from '@eco/types';
 
 interface UserMenuProps {
   isMobile?: boolean;
@@ -69,7 +70,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       horizontal: 'right',
     };
 
-  const userInitials = user.name?.split(' ').map((namePart) => namePart[0]).join('') || 'U';
+  const userInitials = getUserInitials(user.name);
 
   return (
     <Box sx={{ flexGrow: 0 }}>

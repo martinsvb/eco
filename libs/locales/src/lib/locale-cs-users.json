@@ -1,5 +1,9 @@
 {
   "createAccount": "Vytvořit nového uživatele",
   "refresh": "Obnovit",
+  "roleAdmin": "Administrátor",
+  "roleApprovalEditor": "Editace a schvalování",
+  "roleEditor": "Editace",
+  "roleReader": "Čtení",
   "title": "Uživatelé"
 }

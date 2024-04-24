@@ -1,5 +1,6 @@
 {
   "actions": "Actions",
+  "avatar": "Avatar",
   "close": "Close",
   "colorModeDark": "Dark mode",
   "colorModeLight": "Liht mode",
@@ -30,6 +31,7 @@
   "register": "Regiter",
   "registerButton": "Register",
   "resend": "Resend code",
+  "role": "Role",
   "text": "Text",
   "title": "Title",
   "userMenu": "User menu",
