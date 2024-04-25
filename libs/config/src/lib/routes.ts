@@ -23,6 +23,4 @@ export const routes = {
     },
     home: '/home',
     users: '/users',
-    usersNew: '/users/new',
-    usersEdit: '/users/edit/:id',
 }

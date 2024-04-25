@@ -1,5 +1,7 @@
 {
-  "createAccount": "Create new user",
+  "createUser": "Create new user",
+  "delete-question-text": "Are you really want to delete chosen user?",
+  "delete-question-title": "Bank account deletion",
   "refresh": "Refresh",
   "roleAdmin": "Administrator",
   "roleApprovalEditor": "Edit and approve",

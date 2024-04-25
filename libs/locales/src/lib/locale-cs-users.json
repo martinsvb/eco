@@ -1,5 +1,7 @@
 {
-  "createAccount": "Vytvořit nového uživatele",
+  "createUser": "Vytvořit nového uživatele",
+  "delete-question-text": "Opravdu si přejete vymazat vybraného uživatele?",
+  "delete-question-title": "Smazání uživatele",
   "refresh": "Obnovit",
   "roleAdmin": "Administrátor",
   "roleApprovalEditor": "Editace a schvalování",

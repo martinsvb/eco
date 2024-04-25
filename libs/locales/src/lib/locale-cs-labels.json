@@ -1,6 +1,7 @@
 {
   "actions": "Akce",
   "avatar": "Avatar",
+  "cancel": "Zrušit",
   "close": "Zavřít",
   "colorModeDark": "Tmavý režim",
   "colorModeLight": "Světlý režim",
@@ -32,6 +33,7 @@
   "registerButton": "Registrace",
   "resend": "Znovu odeslat kód",
   "role": "Role",
+  "save": "Uložit",
   "text": "Text",
   "title": "Titulek",
   "userMenu": "Nabídka uživatele",

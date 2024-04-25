@@ -2,13 +2,14 @@ import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@mui/material';
 import { GridRowModesModel, GridRowModes, GridColDef, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import { UserItems, UserRoles, getUserInitials } from '@eco/types';
 import { selectUserAuth, useShallowEqualSelector } from '@eco/redux';
+import { DialogClickOpen } from '../components/dialog/AppDialog';
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -16,24 +17,24 @@ interface UsersColumns {
   setRowModesModel: Dispatch<SetStateAction<GridRowModesModel>>
 }
 
-export const useUsersColumns = (): UsersColumns => {
+export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns => {
 
   const { t } = useTranslation();
 
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
 
   const { rights: { scopes: { users } } } = useShallowEqualSelector(selectUserAuth);
-
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
   const handleDeleteClick = (id: GridRowId) => () => {
-    console.log({id});
+    handleClickOpen(id);
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -54,7 +55,7 @@ export const useUsersColumns = (): UsersColumns => {
     },
     [t]
   );
-  
+
   return {
     columns: [
       {
@@ -134,13 +135,12 @@ export const useUsersColumns = (): UsersColumns => {
         width: 100,
         cellClassName: 'actions',
         getActions: ({ id }) => {
-          const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
-          if (isInEditMode) {
-            return [
+          return rowModesModel[id]?.mode === GridRowModes.Edit ?
+            [
               <GridActionsCellItem
                 icon={<SaveIcon />}
-                label="Save"
+                label={t('labels:save')}
                 sx={{
                   color: 'primary.main',
                 }}
@@ -148,29 +148,28 @@ export const useUsersColumns = (): UsersColumns => {
               />,
               <GridActionsCellItem
                 icon={<CancelIcon />}
-                label="Cancel"
+                label={t('labels:cancel')}
                 className="textPrimary"
                 onClick={handleCancelClick(id)}
                 color="inherit"
               />,
-            ];
-          }
-
-          return [
-            <GridActionsCellItem
-              icon={<EditIcon />}
-              label="Edit"
-              className="textPrimary"
-              onClick={handleEditClick(id)}
-              color="inherit"
-            />,
-            <GridActionsCellItem
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={handleDeleteClick(id)}
-              color="inherit"
-            />,
-          ];
+            ]
+            :
+            [
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label={t('labels:save')}
+                className="textPrimary"
+                onClick={handleEditClick(id)}
+                color="inherit"
+              />,
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label={t('labels:delete')}
+                onClick={handleDeleteClick(id)}
+                color="inherit"
+              />,
+            ]
         },
       },
     ],

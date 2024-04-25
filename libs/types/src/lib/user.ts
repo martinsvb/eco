@@ -16,6 +16,16 @@ export enum UserItems {
   Picture = 'picture',
 }
 
+export interface UserData {
+  [UserItems.Name]: string;
+  [UserItems.Email]: string;
+  [UserItems.Phone]?: number;
+  [UserItems.Rights]?: UserRights;
+  [UserItems.Role]: UserRoles;
+  [UserItems.Picture]?: string;
+  isNew?: boolean;
+}
+
 export enum UserOrigins {
   internal = 'internal',
   google = 'google',
@@ -63,6 +73,7 @@ export interface UserRights {
 export type UserDetail = {
   rights: UserRights;
   role: UserRoles;
+  isNew?: boolean;
 }
 
 export type UserFull = User & UserDetail;

@@ -96,7 +96,7 @@ const AccountForm = () => {
             }
           })
         );
-      } 
+      }
     },
     [dispatch, enqueueSnackbar, navigate, id]
   );

@@ -40,11 +40,6 @@ export class CreateUserDto {
   @ApiProperty({ description: 'User origin' })
   origin: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ description: 'User company origin' })
-  companyId: string;
-
   @ApiProperty({ description: 'User rigts' })
   rights: Prisma.JsonValue;
 
@@ -54,10 +49,10 @@ export class CreateUserDto {
   role: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(6)
-  @ApiProperty({ description: 'User password' })
-  password: string;
+  @ApiProperty({ description: 'User password', required: false })
+  password: string | null;
 
   @IsString()
   @IsOptional()

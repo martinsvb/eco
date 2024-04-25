@@ -1,8 +1,7 @@
 {
   "email": "Neplatný formát e-mailové adresy",
-  "required": "{{Field}} je povinný údaj",
-  "numLength": "Délka musí být {{length}} číslic",
-  "minLength": "Délka musí být minimálně {{length}} znaků",
+  "equal": "Hodnota musí být schodné s {{Field}}",
   "maxLength": "Délka musí být maximálně {{length}} znaků",
-  "equal": "Hodnota musí být schodné s {{Field}}"
+  "minLength": "Délka musí být minimálně {{length}} znaků",
+  "required": "{{Field}} je povinný údaj"
 }

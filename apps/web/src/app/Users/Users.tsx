@@ -1,36 +1,43 @@
-import { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { MouseEvent, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Fab, IconButton, Theme, Typography, useMediaQuery } from '@mui/material';
-import {
-  GridRowModesModel,
-  GridRowModes,
-  DataGrid,
-  GridEventListener,
-  GridRowModel,
-  GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+import { Box, Button, Fab, IconButton, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { GridRowModesModel, GridRowModes, DataGrid, GridRowModel, gridClasses, useGridApiRef } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { LoadingButton } from '@mui/lab';
 import { nanoid } from '@reduxjs/toolkit';
-import { selectUsers, useAppDispatch, useShallowEqualSelector, apiGetUsers } from '@eco/redux';
-import { ScopeItems } from '@eco/types';
+import { pick } from 'ramda';
+import { getObjectDiff, getScrollbarDesign } from '@eco/config';
+import {
+  selectUsers,
+  useAppDispatch,
+  useShallowEqualSelector,
+  apiGetUsers,
+  apiPatchUser,
+  apiPostUser,
+  unshiftUser,
+  apiDeleteUser
+} from '@eco/redux';
+import { ScopeItems, UserData, UserItems, UserOrigins, UserRoles } from '@eco/types';
 import { Buttons } from '../components/buttons/Buttons';
 import { useUsersColumns } from './UsersColumns';
+import AppDialog, { useDialog } from '../components/dialog/AppDialog';
 
 export const Users = () => {
 
   const { t } = useTranslation();
 
+  const { palette } = useTheme();
+
   const { users, isLoading, loaded } = useShallowEqualSelector(selectUsers);
 
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
-
   const isMobilePortrait = useMediaQuery((theme: Theme) => {
     return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
   });
+
+  const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
   useEffect(
     () => {
@@ -44,12 +51,21 @@ export const Users = () => {
   const handleNew = useCallback(
     () => {
       const id = nanoid();
+      dispatch(unshiftUser({
+        id,
+        [UserItems.Name]: '',
+        [UserItems.Email]: '',
+        [UserItems.IsEmailConfirmed]: false,
+        [UserItems.Origin]: UserOrigins.internal,
+        [UserItems.Role]: UserRoles.Reader,
+        isNew: true
+      }));
       setRowModesModel((oldModel) => ({
+        [id]: { mode: GridRowModes.Edit, fieldToFocus: UserItems.Name },
         ...oldModel,
-        [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       }));
     },
-    [navigate]
+    [dispatch]
   );
 
   const handleRefresh = useCallback(
@@ -59,21 +75,41 @@ export const Users = () => {
     [dispatch]
   );
 
-  const { columns, rowModesModel, setRowModesModel } = useUsersColumns();
+  const handleDelete = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      if (dialogItemId) {
+        dispatch(apiDeleteUser({id: dialogItemId}));
+      }
+      setOpen(false);
+    },
+    [dispatch, dialogItemId]
+  );
 
-  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+  const { columns, rowModesModel, setRowModesModel } = useUsersColumns(handleClickOpen);
+
+  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
+    const items = [UserItems.Name, UserItems.Email, UserItems.Role];
+    if (newRow.isNew) {
+      dispatch(apiPostUser({body: pick([...items, UserItems.Origin], newRow)}));
     }
-  };
+    else {
+      dispatch(
+        apiPatchUser({
+          body: getObjectDiff<UserData>(newRow, oldRow, items),
+          id: newRow.id
+        })
+      );
+    }
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    return { ...newRow, isNew: false };
+    return { ...newRow, isNew: undefined };
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+
+  const apiRef = useGridApiRef();
 
   return (
     <>
@@ -81,8 +117,8 @@ export const Users = () => {
       <>
         <Box
           sx={{
-            height: `calc(100vh - ${isMobilePortrait ? 200 : 180}px)`,
-            width: `calc(100vw - ${isMobilePortrait ? 100 : 350}px)`,
+            height: `calc(100vh - ${isMobilePortrait ? 210 : 180}px)`,
+            width: `calc(100vw - ${isMobilePortrait ? 16 : 350}px)`,
             boxShadow: 2,
             '& .actions': {
               color: 'text.secondary',
@@ -93,19 +129,28 @@ export const Users = () => {
           }}
         >
           <DataGrid
+            apiRef={apiRef}
             rows={users}
             columns={columns}
             editMode="row"
             loading={isLoading}
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
+            sx={{
+              [`& .${gridClasses.scrollbar}`]: {
+                ...getScrollbarDesign({
+                  trackColor: palette.background.default,
+                  thumbColor: palette.grey[500],
+                }),
+                pr: 0,
+              },
+            }}
           />
         </Box>
         <Buttons
           isLoading={isLoading}
-          scope={ScopeItems.Accounts}
+          scope={ScopeItems.Users}
           refreshButton={
             <IconButton
               aria-label={t('users:refresh')}
@@ -120,13 +165,39 @@ export const Users = () => {
           }
           createButton={
             <Fab
-              aria-label={t('users:createAccount')}
+              aria-label={t('users:createUser')}
               onClick={handleNew}
               color='primary'
             >
               <AddIcon />
             </Fab>
           }
+        />
+        <AppDialog
+          actions={
+            <>
+              <Button
+                autoFocus
+                id="user-delete-button-close"
+                onClick={handleClose}
+              >
+                {t('labels:close')}
+              </Button>
+              <LoadingButton
+                id="user-delete-button-submit"
+                loading={isLoading}
+                type="submit"
+                variant="contained"
+                onClick={handleDelete}
+              >
+                {t('labels:delete')}
+              </LoadingButton>
+            </>
+          }
+          id="user-delete"
+          dialogTitle={t('users:delete-question-title')}
+          contentText={t('users:delete-question-text')}
+          open={open}
         />
       </>
     </>

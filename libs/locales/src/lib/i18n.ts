@@ -10,6 +10,7 @@ import registrationCs from './locale-cs-registration.json';
 import translationCs from './locale-cs-translation.json';
 import validationCs from './locale-cs-validation.json';
 import usersCs from './locale-cs-users.json';
+import usersLibsCs from './locale-cs-usersLibs.json';
 import accountsEn from './locale-en-accounts.json';
 import contentEn from './locale-en-content.json';
 import labelsEn from './locale-en-labels.json';
@@ -17,6 +18,7 @@ import registrationEn from './locale-en-registration.json';
 import translationEn from './locale-en-translation.json';
 import validationEn from './locale-en-validation.json';
 import usersEn from './locale-en-users.json';
+import usersLibsEn from './locale-en-usersLibs.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -41,6 +43,7 @@ i18n
         content: contentCs,
         labels: labelsCs,
         users: usersCs,
+        usersLibs: usersLibsCs,
         validation: validationCs,
       },
       en: {
@@ -50,6 +53,7 @@ i18n
         content: contentEn,
         labels: labelsEn,
         users: usersEn,
+        usersLibs: usersLibsEn,
         validation: validationEn,
       },
     },

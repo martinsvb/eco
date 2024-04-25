@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import * as bcrypt from 'bcrypt';
-import { RightsItems, ScopeItems, UserFull, checkRigts } from '@eco/types';
+import { RightsItems, ScopeItems, UserFull, UserItems, checkRigts, userRights } from '@eco/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -9,12 +9,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto, {rights}: UserFull) {
+  async create({role, ...rest}: CreateUserDto, {companyId, rights}: UserFull) {
     checkRigts(rights, ScopeItems.Users, RightsItems.Create);
     return this.prisma.user.create({
       data: {
-        ...createUserDto,
-        password: await bcrypt.hash(createUserDto.password, parseInt(process.env.HASHING_ROUNDS, 10)),
+        ...rest,
+        companyId,
+        role,
+        [UserItems.Rights]: userRights[role],
+        password: rest.password
+          ? await bcrypt.hash(rest.password, parseInt(process.env.HASHING_ROUNDS, 10))
+          : undefined,
       },
     });
   }
@@ -29,16 +34,19 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto, {rights}: UserFull) {
+  async update(id: string, {role, ...rest}: UpdateUserDto, {rights}: UserFull) {
     checkRigts(rights, ScopeItems.Users, RightsItems.Edit);
-    if (updateUserDto.password) {
-      updateUserDto.password = await bcrypt.hash(
-        updateUserDto.password,
+    if (rest.password) {
+      rest.password = await bcrypt.hash(
+        rest.password,
         parseInt(process.env.HASHING_ROUNDS, 10)
       );
     }
 
-    return this.prisma.user.update({ where: { id }, data: updateUserDto });
+    return this.prisma.user.update({
+      where: { id },
+      data: role ? {...rest, [UserItems.Rights]: userRights[role]} : rest
+    });
   }
 
   remove(id: string, {rights}: UserFull) {

@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState } from 'react';
+import { MouseEvent, ReactNode, useCallback, useState } from 'react';
 import {
   Dialog,
   DialogProps,
@@ -9,14 +9,22 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
+import { GridRowId } from '@mui/x-data-grid';
 import { DialogTransition } from './DialogTransition';
+import { is } from 'ramda';
+
+export type DialogClickOpen = (id?: GridRowId | null) => void;
 
 export const useDialog = () => {
   const [open, setOpen] = useState(false);
+  const [dialogItemId, setItemId] = useState<GridRowId | null>(null);
 
   const handleClickOpen = useCallback(
-    () => {
+    (id?: GridRowId | null | MouseEvent<HTMLButtonElement>) => {
       setOpen(true);
+      if (is(String, id) || is(Number, id)) {
+        setItemId(id);
+      }
     },
     []
   );
@@ -24,12 +32,14 @@ export const useDialog = () => {
   const handleClose = useCallback(
     () => {
       setOpen(false);
+      setItemId(null);
     },
     []
   );
 
   return {
     open,
+    dialogItemId,
     setOpen,
     handleClickOpen,
     handleClose

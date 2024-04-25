@@ -173,7 +173,7 @@ const authSlice = createSlice({
   }),
   selectors: {
     selectUserAuth: (state) => state.user,
-    selectAccessToken: (state) => state.accessToken,
+    selectAccessToken: (state) => state.accessToken || localStorage.getItem(LocalStorageItems.Token),
     selectIsUserLoggedIn: (state) => {
       let token: string | null = state.accessToken;
       if (!token) {
