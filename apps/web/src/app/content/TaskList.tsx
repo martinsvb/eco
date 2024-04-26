@@ -1,11 +1,10 @@
-import { Content } from '@prisma/client';
 import { alpha, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { ContentState } from '@eco/types';
+import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
 import { useTranslation } from 'react-i18next';
 
 interface TaskListProps {
-  data: Content[];
+  data: ContentFull[];
 }
 
 export const TaskList = ({data}: TaskListProps) => {

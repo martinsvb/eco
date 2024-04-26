@@ -19,7 +19,10 @@ export class ContentService {
       where: {
         companyId,
         type
-      }
+      },
+      include: {
+        author: true,
+      },
     });
   }
 

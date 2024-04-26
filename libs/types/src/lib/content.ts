@@ -1,4 +1,5 @@
-import { ScopeItems } from "./user";
+import { Content } from "@prisma/client";
+import { ScopeItems, UserFull } from "./user";
 
 export enum ContentTypes {
   Article = 'article',
@@ -31,4 +32,8 @@ export const contentScopes = {
   [ContentTypes.Article]: ScopeItems.Articles,
   [ContentTypes.Task]: ScopeItems.Tasks,
   [ContentTypes.New]: ScopeItems.News,
+}
+
+export type ContentFull = Content & {
+  author: UserFull;
 }

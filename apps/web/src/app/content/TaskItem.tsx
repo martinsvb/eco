@@ -1,16 +1,17 @@
-import { Chip } from '@mui/material';
-import { Content } from '@prisma/client';
+import { Avatar, Chip } from '@mui/material';
 import dayjs from 'dayjs';
-import { ContentState, ContentTypes } from '@eco/types';
+import { ContentFull, ContentState, ContentTypes, getUserInitials } from '@eco/types';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
 import ContentDeleteButton from './ContentDeleteButton';
 import { AppCard } from '../components/card/AppCard';
 import { ContentEditButton } from './ContentEditButton';
 import TaskSwitch from './TaskSwitch';
 
-export const TaskItem = ({id, title, text, state, createdAt}: Content) => {
+export const TaskItem = ({ id, title, text, state, createdAt, author: { name, picture } }: ContentFull) => {
 
   const { rights: { scopes: { tasks } } } = useShallowEqualSelector(selectUserAuth);
+
+  const userInitials = getUserInitials(name);
 
   return (
     <AppCard
@@ -28,7 +29,19 @@ export const TaskItem = ({id, title, text, state, createdAt}: Content) => {
       actionsAvailable={tasks.edit || tasks.delete}
       cardTitle={title}
       cardContent={text}
-      label={<Chip label={dayjs(createdAt).format('DD. MM. YYYY')} />}
+      label={
+        <Chip
+        avatar={
+          <Avatar
+            alt={userInitials}
+            src={picture || ''}
+          >
+            {userInitials}
+          </Avatar>
+        }
+        label={dayjs(createdAt).format('DD. MM. YYYY')}
+        />
+      }
     />
   );
 };

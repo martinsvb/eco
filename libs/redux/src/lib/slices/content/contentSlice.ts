@@ -1,19 +1,18 @@
-import { Content } from '@prisma/client';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiOperations, ContentTypes } from '@eco/types';
+import { ApiOperations, ContentFull, ContentTypes } from '@eco/types';
 import { contentDelete, contentGet, contentListGet, contentPatch, contentPost } from "./contentApi";
 import { createSlice } from "../createSlice";
 
 export interface ContentState {
   content: {
-    [ContentTypes.Article]: {data: Content | null, loaded: boolean};
-    [ContentTypes.Task]: {data: Content | null, loaded: boolean};
-    [ContentTypes.New]: {data: Content | null, loaded: boolean};
+    [ContentTypes.Article]: {data: ContentFull | null, loaded: boolean};
+    [ContentTypes.Task]: {data: ContentFull | null, loaded: boolean};
+    [ContentTypes.New]: {data: ContentFull | null, loaded: boolean};
   };
   contentList: {
-    [ContentTypes.Article]: {data: Content[], loaded: boolean};
-    [ContentTypes.Task]: {data: Content[], loaded: boolean};
-    [ContentTypes.New]: {data: Content[], loaded: boolean};
+    [ContentTypes.Article]: {data: ContentFull[], loaded: boolean};
+    [ContentTypes.Task]: {data: ContentFull[], loaded: boolean};
+    [ContentTypes.New]: {data: ContentFull[], loaded: boolean};
   };
   error: {
     [ContentTypes.Article]: {[key: string]: unknown | null};
@@ -57,7 +56,7 @@ const contentSlice = createSlice({
     resetContent: create.reducer(() => initialContentState),
     setContent: create.reducer((
       state,
-      {payload: {data, type}}: PayloadAction<{data: Content | null, type: ContentTypes}>
+      {payload: {data, type}}: PayloadAction<{data: ContentFull | null, type: ContentTypes}>
     ) => {
       state.content[type].data = data;
     }),
