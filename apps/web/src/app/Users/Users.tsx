@@ -22,6 +22,7 @@ import { ScopeItems, UserData, UserItems, UserOrigins, UserRoles } from '@eco/ty
 import { Buttons } from '../components/buttons/Buttons';
 import { useUsersColumns } from './UsersColumns';
 import AppDialog, { useDialog } from '../components/dialog/AppDialog';
+import { UsersColumnMenu } from './UsersColumnMenu';
 
 export const Users = () => {
 
@@ -120,7 +121,7 @@ export const Users = () => {
       <>
         <Box
           sx={{
-            height: `calc(100vh - ${isMobilePortrait ? 240 : 180}px)`,
+            height: `calc(100vh - ${isMobilePortrait ? 224 : 180}px)`,
             width: `calc(100vw - ${isMobilePortrait ? 32 : 350}px)`,
             boxShadow: 2,
             '& .actions': {
@@ -136,10 +137,14 @@ export const Users = () => {
             rows={users}
             columns={columns}
             editMode="row"
+            filterMode="server"
             loading={isLoading}
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             processRowUpdate={processRowUpdate}
+            slots={{
+              columnMenu: UsersColumnMenu,
+            }}
             sx={{
               [`& .${gridClasses.scrollbar}`]: {
                 ...getScrollbarDesign({

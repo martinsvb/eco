@@ -37,7 +37,7 @@ const AccountForm = () => {
   const { id } = useParams();
 
   const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
+    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`;
   });
 
   const isLoading = useAppSelector(

@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -56,8 +57,8 @@ export class UsersController {
     status: 200,
     description: 'Users has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request) {
-    const users = await this.usersService.findAll(user as UserFull);
+  async findAll(@Req() {user}: Request, @Query() query) {
+    const users = await this.usersService.findAll(user as UserFull, query);
     return users.map((data) => new UserEntity(data));
   }
 

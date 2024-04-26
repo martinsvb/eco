@@ -1,7 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import * as bcrypt from 'bcrypt';
-import { RightsItems, ScopeItems, UserFull, UserItems, checkRigts, userRights } from '@eco/types';
+import {
+  RightsItems,
+  ScopeItems,
+  UserFilterData,
+  UserFull,
+  UserItems,
+  checkRigts,
+  getPrismaOrFilter,
+  userRights
+} from '@eco/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -24,9 +33,14 @@ export class UsersService {
     });
   }
 
-  findAll({companyId, rights}: UserFull) {
+  findAll({companyId, rights}: UserFull, query: UserFilterData) {
     checkRigts(rights, ScopeItems.Users, RightsItems.Read);
-    return this.prisma.user.findMany({ where: { companyId } });
+    return this.prisma.user.findMany({
+      where: {
+        companyId,
+        ...getPrismaOrFilter(query)
+      }
+    });
   }
 
   findOne(id: string, {rights}: UserFull) {

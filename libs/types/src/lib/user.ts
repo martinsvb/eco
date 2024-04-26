@@ -26,6 +26,8 @@ export interface UserData {
   isNew?: boolean;
 }
 
+export type UserFilterData = Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;
+
 export enum UserOrigins {
   internal = 'internal',
   google = 'google',

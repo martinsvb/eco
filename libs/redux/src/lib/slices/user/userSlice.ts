@@ -1,10 +1,11 @@
 import { userDelete, userGet, usersGet, usersPatch, usersPost } from "./userApi";
 import { createSlice } from '../createSlice';
-import { ApiOperations, UserFull } from '@eco/types';
+import { ApiOperations, UserFilterData, UserFull } from '@eco/types';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
   users: Partial<UserFull>[];
+  filter: UserFilterData;
   error: {[key: string]: unknown | null};
   loading: {[key: string]: boolean};
   loaded: {[key: string]: boolean};
@@ -12,6 +13,7 @@ export interface UserState {
 
 export const initialUserState: UserState = {
   users: [],
+  filter: {},
   error: {},
   loading: {},
   loaded: {},
@@ -24,6 +26,9 @@ const userSlice = createSlice({
     resetUsers: create.reducer(() => initialUserState),
     unshiftUser: create.reducer((state, {payload}: PayloadAction<Partial<UserFull>>) => {
       state.users.unshift(payload);
+    }),
+    setFilterData: create.reducer((state, {payload}: PayloadAction<UserFilterData>) => {
+      state.filter = {...state.filter, ...payload};
     }),
     apiGetUsers: create.asyncThunk(
       usersGet,
@@ -123,6 +128,7 @@ const userSlice = createSlice({
       isLoading: !!state.loading[ApiOperations.getList],
       loaded: !!state.loaded[ApiOperations.getItem],
     }),
+    selectFilter: (state) => state.filter,
   },
 });
 
@@ -135,7 +141,11 @@ export const {
   apiPatchUser,
   apiDeleteUser,
   resetUsers,
+  setFilterData,
   unshiftUser
 } = userSlice.actions
 
-export const { selectUsers } = userSlice.selectors
+export const {
+  selectFilter,
+  selectUsers
+} = userSlice.selectors

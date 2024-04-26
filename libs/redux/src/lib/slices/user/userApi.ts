@@ -10,9 +10,10 @@ import {
   patchHeaders,
   postHeaders
 } from '@eco/config';
-import { UserData } from '@eco/types';
+import { UserData, getUrl } from '@eco/types';
 import i18n from '@eco/locales';
 import { tokenValidation } from '../../tokenValidation';
+import { RootState } from '../../store';
 
 export const usersGet = async (
   id: string,
@@ -21,7 +22,11 @@ export const usersGet = async (
   try {
     const token = await tokenValidation(dispatch, getState);
 
-    return await checkResponse(await fetch(`/api/${endPoints.users}`, getHeaders({signal, token}))).json();
+    const { user: { filter } } = getState() as RootState;
+
+    const url = getUrl(endPoints.users, filter);
+
+    return await checkResponse(await fetch(url, getHeaders({signal, token}))).json();
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

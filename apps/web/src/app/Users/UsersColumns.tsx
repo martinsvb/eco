@@ -139,6 +139,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         width: 200,
         align: 'center',
         headerAlign: 'center',
+        disableColumnMenu: true,
       },
       {
         field: 'actions',
