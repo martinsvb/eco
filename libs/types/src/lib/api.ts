@@ -11,7 +11,6 @@ export enum ApiOperations {
 
 export const getUrl = (endpoint: string, filter: Record<string, any>) => {
   let url = `/api/${endpoint}`;
-  console.log({qs})
   if (is(Object, filter) && !isEmpty(filter)) {
     url = `${url}?${qs.stringify(filter)}`;
   }
