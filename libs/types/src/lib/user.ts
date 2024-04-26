@@ -79,10 +79,26 @@ export type UserDetail = {
 export type UserFull = User & UserDetail;
 
 export enum UserRoles {
+  None = 'none',
   Reader = 'reader',
   Editor = 'editor',
   ApprovalEditor = 'approvalEditor',
   Admin = 'admin',
+}
+
+const noneRights = {
+  create: false,
+  edit: false,
+  read: false,
+  delete: false,
+  approve: false,  
+}
+
+const noneScopes = {
+  accounts: noneRights,
+  tasks: noneRights,
+  users: noneRights,
+  companies: noneRights,
 }
 
 const readerRights = {
@@ -128,6 +144,10 @@ const approvalEditorScopes = {
 }
 
 export const userRights = {
+  [UserRoles.None]: {
+    scopes: noneScopes,
+    companyAdmin: false
+  },
   [UserRoles.Reader]: {
     scopes: readerScopes,
     companyAdmin: false
@@ -154,4 +174,11 @@ export const checkRigts = ({scopes}: UserRights, scope: ScopeItems, operation: R
 
 export const getUserInitials = (name?: string | null) => {
   return name?.split(' ').map((namePart) => namePart[0]).join('') || 'U';
+}
+
+export const isRouteScopeAvailable = (pathname: string, scopes: Scopes) => {
+  const route = pathname.split('/')[1] as ScopeItems;
+  return !!scopes[route]
+    ? !!scopes[route]?.read
+    : false;
 }

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@mui/material';
 import { GridRowModesModel, GridRowModes, GridColDef, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
@@ -25,24 +25,36 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
 
   const { rights: { scopes: { users } } } = useShallowEqualSelector(selectUserAuth);
 
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
+  const handleSaveClick = useCallback(
+    (id: GridRowId) => () => {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    },
+    []
+  );
 
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
+  const handleEditClick = useCallback(
+    (id: GridRowId) => () => {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    },
+    []
+  );
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    handleClickOpen(id);
-  };
+  const handleDeleteClick = useCallback(
+    (id: GridRowId) => () => {
+      handleClickOpen(id);
+    },
+    []
+  );
 
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-  };
+  const handleCancelClick = useCallback(
+    (id: GridRowId) => () => {
+      setRowModesModel({
+        ...rowModesModel,
+        [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      });
+    },
+    []
+  );
 
   const roles = useMemo(
     () => {

@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
-import { Stack, Typography } from '@mui/material';
-import { selectIsUserLoggedIn, useAppSelector } from '@eco/redux';
-import LoginButton from './LoginButton';
-import RegisterButton from './RegistrationButton';
+import { useLocation } from 'react-router-dom';
+import { isRouteScopeAvailable } from '@eco/types';
+import { selectIsUserLoggedIn, selectUserAuth, useAppSelector, useShallowEqualSelector } from '@eco/redux';
+import LoginPage from './LoginPage';
+import NoRights from './NoRigts';
 
 interface LoginWrapperProps {
   children: ReactNode;
@@ -10,17 +11,20 @@ interface LoginWrapperProps {
 
 const LoginWrapper = ({children}: LoginWrapperProps) => {
 
+  const { pathname } = useLocation();
+
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
+  const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
+
   return (
-    isUserLoggedIn ?
+    isUserLoggedIn && isRouteScopeAvailable(pathname, scopes) ?
       children
       :
-      <Stack direction="row" justifyContent="flex-start">
-        <LoginButton />
-        <Typography variant='h6' mx={1}>/</Typography>
-        <RegisterButton />
-      </Stack>
+      isUserLoggedIn ?
+        <NoRights />
+        :
+        <LoginPage />
   );
 }
 

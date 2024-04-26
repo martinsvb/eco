@@ -18,8 +18,8 @@ export const initialAuthState: AuthState = {
   user: {
     name: null,
     picture: null,
-    rights: userRights[UserRoles.Editor],
-    role: UserRoles.Editor
+    rights: userRights[UserRoles.None],
+    role: UserRoles.None
   },
   error: {},
   loading: {},

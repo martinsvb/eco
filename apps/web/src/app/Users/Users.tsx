@@ -117,8 +117,8 @@ export const Users = () => {
       <>
         <Box
           sx={{
-            height: `calc(100vh - ${isMobilePortrait ? 210 : 180}px)`,
-            width: `calc(100vw - ${isMobilePortrait ? 16 : 350}px)`,
+            height: `calc(100vh - ${isMobilePortrait ? 230 : 180}px)`,
+            width: `calc(100vw - ${isMobilePortrait ? 24 : 350}px)`,
             boxShadow: 2,
             '& .actions': {
               color: 'text.secondary',
