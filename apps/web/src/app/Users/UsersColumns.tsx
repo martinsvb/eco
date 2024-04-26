@@ -113,7 +113,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         field: UserItems.IsEmailConfirmed,
         headerName: t('labels:isEmailConfirmed'),
         type: 'boolean',
-        width: 100,
+        width: 80,
         align: 'center',
         headerAlign: 'center',
         sortable: false,

@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { LoadingButton } from '@mui/lab';
 import { nanoid } from '@reduxjs/toolkit';
-import { pick } from 'ramda';
+import { isEmpty, pick } from 'ramda';
 import { getObjectDiff, getScrollbarDesign } from '@eco/config';
 import {
   selectUsers,
@@ -94,12 +94,15 @@ export const Users = () => {
       dispatch(apiPostUser({body: pick([...items, UserItems.Origin], newRow)}));
     }
     else {
-      dispatch(
-        apiPatchUser({
-          body: getObjectDiff<UserData>(newRow, oldRow, items),
-          id: newRow.id
-        })
-      );
+      const body = getObjectDiff<UserData>(newRow, oldRow, items);
+      if (!isEmpty(body)) {
+        dispatch(
+          apiPatchUser({
+            body: getObjectDiff<UserData>(newRow, oldRow, items),
+            id: newRow.id
+          })
+        );
+      }
     }
 
     return { ...newRow, isNew: undefined };
@@ -117,8 +120,8 @@ export const Users = () => {
       <>
         <Box
           sx={{
-            height: `calc(100vh - ${isMobilePortrait ? 230 : 180}px)`,
-            width: `calc(100vw - ${isMobilePortrait ? 24 : 350}px)`,
+            height: `calc(100vh - ${isMobilePortrait ? 240 : 180}px)`,
+            width: `calc(100vw - ${isMobilePortrait ? 32 : 350}px)`,
             boxShadow: 2,
             '& .actions': {
               color: 'text.secondary',
@@ -145,6 +148,12 @@ export const Users = () => {
                 }),
                 pr: 0,
               },
+              [`& .${gridClasses.footerContainer}`]: isMobilePortrait ?
+                {
+                  justifyContent: 'start',
+                }
+                :
+                undefined,
             }}
           />
         </Box>

@@ -38,7 +38,10 @@ export const Buttons = ({isLoading, scope, refreshButton, createButton}: Buttons
         :
         isUserLoggedIn
           ?
-            <Stack alignItems='center'>
+            <Stack
+              alignItems='center'
+              direction={isMobilePortrait ? 'row' : 'column'}
+            >
               {refreshButton}
               {rights.scopes[scope]?.create && createButton}
             </Stack>
