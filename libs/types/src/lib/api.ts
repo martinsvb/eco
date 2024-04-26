@@ -1,4 +1,4 @@
-import qs from 'query-string';
+import * as qs from 'qs';
 import { is, isEmpty } from 'ramda';
 
 export enum ApiOperations {
@@ -11,6 +11,7 @@ export enum ApiOperations {
 
 export const getUrl = (endpoint: string, filter: Record<string, any>) => {
   let url = `/api/${endpoint}`;
+  console.log({qs})
   if (is(Object, filter) && !isEmpty(filter)) {
     url = `${url}?${qs.stringify(filter)}`;
   }
