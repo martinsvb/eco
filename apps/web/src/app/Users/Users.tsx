@@ -1,4 +1,5 @@
 import { MouseEvent, useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Fab, IconButton, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { GridRowModesModel, GridRowModes, DataGrid, GridRowModel, gridClasses, useGridApiRef } from '@mui/x-data-grid';
@@ -6,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { LoadingButton } from '@mui/lab';
 import { nanoid } from '@reduxjs/toolkit';
+import * as qs from 'qs';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff, getScrollbarDesign } from '@eco/config';
 import {
@@ -16,7 +18,8 @@ import {
   apiPatchUser,
   apiPostUser,
   unshiftUser,
-  apiDeleteUser
+  apiDeleteUser,
+  setFilterData
 } from '@eco/redux';
 import { ScopeItems, UserData, UserItems, UserOrigins, UserRoles } from '@eco/types';
 import { Buttons } from '../components/buttons/Buttons';
@@ -34,6 +37,10 @@ export const Users = () => {
 
   const dispatch = useAppDispatch();
 
+  const { search } = useLocation();
+
+  const filter = qs.parse(search.substring(1));
+
   const isMobilePortrait = useMediaQuery((theme: Theme) => {
     return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
   });
@@ -41,12 +48,21 @@ export const Users = () => {
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
   useEffect(
-    () => {
+    () => { 
       if (!loaded) {
         dispatch(apiGetUsers(''));
       }
     },
     [loaded, dispatch]
+  );
+
+  useEffect(
+    () => { 
+      if (!!filter[UserItems.Name] || !!filter[UserItems.Email]) {
+        dispatch(setFilterData(filter));
+      }
+    },
+    [filter, dispatch]
   );
 
   const handleNew = useCallback(
@@ -121,7 +137,7 @@ export const Users = () => {
       <>
         <Box
           sx={{
-            height: `calc(100vh - ${isMobilePortrait ? 216 : 180}px)`,
+            height: `calc(100vh - ${isMobilePortrait ? 210 : 180}px)`,
             width: `calc(100vw - ${isMobilePortrait ? 32 : 350}px)`,
             boxShadow: 2,
             '& .actions': {
