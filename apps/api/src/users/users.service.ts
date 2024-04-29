@@ -52,7 +52,7 @@ export class UsersService {
         subject: 'Invitation link',
         template: './invitation',
         context: {
-          link: `${origin}/invitation-finish?${qs.stringify({email, name})}`,
+          link: `${origin}/invitation?${qs.stringify({email, name})}`,
         },
       })
       .catch((error) => {
