@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as qs from 'qs';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
@@ -13,6 +13,7 @@ import { apiPatchInvitationFinished, selectIsAuthLoading, useAppDispatch, useApp
 import { AuthOperations, InvitationData, UserItems } from '@eco/types';
 import { getInvitationValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
+import { routes } from '@eco/config';
 
 const InvitationForm = () => {
 
@@ -21,6 +22,8 @@ const InvitationForm = () => {
   const { t } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const navigate = useNavigate();
 
   const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
@@ -42,10 +45,11 @@ const InvitationForm = () => {
   const data = watch();
 
   const submit = useCallback(
-    (data: InvitationData) => {
-      dispatch(apiPatchInvitationFinished({
+    async (data: InvitationData) => {
+      await dispatch(apiPatchInvitationFinished({
         body: filter(compose(not, isEmpty), omit([UserItems.PasswordConfirmation], data))
       }));
+      navigate(routes.content.task.list);
     },
     [dispatch, enqueueSnackbar]
   );
