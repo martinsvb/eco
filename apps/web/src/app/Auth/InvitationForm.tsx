@@ -70,6 +70,7 @@ const InvitationForm = () => {
             control={control}
             defaultValue={data.email}
             fieldProps={{
+              readOnly: true,
               required: true,
               label: t('labels:email'),
               id: UserItems.Email

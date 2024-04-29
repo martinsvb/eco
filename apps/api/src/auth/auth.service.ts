@@ -185,7 +185,8 @@ export class AuthService {
 
   async invitationFinish({
     email,
-    ...rest
+    name,
+    password,
   }: InvitationFinishDto): Promise<FullAuthEntity> {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
@@ -198,7 +199,8 @@ export class AuthService {
         email
       },
       data: {
-        ...rest,
+        name,
+        password: await bcrypt.hash(password, parseInt(process.env.HASHING_ROUNDS, 10)),
         isEmailConfirmed: true
       }
     });
