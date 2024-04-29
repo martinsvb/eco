@@ -2,14 +2,13 @@ import { MouseEvent, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Fab, IconButton, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { GridRowModesModel, GridRowModes, DataGrid, GridRowModel, gridClasses, useGridApiRef } from '@mui/x-data-grid';
+import { GridRowModesModel, GridRowModes, DataGrid, GridRowModel, useGridApiRef } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { LoadingButton } from '@mui/lab';
-import { nanoid } from '@reduxjs/toolkit';
 import * as qs from 'qs';
 import { isEmpty, pick } from 'ramda';
-import { getObjectDiff, getScrollbarDesign } from '@eco/config';
+import { getObjectDiff } from '@eco/config';
 import {
   selectUsers,
   useAppDispatch,
@@ -21,11 +20,12 @@ import {
   apiDeleteUser,
   setFilterData
 } from '@eco/redux';
-import { ScopeItems, UserData, UserItems, UserOrigins, UserRoles } from '@eco/types';
+import { ScopeItems, UserData, UserItems, getNewUserData } from '@eco/types';
 import { Buttons } from '../components/buttons/Buttons';
 import { useUsersColumns } from './UsersColumns';
 import AppDialog, { useDialog } from '../components/dialog/AppDialog';
 import { UsersColumnMenu } from './UsersColumnMenu';
+import { getDataGridSx, getDataGridWrapperSx } from '../components/dataGrid/design';
 
 export const Users = () => {
 
@@ -67,16 +67,8 @@ export const Users = () => {
 
   const handleNew = useCallback(
     () => {
-      const id = nanoid();
-      dispatch(unshiftUser({
-        id,
-        [UserItems.Name]: '',
-        [UserItems.Email]: '',
-        [UserItems.IsEmailConfirmed]: false,
-        [UserItems.Origin]: UserOrigins.internal,
-        [UserItems.Role]: UserRoles.Reader,
-        isNew: true
-      }));
+      const { id, data } = getNewUserData();
+      dispatch(unshiftUser(data));
       setRowModesModel((oldModel) => ({
         [id]: { mode: GridRowModes.Edit, fieldToFocus: UserItems.Name },
         ...oldModel,
@@ -134,102 +126,76 @@ export const Users = () => {
   return (
     <>
       <Typography variant='h3' mb={3}>{t('users:title')}</Typography>
-      <>
-        <Box
-          sx={{
-            height: `calc(100vh - ${isMobilePortrait ? 212 : 180}px)`,
-            width: `calc(100vw - ${isMobilePortrait ? 32 : 350}px)`,
-            boxShadow: 2,
-            '& .actions': {
-              color: 'text.secondary',
-            },
-            '& .textPrimary': {
-              color: 'text.primary',
-            },
+      <Box
+        sx={getDataGridWrapperSx(isMobilePortrait)}
+      >
+        <DataGrid
+          apiRef={apiRef}
+          rows={users}
+          columns={columns}
+          editMode="row"
+          filterMode="server"
+          loading={isLoading}
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          processRowUpdate={processRowUpdate}
+          slots={{
+            columnMenu: UsersColumnMenu,
           }}
-        >
-          <DataGrid
-            apiRef={apiRef}
-            rows={users}
-            columns={columns}
-            editMode="row"
-            filterMode="server"
-            loading={isLoading}
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            processRowUpdate={processRowUpdate}
-            slots={{
-              columnMenu: UsersColumnMenu,
-            }}
+          sx={getDataGridSx(palette, isMobilePortrait)}
+        />
+      </Box>
+      <Buttons
+        isLoading={isLoading}
+        scope={ScopeItems.Users}
+        refreshButton={
+          <IconButton
+            aria-label={t('users:refresh')}
+            onClick={handleRefresh}
+            size='large'
             sx={{
-              [`& .${gridClasses.scrollbar}`]: {
-                ...getScrollbarDesign({
-                  trackColor: palette.background.default,
-                  thumbColor: palette.grey[500],
-                }),
-                pr: 0,
-              },
-              [`& .${gridClasses.footerContainer}`]: isMobilePortrait ?
-                {
-                  justifyContent: 'start',
-                }
-                :
-                undefined,
+              mb: 2
             }}
-          />
-        </Box>
-        <Buttons
-          isLoading={isLoading}
-          scope={ScopeItems.Users}
-          refreshButton={
-            <IconButton
-              aria-label={t('users:refresh')}
-              onClick={handleRefresh}
-              size='large'
-              sx={{
-                mb: 2
-              }}
+          >
+            <RefreshIcon />
+          </IconButton>
+        }
+        createButton={
+          <Fab
+            aria-label={t('users:createUser')}
+            onClick={handleNew}
+            color='primary'
+          >
+            <AddIcon />
+          </Fab>
+        }
+      />
+      <AppDialog
+        actions={
+          <>
+            <Button
+              autoFocus
+              id="user-delete-button-close"
+              onClick={handleClose}
             >
-              <RefreshIcon />
-            </IconButton>
-          }
-          createButton={
-            <Fab
-              aria-label={t('users:createUser')}
-              onClick={handleNew}
-              color='primary'
+              {t('labels:close')}
+            </Button>
+            <LoadingButton
+              id="user-delete-button-submit"
+              loading={isLoading}
+              type="submit"
+              variant="contained"
+              onClick={handleDelete}
             >
-              <AddIcon />
-            </Fab>
-          }
-        />
-        <AppDialog
-          actions={
-            <>
-              <Button
-                autoFocus
-                id="user-delete-button-close"
-                onClick={handleClose}
-              >
-                {t('labels:close')}
-              </Button>
-              <LoadingButton
-                id="user-delete-button-submit"
-                loading={isLoading}
-                type="submit"
-                variant="contained"
-                onClick={handleDelete}
-              >
-                {t('labels:delete')}
-              </LoadingButton>
-            </>
-          }
-          id="user-delete"
-          dialogTitle={t('users:delete-question-title')}
-          contentText={t('users:delete-question-text')}
-          open={open}
-        />
-      </>
+              {t('labels:delete')}
+            </LoadingButton>
+          </>
+        }
+        id="user-delete"
+        dialogTitle={t('users:delete-question-title')}
+        contentText={t('users:delete-question-text')}
+        open={open}
+      />
     </>
   );
 };

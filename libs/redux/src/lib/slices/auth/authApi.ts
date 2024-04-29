@@ -130,6 +130,7 @@ export const authUserGet = async (
       ? await checkResponse(await fetch(`/api/${endPoints.user}`, getHeaders({signal, token}))).json()
       : initialAuthState.user;
   } catch (error: unknown) {
+    console.log({error})
     return rejectWithValue(getErrorValue(error));
   }
 }

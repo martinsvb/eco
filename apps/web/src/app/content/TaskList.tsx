@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import { alpha, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
-import { useTranslation } from 'react-i18next';
 
 interface TaskListProps {
   data: ContentFull[];

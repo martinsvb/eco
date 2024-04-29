@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { alpha, Divider, Paper, Stack, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { alpha, Chip, Divider, Paper, Stack, useTheme } from '@mui/material';
 import { unsplashUrl } from '@eco/config';
 import GoogleLoginCmp from './GoogleLogin';
 import LoginForm from './LoginForm';
@@ -12,6 +13,8 @@ const Login = ({handleClose}: LoginProps) => {
 
   const { palette, shape } = useTheme();
 
+  const { t } = useTranslation();
+
   return (
     <Stack
       height="100vh"
@@ -23,7 +26,11 @@ const Login = ({handleClose}: LoginProps) => {
     >
       <Stack
         width={300}
-        divider={<Divider orientation="horizontal" flexItem />}
+        divider={
+          <Divider orientation="horizontal" flexItem>
+            <Chip label={t('labels:or')} />
+          </Divider>
+        }
         component={Paper}
         spacing={2}
         padding={4}

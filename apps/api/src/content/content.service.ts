@@ -10,7 +10,16 @@ export class ContentService {
 
   create(createContentDto: CreateContentDto, {id, companyId, rights}: UserFull) {
     checkRigts(rights, contentScopes[createContentDto.type], RightsItems.Create);
-    return this.prisma.content.create({ data: {...createContentDto, authorId: id, companyId} });
+    return this.prisma.content.create({
+      data: {
+        ...createContentDto,
+        authorId: id,
+        companyId
+      },
+      include: {
+        author: true,
+      },
+    });
   }
 
   findAll({companyId, rights}: UserFull, type: ContentTypes) {
@@ -29,7 +38,9 @@ export class ContentService {
   findOne(id: string, {rights}: UserFull, type: ContentTypes) {
     checkRigts(rights, contentScopes[type], RightsItems.Read);
     return this.prisma.content.findUnique({
-      where: { id },
+      where: {
+        id
+      },
       include: {
         author: true,
       },
@@ -39,8 +50,13 @@ export class ContentService {
   update(id: string, data: UpdateContentDto, {rights}: UserFull, type: ContentTypes) {
     checkRigts(rights, contentScopes[type], RightsItems.Edit);
     return this.prisma.content.update({
-      where: { id },
+      where: {
+        id
+      },
       data,
+      include: {
+        author: true,
+      },
     });
   }
 

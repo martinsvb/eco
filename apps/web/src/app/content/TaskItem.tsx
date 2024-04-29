@@ -30,14 +30,14 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
       cardContent={text}
       label={
         <Chip
-        avatar={
-          <AppAvatar
-            name={name}
-            picture={picture}
-            showTooltip
-          />
-        }
-        label={dayjs(createdAt).format('DD. MM. YYYY')}
+          avatar={
+            <AppAvatar
+              name={name}
+              picture={picture}
+              showTooltip
+            />
+          }
+          label={dayjs(createdAt).format('DD. MM. YYYY')}
         />
       }
     />

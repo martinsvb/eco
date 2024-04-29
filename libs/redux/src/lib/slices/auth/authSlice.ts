@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { LocalStorageItems, decodeToken, isTokenValid } from '@eco/config';
-import { AuthOperations, RegistrationState, UserFull, UserItems, UserRoles, userRights } from '@eco/types';
+import { AuthOperations, BasicUser, RegistrationState, UserRoles, userRights } from '@eco/types';
 import {
   authUserGet,
   invitationFinishPatch,
@@ -15,7 +15,7 @@ import { createSlice } from '../createSlice';
 
 export interface AuthState {
   accessToken: string;
-  user: Pick<UserFull, UserItems.Name | UserItems.Picture | UserItems.Rights | UserItems.Role>;
+  user: BasicUser;
   error: {[key: string]: unknown | null};
   loading: {[key: string]: boolean};
   registration: RegistrationState;

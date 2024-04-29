@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { nanoid } from '@reduxjs/toolkit';
 
 export enum UserItems {
   Name = 'name',
@@ -81,6 +82,8 @@ export type UserDetail = {
 }
 
 export type UserFull = User & UserDetail;
+
+export type BasicUser = Pick<UserFull, UserItems.Name | UserItems.Picture | UserItems.Rights | UserItems.Role>;
 
 export enum UserRoles {
   None = 'none',
@@ -185,4 +188,20 @@ export const isRouteScopeAvailable = (pathname: string, scopes: Scopes) => {
   return !!scopes[route]
     ? !!scopes[route]?.read
     : false;
+}
+
+export const getNewUserData = () => {
+  const id = nanoid();
+  return {
+    id,
+    data: {
+      id,
+      [UserItems.Name]: '',
+      [UserItems.Email]: '',
+      [UserItems.IsEmailConfirmed]: false,
+      [UserItems.Origin]: UserOrigins.internal,
+      [UserItems.Role]: UserRoles.Reader,
+      isNew: true
+    }
+  }
 }
