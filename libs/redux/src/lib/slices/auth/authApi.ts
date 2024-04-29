@@ -1,8 +1,24 @@
-import { LocalStorageItems, checkResponse, endPoints, getErrorValue, getHeaders, postHeaders } from '@eco/config';
-import { LoginData, RegistrationData, RegistrationItems, RegistrationState, VerificationPayload } from '@eco/types';
+import { enqueueSnackbar } from 'notistack';
 import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsyncThunk';
+import {
+  LocalStorageItems,
+  checkResponse,
+  endPoints,
+  getErrorValue,
+  getHeaders,
+  patchHeaders,
+  postHeaders
+} from '@eco/config';
+import {
+  InvitationData,
+  LoginData,
+  RegistrationData,
+  RegistrationState,
+  UserItems,
+  VerificationPayload
+} from '@eco/types';
+import i18n from '@eco/locales';
 import { initialAuthState, setRegistration, setRegistrationEmail } from './authSlice';
-import { tokenValidation } from '../../tokenValidation';
 
 export const loginPost = async (
   body: LoginData,
@@ -41,7 +57,7 @@ export const refreshPost = async (
 }
 
 export const registerPost = async (
-  {body, onSuccess}: {body: Omit<RegistrationData, RegistrationItems.passwordConfirmation>, onSuccess: () => void},
+  {body, onSuccess}: {body: Omit<RegistrationData, UserItems.PasswordConfirmation>, onSuccess: () => void},
   { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
@@ -49,6 +65,26 @@ export const registerPost = async (
     dispatch(setRegistration(RegistrationState.verification));
     dispatch(setRegistrationEmail(body.email));
     onSuccess();
+    return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const invitationFinishPatch = async (
+  {body}: {body: Omit<InvitationData, UserItems.PasswordConfirmation>},
+  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.invitationFinish}`,
+        patchHeaders({body, signal})
+      )
+    ).json();
+
+    enqueueSnackbar(i18n.t('authLibs:invitationFinish'), {variant: 'success'});
+
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -71,7 +107,7 @@ export const verifyPost = async (
 }
 
 export const resendPost = async (
-  {body, onSuccess}: {body: Pick<VerificationPayload, RegistrationItems.email>, onSuccess: () => void},
+  {body, onSuccess}: {body: Pick<VerificationPayload, UserItems.Email>, onSuccess: () => void},
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {

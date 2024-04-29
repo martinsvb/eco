@@ -1,7 +1,8 @@
+import { GridRowId } from "@mui/x-data-grid";
+import { PayloadAction } from '@reduxjs/toolkit';
+import { ApiOperations, UserFilterData, UserFull } from '@eco/types';
 import { userDelete, userGet, usersGet, usersPatch, usersPost } from "./userApi";
 import { createSlice } from '../createSlice';
-import { ApiOperations, UserFilterData, UserFull } from '@eco/types';
-import { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
   users: Partial<UserFull>[];
@@ -26,6 +27,9 @@ const userSlice = createSlice({
     resetUsers: create.reducer(() => initialUserState),
     unshiftUser: create.reducer((state, {payload}: PayloadAction<Partial<UserFull>>) => {
       state.users.unshift(payload);
+    }),
+    cancelUser: create.reducer((state, {payload}: PayloadAction<GridRowId>) => {
+      state.users = state.users.filter(({id, isNew}) => id !== payload && !isNew);
     }),
     setFilterData: create.reducer((state, {payload}: PayloadAction<UserFilterData>) => {
       state.filter = {...state.filter, ...payload};
@@ -140,6 +144,7 @@ export const {
   apiPostUser,
   apiPatchUser,
   apiDeleteUser,
+  cancelUser,
   resetUsers,
   setFilterData,
   unshiftUser

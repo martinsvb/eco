@@ -40,6 +40,7 @@ export const Buttons = ({isLoading, scope, refreshButton, createButton}: Buttons
           ?
             <Stack
               alignItems='center'
+              justifyContent={isMobilePortrait ? 'center' : undefined}
               direction={isMobilePortrait ? 'row' : 'column'}
             >
               {refreshButton}

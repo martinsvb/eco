@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Headers,
   Body,
   Patch,
   Param,
@@ -40,12 +41,15 @@ export class UsersController {
     status: 201,
     description: 'User has been successfully created.',
   })
-  async create(@Req() {user}: Request, @Body() createUserDto: CreateUserDto) {
+  async create(@Req() {user}: Request, @Body() createUserDto: CreateUserDto, @Headers('origin') origin: string) {
     return new UserEntity(
       await this.usersService.create({
-        ...createUserDto,
-        origin: UserOrigins.internal,
-      }, user as UserFull)
+          ...createUserDto,
+          origin: UserOrigins.internal,
+        },
+        user as UserFull,
+        origin
+      )
     );
   }
 

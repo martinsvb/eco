@@ -22,5 +22,6 @@ export const routes = {
         },
     },
     home: '/home',
+    invitation: '/invitation',
     users: '/users',
 }

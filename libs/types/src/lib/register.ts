@@ -1,17 +1,15 @@
+import { UserItems } from "./user";
+
 export enum RegistrationItems {
-  email = 'email',
-  name = 'name',
-  password = 'password',
-  passwordConfirmation = 'passwordConfirmation',
   companyName = 'companyName',
   country = 'country'
 }
 
 export interface RegistrationData {
-  [RegistrationItems.email]: string;
-  [RegistrationItems.name]?: string;
-  [RegistrationItems.password]: string;
-  [RegistrationItems.passwordConfirmation]: string;
+  [UserItems.Email]: string;
+  [UserItems.Name]?: string;
+  [UserItems.Password]: string;
+  [UserItems.PasswordConfirmation]: string;
   [RegistrationItems.companyName]: string;
   [RegistrationItems.country]: string;
 }
@@ -31,5 +29,5 @@ export interface VerificationData {
 }
 
 export interface VerificationPayload extends VerificationData {
-  [RegistrationItems.email]: string;
+  [UserItems.Email]: string;
 }

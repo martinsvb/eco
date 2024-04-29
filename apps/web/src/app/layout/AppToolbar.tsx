@@ -3,7 +3,7 @@ import { selectIsUserLoggedIn, selectRegistration, useAppSelector } from '@eco/r
 import { RegistrationState } from '@eco/types';
 import UserMenu from '../user/UserMenu';
 import LoginButton from '../user/LoginButton';
-import RegisterButton from '../user/RegistrationButton';
+import RegistrationButton from '../user/RegistrationButton';
 
 const AppToolbar = () => {
 
@@ -25,7 +25,7 @@ const AppToolbar = () => {
           <Stack direction="row">
             <LoginButton />
             <Typography variant='h6' mx={1}>|</Typography>
-            <RegisterButton />
+            <RegistrationButton />
           </Stack>
         }
       </Box>

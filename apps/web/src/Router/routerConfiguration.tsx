@@ -7,6 +7,7 @@ import { Accounts, AccountsNew, AccountsEdit } from "../app/accounts";
 import { Users } from "../app/Users/Users";
 import { ContentEdit, ContentList, ContentNew } from "../app/content";
 import LoginWrapper from "../app/user/LoginWrapper";
+import Invitation from "../app/Auth/Invitation";
 
 export const router = createBrowserRouter([
     {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
         {
           path: routes.home,
           element: <Home />,
+        },
+        {
+          path: routes.invitation,
+          element: <Invitation />,
         },
         {
           path: routes.users,

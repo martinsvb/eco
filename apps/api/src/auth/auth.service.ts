@@ -17,6 +17,7 @@ import { ICountry, TCountryCode, TLanguageCode, countries } from 'countries-list
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
 import { VerifyDto } from './dto/verify.dto';
 import { RegisterDto } from './dto/register.dto';
+import { InvitationFinishDto } from './dto/invitationFinish.dto';
 
 @Injectable()
 export class AuthService {
@@ -178,6 +179,29 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
+
+    return this.getAuthData(user);
+  }
+
+  async invitationFinish({
+    email,
+    ...rest
+  }: InvitationFinishDto): Promise<FullAuthEntity> {
+    let user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException(`No user found for email: ${email}`);
+    }
+    
+    user = await this.prisma.user.update({
+      where: {
+        email
+      },
+      data: {
+        ...rest,
+        isEmailConfirmed: true
+      }
+    });
 
     return this.getAuthData(user);
   }

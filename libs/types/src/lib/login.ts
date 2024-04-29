@@ -1,9 +1,6 @@
-export enum LoginItems {
-  email = 'email',
-  password = 'password',
-}
+import { UserItems } from "./user";
 
 export interface LoginData {
-  [LoginItems.email]: string;
-  [LoginItems.password]: string;
+  [UserItems.Email]: string;
+  [UserItems.Password]: string;
 }

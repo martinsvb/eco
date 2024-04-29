@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Response, Request } from 'express';
@@ -11,6 +11,7 @@ import { VerifyDto } from './dto/verify.dto';
 import { EmailGuard } from './email.guard';
 import { JwtAuthGuard } from './jwt.guard';
 import { BasicUserEntity } from '../users/entities/user.entity';
+import { InvitationFinishDto } from './dto/invitationFinish.dto';
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -82,6 +83,16 @@ export class AuthController {
     await this.authService.register(body);
 
     res.send({registered: true});
+  }
+
+  @Patch('invitation-finish')
+  @ApiOkResponse({ type: AuthEntity })
+  async invitationFinish(@Res() res: Response, @Body() body: InvitationFinishDto) {
+    const { auth, refreshToken } = await this.authService.invitationFinish(body);
+
+    this.setRefreshtoken(res, refreshToken);
+
+    res.send(auth);
   }
 
   @Post('verify')

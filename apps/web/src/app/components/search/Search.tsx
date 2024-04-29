@@ -31,7 +31,7 @@ const Search = ({
         id={`toggle-table-filter-input-${inputProps.name}`}
         endAdornment={ !!inputProps.value &&
           <IconButton
-            aria-label={t('labels:filterToggleClear')}
+            aria-label={t('labels:filterSearchClear')}
             id={`toggle-table-filter-clear-button-${inputProps.name}`}
             onClick={handleClear}
           >
@@ -45,7 +45,7 @@ const Search = ({
       />
       <IconButton
         {...buttonProps}
-        aria-label={t('labels:filterToggle')}
+        aria-label={t('labels:filterSearch')}
         id={`toggle-table-filter-button-${inputProps.name}`}
         sx={{
           alignSelf: 'center',

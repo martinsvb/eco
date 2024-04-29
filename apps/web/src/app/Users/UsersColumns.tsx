@@ -8,7 +8,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import { UserItems, UserRoles, getUserInitials } from '@eco/types';
-import { selectUserAuth, useShallowEqualSelector } from '@eco/redux';
+import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
 
 interface UsersColumns {
@@ -22,6 +22,8 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
   const { t } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
+
+  const dispatch = useAppDispatch();
 
   const { rights: { scopes: { users } } } = useShallowEqualSelector(selectUserAuth);
 
@@ -52,8 +54,9 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         ...rowModesModel,
         [id]: { mode: GridRowModes.View, ignoreModifications: true },
       });
+      dispatch(cancelUser(id));
     },
-    []
+    [dispatch]
   );
 
   const roles = useMemo(

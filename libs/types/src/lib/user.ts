@@ -11,6 +11,8 @@ export enum UserItems {
   Otp = 'otp',
   Origin = 'origin',
   CompanyId = 'companyId',
+  Password = 'password',
+  PasswordConfirmation = 'passwordConfirmation',
   Rights = 'rights',
   Role = 'role',
   Picture = 'picture',

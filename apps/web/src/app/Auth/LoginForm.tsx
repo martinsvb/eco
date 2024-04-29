@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { apiPostLogin, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
-import { AuthOperations, LoginData, LoginItems } from '@eco/types';
+import { AuthOperations, LoginData, UserItems } from '@eco/types';
 import { getLoginValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 
@@ -25,8 +25,8 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
     resolver: yupResolver(getLoginValidationSchema()),
     mode: 'onTouched',
     values: {
-      [LoginItems.email]: '',
-      [LoginItems.password]: ''
+      [UserItems.Email]: '',
+      [UserItems.Password]: ''
     }
   });
 
@@ -50,25 +50,25 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
     <form onSubmit={handleSubmit(submit)}>
       <Stack>
         <ControllerTextField
-          name={LoginItems.email}
+          name={UserItems.Email}
           control={control}
           defaultValue={data.email}
           fieldProps={{
             sx: {mb: 2},
             required: true,
             label: t('labels:email'),
-            id: LoginItems.email
+            id: UserItems.Email
           }}
         />
         <ControllerTextField
-          name={LoginItems.password}
+          name={UserItems.Password}
           control={control}
           defaultValue={data.password}
           fieldProps={{
             sx: {mb: 2},
             required: true,
             label: t('labels:password'),
-            id: LoginItems.password,
+            id: UserItems.Password,
             type: 'password'
           }}
         />

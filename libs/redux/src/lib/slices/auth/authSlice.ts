@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { LocalStorageItems, decodeToken, isTokenValid } from '@eco/config';
 import { AuthOperations, BasicUser, RegistrationState, UserRoles, userRights } from '@eco/types';
-import { authUserGet, loginGooglePost, loginPost, refreshPost, registerPost, resendPost, verifyPost } from "./authApi";
+import { authUserGet, invitationFinishPatch, loginGooglePost, loginPost, refreshPost, registerPost, resendPost, verifyPost } from "./authApi";
 import { createSlice } from '../createSlice';
 
 export interface AuthState {
@@ -139,6 +139,25 @@ const authSlice = createSlice({
         },
       },
     ),
+    apiPatchInvitationFinished: create.asyncThunk(
+      invitationFinishPatch,
+      {
+        pending: (state) => {
+          state.loading[AuthOperations.invitationFinished] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.error[AuthOperations.invitationFinished] = payload ?? error;
+        },        
+        fulfilled: (state, { payload: { accessToken, user } }) => {
+          setAccessToken(accessToken);
+          state.accessToken = accessToken;
+          state.user = user;
+        },
+        settled: (state) => {
+          state.loading[AuthOperations.invitationFinished] = false;
+        },
+      },
+    ),
     apiPostResend: create.asyncThunk(
       resendPost,
       {
@@ -197,6 +216,7 @@ export const {
   apiPostRegister,
   apiPostResend,
   apiPostVerify,
+  apiPatchInvitationFinished,
   apiGetAuthUser,
   logout,
   setLoginGoogleError,

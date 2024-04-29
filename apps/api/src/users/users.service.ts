@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { PrismaService } from 'nestjs-prisma';
 import * as bcrypt from 'bcrypt';
+import * as qs from 'qs';
 import {
   RightsItems,
   ScopeItems,
@@ -13,14 +15,19 @@ import {
 } from '@eco/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly mailerService: MailerService
+  ) {}
 
-  async create({role, ...rest}: CreateUserDto, {companyId, rights}: UserFull) {
+  async create({role, ...rest}: CreateUserDto, {companyId, rights}: UserFull, origin: string) {
     checkRigts(rights, ScopeItems.Users, RightsItems.Create);
-    return this.prisma.user.create({
+
+    const user = await this.prisma.user.create({
       data: {
         ...rest,
         companyId,
@@ -31,6 +38,26 @@ export class UsersService {
           : undefined,
       },
     });
+
+    this.sendInvitation(user, origin);
+
+    return user;
+  }
+
+  sendInvitation({email, name}: User, origin: string) {
+ 
+    return this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'Invitation link',
+        template: './invitation',
+        context: {
+          link: `${origin}/invitation-finish?${qs.stringify({email, name})}`,
+        },
+      })
+      .catch((error) => {
+        throw new ServiceUnavailableException(`Invitation email failed: ${email}`)
+      });
   }
 
   findAll({companyId, rights}: UserFull, query: UserFilterData) {

@@ -1,21 +1,21 @@
 import * as yup from "yup";
 import i18n from '@eco/locales';
-import { RegistrationItems, VerificationItems } from '@eco/types';
+import { RegistrationItems, UserItems, VerificationItems } from '@eco/types';
 
 export const getRegistrationValidationSchema = () => {
   const { t } = i18n;
 
   return yup.object().shape({
-    [RegistrationItems.name]: yup.string(),
-    [RegistrationItems.email]: yup.string()
+    [UserItems.Name]: yup.string(),
+    [UserItems.Email]: yup.string()
       .email(t('validation:email'))
       .required(t('validation:required', {Field: t('labels:email')})),
-    [RegistrationItems.password]: yup.string()
+    [UserItems.Password]: yup.string()
       .required(t('validation:required', {Field: t('labels:password')})),
-    [RegistrationItems.passwordConfirmation]: yup.string()
+    [UserItems.PasswordConfirmation]: yup.string()
       .required(t('validation:required', {Field: t('labels:passwordConfirmation')}))
       .oneOf(
-        [yup.ref(RegistrationItems.password)],
+        [yup.ref(UserItems.Password)],
         t('validation:equal', {Field: t('labels:password')})
       ),
     [RegistrationItems.companyName]: yup.string()

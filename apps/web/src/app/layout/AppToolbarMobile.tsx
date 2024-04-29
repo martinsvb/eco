@@ -5,7 +5,7 @@ import { selectIsUserLoggedIn, selectRegistration, useAppSelector } from '@eco/r
 import { RegistrationState } from '@eco/types';
 import UserMenu from '../user/UserMenu';
 import LoginButton from '../user/LoginButton';
-import RegisterButton from '../user/RegistrationButton';
+import RegistrationButton from '../user/RegistrationButton';
 
 interface AppToolbarMobileProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -42,7 +42,7 @@ const AppToolbarMobile = ({setOpen}: AppToolbarMobileProps) => {
           :
           <Stack direction="row">
             <LoginButton isMobile />
-            <RegisterButton isMobile />
+            <RegistrationButton isMobile />
           </Stack>
         }
       </Box>

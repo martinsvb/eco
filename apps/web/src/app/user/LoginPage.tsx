@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Theme, Typography, useMediaQuery } from '@mui/material';
 import LoginButton from './LoginButton';
-import RegisterButton from './RegistrationButton';
+import RegistrationButton from './RegistrationButton';
 
 const LoginPage = () => {
 
@@ -22,7 +22,7 @@ const LoginPage = () => {
           >
             <LoginButton />
             <Typography variant='h6' mx={1}>/</Typography>
-            <RegisterButton />
+            <RegistrationButton />
           </Stack>
         }
       </Box>

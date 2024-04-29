@@ -8,6 +8,7 @@ export interface BasicUser {
 }
 
 export enum AuthOperations {
+    invitationFinished = 'invitationFinished',
     login = 'login',
     loginGoogle = 'loginGoogle',
     refresh = 'refresh',

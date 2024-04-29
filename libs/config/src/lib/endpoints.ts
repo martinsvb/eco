@@ -4,6 +4,7 @@ export const endPoints = {
   companies: 'companies',
   content: 'content',
   login: 'auth/login',
+  invitationFinish: 'auth/invitation-finish',
   loginGoogle: 'auth/login-google',
   refresh: 'auth/refresh',
   register: 'auth/register',
