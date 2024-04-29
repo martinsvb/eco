@@ -1,12 +1,3 @@
-import { UserRights, UserRoles } from "..";
-
-export interface BasicUser {
-    name: string | null;
-    picture: string | null;
-    rights: UserRights;
-    role: UserRoles;
-}
-
 export enum AuthOperations {
     invitationFinished = 'invitationFinished',
     login = 'login',

@@ -1,7 +1,7 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ms from 'ms';
-import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
+import { Box, Tooltip, IconButton, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
   logout,
@@ -16,7 +16,7 @@ import { routes } from '@eco/config';
 import { useTranslation } from 'react-i18next';
 import UserLanguage from './UserLanguage';
 import UserColorMode from './UserColorMode';
-import { getUserInitials } from '@eco/types';
+import AppAvatar from '../components/avatar/AppAvatar';
 
 interface UserMenuProps {
   isMobile?: boolean;
@@ -70,8 +70,6 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       horizontal: 'right',
     };
 
-  const userInitials = getUserInitials(user.name);
-
   return (
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip
@@ -79,9 +77,10 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
         enterDelay={ms('0.1s')}
       >
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt={userInitials} src={user.picture || ''}>
-            {userInitials}
-          </Avatar>
+          <AppAvatar
+            name={user.name}
+            picture={user.picture}
+          />
         </IconButton>
       </Tooltip>
       <Menu

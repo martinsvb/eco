@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Avatar } from '@mui/material';
 import { GridRowModesModel, GridRowModes, GridColDef, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
-import { UserItems, UserRoles, getUserInitials } from '@eco/types';
+import { UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
+import AppAvatar from '../components/avatar/AppAvatar';
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -78,19 +78,16 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         headerName: t('labels:avatar'),
         width: 80,
         renderCell: ({row: { name, picture }}) => {
-          const userInitials = getUserInitials(name);
           return (
-            <Avatar
-              alt={userInitials}
-              src={picture || ''}
+            <AppAvatar
+              name={name}
+              picture={picture}
               sx={{
                 mt: 1,
                 width: 36,
                 height: 36
               }}
-            >
-              {userInitials}
-            </Avatar>
+            />
           )
         },
         sortable: false,
