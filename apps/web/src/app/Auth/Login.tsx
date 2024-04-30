@@ -26,8 +26,9 @@ const Login = ({handleClose}: LoginProps) => {
     >
       <Stack
         width={300}
-        spacing={2}
-        padding={4}
+        component={Paper}
+        spacing={4}
+        p={4}
         sx={{
           backgroundColor: alpha(palette.background.default, .8),
           borderRadius: shape.borderRadius / 2
@@ -40,7 +41,6 @@ const Login = ({handleClose}: LoginProps) => {
               <Chip label={t('labels:or')} />
             </Divider>
           }
-          component={Paper}
           spacing={2}
         >
           <GoogleLoginCmp />
