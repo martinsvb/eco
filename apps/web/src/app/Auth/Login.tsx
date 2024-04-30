@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { alpha, Chip, Divider, Paper, Stack, useTheme } from '@mui/material';
+import { alpha, Chip, Divider, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { unsplashUrl } from '@eco/config';
 import GoogleLoginCmp from './GoogleLogin';
 import LoginForm from './LoginForm';
@@ -26,12 +26,6 @@ const Login = ({handleClose}: LoginProps) => {
     >
       <Stack
         width={300}
-        divider={
-          <Divider orientation="horizontal" flexItem>
-            <Chip label={t('labels:or')} />
-          </Divider>
-        }
-        component={Paper}
         spacing={2}
         padding={4}
         sx={{
@@ -39,8 +33,19 @@ const Login = ({handleClose}: LoginProps) => {
           borderRadius: shape.borderRadius / 2
         }}
       >
-        <GoogleLoginCmp />
-        <LoginForm handleClose={handleClose} />
+        <Typography variant='h4'>{t('labels:loginButton')}</Typography>
+        <Stack
+          divider={
+            <Divider orientation="horizontal" flexItem>
+              <Chip label={t('labels:or')} />
+            </Divider>
+          }
+          component={Paper}
+          spacing={2}
+        >
+          <GoogleLoginCmp />
+          <LoginForm handleClose={handleClose} />
+        </Stack>
       </Stack>
     </Stack>
   );

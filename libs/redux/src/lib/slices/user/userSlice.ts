@@ -29,7 +29,7 @@ const userSlice = createSlice({
       state.users.unshift(payload);
     }),
     cancelUser: create.reducer((state, {payload}: PayloadAction<GridRowId>) => {
-      state.users = state.users.filter(({id, isNew}) => id !== payload && !isNew);
+      state.users = state.users.filter(({id, isNew}) => id !== payload || !isNew);
     }),
     setFilterData: create.reducer((state, {payload}: PayloadAction<UserFilterData>) => {
       state.filter = {...state.filter, ...payload};
