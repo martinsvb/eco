@@ -1,11 +1,13 @@
 import { GridRowId } from "@mui/x-data-grid";
 import { PayloadAction } from '@reduxjs/toolkit';
+import { is } from "ramda";
 import { ApiOperations, UserFilterData, UserFull } from '@eco/types';
 import { userDelete, userGet, usersGet, usersPatch, usersPost } from "./userApi";
 import { createSlice } from '../createSlice';
+import { decodeToken } from "@eco/config";
 
 export interface UserState {
-  users: Partial<UserFull>[];
+  users: UserFull[];
   filter: UserFilterData;
   error: {[key: string]: unknown | null};
   loading: {[key: string]: boolean};
@@ -25,7 +27,7 @@ const userSlice = createSlice({
   initialState: initialUserState,
   reducers: (create) => ({
     resetUsers: create.reducer(() => initialUserState),
-    unshiftUser: create.reducer((state, {payload}: PayloadAction<Partial<UserFull>>) => {
+    unshiftUser: create.reducer((state, {payload}: PayloadAction<UserFull>) => {
       state.users.unshift(payload);
     }),
     cancelUser: create.reducer((state, {payload}: PayloadAction<GridRowId>) => {
@@ -43,8 +45,19 @@ const userSlice = createSlice({
         rejected: (state, { error, payload }) => {
           state.error[ApiOperations.getList] = payload ?? error;
         },
-        fulfilled: (state, { payload }) => {
-          state.users = payload;
+        fulfilled: (state, { payload: { data, token } }) => {
+          const { userId } = decodeToken(token) as any;
+          let userIndex = null;
+          state.users = data.map((user: UserFull, index: number) => {
+            if (user.id === userId) {
+              userIndex = index;
+              return {...user, isSelected: true};
+            } 
+            return user;
+          });
+          if (is(Number, userIndex)) {
+            state.users.unshift(state.users.splice(userIndex, 1)[0]);
+          }
           state.loaded[ApiOperations.getList] = true;
         },
         settled: (state) => {

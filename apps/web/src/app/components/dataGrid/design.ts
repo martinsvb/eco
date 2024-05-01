@@ -1,6 +1,11 @@
 import { getScrollbarDesign } from "@eco/config";
 import { Palette } from "@mui/material";
 import { gridClasses } from "@mui/x-data-grid";
+import { THEME_MODE } from "../../../config";
+
+export const appGridClasses = {
+  rowSelected: 'rowSelected'
+}
 
 export const getDataGridWrapperSx = (isMobilePortrait: boolean) => ({
   height: `calc(100vh - ${isMobilePortrait ? 212 : 180}px)`,
@@ -14,7 +19,7 @@ export const getDataGridWrapperSx = (isMobilePortrait: boolean) => ({
   },
 });
 
-export const getDataGridSx = ({background, grey}: Palette, isMobilePortrait: boolean) => ({
+export const getDataGridSx = ({background, grey, mode}: Palette, isMobilePortrait: boolean) => ({
   [`& .${gridClasses.scrollbar}`]: {
     ...getScrollbarDesign({
       trackColor: background.default,
@@ -28,4 +33,7 @@ export const getDataGridSx = ({background, grey}: Palette, isMobilePortrait: boo
     }
     :
     undefined,
+  [`& .${gridClasses.row}.${appGridClasses.rowSelected}`]: {
+    backgroundColor: grey[mode === THEME_MODE.LIGHT ? 300 : 800],
+  },
 });

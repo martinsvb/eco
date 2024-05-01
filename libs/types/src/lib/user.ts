@@ -79,6 +79,7 @@ export type UserDetail = {
   rights: UserRights;
   role: UserRoles;
   isNew?: boolean;
+  isSelected?: boolean;
 }
 
 export type UserFull = User & UserDetail;

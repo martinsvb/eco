@@ -26,7 +26,12 @@ export const usersGet = async (
 
     const url = getUrl(endPoints.users, filter);
 
-    return await checkResponse(await fetch(url, getHeaders({signal, token}))).json();
+    const data = await checkResponse(await fetch(url, getHeaders({signal, token}))).json();
+
+    return {
+      data,
+      token
+    } as any;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

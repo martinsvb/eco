@@ -1,6 +1,5 @@
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconButton, useTheme, Stack, Tooltip } from '@mui/material';
+import { IconButton, Stack, Tooltip } from '@mui/material';
 import Brightness2Icon from '@mui/icons-material/Brightness2';
 import Brightness5Icon from '@mui/icons-material/Brightness5';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
@@ -12,20 +11,15 @@ const UserColorMode = () => {
 
     const { t } = useTranslation();
 
-    const { palette } = useTheme();
-
-    const handleClick = useCallback(
-        (mode: THEME_MODE | null) => {
-            if (mode) {
-                localStorage.setItem(LocalStorageItems.Mode, mode);
-            }
-            else {
-                localStorage.removeItem(LocalStorageItems.Mode);
-            }
-            dispatchEvent(new Event('storage'));
-        },
-        [palette]
-    );
+    const handleClick = (mode: THEME_MODE | null) => {
+        if (mode) {
+            localStorage.setItem(LocalStorageItems.Mode, mode);
+        }
+        else {
+            localStorage.removeItem(LocalStorageItems.Mode);
+        }
+        dispatchEvent(new Event('storage'));
+    };
 
     const mode = localStorage.getItem(LocalStorageItems.Mode);
 
