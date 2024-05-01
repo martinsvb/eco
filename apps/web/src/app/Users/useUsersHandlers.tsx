@@ -50,7 +50,7 @@ export const useUsersHandlers = (
   const handleNew = useCallback(
     () => {
       const { id, data } = getNewUserData();
-      dispatch(unshiftUser(data));
+      dispatch(unshiftUser(data as UserFull));
       setRowModesModel((oldModel) => ({
         [id]: { mode: GridRowModes.Edit, fieldToFocus: UserItems.Name },
         ...oldModel,
