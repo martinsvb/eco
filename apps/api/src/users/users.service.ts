@@ -86,7 +86,7 @@ export class UsersService {
 
     return this.prisma.user.update({
       where: { id },
-      data: role ? {...rest, [UserItems.Rights]: userRights[role]} : rest
+      data: role ? {...rest, role, [UserItems.Rights]: userRights[role]} : rest
     });
   }
 
