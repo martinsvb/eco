@@ -1,10 +1,9 @@
-// prisma/seed.ts
-
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { allowedCountries } from 'libs/config/src';
 import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
-import { UserRoles, userRights } from '../libs/types/src/lib/user';
+import { UserRoles } from '../libs/types/src/lib/user';
+import { userRights } from '../libs/types/src/lib/userRights';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -49,8 +48,8 @@ async function main() {
       origin: UserOrigins.internal,
       password: await bcrypt.hash('user2password', parseInt(process.env.HASHING_ROUNDS, 10)),
       companyId: company2.id,
-      rights: userRights[UserRoles.Admin],
-      role: UserRoles.Admin,
+      rights: userRights[UserRoles.CompanyAdmin],
+      role: UserRoles.CompanyAdmin,
     },
   });
 

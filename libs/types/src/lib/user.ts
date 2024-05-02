@@ -27,6 +27,7 @@ export interface UserData {
   [UserItems.Role]: UserRoles;
   [UserItems.Picture]?: string;
   isNew?: boolean;
+  isSelected?: boolean;
 }
 
 export type UserFilterData = Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;
@@ -72,6 +73,7 @@ export interface Scopes {
 
 export interface UserRights {
   scopes: Scopes;
+  applicationAdmin: boolean;
   companyAdmin: boolean;
 }
 
@@ -91,87 +93,8 @@ export enum UserRoles {
   Reader = 'reader',
   Editor = 'editor',
   ApprovalEditor = 'approvalEditor',
+  CompanyAdmin = 'companyAdmin',
   Admin = 'admin',
-}
-
-const noneRights = {
-  create: false,
-  edit: false,
-  read: false,
-  delete: false,
-  approve: false,  
-}
-
-const noneScopes = {
-  accounts: noneRights,
-  tasks: noneRights,
-  users: noneRights,
-  companies: noneRights,
-}
-
-const readerRights = {
-  create: false,
-  edit: false,
-  read: true,
-  delete: false,
-  approve: false,  
-}
-
-const readerScopes = {
-  accounts: readerRights,
-  tasks: readerRights,
-  users: readerRights,
-  companies: readerRights,
-}
-
-const editorRights = {
-  create: true,
-  edit: true,
-  read: true,
-  delete: true,
-  approve: false,  
-}
-
-const editorScopes = {
-  accounts: editorRights,
-  tasks: editorRights,
-  users: readerRights,
-  companies: readerRights,
-}
-
-const approvalEditorRights = {
-  ...editorRights,
-  approve: true,
-}
-
-const approvalEditorScopes = {
-  accounts: approvalEditorRights,
-  tasks: approvalEditorRights,
-  users: approvalEditorRights,
-  companies: approvalEditorRights,
-}
-
-export const userRights = {
-  [UserRoles.None]: {
-    scopes: noneScopes,
-    companyAdmin: false
-  },
-  [UserRoles.Reader]: {
-    scopes: readerScopes,
-    companyAdmin: false
-  },
-  [UserRoles.Editor]: {
-    scopes: editorScopes,
-    companyAdmin: false
-  },
-  [UserRoles.ApprovalEditor]: {
-    scopes: approvalEditorScopes,
-    companyAdmin: false
-  },
-  [UserRoles.Admin]: {
-    scopes: approvalEditorScopes,
-    companyAdmin: true
-  }
 }
 
 export const checkRigts = ({scopes}: UserRights, scope: ScopeItems, operation: RightsItems) => {

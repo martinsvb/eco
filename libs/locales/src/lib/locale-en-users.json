@@ -9,6 +9,7 @@
   "refresh": "Refresh",
   "roleAdmin": "Administrator",
   "roleApprovalEditor": "Edit and approve",
+  "roleCompanyAdmin": "Company admin",
   "roleEditor": "Edit",
   "roleReader": "Read",
   "title": "Users"

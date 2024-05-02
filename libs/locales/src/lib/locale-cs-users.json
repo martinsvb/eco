@@ -9,6 +9,7 @@
   "refresh": "Obnovit",
   "roleAdmin": "Administrátor",
   "roleApprovalEditor": "Editace a schvalování",
+  "roleCompanyAdmin": "Administrátor společnosti",
   "roleEditor": "Editace",
   "roleReader": "Čtení",
   "title": "Uživatelé"

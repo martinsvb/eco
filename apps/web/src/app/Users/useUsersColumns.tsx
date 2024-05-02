@@ -10,6 +10,7 @@ import { UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
 import AppAvatar from '../components/avatar/AppAvatar';
+import { omit } from 'ramda';
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -25,7 +26,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
 
   const dispatch = useAppDispatch();
 
-  const { rights: { scopes: { users } } } = useShallowEqualSelector(selectUserAuth);
+  const { rights: { scopes: { users } }, role } = useShallowEqualSelector(selectUserAuth);
 
   const handleSaveClick = useCallback(
     (id: GridRowId) => () => {
@@ -65,6 +66,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         [UserRoles.Reader]: t('users:roleReader'),
         [UserRoles.Editor]: t('users:roleEditor'),
         [UserRoles.ApprovalEditor]: t('users:roleApprovalEditor'),
+        [UserRoles.CompanyAdmin]: t('users:roleCompanyAdmin'),
         [UserRoles.Admin]: t('users:roleAdmin'),
       } as {[key: string]: string}
     },
@@ -126,7 +128,12 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         align: 'center',
         headerAlign: 'center',
         type: 'singleSelect',
-        valueOptions: Object.values(UserRoles).map((value) => ({label: roles[value], value})),
+        valueOptions: Object.values(role === UserRoles.Admin ? UserRoles : omit(['Admin'], UserRoles)).map(
+          (value) => ({
+            label: roles[value],
+            value
+          })
+        ),
         editable: users?.edit,
         sortable: false,
         disableColumnMenu: true,

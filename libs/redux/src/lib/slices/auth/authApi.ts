@@ -25,7 +25,12 @@ export const loginPost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    const data = await checkResponse(await fetch(`/api/${endPoints.login}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.login}`,
+        postHeaders({body, signal})
+      )
+    ).json();
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -37,7 +42,12 @@ export const loginGooglePost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    const data = await checkResponse(await fetch(`/api/${endPoints.loginGoogle}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.loginGoogle}`,
+        postHeaders({body, signal})
+      )
+    ).json();
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -49,7 +59,12 @@ export const refreshPost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    const data = await checkResponse(await fetch(`/api/${endPoints.refresh}`, postHeaders({signal}))).json();
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.refresh}`,
+        postHeaders({signal})
+      )
+    ).json();
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -61,7 +76,12 @@ export const registerPost = async (
   { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    const data = await checkResponse(await fetch(`/api/${endPoints.register}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.register}`,
+        postHeaders({body, signal})
+      )
+    ).json();
     dispatch(setRegistration(RegistrationState.verification));
     dispatch(setRegistrationEmail(body.email));
     onSuccess();
@@ -96,7 +116,12 @@ export const verifyPost = async (
   { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    const data = await checkResponse(await fetch(`/api/${endPoints.verify}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.verify}`,
+        postHeaders({body, signal})
+      )
+    ).json();
     dispatch(setRegistration(RegistrationState.none));
     dispatch(setRegistrationEmail(null));
     onSuccess();
@@ -111,7 +136,12 @@ export const resendPost = async (
   { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
-    const data = await checkResponse(await fetch(`/api/${endPoints.resend}`, postHeaders({body, signal}))).json();
+    const data = await checkResponse(
+      await fetch(
+        `/api/${endPoints.resend}`,
+        postHeaders({body, signal})
+      )
+    ).json();
     onSuccess();
     return data;
   } catch (error: unknown) {
@@ -127,10 +157,14 @@ export const authUserGet = async (
     const token = localStorage.getItem(LocalStorageItems.Token);
 
     return token
-      ? await checkResponse(await fetch(`/api/${endPoints.user}`, getHeaders({signal, token}))).json()
+      ? await checkResponse(
+          await fetch(
+            `/api/${endPoints.user}`,
+            getHeaders({signal, token})
+          )
+        ).json()
       : initialAuthState.user;
   } catch (error: unknown) {
-    console.log({error})
     return rejectWithValue(getErrorValue(error));
   }
 }

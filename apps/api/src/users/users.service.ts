@@ -1,5 +1,6 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import * as bcrypt from 'bcrypt';
 import * as qs from 'qs';
@@ -15,7 +16,6 @@ import {
 } from '@eco/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
