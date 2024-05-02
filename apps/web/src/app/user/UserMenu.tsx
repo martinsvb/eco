@@ -1,7 +1,7 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ms from 'ms';
-import { Box, Tooltip, IconButton, Menu, MenuItem, Typography, PopoverOrigin } from '@mui/material';
+import { Box, Tooltip, IconButton, Menu, MenuItem, Typography, PopoverOrigin, useTheme } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
   logout,
@@ -22,6 +22,8 @@ interface UserMenuProps {
   isMobile?: boolean;
 }
 
+const minHeight = 52;
+
 const UserMenu = ({isMobile}: UserMenuProps) => {
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -33,6 +35,8 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
   const navigate = useNavigate();
 
   const { t } = useTranslation();
+
+  const { palette } = useTheme();
 
   const handleOpenUserMenu = useCallback(
     (event: MouseEvent<HTMLElement>) => {
@@ -93,13 +97,30 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem sx={{minHeight: 52}}>
+        <MenuItem
+          sx={{
+            minHeight,
+            py: 2,
+            justifyContent: 'center',
+            cursor: 'default',
+            borderBottom: `1px solid ${palette.grey[500]}`
+          }}
+        >
+          <Typography>{user.name}</Typography>
+        </MenuItem>
+        <MenuItem sx={{minHeight}}>
           <UserColorMode />
         </MenuItem>
-        <MenuItem sx={{minHeight: 52, py: 1, justifyContent: 'center'}}>
+        <MenuItem sx={{minHeight, py: 1, justifyContent: 'center'}}>
           <UserLanguage />
         </MenuItem>
-        <MenuItem sx={{minHeight: 52, py: 2}} onClick={handleLogout}>
+        <MenuItem
+          sx={{
+            minHeight,
+            py: 2,
+          }}
+          onClick={handleLogout}
+        >
           <LogoutIcon sx={{mr: 1}} />
           <Typography textAlign="center">{t('labels:logout')}</Typography>
         </MenuItem>
