@@ -83,7 +83,6 @@
     "@nx/react": "19.0.0",
     "@nx/vite": "19.0.0",
     "@nx/webpack": "19.0.0",
-    "@nx/nx-win32-x64-msvc": "19.0.0",
     "@nx/workspace": "19.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@svgr/webpack": "^8.0.1",
