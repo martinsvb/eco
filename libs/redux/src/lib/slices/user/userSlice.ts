@@ -1,12 +1,13 @@
 import { GridRowId } from "@mui/x-data-grid";
 import { PayloadAction } from '@reduxjs/toolkit';
 import { is } from "ramda";
-import { ApiOperations, UserFilterData, UserFull } from '@eco/types';
+import { decodeToken } from "@eco/config";
+import { ApiOperations, UserFilterData, UserFull, UserRoles, userRights } from '@eco/types';
 import { userDelete, userGet, usersGet, usersPatch, usersPost } from "./userApi";
 import { createSlice } from '../createSlice';
-import { decodeToken } from "@eco/config";
 
 export interface UserState {
+  user: UserFull | null;
   users: UserFull[];
   filter: UserFilterData;
   error: {[key: string]: unknown | null};
@@ -15,6 +16,7 @@ export interface UserState {
 }
 
 export const initialUserState: UserState = {
+  user: null,
   users: [],
   filter: {},
   error: {},
@@ -35,6 +37,9 @@ const userSlice = createSlice({
     }),
     setFilterData: create.reducer((state, {payload}: PayloadAction<UserFilterData>) => {
       state.filter = {...state.filter, ...payload};
+    }),
+    setUser: create.reducer((state, {payload}: PayloadAction<UserState['user']>) => {
+      state.user = payload;
     }),
     apiGetUsers: create.asyncThunk(
       usersGet,
@@ -145,7 +150,9 @@ const userSlice = createSlice({
       isLoading: !!state.loading[ApiOperations.getList],
       loaded: !!state.loaded[ApiOperations.getItem],
     }),
+    selectUser: (state) => state.user,
     selectFilter: (state) => state.filter,
+    selectIsUsersLoading: (state, operation: ApiOperations) => !!state.loading[operation],
   },
 });
 
@@ -160,10 +167,13 @@ export const {
   cancelUser,
   resetUsers,
   setFilterData,
+  setUser,
   unshiftUser
 } = userSlice.actions
 
 export const {
   selectFilter,
-  selectUsers
+  selectUsers,
+  selectUser,
+  selectIsUsersLoading,
 } = userSlice.selectors

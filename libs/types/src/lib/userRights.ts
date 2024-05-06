@@ -64,32 +64,20 @@ const adminScopes = {
 export const userRights = {
   [UserRoles.None]: {
     scopes: noneScopes,
-    applicationAdmin: false,
-    companyAdmin: false,
   },
   [UserRoles.Reader]: {
     scopes: readerScopes,
-    applicationAdmin: false,
-    companyAdmin: false,
   },
   [UserRoles.Editor]: {
     scopes: editorScopes,
-    applicationAdmin: false,
-    companyAdmin: false,
   },
   [UserRoles.ApprovalEditor]: {
     scopes: approvalEditorScopes,
-    applicationAdmin: false,
-    companyAdmin: false,
   },
   [UserRoles.CompanyAdmin]: {
     scopes: approvalEditorScopes,
-    applicationAdmin: false,
-    companyAdmin: true,
   },
   [UserRoles.Admin]: {
     scopes: adminScopes,
-    applicationAdmin: true,
-    companyAdmin: false,
   }
 }

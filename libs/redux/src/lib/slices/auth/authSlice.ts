@@ -25,6 +25,7 @@ export interface AuthState {
 export const initialAuthState: AuthState = {
   accessToken: '',
   user: {
+    id: '',
     name: null,
     picture: null,
     rights: userRights[UserRoles.None],

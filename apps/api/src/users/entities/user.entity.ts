@@ -3,6 +3,9 @@ import { Prisma, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class BasicUserEntity {
+  @ApiProperty({ description: 'Id' })
+  id: string;
+  
   @ApiProperty({ description: 'User name', required: false })
   name: string | null;
 

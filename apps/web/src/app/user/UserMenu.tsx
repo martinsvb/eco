@@ -2,6 +2,7 @@ import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ms from 'ms';
 import { Box, Tooltip, IconButton, Menu, MenuItem, Typography, PopoverOrigin, useTheme } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
   logout,
@@ -50,6 +51,13 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       setAnchorElUser(null);
     },
     []
+  );
+
+  const handleEdit = useCallback(
+    () => {
+      navigate(routes.usersEdit.replace(':id', user.id));
+    },
+    [navigate, user.id]
   );
 
   const handleLogout = useCallback(
@@ -101,12 +109,20 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
           sx={{
             minHeight,
             py: 2,
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             cursor: 'default',
             borderBottom: `1px solid ${palette.grey[500]}`
           }}
         >
           <Typography>{user.name}</Typography>
+          <Tooltip
+            title={t('labels:edit')}
+            enterDelay={ms('0.1s')}
+          >
+            <IconButton onClick={handleEdit}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         </MenuItem>
         <MenuItem sx={{minHeight}}>
           <UserColorMode />

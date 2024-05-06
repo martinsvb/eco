@@ -3,6 +3,7 @@ import { User } from '@prisma/client';
 import { nanoid } from '@reduxjs/toolkit';
 
 export enum UserItems {
+  Id = 'id',
   Name = 'name',
   CreatedAt = 'createdAt',
   UpdatedAt = 'updatedAt',
@@ -13,6 +14,7 @@ export enum UserItems {
   Origin = 'origin',
   CompanyId = 'companyId',
   Password = 'password',
+  PasswordNew = 'passwordNew',
   PasswordConfirmation = 'passwordConfirmation',
   Rights = 'rights',
   Role = 'role',
@@ -28,6 +30,12 @@ export interface UserData {
   [UserItems.Picture]?: string;
   isNew?: boolean;
   isSelected?: boolean;
+}
+
+export interface UserEditData {
+  [UserItems.Name]: string;
+  [UserItems.Email]: string;
+  [UserItems.Role]: UserRoles;
 }
 
 export type UserFilterData = Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;
@@ -73,8 +81,6 @@ export interface Scopes {
 
 export interface UserRights {
   scopes: Scopes;
-  applicationAdmin: boolean;
-  companyAdmin: boolean;
 }
 
 export type UserDetail = {
@@ -86,7 +92,10 @@ export type UserDetail = {
 
 export type UserFull = User & UserDetail;
 
-export type BasicUser = Pick<UserFull, UserItems.Name | UserItems.Picture | UserItems.Rights | UserItems.Role>;
+export type BasicUser = Pick<
+  UserFull,
+  UserItems.Id | UserItems.Name | UserItems.Picture | UserItems.Rights | UserItems.Role
+>;
 
 export enum UserRoles {
   None = 'none',

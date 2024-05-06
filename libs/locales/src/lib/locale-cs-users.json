@@ -2,6 +2,7 @@
   "createUser": "Vytvořit nového uživatele",
   "delete-question-text": "Opravdu si přejete vymazat vybraného uživatele?",
   "delete-question-title": "Smazání uživatele",
+  "editUserTitle": "Úprava uživatele",
   "noRights": "Nedostatečné oprávnění",
   "noRightsInfo": "Pro zobrazení obsahu vybrané stránky nemáte oprávnění.",
   "notLoggedIn": "Nepřihlášený uživatel",

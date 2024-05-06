@@ -2,6 +2,7 @@
   "createUser": "Create new user",
   "delete-question-text": "Are you really want to delete chosen user?",
   "delete-question-title": "Bank account deletion",
+  "editUserTitle": "User edit",
   "noRights": "Insufficient rights",
   "noRightsInfo": "You don't have rights for display selected page content.",
   "notLoggedIn": "User not logged in",

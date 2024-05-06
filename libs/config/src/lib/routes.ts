@@ -24,4 +24,5 @@ export const routes = {
     home: '/home',
     invitation: '/invitation',
     users: '/users',
+    usersEdit: '/users/edit/:id',
 }

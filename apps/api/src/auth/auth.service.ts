@@ -11,13 +11,14 @@ import { PrismaService } from 'nestjs-prisma';
 import { User } from '@prisma/client';
 import { TokenPayload } from 'google-auth-library';
 import { allowedCountries, isTokenValid } from '@eco/config';
-import { UserOrigins, UserRoles, userRights } from '@eco/types';
+import { UserItems, UserOrigins, UserRoles, userRights } from '@eco/types';
 import { nanoid } from 'nanoid'
 import { ICountry, TCountryCode, TLanguageCode, countries } from 'countries-list';
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
 import { VerifyDto } from './dto/verify.dto';
 import { RegisterDto } from './dto/register.dto';
 import { InvitationFinishDto } from './dto/invitationFinish.dto';
+import { pick } from 'ramda';
 
 @Injectable()
 export class AuthService {
@@ -39,12 +40,7 @@ export class AuthService {
     return {
       auth: {
         accessToken: this.getAccessToken(user),
-        user: {
-          name: user.name,
-          picture: user.picture,
-          rights: user.rights,
-          role: user.role,
-        },
+        user: pick([UserItems.Id, UserItems.Name, UserItems.Picture, UserItems.Rights, UserItems.Role], user),
       },
       refreshToken: this.getRefreshToken(user.id)
     }
