@@ -7,6 +7,7 @@
     "locales-libs": "i18next libs/**/*.{ts,tsx} --config libs/locales/src/lib/i18next-parser.config.js"
   },
   "private": true,
+  "type": "module",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
