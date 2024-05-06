@@ -1,8 +1,8 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
 import UserForm from './UserForm';
-import { useEffect } from 'react';
 import { apiGetUser, setUser, useAppDispatch } from '@eco/redux';
 
 export const UserEdit = () => {

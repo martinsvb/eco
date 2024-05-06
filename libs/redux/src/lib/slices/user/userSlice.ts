@@ -1,9 +1,9 @@
 import { GridRowId } from "@mui/x-data-grid";
 import { PayloadAction } from '@reduxjs/toolkit';
 import { is } from "ramda";
-import { decodeToken } from "@eco/config";
-import { ApiOperations, UserFilterData, UserFull, UserRoles, userRights } from '@eco/types';
+import { ApiOperations, UserFilterData, UserFull } from '@eco/types';
 import { userDelete, userGet, usersGet, usersPatch, usersPost } from "./userApi";
+import { decodeToken } from "@eco/config";
 import { createSlice } from '../createSlice';
 
 export interface UserState {

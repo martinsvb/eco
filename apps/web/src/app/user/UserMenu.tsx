@@ -8,6 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import {
   logout,
   resetAccounts,
+  resetCompanies,
   resetContent,
   resetUsers,
   selectUserAuth,
@@ -67,6 +68,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       dispatch(resetAccounts());
       dispatch(resetContent());
       dispatch(resetUsers());
+      dispatch(resetCompanies());
       navigate(routes.home);
     },
     []

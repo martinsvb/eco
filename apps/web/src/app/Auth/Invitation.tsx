@@ -2,7 +2,7 @@ import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { alpha, Paper, Stack, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { unsplashUrl } from '@eco/config';
-import { logout, resetAccounts, resetContent, resetUsers, useAppDispatch } from '@eco/redux';
+import { logout, resetAccounts, resetCompanies, resetContent, resetUsers, useAppDispatch } from '@eco/redux';
 import InvitationForm from './InvitationForm';
 
 const Invitation = () => {
@@ -23,6 +23,7 @@ const Invitation = () => {
       dispatch(resetAccounts());
       dispatch(resetContent());
       dispatch(resetUsers());
+      dispatch(resetCompanies());
     },
     [dispatch]
   );
