@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import BusinessIcon from '@mui/icons-material/Business';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import GroupIcon from '@mui/icons-material/Group';
 import { routes } from '@eco/config';
@@ -73,6 +74,13 @@ export const AppNavigation = () => {
                 icon={<GroupIcon />}
                 text={t('users')}
                 to={routes.users}
+              />
+            }
+            {rights.scopes[ScopeItems.Companies]?.read &&
+              <NavItem
+                icon={<BusinessIcon />}
+                text={t('companies')}
+                to={routes.companies}
               />
             }
           </>
