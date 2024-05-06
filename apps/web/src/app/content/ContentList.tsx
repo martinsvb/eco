@@ -59,7 +59,7 @@ export const ContentList = ({type}: ContentListProps) => {
           scope={contentScopes[type]}
           refreshButton={
             <IconButton
-              aria-label={t('content:refresh')}
+              aria-label={t('labels:refresh')}
               onClick={handleRefresh}
               size='large'
               sx={{

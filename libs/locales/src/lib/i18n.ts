@@ -7,6 +7,7 @@ import accountsCs from './locale-cs-accounts.json';
 import authLibsCs from './locale-cs-authLibs.json';
 import contentCs from './locale-cs-content.json';
 import labelsCs from './locale-cs-labels.json';
+import companiesLibsCs from './locale-cs-companiesLibs.json';
 import registrationCs from './locale-cs-registration.json';
 import translationCs from './locale-cs-translation.json';
 import validationCs from './locale-cs-validation.json';
@@ -16,6 +17,7 @@ import accountsEn from './locale-en-accounts.json';
 import authLibsEn from './locale-en-authLibs.json';
 import contentEn from './locale-en-content.json';
 import labelsEn from './locale-en-labels.json';
+import companiesLibsEn from './locale-en-companiesLibs.json';
 import registrationEn from './locale-en-registration.json';
 import translationEn from './locale-en-translation.json';
 import validationEn from './locale-en-validation.json';
@@ -45,6 +47,7 @@ i18n
         authLibs: authLibsCs,
         content: contentCs,
         labels: labelsCs,
+        companiesLibs: companiesLibsCs,
         users: usersCs,
         usersLibs: usersLibsCs,
         validation: validationCs,
@@ -56,6 +59,7 @@ i18n
         authLibs: authLibsEn,
         content: contentEn,
         labels: labelsEn,
+        companiesLibs: companiesLibsEn,
         users: usersEn,
         usersLibs: usersLibsEn,
         validation: validationEn,

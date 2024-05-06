@@ -6,24 +6,24 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { ScopeItems } from '@eco/types';
 import { Buttons } from '../components/buttons/Buttons';
 
-interface UsersButtonsProps {
+interface CompaniesButtonsProps {
   isLoading: boolean;
   handleNew: () => void;
   handleRefresh: () => void;
 }
 
-const UsersButtons = ({
+const CompaniesButtons = ({
   isLoading,
   handleNew,
   handleRefresh,
-}: UsersButtonsProps) => {
+}: CompaniesButtonsProps) => {
 
   const { t } = useTranslation();
 
   return (
     <Buttons
       isLoading={isLoading}
-      scope={ScopeItems.Users}
+      scope={ScopeItems.Companies}
       refreshButton={
         <IconButton
           aria-label={t('labels:refresh')}
@@ -38,7 +38,7 @@ const UsersButtons = ({
       }
       createButton={
         <Fab
-          aria-label={t('users:createUser')}
+          aria-label={t('companies:createCompany')}
           onClick={handleNew}
           color='primary'
         >
@@ -49,4 +49,4 @@ const UsersButtons = ({
   );
 };
 
-export default memo(UsersButtons);
+export default memo(CompaniesButtons);

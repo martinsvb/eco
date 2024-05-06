@@ -42,18 +42,21 @@ const readerScopes = {
   accounts: rights.reader,
   tasks: rights.reader,
   users: rights.reader,
+  companies: rights.none,
 }
 
 const editorScopes = {
   accounts: rights.editor,
   tasks: rights.editor,
   users: rights.reader,
+  companies: rights.none,
 }
 
 const approvalEditorScopes = {
   accounts: rights.approvalEditor,
   tasks: rights.approvalEditor,
   users: rights.approvalEditor,
+  companies: rights.none,
 }
 
 const adminScopes = {

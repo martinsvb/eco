@@ -33,6 +33,7 @@
   "password": "Password",
   "passwordConfirmation": "Password confirmation",
   "passwordOld": "Old password",
+  "refresh": "Refresh",
   "register": "Regiter",
   "registerButton": "Register",
   "resend": "Resend code",

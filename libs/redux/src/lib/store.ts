@@ -6,12 +6,14 @@ import {
 } from "@reduxjs/toolkit";
 import auth from "./slices/auth/authSlice";
 import account from "./slices/account/accountSlice";
+import company from "./slices/company/companySlice";
 import content from "./slices/content/contentSlice";
 import user from "./slices/user/userSlice";
 import { apiErrorLogger } from "./apiErrorLogger";
 
 const reducer = combineReducers({
   account,
+  company,
   content,
   auth,
   user,

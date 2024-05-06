@@ -15,7 +15,7 @@ export class CompaniesService {
 
   findAll({rights}: UserFull, query: UserFilterData) {
     checkRigts(rights, ScopeItems.Companies, RightsItems.Read);
-    return this.prisma.user.findMany({
+    return this.prisma.company.findMany({
       where: {
         ...getPrismaOrFilter(query)
       }

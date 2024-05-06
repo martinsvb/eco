@@ -1,3 +1,6 @@
+import { Company } from "@prisma/client";
+import { nanoid } from "@reduxjs/toolkit";
+
 export enum CompanyItems {
   Name = 'name',
   Country = 'country',
@@ -12,4 +15,19 @@ export interface CompanyData {
   isSelected?: boolean;
 }
 
+export type CompanyFull = Company & CompanyData;
+
 export type CompanyFilterData = Partial<Pick<CompanyData, CompanyItems.Name | CompanyItems.Country>>;
+
+export const getNewCompanyData = () => {
+  const id = nanoid();
+  return {
+    id,
+    data: {
+      id,
+      [CompanyItems.Name]: '',
+      [CompanyItems.Country]: '',
+      isNew: true
+    }
+  }
+}

@@ -79,6 +79,7 @@ export class UsersService {
     if (id !== userId) {
       checkRigts(rights, ScopeItems.Users, RightsItems.Edit);
     }
+
     if (rest.password && rest.passwordOld) {
 
       const isOldPasswordValid = await bcrypt.compare(rest.passwordOld, password);

@@ -72,7 +72,7 @@ export const Accounts = () => {
           scope={ScopeItems.Accounts}
           refreshButton={
             <IconButton
-              aria-label={t('accounts:refresh')}
+              aria-label={t('labels:refresh')}
               onClick={handleRefresh}
               size='large'
               sx={{
