@@ -55,9 +55,9 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
 
   const handleEdit = useCallback(
     () => {
-      navigate(routes.usersEdit.replace(':id', user.id));
+      navigate(routes.usersEdit.replace(':id', user?.id));
     },
-    [navigate, user.id]
+    [navigate, user?.id]
   );
 
   const handleLogout = useCallback(
@@ -90,8 +90,8 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       >
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <AppAvatar
-            name={user.name}
-            picture={user.picture}
+            name={user?.name}
+            picture={user?.picture}
           />
         </IconButton>
       </Tooltip>
@@ -114,7 +114,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
             borderBottom: `1px solid ${palette.grey[500]}`
           }}
         >
-          <Typography>{user.name}</Typography>
+          <Typography>{user?.name}</Typography>
           <Tooltip
             title={t('labels:edit')}
             enterDelay={ms('0.1s')}
