@@ -56,6 +56,12 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
+  @MinLength(6)
+  @ApiProperty({ description: 'User old password', required: false })
+  passwordOld: string | null;
+
+  @IsString()
+  @IsOptional()
   @ApiProperty({ description: 'User picture', required: false })
   picture?: string;
 }

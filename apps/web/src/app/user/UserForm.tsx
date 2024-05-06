@@ -7,11 +7,9 @@ import { Button, Stack, Theme, useMediaQuery } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
-import CurrencyList from 'currency-list'
 import { useSnackbar } from 'notistack';
 import {
   apiPatchUser,
-  apiPostUser,
   selectUser,
   selectIsUsersLoading,
   useAppDispatch,
@@ -27,7 +25,7 @@ const UserForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -48,12 +46,19 @@ const UserForm = () => {
   const values = useMemo(
     () => {
       return user ?
-        map((item) => item || '', pick([UserItems.Name, UserItems.Email], user)) as UserEditData
+        {
+          ...map((item) => item || '', pick([UserItems.Name, UserItems.Email], user)),
+          [UserItems.PasswordOld]: '',
+          [UserItems.Password]: '',
+          [UserItems.PasswordConfirmation]: '',
+        } as UserEditData
         :
         {
           [UserItems.Name]: '',
           [UserItems.Email]: '',
-          [UserItems.Role]: UserRoles.None,
+          [UserItems.PasswordOld]: '',
+          [UserItems.Password]: '',
+          [UserItems.PasswordConfirmation]: '',
         }
     },
     [user]
@@ -69,22 +74,22 @@ const UserForm = () => {
 
   const submit = useCallback(
     (data: UserEditData) => {
-      const items = [UserItems.Name, UserItems.Email, UserItems.Role] as readonly (keyof UserEditData)[];
-      const body = filter(compose(not, isEmpty), pick(items, data));
       if (id) {
-        dispatch(
-          apiPatchUser({
-            body,
-            id,
-          })
-        );
-      }
-      else {
-        dispatch(
-          apiPostUser({
-            body
-          })
-        );
+        const items = [
+          UserItems.Name,
+          UserItems.Email,
+          UserItems.Password,
+          UserItems.PasswordOld
+        ] as readonly (keyof UserEditData)[];
+        const body = filter(compose(not, isEmpty), pick(items, data));
+        if (!isEmpty(body)) {
+          dispatch(
+            apiPatchUser({
+              body,
+              id,
+            })
+          );
+        }
       }
     },
     [dispatch, enqueueSnackbar, navigate, id]
@@ -103,10 +108,6 @@ const UserForm = () => {
     },
     [navigate]
   );
-
-  const currencies = CurrencyList.getAll();
-
-  const language = i18n.language.includes('-') ? i18n.language.split('-')[0] : i18n.language;
 
   return (
     <form onSubmit={handleSubmit(submit)}>
@@ -134,6 +135,42 @@ const UserForm = () => {
               required: true,
               label: t('labels:email'),
               id: UserItems.Email
+            }}
+          />
+        </Grid>
+        <Grid xs={12}>
+          <ControllerTextField
+            name={UserItems.PasswordOld}
+            control={control}
+            defaultValue={data.passwordOld}
+            fieldProps={{
+              label: t('labels:passwordOld'),
+              id: UserItems.PasswordOld,
+              type: 'password'
+            }}
+          />
+        </Grid>
+        <Grid md={6} xs={12}>
+          <ControllerTextField
+            name={UserItems.Password}
+            control={control}
+            defaultValue={data.password}
+            fieldProps={{
+              label: t('labels:password'),
+              id: UserItems.Password,
+              type: 'password'
+            }}
+          />
+        </Grid>
+        <Grid md={6} xs={12}>
+          <ControllerTextField
+            name={UserItems.PasswordConfirmation}
+            control={control}
+            defaultValue={data.passwordConfirmation}
+            fieldProps={{
+              label: t('labels:passwordConfirmation'),
+              id: UserItems.PasswordConfirmation,
+              type: 'password'
             }}
           />
         </Grid>

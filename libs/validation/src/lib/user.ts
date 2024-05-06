@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import i18n from '@eco/locales';
-import { UserItems, UserRoles } from '@eco/types';
+import { UserItems } from '@eco/types';
 
 export const getUserEditValidationSchema = () => {
   const { t } = i18n;
@@ -11,7 +11,12 @@ export const getUserEditValidationSchema = () => {
     [UserItems.Email]: yup.string()
       .required(t('validation:required', {Field: t('labels:email')}))
       .email(t('validation:email')),
-    [UserItems.Role]: yup.string<UserRoles>()
-      .required(t('validation:required', {Field: t('labels:role')})),
+    [UserItems.PasswordOld]: yup.string(),
+    [UserItems.Password]: yup.string(),
+    [UserItems.PasswordConfirmation]: yup.string()
+      .oneOf(
+        [yup.ref(UserItems.Password)],
+        t('validation:equal', {Field: t('labels:password')})
+      ),
   });
 }

@@ -1,5 +1,6 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ms from 'ms';
 import { Box, Tooltip, IconButton, Menu, MenuItem, Typography, PopoverOrigin, useTheme } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,7 +15,6 @@ import {
   useShallowEqualSelector
 } from '@eco/redux';
 import { routes } from '@eco/config';
-import { useTranslation } from 'react-i18next';
 import UserLanguage from './UserLanguage';
 import UserColorMode from './UserColorMode';
 import AppAvatar from '../components/avatar/AppAvatar';

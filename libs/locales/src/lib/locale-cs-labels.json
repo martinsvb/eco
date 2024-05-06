@@ -32,6 +32,7 @@
   "otp": "OTP kód",
   "password": "Heslo",
   "passwordConfirmation": "Potvrzení hesla",
+  "passwordOld": "Staré heslo",
   "register": "Registrovat",
   "registerButton": "Registrace",
   "resend": "Znovu odeslat kód",

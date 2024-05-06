@@ -60,6 +60,9 @@ const authSlice = createSlice({
     setRegistrationEmail: create.reducer((state, {payload}: PayloadAction<string | null>) => {
       state.registrationEmail = payload
     }),
+    setAuthUser: create.reducer((state, {payload}: PayloadAction<Partial<BasicUser>>) => {
+      state.user = {...state.user, ...payload};
+    }),
     apiPostLogin: create.asyncThunk(
       loginPost,
       {
@@ -231,7 +234,8 @@ export const {
   logout,
   setLoginGoogleError,
   setRegistration,
-  setRegistrationEmail
+  setRegistrationEmail,
+  setAuthUser
 } = authSlice.actions;
 
 export const {

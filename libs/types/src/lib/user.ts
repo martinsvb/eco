@@ -14,7 +14,7 @@ export enum UserItems {
   Origin = 'origin',
   CompanyId = 'companyId',
   Password = 'password',
-  PasswordNew = 'passwordNew',
+  PasswordOld = 'passwordOld',
   PasswordConfirmation = 'passwordConfirmation',
   Rights = 'rights',
   Role = 'role',
@@ -35,7 +35,9 @@ export interface UserData {
 export interface UserEditData {
   [UserItems.Name]: string;
   [UserItems.Email]: string;
-  [UserItems.Role]: UserRoles;
+  [UserItems.PasswordOld]?: string;
+  [UserItems.Password]?: string;
+  [UserItems.PasswordConfirmation]?: string;
 }
 
 export type UserFilterData = Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;

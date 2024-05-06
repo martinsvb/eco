@@ -1,4 +1,4 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
@@ -75,13 +75,24 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async update(id: string, {role, ...rest}: UpdateUserDto, {rights}: UserFull) {
-    checkRigts(rights, ScopeItems.Users, RightsItems.Edit);
-    if (rest.password) {
+  async update(id: string, {role, ...rest}: UpdateUserDto, {id: userId, password, rights}: UserFull) {
+    if (id !== userId) {
+      checkRigts(rights, ScopeItems.Users, RightsItems.Edit);
+    }
+    if (rest.password && rest.passwordOld) {
+
+      const isOldPasswordValid = await bcrypt.compare(rest.passwordOld, password);
+
+      if (!isOldPasswordValid) {
+        throw new UnauthorizedException('Invalid old password');
+      }
+
       rest.password = await bcrypt.hash(
         rest.password,
         parseInt(process.env.HASHING_ROUNDS, 10)
       );
+
+      delete rest.passwordOld;
     }
 
     return this.prisma.user.update({

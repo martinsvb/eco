@@ -81,6 +81,7 @@ const userSlice = createSlice({
         },
         fulfilled: (state, { payload }) => {
           state.loaded[ApiOperations.getItem] = true;
+          state.user = payload;
         },
         settled: (state) => {
           state.loading[ApiOperations.getItem] = false;
@@ -118,6 +119,7 @@ const userSlice = createSlice({
           if (index > -1) {
             state.users[index] = payload;
           }
+          state.user = payload;
         },
         settled: (state) => {
           state.loading[ApiOperations.edit] = false;

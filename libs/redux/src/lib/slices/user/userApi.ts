@@ -1,6 +1,7 @@
 import { GridRowId } from '@mui/x-data-grid';
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
 import { enqueueSnackbar } from 'notistack';
+import { pick } from 'ramda';
 import {
   checkResponse,
   endPoints,
@@ -10,10 +11,11 @@ import {
   patchHeaders,
   postHeaders
 } from '@eco/config';
-import { UserData, getUrl } from '@eco/types';
+import { UserData, UserEditData, UserItems, getUrl } from '@eco/types';
 import i18n from '@eco/locales';
 import { tokenValidation } from '../../tokenValidation';
 import { RootState } from '../../store';
+import { setAuthUser } from '../auth/authSlice';
 
 export const usersGet = async (
   id: string,
@@ -70,7 +72,7 @@ export const usersPost = async (
 }
 
 export const usersPatch = async (
-  {body, id}: {body: Partial<UserData>, id: string},
+  {body, id}: {body: Partial<UserData | UserEditData>, id: string},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
@@ -81,6 +83,10 @@ export const usersPatch = async (
     ).json();
 
     enqueueSnackbar(i18n.t('usersLibs:updated'), {variant: 'success'});
+
+    if (body.name || body.email) {
+      dispatch(setAuthUser(pick([UserItems.Name, UserItems.Email], data)));
+    }
 
     return data;
   } catch (error: unknown) {

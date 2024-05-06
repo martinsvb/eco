@@ -32,6 +32,7 @@
   "otp": "OTP code",
   "password": "Password",
   "passwordConfirmation": "Password confirmation",
+  "passwordOld": "Old password",
   "register": "Regiter",
   "registerButton": "Register",
   "resend": "Resend code",
