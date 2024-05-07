@@ -6,11 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
+import { omit } from 'ramda';
 import { UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
 import AppAvatar from '../components/avatar/AppAvatar';
-import { omit } from 'ramda';
 
 interface UsersColumns {
   columns: GridColDef[];
