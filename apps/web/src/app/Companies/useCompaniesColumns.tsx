@@ -31,14 +31,14 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
 
   const handleSaveClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+      setRowModesModel((prevRowModesModel) => ({ ...prevRowModesModel, [id]: { mode: GridRowModes.View } }));
     },
     []
   );
 
   const handleEditClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+      setRowModesModel((prevRowModesModel) => ({ ...prevRowModesModel, [id]: { mode: GridRowModes.Edit } }));
     },
     []
   );
@@ -47,15 +47,15 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
     (id: GridRowId) => () => {
       handleClickOpen(id);
     },
-    []
+    [handleClickOpen]
   );
 
   const handleCancelClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel({
-        ...rowModesModel,
+      setRowModesModel((prevRowModesModel) => ({
+        ...prevRowModesModel,
         [id]: { mode: GridRowModes.View, ignoreModifications: true },
-      });
+      }));
       dispatch(cancelCompany(id));
     },
     [dispatch]
