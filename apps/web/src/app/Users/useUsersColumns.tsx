@@ -122,6 +122,17 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         disableColumnMenu: true,
       },
       {
+        field: UserItems.Phone,
+        headerName: t('labels:phone'),
+        width: 160,
+        align: 'center',
+        headerAlign: 'center',
+        type: 'number',
+        sortable: false,
+        disableColumnMenu: true,
+        editable: users?.edit
+      },
+      {
         field: UserItems.Role,
         headerName: t('labels:role'),
         width: 200,
