@@ -1,6 +1,6 @@
 import { MouseEvent, SetStateAction, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { GridRowModesModel, GridRowModes, GridRowModel, GridRowId, GridRowClassNameParams } from '@mui/x-data-grid';
+import { GridRowModesModel, GridRowModes, GridRowModel, GridRowId, GridRowClassNameParams, GridEventListener, GridRowEditStopReasons } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff } from '@eco/config';
@@ -56,7 +56,7 @@ export const useUsersHandlers = (
         ...oldModel,
       }));
     },
-    [dispatch]
+    [dispatch, setRowModesModel]
   );
 
   const handleRefresh = useCallback(
@@ -74,7 +74,7 @@ export const useUsersHandlers = (
       }
       setOpen(false);
     },
-    [dispatch, dialogItemId]
+    [dispatch, dialogItemId, setOpen]
   );
 
   const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
@@ -101,9 +101,16 @@ export const useUsersHandlers = (
     setRowModesModel(newRowModesModel);
   };
 
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
   return {
     dataGridHandlers:{
       getRowClassName: ({row}: GridRowClassNameParams<UserFull>) => row.isSelected ? appGridClasses.rowSelected : '',
+      onRowEditStop: handleRowEditStop,
       onRowModesModelChange: handleRowModesModelChange,
       processRowUpdate
     },
