@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { compose, filter, isEmpty, map, not, omit, pick } from 'ramda';
-import { Button, Stack, Theme, useMediaQuery } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,7 +20,7 @@ import {
 } from '@eco/redux';
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
-import { allowedCurrencies, routes } from '@eco/config';
+import { allowedCurrencies, routes, useMobilePortraitDetection } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import ControllerSelect from '../components/formControls/ControllerSelect';
 
@@ -36,9 +36,7 @@ const AccountForm = () => {
 
   const { id } = useParams();
 
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`;
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   const isLoading = useAppSelector(
     (state) => selectIsAccountsLoading(state, id ? ApiOperations.edit : ApiOperations.create)

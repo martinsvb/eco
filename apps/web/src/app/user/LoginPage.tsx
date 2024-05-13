@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Box, Stack, Theme, Typography, useMediaQuery } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
+import { useMobilePortraitDetection } from '@eco/config';
 import LoginButton from './LoginButton';
 import RegistrationButton from './RegistrationButton';
 
@@ -7,9 +8,7 @@ const LoginPage = () => {
 
   const { t } = useTranslation();
 
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`;
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   return (
       <Box>

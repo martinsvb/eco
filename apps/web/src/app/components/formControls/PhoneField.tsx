@@ -71,6 +71,6 @@ const PhoneField: FC<PhoneFieldProps> = ({label, onChange, ...rest}) => {
   );
 };
 
-PhoneField.displayName = 'Phone';
+PhoneField.displayName = 'PhoneField';
 
 export default memo(PhoneField);

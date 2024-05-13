@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { alpha, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { alpha, Stack, Typography, useTheme } from '@mui/material';
+import { useMobileDetection } from '@eco/config';
 import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
 
@@ -11,9 +12,9 @@ export const TaskList = ({data}: TaskListProps) => {
 
   const { t } = useTranslation();
 
-  const { breakpoints, palette, shape } = useTheme();
+  const { palette, shape } = useTheme();
 
-  const isMobile = useMediaQuery(breakpoints.down('md'));
+  const isMobile = useMobileDetection();
 
   const todo = data.filter(({state}) => state !== ContentState.Done);
 

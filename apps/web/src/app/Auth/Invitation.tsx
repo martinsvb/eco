@@ -1,7 +1,7 @@
 import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { alpha, Paper, Stack, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { unsplashUrl } from '@eco/config';
+import { alpha, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { unsplashUrl, useMobilePortraitDetection } from '@eco/config';
 import { logout, resetAccounts, resetCompanies, resetContent, resetUsers, useAppDispatch } from '@eco/redux';
 import InvitationForm from './InvitationForm';
 
@@ -13,9 +13,7 @@ const Invitation = () => {
 
   const dispatch = useAppDispatch();
 
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`;
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   useEffect(
     () => {

@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
-import { Box, CircularProgress, Stack, Theme, useMediaQuery } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
+import { useMobilePortraitDetection } from "@eco/config";
 import { useAppSelector, selectIsUserLoggedIn, useShallowEqualSelector, selectUserAuth } from "@eco/redux";
 import { ScopeItems } from "@eco/types";
 
@@ -11,9 +12,7 @@ interface ButtonsProps {
 }
 
 export const Buttons = ({isLoading, scope, refreshButton, createButton}: ButtonsProps) => {
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { Card, CardActions, CardContent, CardProps, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Card, CardActions, CardContent, CardProps, Stack, Typography } from '@mui/material';
+import { useMobileDetection } from '@eco/config';
 
 interface AppCardProps extends CardProps {
   actions: ReactNode;
@@ -12,9 +13,7 @@ interface AppCardProps extends CardProps {
 
 export const AppCard = ({actions, actionsAvailable, cardTitle, background, label, cardContent}: AppCardProps) => {
 
-  const { breakpoints } = useTheme();
-
-  const isMobile = useMediaQuery(breakpoints.down('md'));
+  const isMobile = useMobileDetection();
 
   return (
     <Card

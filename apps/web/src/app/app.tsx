@@ -1,11 +1,9 @@
-import { Theme, useMediaQuery } from '@mui/material';
+import { useMobilePortraitDetection } from '@eco/config';
 import Desktop from './layout/Desktop';
 import Mobile from './layout/Mobile';
 
 export default () => {
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   return (
     isMobilePortrait

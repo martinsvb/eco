@@ -3,16 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { compose, filter, isEmpty, map, not, pick } from 'ramda';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Stack,
-  Theme,
-  Typography,
-  useMediaQuery
-} from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Stack, Typography } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -27,7 +18,7 @@ import {
 } from '@eco/redux';
 import { UserEditData, UserItems, ApiOperations } from '@eco/types';
 import { getUserEditValidationSchema } from '@eco/validation';
-import { routes } from '@eco/config';
+import { routes, useMobilePortraitDetection } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import ControllerPhoneField from '../components/formControls/ControllerPoneField';
 
@@ -41,9 +32,7 @@ const UserForm = () => {
 
   const { id } = useParams();
 
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`;
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   const isLoading = useAppSelector(
     (state) => selectIsUsersLoading(state, id ? ApiOperations.edit : ApiOperations.create)

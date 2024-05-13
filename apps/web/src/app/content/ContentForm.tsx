@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { map, pick } from 'ramda';
-import { Button, Stack, Theme, useMediaQuery } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
+import { routes, useMobilePortraitDetection } from '@eco/config';
 import {
   apiPatchContent,
   apiPostContent,
@@ -19,7 +20,6 @@ import {
 } from '@eco/redux';
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
-import { routes } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 
 interface ContentFormProps {
@@ -38,9 +38,7 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const { id } = useParams();
 
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   const isLoading = useAppSelector(
     (state) => selectIsContentsLoading(state, type, id ? ApiOperations.edit : ApiOperations.create)
@@ -61,7 +59,7 @@ const ContentForm = ({type}: ContentFormProps) => {
           [ContentItems.Text]: '',
         }
     },
-    [data, type]
+    [data]
   );
 
   const {
@@ -104,14 +102,14 @@ const ContentForm = ({type}: ContentFormProps) => {
         );
       } 
     },
-    [dispatch, enqueueSnackbar, navigate, id, type]
+    [dispatch, enqueueSnackbar, navigate, id, t, type]
   );
 
   const handleClick = useCallback(
     () => {
       submit(formData);
     },
-    [dispatch, enqueueSnackbar, formData]
+    [submit, formData]
   );
 
   const handleClose = useCallback(

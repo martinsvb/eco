@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Box, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import { useMobilePortraitDetection } from '@eco/config';
 import { selectCompanies, useShallowEqualSelector } from '@eco/redux';
 import { useCompaniesColumns } from './useCompaniesColumns';
 import { useDialog } from '../components/dialog/AppDialog';
@@ -16,9 +17,7 @@ export const Companies = () => {
 
   const { palette } = useTheme();
 
-  const isMobilePortrait = useMediaQuery((theme: Theme) => {
-    return `${theme.breakpoints.down('sm')} and (orientation: portrait)`
-  });
+  const isMobilePortrait = useMobilePortraitDetection();
 
   const { companies, isLoading, loaded } = useShallowEqualSelector(selectCompanies);
 
