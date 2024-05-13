@@ -1,11 +1,8 @@
 {
   "createAccount": "Create new bank account",
-  "created": "Bank account was created successfully",
   "delete-question-text": "Are you really want to delete chosen bank account?",
   "delete-question-title": "Bank account deletion",
-  "deleted": "Bank account was successfully deleted",
   "editAccountTitle": "Edit bank account",
   "newAccountTitle": "New bank account",
-  "title": "Bank accounts",
-  "updated": "Bank account was successfully updated"
+  "title": "Bank accounts"
 }

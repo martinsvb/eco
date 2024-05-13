@@ -72,7 +72,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       dispatch(resetCompanies());
       navigate(routes.home);
     },
-    []
+    [dispatch, navigate]
   );
 
   const anchorOrigin: PopoverOrigin = isMobile

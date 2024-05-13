@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 import { LocalStorageItems } from "@eco/config";
 import { Languages } from './languages';
 import accountsCs from './locale-cs-accounts.json';
+import accountsLibsCs from './locale-cs-accountsLibs.json';
 import authLibsCs from './locale-cs-authLibs.json';
 import companiesCs from './locale-cs-companies.json';
 import contentCs from './locale-cs-content.json';
@@ -15,6 +16,7 @@ import validationCs from './locale-cs-validation.json';
 import usersCs from './locale-cs-users.json';
 import usersLibsCs from './locale-cs-usersLibs.json';
 import accountsEn from './locale-en-accounts.json';
+import accountsLibsEn from './locale-en-accountsLibs.json';
 import authLibsEn from './locale-en-authLibs.json';
 import companiesEn from './locale-en-companies.json';
 import contentEn from './locale-en-content.json';
@@ -46,6 +48,7 @@ i18n
         translation: translationCs,
         registration: registrationCs,
         accounts: accountsCs,
+        accountsLibs: accountsLibsCs,
         authLibs: authLibsCs,
         companies: companiesCs,
         content: contentCs,
@@ -59,6 +62,7 @@ i18n
         translation: translationEn,
         registration: registrationEn,
         accounts: accountsEn,
+        accountsLibs: accountsLibsEn,
         authLibs: authLibsEn,
         companies: companiesEn,
         content: contentEn,

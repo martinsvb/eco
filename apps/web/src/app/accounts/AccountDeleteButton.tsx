@@ -4,7 +4,6 @@ import { Button, IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import ms from 'ms';
-import { useSnackbar } from 'notistack';
 import { apiDeleteAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { ApiOperations } from '@eco/types';
 import AppDialog, { useDialog } from '../components/dialog/AppDialog';
@@ -19,8 +18,6 @@ const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
 
   const { t } = useTranslation();
 
-  const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useAppDispatch();
 
   const isLoading = useAppSelector((state) => selectIsAccountsLoading(state, ApiOperations.deleteItem));
@@ -31,12 +28,11 @@ const AccountDeleteButton = ({id}: AccountDeleteButtonProps) => {
       dispatch(apiDeleteAccount({
         id,
         onSuccess: () => {
-          enqueueSnackbar(t('accounts:deleted'), {variant: 'success'});
           setOpen(false);
         }
       }));
     },
-    [dispatch, id]
+    [dispatch, setOpen, id]
   );
 
   return (

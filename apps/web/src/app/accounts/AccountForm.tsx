@@ -8,7 +8,6 @@ import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CurrencyList from 'currency-list'
-import { useSnackbar } from 'notistack';
 import {
   apiPatchAccount,
   apiPostAccount,
@@ -29,8 +28,6 @@ const AccountForm = () => {
   const dispatch = useAppDispatch();
 
   const { t, i18n } = useTranslation();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -78,9 +75,6 @@ const AccountForm = () => {
           apiPatchAccount({
             body,
             id,
-            onSuccess: () => {
-              enqueueSnackbar(t('accounts:updated'), {variant: 'success'});
-            }
           })
         );
       }
@@ -88,22 +82,18 @@ const AccountForm = () => {
         dispatch(
           apiPostAccount({
             body,
-            onSuccess: () => {
-              enqueueSnackbar(t('accounts:created'), {variant: 'success'});
-              navigate(routes.accounts);
-            }
           })
         );
       }
     },
-    [dispatch, enqueueSnackbar, navigate, id]
+    [dispatch, id]
   );
 
   const handleClick = useCallback(
     () => {
       submit(data);
     },
-    [dispatch, enqueueSnackbar, data]
+    [submit, data]
   );
 
   const handleClose = useCallback(

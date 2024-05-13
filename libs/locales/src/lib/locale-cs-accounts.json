@@ -1,11 +1,8 @@
 {
   "createAccount": "Vytvořit nový bankovní účet",
-  "created": "Bankovní účet byl úspěšně vytvořen",
   "delete-question-text": "Opravdu si přejete vymazat vybraný bankovní účet?",
   "delete-question-title": "Smazání bankovního účtu",
-  "deleted": "Bankovní účet byl smazán",
   "editAccountTitle": "Úprava bankovního účtu",
   "newAccountTitle": "Nový bankovní účet",
-  "title": "Bankovní účty",
-  "updated": "Bankovní účet byl změněn"
+  "title": "Bankovní účty"
 }

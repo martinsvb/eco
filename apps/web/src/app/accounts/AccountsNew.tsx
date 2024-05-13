@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
-import LoginWrapper from '../user/LoginWrapper';
 import AccountForm from './AccountForm';
 
 export const AccountsNew = () => {
