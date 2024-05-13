@@ -57,6 +57,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
   const handleEdit = useCallback(
     () => {
       navigate(routes.usersEdit.replace(':id', user?.id));
+      setAnchorElUser(null);
     },
     [navigate, user?.id]
   );

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, memo, useCallback, useState } from 'react';
+import { ChangeEvent, FC, forwardRef, memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactPhoneInput, { CountryData, PhoneInputProps } from 'react-phone-input-material-ui';
 import { InputBaseProps, SelectChangeEvent, Stack } from '@mui/material';
@@ -13,7 +13,7 @@ export type PhoneFieldProps = BaseFormControlProps & InputBaseProps & Omit<
   'component' | 'label' | 'onChange'
 >;
 
-const PhoneField: FC<PhoneFieldProps> = ({label, onChange, ...rest}) => {
+const PhoneField: FC<PhoneFieldProps> = forwardRef(({label, onChange, ...rest}, ref) => {
 
   const { t } = useTranslation();
 
@@ -60,7 +60,8 @@ const PhoneField: FC<PhoneFieldProps> = ({label, onChange, ...rest}) => {
       <ReactPhoneInput
         {...rest}
         inputProps={{
-          fullWidth: true
+          fullWidth: true,
+          ref
         }}
         country={country.toLowerCase()}
         label={label as string}
@@ -69,7 +70,7 @@ const PhoneField: FC<PhoneFieldProps> = ({label, onChange, ...rest}) => {
       />
     </Stack>
   );
-};
+});
 
 PhoneField.displayName = 'PhoneField';
 
