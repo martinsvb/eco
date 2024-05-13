@@ -54,14 +54,14 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
         }
       }));
     },
-    [dispatch, enqueueSnackbar]
+    [dispatch, enqueueSnackbar, t]
   );
 
   const handleClick = useCallback(
     () => {
       submit(data);
     },
-    [dispatch, enqueueSnackbar, data]
+    [submit, data]
   );
 
   return (

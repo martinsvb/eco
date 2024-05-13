@@ -25,10 +25,10 @@ export class CreateUserDto {
   @ApiProperty({ description: 'User email confirmation state', required: false })
   isEmailConfirmed?: boolean;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   @ApiProperty({ description: 'User phone', required: false })
-  phone: number | null;
+  phone: string | null;
 
   @IsNumber()
   @IsOptional()

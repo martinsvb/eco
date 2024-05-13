@@ -77,13 +77,20 @@ npm i helmet
 # Prisma
 
 npm install prisma --save-dev
+// Development
 npx prisma migrate dev --name "init"
-npx prisma migrate dev --create-only
+npx prisma migrate dev --create-only // Create a migration without applying it
 npx prisma migrate reset
 npx prisma db push
 npx prisma db seed
+
+// Production
+npx prisma migrate deploy
+npx prisma migrate resolve
+
 npx tsx prisma/data.ts
 npx prisma generate
+
 npm install nestjs-prisma
 
 ```

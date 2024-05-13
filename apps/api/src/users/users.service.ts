@@ -55,7 +55,7 @@ export class UsersService {
           link: `${origin}/invitation?${qs.stringify({email, name})}`,
         },
       })
-      .catch((error) => {
+      .catch(() => {
         throw new ServiceUnavailableException(`Invitation email failed: ${email}`)
       });
   }
@@ -80,18 +80,21 @@ export class UsersService {
       checkRigts(rights, ScopeItems.Users, RightsItems.Edit);
     }
 
-    if (rest.password && rest.passwordOld) {
+    if (rest.passwordOld) {
+      if (rest.password) {
 
-      const isOldPasswordValid = await bcrypt.compare(rest.passwordOld, password);
-
-      if (!isOldPasswordValid) {
-        throw new UnauthorizedException('Invalid old password');
+        const isOldPasswordValid = await bcrypt.compare(rest.passwordOld, password);
+  
+        if (!isOldPasswordValid) {
+          throw new UnauthorizedException('Invalid old password');
+        }
+  
+        rest.password = await bcrypt.hash(
+          rest.password,
+          parseInt(process.env.HASHING_ROUNDS, 10)
+        );
+  
       }
-
-      rest.password = await bcrypt.hash(
-        rest.password,
-        parseInt(process.env.HASHING_ROUNDS, 10)
-      );
 
       delete rest.passwordOld;
     }

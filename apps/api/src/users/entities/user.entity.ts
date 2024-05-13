@@ -41,7 +41,7 @@ export class UserEntity extends BasicUserEntity implements User {
   isEmailConfirmed: boolean;
 
   @ApiProperty({ description: 'User phone', required: false })
-  phone: number | null;
+  phone: string | null;
 
   @ApiProperty({ description: 'OTP code', required: false })
   otp: number | null;

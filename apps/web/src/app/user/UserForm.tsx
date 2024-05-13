@@ -3,11 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { compose, filter, isEmpty, map, not, pick } from 'ramda';
-import { Button, Stack, Theme, useMediaQuery } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Stack,
+  Theme,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSnackbar } from 'notistack';
 import {
   apiPatchUser,
   selectUser,
@@ -16,18 +25,17 @@ import {
   useAppSelector,
   useShallowEqualSelector
 } from '@eco/redux';
-import { UserEditData, UserItems, ApiOperations, UserRoles } from '@eco/types';
+import { UserEditData, UserItems, ApiOperations } from '@eco/types';
 import { getUserEditValidationSchema } from '@eco/validation';
 import { routes } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
+import ControllerPhoneField from '../components/formControls/ControllerPoneField';
 
 const UserForm = () => {
 
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -47,7 +55,7 @@ const UserForm = () => {
     () => {
       return user ?
         {
-          ...map((item) => item || '', pick([UserItems.Name, UserItems.Email], user)),
+          ...map((item) => item || '', pick([UserItems.Name, UserItems.Email, UserItems.Phone], user)),
           [UserItems.PasswordOld]: '',
           [UserItems.Password]: '',
           [UserItems.PasswordConfirmation]: '',
@@ -56,6 +64,7 @@ const UserForm = () => {
         {
           [UserItems.Name]: '',
           [UserItems.Email]: '',
+          [UserItems.Phone]: '',
           [UserItems.PasswordOld]: '',
           [UserItems.Password]: '',
           [UserItems.PasswordConfirmation]: '',
@@ -78,6 +87,7 @@ const UserForm = () => {
         const items = [
           UserItems.Name,
           UserItems.Email,
+          UserItems.Phone,
           UserItems.Password,
           UserItems.PasswordOld
         ] as readonly (keyof UserEditData)[];
@@ -92,14 +102,14 @@ const UserForm = () => {
         }
       }
     },
-    [dispatch, enqueueSnackbar, navigate, id]
+    [dispatch, id]
   );
 
   const handleClick = useCallback(
     () => {
       submit(data);
     },
-    [dispatch, enqueueSnackbar, data]
+    [submit, data]
   );
 
   const handleClose = useCallback(
@@ -138,41 +148,69 @@ const UserForm = () => {
             }}
           />
         </Grid>
+        <Grid md={6} xs={12}>
+          <ControllerPhoneField
+            name={UserItems.Phone}
+            control={control}
+            defaultValue={data.phone}
+            fieldProps={{
+              fullWidth: true,
+              required: true,
+              label: t('labels:phone'),
+              id: UserItems.Email
+            }}
+          />
+        </Grid>
         <Grid xs={12}>
-          <ControllerTextField
-            name={UserItems.PasswordOld}
-            control={control}
-            defaultValue={data.passwordOld}
-            fieldProps={{
-              label: t('labels:passwordOld'),
-              id: UserItems.PasswordOld,
-              type: 'password'
-            }}
-          />
-        </Grid>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={UserItems.Password}
-            control={control}
-            defaultValue={data.password}
-            fieldProps={{
-              label: t('labels:password'),
-              id: UserItems.Password,
-              type: 'password'
-            }}
-          />
-        </Grid>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={UserItems.PasswordConfirmation}
-            control={control}
-            defaultValue={data.passwordConfirmation}
-            fieldProps={{
-              label: t('labels:passwordConfirmation'),
-              id: UserItems.PasswordConfirmation,
-              type: 'password'
-            }}
-          />
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel2-content"
+              id="changePasswordHeader"
+            >
+              <Typography>{t('labels:passwordChange')}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container rowSpacing={2} columnSpacing={2}>
+                <Grid xs={12}>
+                  <ControllerTextField
+                    name={UserItems.PasswordOld}
+                    control={control}
+                    defaultValue={data.passwordOld}
+                    fieldProps={{
+                      label: t('labels:passwordOld'),
+                      id: UserItems.PasswordOld,
+                      type: 'password'
+                    }}
+                  />
+                </Grid>
+                <Grid md={6} xs={12}>
+                  <ControllerTextField
+                    name={UserItems.Password}
+                    control={control}
+                    defaultValue={data.password}
+                    fieldProps={{
+                      label: t('labels:password'),
+                      id: UserItems.Password,
+                      type: 'password'
+                    }}
+                  />
+                </Grid>
+                <Grid md={6} xs={12}>
+                  <ControllerTextField
+                    name={UserItems.PasswordConfirmation}
+                    control={control}
+                    defaultValue={data.passwordConfirmation}
+                    fieldProps={{
+                      label: t('labels:passwordConfirmation'),
+                      id: UserItems.PasswordConfirmation,
+                      type: 'password'
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="end">

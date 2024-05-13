@@ -35,6 +35,7 @@ export interface UserData {
 export interface UserEditData {
   [UserItems.Name]: string;
   [UserItems.Email]: string;
+  [UserItems.Phone]?: string;
   [UserItems.PasswordOld]?: string;
   [UserItems.Password]?: string;
   [UserItems.PasswordConfirmation]?: string;
@@ -120,7 +121,7 @@ export const getUserInitials = (name?: string | null) => {
 
 export const isRouteScopeAvailable = (pathname: string, scopes: Scopes) => {
   const route = pathname.split('/')[1] as ScopeItems;
-  return !!scopes[route]
+  return scopes[route]
     ? !!scopes[route]?.read
     : false;
 }

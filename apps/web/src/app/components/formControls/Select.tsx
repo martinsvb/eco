@@ -12,8 +12,9 @@ import { BaseFormControlProps } from './formControlsTypes';
 export type SelectedValue = number | string | undefined;
 
 export interface SelectProps extends Omit<MuiSelectProps<SelectedValue>, 'variant'> {
+  fullWidth?: boolean;
   values: SelectValue[];
-};
+}
 
 // eslint-disable-next-line no-undef
 const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Element>(MuiSelect)(
@@ -40,14 +41,14 @@ const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Ele
 
 const Select: FC<BaseFormControlProps & SelectProps> = forwardRef(
   (
-    { disabled, error, FormHelperTextProps, helperText, id, name, required, values, ...rest },
+    { disabled, error, fullWidth = true, FormHelperTextProps, helperText, id, name, required, values, ...rest },
     ref
   ) => {
 
     const formControlStates = { disabled, error, required };
 
     return (
-      <FormControl {...formControlStates} fullWidth variant="standard">
+      <FormControl {...formControlStates} fullWidth={fullWidth} variant="standard">
         <InputLabel {...formControlStates} shrink id={`select-label-${id}`}>
           {rest.label}
         </InputLabel>

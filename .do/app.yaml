@@ -7,7 +7,7 @@ static_sites:
       repo: martinsvb/eco
       branch: master
       deploy_on_push: true
-    build_command: npx nx reset && npx prisma generate && npx nx build web
+    build_command: npx prisma migrate deploy && npx prisma generate && npx nx build web
     output_dir: /dist/apps/web
     routes:
       - path: /

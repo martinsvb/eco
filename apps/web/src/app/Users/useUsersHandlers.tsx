@@ -1,6 +1,14 @@
 import { MouseEvent, SetStateAction, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { GridRowModesModel, GridRowModes, GridRowModel, GridRowId, GridRowClassNameParams, GridEventListener, GridRowEditStopReasons } from '@mui/x-data-grid';
+import {
+  GridRowModesModel,
+  GridRowModes,
+  GridRowModel,
+  GridRowId,
+  GridRowClassNameParams,
+  GridEventListener,
+  GridRowEditStopReasons
+} from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff } from '@eco/config';
@@ -78,7 +86,7 @@ export const useUsersHandlers = (
   );
 
   const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
-    const items = [UserItems.Name, UserItems.Email, UserItems.Role];
+    const items = [UserItems.Name, UserItems.Email, UserItems.Role, UserItems.Phone];
     if (newRow.isNew) {
       dispatch(apiPostUser({body: pick([...items, UserItems.Origin], newRow)}));
     }

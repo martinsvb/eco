@@ -11,6 +11,7 @@ export const getUserEditValidationSchema = () => {
     [UserItems.Email]: yup.string()
       .required(t('validation:required', {Field: t('labels:email')}))
       .email(t('validation:email')),
+    [UserItems.Phone]: yup.string(),
     [UserItems.PasswordOld]: yup.string(),
     [UserItems.Password]: yup.string(),
     [UserItems.PasswordConfirmation]: yup.string()

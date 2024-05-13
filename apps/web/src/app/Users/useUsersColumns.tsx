@@ -127,7 +127,6 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         width: 160,
         align: 'center',
         headerAlign: 'center',
-        type: 'number',
         sortable: false,
         disableColumnMenu: true,
         editable: users?.edit

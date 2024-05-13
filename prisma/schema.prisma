@@ -46,7 +46,7 @@ model User {
   picture          String?
   email            String    @unique
   isEmailConfirmed Boolean   @default(false)
-  phone            Int?
+  phone            String?
   origin           String
   otp              Int?
   password         String?
