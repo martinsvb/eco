@@ -8,7 +8,6 @@ import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSnackbar } from 'notistack';
 import { apiPatchInvitationFinished, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, InvitationData, UserItems } from '@eco/types';
 import { getInvitationValidationSchema } from '@eco/validation';
@@ -20,8 +19,6 @@ const InvitationForm = () => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -51,14 +48,14 @@ const InvitationForm = () => {
       }));
       navigate(routes.content.task.list);
     },
-    [dispatch, enqueueSnackbar]
+    [dispatch, navigate]
   );
 
   const handleClick = useCallback(
     () => {
       submit(data);
     },
-    [dispatch, enqueueSnackbar, data]
+    [submit, data]
   );
 
   return (

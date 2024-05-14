@@ -47,14 +47,14 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
         }));
       }
     },
-    [dispatch, enqueueSnackbar, email]
+    [dispatch, enqueueSnackbar, t, email]
   );
 
   const handleClick = useCallback(
     () => {
       submit(data);
     },
-    [dispatch, enqueueSnackbar, data, email]
+    [submit, data]
   );
 
   const handleResend = useCallback(
@@ -68,7 +68,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
         }));
       }
     },
-    [dispatch, email]
+    [dispatch, enqueueSnackbar, t, email]
   );
 
   return (
