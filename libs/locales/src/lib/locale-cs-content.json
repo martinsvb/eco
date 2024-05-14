@@ -1,9 +1,7 @@
 {
-  "created": "Obsah byl úspěšně vytvořen",
   "createTask": "Vytvořit nový úkol",
   "delete-question-text": "Opravdu si přejete vymazat vybraný obsah?",
   "delete-question-title": "Smazání obsahu",
-  "deleted": "Obsah byl smazán",
   "edit": "Úprava obsahu",
   "editArticleTitle": "Úprava článku",
   "editNewTitle": "Úprava novinky",
@@ -17,6 +15,5 @@
   "taskSwitchedDone": "Úkol přepnut do stavu hotový",
   "taskSwitchedInProgress": "Úkol vrácen do řešení",
   "taskSwitchInProgress": "Vrátit úkol do řešení",
-  "title": "Úkoly",
-  "updated": "Obsah byl úspěšně změněn"
+  "title": "Úkoly"
 }

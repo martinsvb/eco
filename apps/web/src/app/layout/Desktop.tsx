@@ -16,7 +16,7 @@ const Desktop = () => {
     () => {
       dispatch(apiGetAuthUser(''));
     },
-    []
+    [dispatch]
   );
 
   return (

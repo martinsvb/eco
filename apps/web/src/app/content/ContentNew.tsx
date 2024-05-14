@@ -22,7 +22,7 @@ export const ContentNew = ({type}: ContentNewProps) => {
 
       return contentTitles[type] || t('content:new');
     },
-    [type]
+    [t, type]
   );
 
   return (

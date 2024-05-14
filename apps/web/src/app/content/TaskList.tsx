@@ -16,10 +16,6 @@ export const TaskList = ({data}: TaskListProps) => {
 
   const isMobile = useMobileDetection();
 
-  const todo = data.filter(({state}) => state !== ContentState.Done);
-
-  const done = data.filter(({state}) => state === ContentState.Done);
-
   return (
     <Stack
       direction={isMobile ? 'column' : 'row'}
@@ -43,7 +39,7 @@ export const TaskList = ({data}: TaskListProps) => {
         >
           {t('labels:inProgress')}
         </Typography>
-        {todo.map((content) => (
+        {data.filter(({state}) => state !== ContentState.Done).map((content) => (
           <TaskItem key={content.id} {...content} />
         ))}
       </Stack>
@@ -63,7 +59,7 @@ export const TaskList = ({data}: TaskListProps) => {
         >
           {t('labels:done')}
         </Typography>
-        {done.map((content) => (
+        {data.filter(({state}) => state === ContentState.Done).map((content) => (
           <TaskItem key={content.id} {...content} />
         ))}
       </Stack>

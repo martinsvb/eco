@@ -21,7 +21,7 @@ const AppToolbarMobile = ({setOpen}: AppToolbarMobileProps) => {
     () => {
       setOpen(true);
     },
-    []
+    [setOpen]
   );
 
   return (

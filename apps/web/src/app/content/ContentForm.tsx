@@ -7,7 +7,6 @@ import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSnackbar } from 'notistack';
 import { routes } from '@eco/config';
 import {
   apiPatchContent,
@@ -32,8 +31,6 @@ const ContentForm = ({type}: ContentFormProps) => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -84,9 +81,6 @@ const ContentForm = ({type}: ContentFormProps) => {
             body,
             id,
             type,
-            onSuccess: () => {
-              enqueueSnackbar(t('content:updated'), {variant: 'success'});
-            }
           })
         );
       }
@@ -96,14 +90,13 @@ const ContentForm = ({type}: ContentFormProps) => {
             body,
             type,
             onSuccess: () => {
-              enqueueSnackbar(t('content:created'), {variant: 'success'});
               navigate(routes.content[type].list);
             }
           })
         );
       } 
     },
-    [dispatch, enqueueSnackbar, navigate, id, t, type]
+    [dispatch, navigate, id, type]
   );
 
   const handleClick = useCallback(

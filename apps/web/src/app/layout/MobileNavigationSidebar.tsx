@@ -15,10 +15,10 @@ const MobileNavigationSidebar = ({
 }: MobileNavigationSidebarProps) => {
 
   const handleClose = useCallback(
-    (event: {}, reason: "backdropClick" | "escapeKeyDown") => {
+    (event: object, reason: "backdropClick" | "escapeKeyDown") => {
       setOpen(false);
     },
-    []
+    [setOpen]
   );
 
   return (

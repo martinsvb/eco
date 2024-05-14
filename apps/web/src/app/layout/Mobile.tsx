@@ -18,7 +18,7 @@ const Mobile = () => {
     () => {
       dispatch(apiGetAuthUser(''));
     },
-    []
+    [dispatch]
   );
 
   return (

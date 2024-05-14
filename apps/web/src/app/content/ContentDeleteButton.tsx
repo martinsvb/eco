@@ -4,7 +4,6 @@ import { Button, IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import ms from 'ms';
-import { useSnackbar } from 'notistack';
 import { apiDeleteContent, selectIsContentsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { ApiOperations, ContentTypes } from '@eco/types';
 import AppDialog, { useDialog } from '../components/dialog/AppDialog';
@@ -20,8 +19,6 @@ const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
 
   const { t } = useTranslation();
 
-  const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useAppDispatch();
 
   const isLoading = useAppSelector((state) => selectIsContentsLoading(state, type, ApiOperations.deleteItem));
@@ -32,12 +29,11 @@ const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
         id,
         type,
         onSuccess: () => {
-          enqueueSnackbar(t('content:deleted'), {variant: 'success'});
           setOpen(false);
         }
       }));
     },
-    [dispatch, id]
+    [dispatch, setOpen, id, type]
   );
 
   return (

@@ -1,8 +1,8 @@
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IconButton, IconButtonProps, InputBase, InputBaseProps, Stack, useTheme } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
-import { t } from 'i18next';
-import { memo } from 'react';
 
 interface SearchProps {
   inputProps: InputBaseProps;
@@ -18,6 +18,8 @@ const Search = ({
 
   const { palette, shape } = useTheme();
 
+  const { t } = useTranslation();
+
   return (
     <Stack
       direction="row"
@@ -29,7 +31,7 @@ const Search = ({
       <InputBase
         {...inputProps}
         id={`toggle-table-filter-input-${inputProps.name}`}
-        endAdornment={ !!inputProps.value &&
+        endAdornment={!!inputProps.value &&
           <IconButton
             aria-label={t('labels:filterSearchClear')}
             id={`toggle-table-filter-clear-button-${inputProps.name}`}

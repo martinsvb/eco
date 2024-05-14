@@ -1,4 +1,5 @@
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
+import { enqueueSnackbar } from 'notistack';
 import {
   checkResponse,
   endPoints,
@@ -8,6 +9,7 @@ import {
   patchHeaders,
   delHeaders
 } from '@eco/config';
+import i18n from '@eco/locales';
 import { ContentData, ContentTypes } from '@eco/types';
 import { tokenValidation } from '../../tokenValidation';
 
@@ -55,6 +57,8 @@ export const contentPost = async (
       await fetch(`/api/${endPoints.content}`, postHeaders({body: {...body, type}, signal, token}))
     ).json();
 
+    enqueueSnackbar(i18n.t('contentLibs:created'), {variant: 'success'});
+
     onSuccess();
 
     return data;
@@ -64,7 +68,7 @@ export const contentPost = async (
 }
 
 export const contentPatch = async (
-  {body, type, id, onSuccess}: {body: Partial<ContentData>, id: string, onSuccess: () => void} & ContentTypePayload,
+  {body, type, id}: {body: Partial<ContentData>, id: string} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
@@ -74,7 +78,7 @@ export const contentPatch = async (
       await fetch(`/api/${endPoints.content}/${id}/${type}`, patchHeaders({body, signal, token}))
     ).json();
 
-    onSuccess();
+    enqueueSnackbar(i18n.t('contentLibs:updated'), {variant: 'success'});
 
     return data;
   } catch (error: unknown) {
@@ -83,15 +87,21 @@ export const contentPatch = async (
 }
 
 export const contentDelete = async (
-  {id, type}: {id: string, onSuccess: () => void} & ContentTypePayload,
+  {id, type, onSuccess}: {id: string, onSuccess: () => void} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const token = await tokenValidation(dispatch, getState);
 
-    return await checkResponse(
+    const data = await checkResponse(
       await fetch(`/api/${endPoints.content}/${id}/${type}`, delHeaders({signal, token}))
     ).json();
+
+    enqueueSnackbar(i18n.t('contentLibs:deleted'), {variant: 'success'});
+
+    onSuccess();
+
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

@@ -59,16 +59,20 @@ export const AppNavigation = () => {
         {isUserLoggedIn
           ?
           <>
-            <NavItem
-              icon={<FormatListBulletedIcon />}
-              text={t('tasks')}
-              to={routes.content.task.list}
-            />
-            <NavItem
-              icon={<AccountBalanceWalletIcon />}
-              text={t('accounts')}
-              to={routes.accounts}
-            />
+            {rights.scopes[ScopeItems.Tasks]?.read &&
+              <NavItem
+                icon={<FormatListBulletedIcon />}
+                text={t('tasks')}
+                to={routes.content.task.list}
+              />
+            }
+            {rights.scopes[ScopeItems.Accounts]?.read &&
+              <NavItem
+                icon={<AccountBalanceWalletIcon />}
+                text={t('accounts')}
+                to={routes.accounts}
+              />
+            }
             {rights.scopes[ScopeItems.Users]?.read &&
               <NavItem
                 icon={<GroupIcon />}

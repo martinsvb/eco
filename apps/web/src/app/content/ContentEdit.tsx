@@ -41,7 +41,7 @@ export const ContentEdit = ({type}: ContentEditProps) => {
 
       return contentTitles[type] || t('content:edit');
     },
-    [type]
+    [t, type]
   );
 
   return (

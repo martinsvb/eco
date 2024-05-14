@@ -1,9 +1,7 @@
 {
-  "created": "Content was successfully created",
   "createTask": "Create new task",
   "delete-question-text": "Are you really want to delete chosen content?",
   "delete-question-title": "Content deletion",
-  "deleted": "Content was successfully deleted",
   "edit": "Edit content",
   "editArticleTitle": "Edit article",
   "editNewTitle": "Edit new",
@@ -17,6 +15,5 @@
   "taskSwitchedDone": "Task was switched into done state",
   "taskSwitchedInProgress": "Task was returned into progress",
   "taskSwitchInProgress": "Return task into progress",
-  "title": "Tasks",
-  "updated": "Content was successfully updated"
+  "title": "Tasks"
 }
