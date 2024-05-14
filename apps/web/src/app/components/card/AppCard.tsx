@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Card, CardActions, CardContent, CardProps, Stack, Typography } from '@mui/material';
-import { useMobileDetection } from '@eco/config';
+import { useMobileDetection } from '../../hooks/useMobileDetection';
 
 interface AppCardProps extends CardProps {
   actions: ReactNode;

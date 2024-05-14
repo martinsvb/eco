@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useMobilePortraitDetection } from '@eco/config';
 import { selectCompanies, useShallowEqualSelector } from '@eco/redux';
 import { useCompaniesColumns } from './useCompaniesColumns';
 import { useDialog } from '../components/dialog/AppDialog';
@@ -10,6 +9,7 @@ import { getDataGridSx, getDataGridWrapperSx } from '../components/dataGrid/desi
 import CompaniesButtons from './CompaniesButtons';
 import CompaniesDialog from './CompaniesDialog';
 import { useCompaniesHandlers } from './useCompaniesHandlers';
+import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 export const Companies = () => {
 

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { alpha, Stack, Typography, useTheme } from '@mui/material';
-import { useMobileDetection } from '@eco/config';
 import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 interface TaskListProps {
   data: ContentFull[];

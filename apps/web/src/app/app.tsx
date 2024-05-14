@@ -1,4 +1,4 @@
-import { useMobilePortraitDetection } from '@eco/config';
+import { useMobilePortraitDetection } from './hooks/useMobileDetection';
 import Desktop from './layout/Desktop';
 import Mobile from './layout/Mobile';
 

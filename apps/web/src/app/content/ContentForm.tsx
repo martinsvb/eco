@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
-import { routes, useMobilePortraitDetection } from '@eco/config';
+import { routes } from '@eco/config';
 import {
   apiPatchContent,
   apiPostContent,
@@ -21,6 +21,7 @@ import {
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
+import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 interface ContentFormProps {
   type: ContentTypes;

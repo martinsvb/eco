@@ -19,9 +19,10 @@ import {
 } from '@eco/redux';
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
-import { allowedCurrencies, routes, useMobilePortraitDetection } from '@eco/config';
+import { allowedCurrencies, routes } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import ControllerSelect from '../components/formControls/ControllerSelect';
+import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 const AccountForm = () => {
 

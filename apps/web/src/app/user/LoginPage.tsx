@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Typography } from '@mui/material';
-import { useMobilePortraitDetection } from '@eco/config';
 import LoginButton from './LoginButton';
 import RegistrationButton from './RegistrationButton';
+import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 const LoginPage = () => {
 

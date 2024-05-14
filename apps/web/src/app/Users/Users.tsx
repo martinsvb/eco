@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useMobilePortraitDetection } from '@eco/config';
 import { selectUsers, useShallowEqualSelector } from '@eco/redux';
 import { useUsersColumns } from './useUsersColumns';
 import { useDialog } from '../components/dialog/AppDialog';
@@ -10,6 +9,7 @@ import { getDataGridSx, getDataGridWrapperSx } from '../components/dataGrid/desi
 import UsersButtons from './UsersButtons';
 import UsersDialog from './UsersDialog';
 import { useUsersHandlers } from './useUsersHandlers';
+import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 export const Users = () => {
 

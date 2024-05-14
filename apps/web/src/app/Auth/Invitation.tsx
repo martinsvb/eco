@@ -1,9 +1,10 @@
 import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { alpha, Paper, Stack, Typography, useTheme } from '@mui/material';
-import { unsplashUrl, useMobilePortraitDetection } from '@eco/config';
+import { unsplashUrl } from '@eco/config';
 import { logout, resetAccounts, resetCompanies, resetContent, resetUsers, useAppDispatch } from '@eco/redux';
 import InvitationForm from './InvitationForm';
+import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 const Invitation = () => {
 

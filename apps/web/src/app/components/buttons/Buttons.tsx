@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Box, CircularProgress, Stack } from "@mui/material";
-import { useMobilePortraitDetection } from "@eco/config";
 import { useAppSelector, selectIsUserLoggedIn, useShallowEqualSelector, selectUserAuth } from "@eco/redux";
 import { ScopeItems } from "@eco/types";
+import { useMobilePortraitDetection } from "../../hooks/useMobileDetection";
 
 interface ButtonsProps {
   isLoading: boolean;
