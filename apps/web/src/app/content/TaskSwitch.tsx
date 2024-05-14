@@ -2,7 +2,6 @@ import { ChangeEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Switch, Tooltip } from '@mui/material';
 import ms from 'ms';
-import { useSnackbar } from 'notistack';
 import { apiPatchContent, useAppDispatch } from '@eco/redux';
 import { ContentState, ContentTypes } from '@eco/types';
 
@@ -15,27 +14,19 @@ const TaskSwitch = ({id, state}: TaskSwitchProps) => {
 
   const { t } = useTranslation();
 
-  const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useAppDispatch();
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-      console.log({checked})
       const body = {state: checked ? ContentState.Done : ContentState.InProgress};
       dispatch(apiPatchContent({
         body,
         id,
         type: ContentTypes.Task,
-        onSuccess: () => {
-          enqueueSnackbar(
-            checked ? t('content:taskSwitchedDone') : t('content:taskSwitchedInProgress'),
-            {variant: 'success'}
-          );
-        }
+        successMsg: checked ? t('content:taskSwitchedDone') : t('content:taskSwitchedInProgress'),
       }));
     },
-    [dispatch, id]
+    [dispatch, id, t]
   );
 
   return (
