@@ -68,7 +68,7 @@ export const contentPost = async (
 }
 
 export const contentPatch = async (
-  {body, type, id}: {body: Partial<ContentData>, id: string} & ContentTypePayload,
+  {body, type, id, successMsg}: {body: Partial<ContentData>, id: string, successMsg?: string} & ContentTypePayload,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
@@ -78,7 +78,7 @@ export const contentPatch = async (
       await fetch(`/api/${endPoints.content}/${id}/${type}`, patchHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('contentLibs:updated'), {variant: 'success'});
+    enqueueSnackbar(successMsg || i18n.t('contentLibs:updated'), {variant: 'success'});
 
     return data;
   } catch (error: unknown) {
