@@ -14,7 +14,7 @@ import Search from '../components/search/Search';
 
 export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
 
-  let [, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const filter = useShallowEqualSelector(selectCompanyFilter);
 
@@ -24,7 +24,7 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
     (e: ChangeEvent<HTMLInputElement>) => {
       dispatch(setCompanyFilterData({[field]: e.target.value}));
     },
-    [dispatch]
+    [dispatch, field]
   );
 
   const handleClear = useCallback(
@@ -37,7 +37,7 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
       dispatch(setCompanyFilterData({[field]: ''}));
       dispatch(apiGetCompanies(''));
     },
-    [filter, dispatch]
+    [dispatch, setSearchParams, field, filter]
   );
 
   const handleSearch = useCallback(
@@ -49,7 +49,7 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
       setSearchParams(newFilter);
       dispatch(apiGetCompanies(''));
     },
-    [filter, dispatch]
+    [dispatch, setSearchParams, filter]
   );
 
   return (

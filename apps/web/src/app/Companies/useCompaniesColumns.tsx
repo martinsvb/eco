@@ -12,6 +12,7 @@ import { Languages } from '@eco/locales';
 import { CompanyItems } from '@eco/types';
 import { cancelCompany, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
+import { columnSettings, setRowMode } from '../helpers/dataGrid';
 
 interface CompaniesColumns {
   columns: GridColDef[];
@@ -31,14 +32,14 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
 
   const handleSaveClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel((prevRowModesModel) => ({ ...prevRowModesModel, [id]: { mode: GridRowModes.View } }));
+      setRowModesModel(setRowMode(id, GridRowModes.View));
     },
     []
   );
 
   const handleEditClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel((prevRowModesModel) => ({ ...prevRowModesModel, [id]: { mode: GridRowModes.Edit } }));
+      setRowModesModel(setRowMode(id, GridRowModes.Edit));
     },
     []
   );
@@ -64,19 +65,13 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
   return {
     columns: [
       {
-        field: CompanyItems.Name,
+        ...columnSettings(CompanyItems.Name, 180, 'left'),
         headerName: t('labels:name'),
-        width: 180,
-        align: 'left',
-        headerAlign: 'left',
         editable: companies?.edit
       },
       {
-        field: CompanyItems.Country,
+        ...columnSettings(CompanyItems.Country, 200),
         headerName: t('labels:country'),
-        width: 200,
-        align: 'center',
-        headerAlign: 'center',
         type: 'singleSelect',
         valueOptions: allowedCountries.map((value) => ({
           value,
@@ -87,13 +82,10 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         disableColumnMenu: true,
       },
       {
-        field: CompanyItems.CreatedAt,
+        ...columnSettings(CompanyItems.CreatedAt, 200),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),
-        width: 200,
-        align: 'center',
-        headerAlign: 'center',
         disableColumnMenu: true,
       },
       {

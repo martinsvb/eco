@@ -11,6 +11,7 @@ import { UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
 import AppAvatar from '../components/avatar/AppAvatar';
+import { columnSettings, setRowMode } from '../helpers/dataGrid';
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -30,14 +31,14 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
 
   const handleSaveClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel((prevRowModesModel) => ({ ...prevRowModesModel, [id]: { mode: GridRowModes.View } }));
+      setRowModesModel(setRowMode(id, GridRowModes.View));
     },
     []
   );
 
   const handleEditClick = useCallback(
     (id: GridRowId) => () => {
-      setRowModesModel((prevRowModesModel) => ({ ...prevRowModesModel, [id]: { mode: GridRowModes.Edit } }));
+      setRowModesModel(setRowMode(id, GridRowModes.Edit));
     },
     []
   );
@@ -96,47 +97,32 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         disableColumnMenu: true,
       },
       {
-        field: UserItems.Name,
+        ...columnSettings(UserItems.Name, 180, 'left'),
         headerName: t('labels:name'),
-        width: 180,
-        align: 'left',
-        headerAlign: 'left',
         editable: users?.edit
       },
       {
-        field: UserItems.Email,
+        ...columnSettings(UserItems.Email, 220, 'left'),
         headerName: t('labels:email'),
-        width: 220,
-        align: 'left',
-        headerAlign: 'left',
         editable: users?.edit,
       },
       {
-        field: UserItems.IsEmailConfirmed,
+        ...columnSettings(UserItems.IsEmailConfirmed, 80),
         headerName: t('labels:isEmailConfirmed'),
         type: 'boolean',
-        width: 80,
-        align: 'center',
-        headerAlign: 'center',
         sortable: false,
         disableColumnMenu: true,
       },
       {
-        field: UserItems.Phone,
+        ...columnSettings(UserItems.Phone, 160),
         headerName: t('labels:phone'),
-        width: 160,
-        align: 'center',
-        headerAlign: 'center',
         sortable: false,
         disableColumnMenu: true,
         editable: users?.edit
       },
       {
-        field: UserItems.Role,
+        ...columnSettings(UserItems.Role, 200),
         headerName: t('labels:role'),
-        width: 200,
-        align: 'center',
-        headerAlign: 'center',
         type: 'singleSelect',
         valueOptions: Object.values(role === UserRoles.Admin ? UserRoles : omit(['Admin'], UserRoles)).map(
           (value) => ({
@@ -149,13 +135,10 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         disableColumnMenu: true,
       },
       {
-        field: UserItems.CreatedAt,
+        ...columnSettings(UserItems.CreatedAt, 200),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),
-        width: 200,
-        align: 'center',
-        headerAlign: 'center',
         disableColumnMenu: true,
       },
       {
