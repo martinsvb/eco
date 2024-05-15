@@ -18,7 +18,6 @@ import {
 } from '@eco/redux';
 import { UserEditData, UserItems, ApiOperations } from '@eco/types';
 import { getUserEditValidationSchema } from '@eco/validation';
-import { routes } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import ControllerPhoneField from '../components/formControls/ControllerPoneField';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
@@ -104,7 +103,7 @@ const UserForm = () => {
 
   const handleClose = useCallback(
     () => {
-      navigate(routes.users);
+      navigate(-1);
     },
     [navigate]
   );
