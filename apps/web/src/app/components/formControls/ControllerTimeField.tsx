@@ -1,12 +1,12 @@
 import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
-import DateTimePicker from "./DateTimePicker";
-import { DateTimePickerProps } from "./formControlsTypes";
+import { TimePickerProps } from "./formControlsTypes";
+import TimePicker from "./TimePicker";
 
 export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: DateTimePickerProps;
+  fieldProps: TimePickerProps;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
-const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>({
+const ControllerTimeField = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
@@ -17,7 +17,7 @@ const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>(
       name={name}
       control={control}
       render={({ field }) => (
-        <DateTimePicker
+        <TimePicker
           {...field}
           {...fieldProps}
         />
@@ -27,4 +27,4 @@ const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>(
   );
 };
 
-export default ControllerDateTimeField;
+export default ControllerTimeField;

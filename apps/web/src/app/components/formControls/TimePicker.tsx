@@ -1,39 +1,54 @@
-//@ts-nocheck
-import { FC, memo } from 'react';
-import { TimePicker as MuiTimePicker, TimePickerProps as MuiTimePickerProps } from '@mui/x-date-pickers/TimePicker';
+import { FC, Ref, forwardRef, memo } from 'react';
+import { useTheme } from '@mui/material';
+import { TimePicker as MuiTimePicker } from '@mui/x-date-pickers/TimePicker';
+import { TimePickerProps } from './formControlsTypes';
+import { DateWrapper } from './DateWrapper';
+import { getScrollbarDesign } from '@eco/config';
 
-import TextField from './TextField';
-import { BaseFormControlProps } from './formControlsTypes';
+const TimePicker: FC<TimePickerProps> = forwardRef(({
+  id,
+  label,
+  value,
+  ...rest
+}, ref) => {
 
-type MuiTimePickerFilteredProps = Omit<MuiTimePickerProps<Date>, 'renderInput'>;
+  const { palette: { background, grey } } = useTheme();
 
-const DatePicker: FC<BaseFormControlProps & MuiTimePickerFilteredProps> = memo(
-  ({ formHelperTextProps, helperText, id, label, name, value, ...rest }) => {
-
-    return (
+  return (
+    <DateWrapper
+      label={label}
+      id={id}
+      disabled={rest.disabled}
+    >
       <MuiTimePicker
         {...rest}
-        label={label}
+        ampm={false}
+        inputRef={ref as Ref<HTMLInputElement> | undefined}
         value={value}
-        renderInput={({ disabled, error, inputProps, InputProps, inputRef }) => (
-          <TextField
-            {...InputProps}
-            disabled={disabled}
-            error={error}
-            formHelperTextProps={formHelperTextProps}
-            helperText={helperText}
-            id={id}
-            inputProps={inputProps}
-            label={label}
-            name={name}
-            ref={inputRef}
-          />
-        )}
+        slotProps={{
+          textField: {
+            inputProps: {
+              id
+            }
+          },
+          desktopPaper: {
+            sx: {
+              '& .MuiMultiSectionDigitalClock-root': {
+                '& .MuiList-root': {
+                  ...getScrollbarDesign({
+                    trackColor: background.default,
+                    thumbColor: grey[500],
+                  }),
+                }
+              }
+            }
+          }
+        }}
       />
-    );
-  }
-);
+    </DateWrapper>
+  );
+});
 
-DatePicker.displayName = 'DatePicker';
+TimePicker.displayName = 'TimePicker';
 
-export default DatePicker;
+export default memo(TimePicker);
