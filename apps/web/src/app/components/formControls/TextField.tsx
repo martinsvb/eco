@@ -48,7 +48,7 @@ const TextField: FC<TextFieldProps> = forwardRef(
       defaultValue,
       disabled,
       error,
-      FormHelperTextProps,
+      formHelperTextProps,
       helperText,
       id,
       label,
@@ -76,7 +76,7 @@ const TextField: FC<TextFieldProps> = forwardRef(
         />
         <HelperText
           helperText={helperText}
-          FormHelperTextProps={FormHelperTextProps}
+          formHelperTextProps={formHelperTextProps}
           error={error}
           id={id}
         />

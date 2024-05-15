@@ -41,7 +41,7 @@ const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Ele
 
 const Select: FC<BaseFormControlProps & SelectProps> = forwardRef(
   (
-    { disabled, error, fullWidth = true, FormHelperTextProps, helperText, id, name, required, values, ...rest },
+    { disabled, error, fullWidth = true, formHelperTextProps, helperText, id, name, required, values, ...rest },
     ref
   ) => {
 
@@ -69,7 +69,7 @@ const Select: FC<BaseFormControlProps & SelectProps> = forwardRef(
         </BootstrapSelect>
         <HelperText
           helperText={helperText}
-          FormHelperTextProps={FormHelperTextProps}
+          formHelperTextProps={formHelperTextProps}
           error={error}
           id={id}
         />

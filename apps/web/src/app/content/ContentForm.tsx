@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { map, pick } from 'ramda';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -21,6 +20,7 @@ import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/typ
 import { getContentValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
+import ControllerDateTimeField from '../components/formControls/ControllerDateTimeField';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -46,16 +46,10 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const values = useMemo(
     () => {
-      return data ?
-        map((item) => item || '', pick(
-          [ContentItems.Title, ContentItems.Text],
-          data
-        )) as ContentData
-        :
-        {
-          [ContentItems.Title]: '',
-          [ContentItems.Text]: '',
-        }
+      return [ContentItems.Title, ContentItems.Text, ContentItems.DateTime].reduce((acc, item) => ({
+        ...acc,
+        [item]: data?.[item] ?? item === ContentItems.DateTime ? null : ''
+      }), {}) as ContentData;
     },
     [data]
   );
@@ -130,6 +124,17 @@ const ContentForm = ({type}: ContentFormProps) => {
           />
         </Grid>
         <Grid md={6} xs={12}>
+          <ControllerDateTimeField
+            name={ContentItems.DateTime}
+            control={control}
+            defaultValue={formData.dateTime}
+            fieldProps={{
+              label: t('labels:dateTime'),
+              id: ContentItems.DateTime
+            }}
+          />
+        </Grid>
+        <Grid xs={12}>
           <ControllerTextField
             name={ContentItems.Text}
             control={control}

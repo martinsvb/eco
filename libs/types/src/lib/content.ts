@@ -17,6 +17,7 @@ export enum ContentState {
 export enum ContentItems {
   Title = 'title',
   Text = 'text',
+  DateTime = 'dateTime',
   Type = 'type',
   State = 'state',
   Published = 'published',
@@ -25,6 +26,7 @@ export enum ContentItems {
 export interface ContentData {
   [ContentItems.Title]: string;
   [ContentItems.Text]?: string;
+  [ContentItems.DateTime]?: Date | null;
   [ContentItems.State]?: ContentState;
 }
 

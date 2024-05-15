@@ -16,7 +16,7 @@ export interface RadioProps {
 const Radio: FC<BaseFormControlProps & RadioProps & FormLabelProps & RadioGroupProps> = ({
   disabled,
   error,
-  FormHelperTextProps,
+  formHelperTextProps,
   label,
   helperText,
   id,
@@ -49,7 +49,7 @@ const Radio: FC<BaseFormControlProps & RadioProps & FormLabelProps & RadioGroupP
           <FormControlLabel key={option.label} {...option} control={<MuiRadio {...muiRadioProps} />} />
         ))}
       </RadioGroup>
-      <HelperText helperText={helperText} FormHelperTextProps={FormHelperTextProps} error={error} id={id} />
+      <HelperText helperText={helperText} formHelperTextProps={formHelperTextProps} error={error} id={id} />
     </FormControl>
   );
 };

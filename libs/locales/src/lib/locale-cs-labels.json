@@ -12,6 +12,7 @@
   "createdAt": "Datum vytvoření",
   "cs": "Cs",
   "currency": "Měna",
+  "dateTime": "Datum a čas",
   "delete": "Smazat",
   "description": "Popis",
   "done": "Hotovo",

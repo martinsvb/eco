@@ -21,6 +21,9 @@ export class ContentEntity implements Content {
   @ApiProperty({ description: 'Published state', required: false })
   published: boolean | null;
 
+  @ApiProperty({ description: 'Content date time', required: false })
+  dateTime: Date | null;
+
   @ApiProperty({ description: 'Date of creation' })
   createdAt: Date;
 

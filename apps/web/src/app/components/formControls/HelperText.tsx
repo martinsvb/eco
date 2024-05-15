@@ -3,7 +3,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 import { BaseFormControlProps } from './formControlsTypes';
 
-type HelperTextProps = Pick<BaseFormControlProps, 'FormHelperTextProps' | 'helperText'>;
+type HelperTextProps = Pick<BaseFormControlProps, 'formHelperTextProps' | 'helperText'>;
 
 interface HelperTextStatesProps {
   id?: string;
@@ -11,11 +11,11 @@ interface HelperTextStatesProps {
 }
 
 const HelperText: FC<HelperTextProps & HelperTextStatesProps> = memo(
-  ({ error, FormHelperTextProps, helperText, id }) => {
+  ({ error, formHelperTextProps, helperText, id }) => {
     const helperTextId = helperText && id ? `${id}-helper-text` : undefined;
 
     return helperText ? (
-      <FormHelperText id={helperTextId} {...FormHelperTextProps} error={error}>
+      <FormHelperText id={helperTextId} {...formHelperTextProps} error={error}>
         {helperText}
       </FormHelperText>
     ) : null;

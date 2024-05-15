@@ -8,7 +8,7 @@ import { BaseFormControlProps } from './formControlsTypes';
 type MuiTimePickerFilteredProps = Omit<MuiTimePickerProps<Date>, 'renderInput'>;
 
 const DatePicker: FC<BaseFormControlProps & MuiTimePickerFilteredProps> = memo(
-  ({ FormHelperTextProps, helperText, id, label, name, value, ...rest }) => {
+  ({ formHelperTextProps, helperText, id, label, name, value, ...rest }) => {
 
     return (
       <MuiTimePicker
@@ -20,7 +20,7 @@ const DatePicker: FC<BaseFormControlProps & MuiTimePickerFilteredProps> = memo(
             {...InputProps}
             disabled={disabled}
             error={error}
-            FormHelperTextProps={FormHelperTextProps}
+            formHelperTextProps={formHelperTextProps}
             helperText={helperText}
             id={id}
             inputProps={inputProps}

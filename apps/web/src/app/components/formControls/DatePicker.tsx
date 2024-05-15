@@ -1,38 +1,26 @@
-//@ts-nocheck
 import { FC, memo } from 'react';
-import { DatePicker as MuiDatePicker, DatePickerProps as MuiDatePickerProps } from '@mui/x-date-pickers/DatePicker';
-import TextField from './TextField';
-import { BaseFormControlProps } from './formControlsTypes';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePickerProps } from './formControlsTypes';
 
-type MuiDatePickerFilteredProps = Omit<MuiDatePickerProps<Date>, 'renderInput'>;
+const DatePicker: FC<DatePickerProps> = ({
+  id,
+  label,
+  name,
+  value,
+  ...rest
+}) => {
 
-const DatePicker: FC<BaseFormControlProps & MuiDatePickerFilteredProps> = memo(
-  ({ FormHelperTextProps, helperText, id, label, name, value, ...rest }) => {
-
-    return (
+  return (
+    <DemoItem label={label}>
       <MuiDatePicker
         {...rest}
-        label={label}
         value={value}
-        renderInput={({ disabled, error, inputProps, InputProps, inputRef }) => (
-          <TextField
-            {...InputProps}
-            disabled={disabled}
-            error={error}
-            FormHelperTextProps={FormHelperTextProps}
-            helperText={helperText}
-            id={id}
-            inputProps={inputProps}
-            label={label}
-            name={name}
-            ref={inputRef}
-          />
-        )}
       />
-    );
-  }
-);
+    </DemoItem>
+  );
+}
 
 DatePicker.displayName = 'DatePicker';
 
-export default DatePicker;
+export default memo(DatePicker);

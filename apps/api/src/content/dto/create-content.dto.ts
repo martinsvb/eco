@@ -12,19 +12,24 @@ export class CreateContentDto {
   @IsNotEmpty()
   @ApiProperty({ description: 'Content text' })
   text: string;
-
+  
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ description: 'Content type' })
   type: ContentTypes;
-
+  
   @IsString()
   @IsOptional()
   @ApiProperty({ description: 'Content state', required: false })
   state?: string;
-
+  
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ description: 'Published state', required: false })
   published?: boolean;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Content date time', required: false })
+  dateTime?: string;
 }

@@ -24,7 +24,7 @@ interface AutocompleteProps {
 const Autocomplete: FC<BaseFormControlProps & AutocompleteProps & MuiAutocompleteFilteredProps> = ({
   disabled,
   error,
-  FormHelperTextProps,
+  formHelperTextProps,
   helperText,
   id,
   label,
@@ -61,7 +61,7 @@ const Autocomplete: FC<BaseFormControlProps & AutocompleteProps & MuiAutocomplet
             {...InputProps}
             disabled={disabled}
             error={error}
-            FormHelperTextProps={FormHelperTextProps}
+            formHelperTextProps={formHelperTextProps}
             fullWidth
             helperText={helperText}
             id={id}

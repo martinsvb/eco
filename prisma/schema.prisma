@@ -29,6 +29,7 @@ model Content {
   id        String    @id @default(uuid())
   title     String
   text      String
+  dateTime  DateTime?
   type      String
   state     String?   @default("created")
   published Boolean?  @default(false)
