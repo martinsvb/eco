@@ -1,36 +1,25 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import { compose, filter, isEmpty, map, not, omit, pick } from 'ramda';
+import { useParams } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CurrencyList from 'currency-list'
-import {
-  apiPatchAccount,
-  apiPostAccount,
-  selectAccount,
-  selectIsAccountsLoading,
-  useAppDispatch,
-  useAppSelector,
-  useShallowEqualSelector
-} from '@eco/redux';
+import { selectAccount, selectIsAccountsLoading, useAppSelector, useShallowEqualSelector } from '@eco/redux';
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
-import { allowedCurrencies, routes } from '@eco/config';
+import { allowedCurrencies } from '@eco/config';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import ControllerSelect from '../components/formControls/ControllerSelect';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
+import { useFormValues } from '../hooks/useFormValues';
+import { useAccountFormHandlers } from './useAccountFormHandlers';
 
 const AccountForm = () => {
 
-  const dispatch = useAppDispatch();
-
   const { t, i18n } = useTranslation();
-
-  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -42,22 +31,9 @@ const AccountForm = () => {
 
   const account = useShallowEqualSelector(selectAccount);
 
-  const values = useMemo(
-    () => {
-      return account ?
-        map((item) => item || '', pick(
-          [AccountItems.iban, AccountItems.name, AccountItems.currency, AccountItems.description],
-          account
-        )) as AccountData
-        :
-        {
-          [AccountItems.iban]: '',
-          [AccountItems.name]: '',
-          [AccountItems.currency]: '',
-          [AccountItems.description]: '',
-        }
-    },
-    [account]
+  const values = useFormValues<AccountData>(
+    account,
+    [AccountItems.iban, AccountItems.name, AccountItems.currency, AccountItems.description]
   );
 
   const { control, formState: { isValid }, handleSubmit, watch } = useForm<AccountData>({
@@ -68,45 +44,11 @@ const AccountForm = () => {
 
   const data = watch();
 
-  const submit = useCallback(
-    (data: AccountData) => {
-      const body = filter(compose(not, isEmpty), omit([AccountItems.description], data));
-      if (id) {
-        dispatch(
-          apiPatchAccount({
-            body,
-            id,
-          })
-        );
-      }
-      else {
-        dispatch(
-          apiPostAccount({
-            body,
-          })
-        );
-      }
-    },
-    [dispatch, id]
-  );
-
-  const handleClick = useCallback(
-    () => {
-      submit(data);
-    },
-    [submit, data]
-  );
-
-  const handleClose = useCallback(
-    () => {
-      navigate(routes.accounts);
-    },
-    [navigate]
-  );
-
   const currencies = CurrencyList.getAll();
 
   const language = i18n.language.includes('-') ? i18n.language.split('-')[0] : i18n.language;
+
+  const { submit, handleClick, handleClose } = useAccountFormHandlers(data, id);
 
   return (
     <form onSubmit={handleSubmit(submit)}>

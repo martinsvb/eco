@@ -1,27 +1,18 @@
-import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
-import dayjs from 'dayjs';
-import { routes } from '@eco/config';
-import {
-  apiPatchContent,
-  apiPostContent,
-  selectContent,
-  selectIsContentsLoading,
-  useAppDispatch,
-  useAppSelector,
-  useShallowEqualSelector
-} from '@eco/redux';
+import { selectContent, selectIsContentsLoading, useAppSelector, useShallowEqualSelector } from '@eco/redux';
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 import ControllerDateTimeField from '../components/formControls/ControllerDateTimeField';
+import { useFormValues } from '../hooks/useFormValues';
+import { useContentFormHandlers } from './useContentFormHandlers';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -29,11 +20,7 @@ interface ContentFormProps {
 
 const ContentForm = ({type}: ContentFormProps) => {
 
-  const dispatch = useAppDispatch();
-
   const { t } = useTranslation();
-
-  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -45,19 +32,10 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const { data } = useShallowEqualSelector((state) => selectContent(state, type));
 
-  const values = useMemo(
-    () => {
-      return [ContentItems.Title, ContentItems.Text, ContentItems.DateTime].reduce((acc, item) => {
-        const isDateField = [ContentItems.DateTime].includes(item);
-        return {
-          ...acc,
-          [item]: data?.[item]
-            ? isDateField ? dayjs(data[item] as string) : data[item]
-            : isDateField ? null : ''
-        }
-      }, {}) as ContentData;
-    },
-    [data]
+  const values = useFormValues<ContentData>(
+    data,
+    [ContentItems.Title, ContentItems.Text, ContentItems.DateTime],
+    [ContentItems.DateTime]
   );
 
   const {
@@ -73,45 +51,7 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const formData = watch();
 
-  const submit = useCallback(
-    (body: ContentData) => {
-      if (id) {
-        dispatch(
-          apiPatchContent({
-            body,
-            id,
-            type,
-          })
-        );
-      }
-      else {
-        dispatch(
-          apiPostContent({
-            body,
-            type,
-            onSuccess: () => {
-              navigate(routes.content[type].list);
-            }
-          })
-        );
-      } 
-    },
-    [dispatch, navigate, id, type]
-  );
-
-  const handleClick = useCallback(
-    () => {
-      submit(formData);
-    },
-    [submit, formData]
-  );
-
-  const handleClose = useCallback(
-    () => {
-      navigate(routes.content[type].list);
-    },
-    [navigate, type]
-  );
+  const { submit, handleClick, handleClose } = useContentFormHandlers(type, formData, id);
 
   return (
     <form onSubmit={handleSubmit(submit)}>
