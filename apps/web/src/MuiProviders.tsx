@@ -5,6 +5,9 @@ import { csCZ, enUS } from '@mui/material/locale';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import 'dayjs/locale/en';
+import 'dayjs/locale/cs';
+import 'dayjs/locale/sk';
 import ms from 'ms';
 import { SnackbarProvider } from 'notistack';
 import { LocalStorageItems } from '@eco/config';
@@ -17,7 +20,7 @@ interface MuiProvidersProps {
 
 const MuiProviders: FC<MuiProvidersProps> = ({ children }) => {
 
-  const { i18n } = useTranslation();
+  const { i18n: { language } } = useTranslation();
 
   const isLightMode = useMediaQuery('(prefers-color-scheme: light)');
 
@@ -43,13 +46,13 @@ const MuiProviders: FC<MuiProvidersProps> = ({ children }) => {
   const muiLocales = useMemo(
     () => {
       let locales = enUS;
-      if (i18n.language.includes(Languages.cs)) {
+      if (language.includes(Languages.cs)) {
         locales = csCZ;
       }
 
       return locales;
     },
-    [i18n.language]
+    [language]
   );
 
   return (
@@ -72,7 +75,10 @@ const MuiProviders: FC<MuiProvidersProps> = ({ children }) => {
         autoHideDuration={ms('4s')}
         preventDuplicate
       >
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={Object.values(Languages).includes(language as Languages) ? language : Languages.en}
+        >
           {children}
         </LocalizationProvider>
       </SnackbarProvider>

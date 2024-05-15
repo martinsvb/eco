@@ -1,25 +1,31 @@
-import { FC, memo } from 'react';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { FC, Ref, forwardRef, memo } from 'react';
 import { DateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DateTimePickerProps } from './formControlsTypes';
+import { DateWrapper } from './DateWrapper';
 
-const DatePicker: FC<DateTimePickerProps> = ({
-  id,
+const DatePicker: FC<DateTimePickerProps> = forwardRef(({
   label,
   name,
   value,
   ...rest
-}) => {
+}, ref) => {
 
   return (
-    <DemoItem label={label}>
+    <DateWrapper
+      label={label}
+      id={rest.id}
+      disabled={rest.disabled}
+    >
       <MuiDateTimePicker
         {...rest}
+        ampm={false}
+        showDaysOutsideCurrentMonth
+        inputRef={ref as Ref<HTMLInputElement> | undefined}
         value={value}
       />
-    </DemoItem>
+    </DateWrapper>
   );
-}
+});
 
 DatePicker.displayName = 'DatePicker';
 

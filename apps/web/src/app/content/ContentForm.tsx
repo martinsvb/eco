@@ -6,6 +6,7 @@ import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
+import dayjs from 'dayjs';
 import { routes } from '@eco/config';
 import {
   apiPatchContent,
@@ -46,10 +47,15 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const values = useMemo(
     () => {
-      return [ContentItems.Title, ContentItems.Text, ContentItems.DateTime].reduce((acc, item) => ({
-        ...acc,
-        [item]: data?.[item] ?? item === ContentItems.DateTime ? null : ''
-      }), {}) as ContentData;
+      return [ContentItems.Title, ContentItems.Text, ContentItems.DateTime].reduce((acc, item) => {
+        const isDateField = [ContentItems.DateTime].includes(item);
+        return {
+          ...acc,
+          [item]: data?.[item]
+            ? isDateField ? dayjs(data[item] as string) : data[item]
+            : isDateField ? null : ''
+        }
+      }, {}) as ContentData;
     },
     [data]
   );
