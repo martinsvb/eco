@@ -1,12 +1,14 @@
 import * as ReactDOM from 'react-dom/client';
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { store } from '@eco/redux';
 import { Provider } from 'react-redux';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import i18n from '@eco/locales';
+import { store } from '@eco/redux';
 import { router } from './Router/routerConfiguration';
 import MuiProviders from './MuiProviders';
-import i18n from '@eco/locales';
+
+import './app/components/editor/styles.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

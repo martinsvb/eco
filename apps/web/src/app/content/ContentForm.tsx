@@ -13,6 +13,7 @@ import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 import ControllerDateTimeField from '../components/formControls/ControllerDateTimeField';
 import { useFormValues } from '../hooks/useFormValues';
 import { useContentFormHandlers } from './useContentFormHandlers';
+import ControllerEditor from '../components/editor/ControllerEditor';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -81,12 +82,11 @@ const ContentForm = ({type}: ContentFormProps) => {
           />
         </Grid>
         <Grid xs={12}>
-          <ControllerTextField
+          <ControllerEditor
             name={ContentItems.Text}
             control={control}
             defaultValue={formData.text}
             fieldProps={{
-              fullWidth: true,
               label: t('labels:text'),
               id: ContentItems.Text
             }}
