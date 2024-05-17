@@ -1,21 +1,17 @@
 import { ReactNode, forwardRef, memo } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
-import { InputBaseProps, InputLabel, Stack } from '@mui/material';
-import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
-import {LexicalComposer} from '@lexical/react/LexicalComposer';
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
+import { Box, InputBaseProps, InputLabel, Stack } from '@mui/material';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
-import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
-
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import ExampleTheme from './ExampleTheme';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import OnChangePlugin from './plugins/OnChangePlugin';
 import CapturePlugin from './plugins/CapturePlugin';
-
-function Placeholder() {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
-}
+import { useEditorDesign } from './useEditorDesign';
+import Placeholder from './Placeholder';
 
 const editorConfig = {
   namespace: 'Editor',
@@ -24,7 +20,6 @@ const editorConfig = {
   onError(error: Error) {
     throw error;
   },
-  // The editor theme
   theme: ExampleTheme,
 };
 
@@ -38,6 +33,8 @@ const Editor = forwardRef(({
   label,
   onChange
 }: EditorProps & Pick<ControllerRenderProps, 'onChange'>, ref) => {
+
+  const { editorContainerSx, editorInnerSx } = useEditorDesign();
 
   const formControlStates = { disabled };
 
@@ -55,20 +52,19 @@ const Editor = forwardRef(({
         >
           {label}
         </InputLabel>
-        <div className="editor-container">
+        <Box sx={editorContainerSx}>
           <ToolbarPlugin />
-          <div className="editor-inner">
+          <Box sx={editorInnerSx}>
             <RichTextPlugin
-              contentEditable={<ContentEditable className="editor-input" />}
+              contentEditable={<ContentEditable className="editor-input" id={id} />}
               placeholder={<Placeholder />}
               ErrorBoundary={LexicalErrorBoundary}
             />
             <HistoryPlugin />
-            <AutoFocusPlugin />
             <OnChangePlugin onChange={onChange} />
             <CapturePlugin ref={ref} />
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Stack>
     </LexicalComposer>
   );

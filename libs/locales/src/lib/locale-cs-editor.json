@@ -1,0 +1,13 @@
+{
+  "bold": "Tučné písmo",
+  "centerAlignment": "Zarovnání na střed",
+  "italic": "Kurzíva",
+  "justifyAlignment": "Zarovnání na obě strany",
+  "leftAlignment": "Zarovnání vlevo",
+  "placeholder": "Zde napiště text...",
+  "redo": "Vpřed",
+  "rightAlignment": "Zarování vpravo",
+  "strikethrough": "Přeškrtnuté písmo",
+  "underline": "Podtržené písmo",
+  "undo": "Zpět"
+}

@@ -1,0 +1,13 @@
+{
+  "bold": "Font bold",
+  "centerAlignment": "Center align",
+  "italic": "Font italic",
+  "justifyAlignment": "Justify align",
+  "leftAlignment": "Left align",
+  "placeholder": "Enter text here...",
+  "redo": "Redo",
+  "rightAlignment": "Right align",
+  "strikethrough": "Font strikethrough",
+  "underline": "Font underline",
+  "undo": "Undo"
+}
