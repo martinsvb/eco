@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { allowedCountries } from 'libs/config/src';
+import { allowedCountries, exampleRichText } from 'libs/config/src';
 import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
 import { UserRoles } from '../libs/types/src/lib/user';
 import { userRights } from '../libs/types/src/lib/userRights';
@@ -89,7 +89,7 @@ async function main() {
   const content1 = await prisma.content.create({
     data: {
       title: 'Test 1',
-      text: 'Test content 1',
+      text: exampleRichText,
       type: ContentTypes.Task,
       state: ContentState.Done,
       authorId: user1.id,
@@ -100,7 +100,7 @@ async function main() {
   const content2 = await prisma.content.create({
     data: {
       title: 'Test 2',
-      text: 'Test content 2',
+      text: exampleRichText,
       type: ContentTypes.Task,
       state: ContentState.Done,
       authorId: user2.id,

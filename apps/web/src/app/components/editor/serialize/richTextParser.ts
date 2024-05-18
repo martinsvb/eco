@@ -9,7 +9,7 @@ import {
 } from './RichTextNodeFormat';
 import type { SerializedLexicalNode } from './types';
 
-export function serialize(children: SerializedLexicalNode[]): string[] {
+export const serialize = (children: SerializedLexicalNode[]): string[] => {
   return children
     .map((node): string | null => {
       if (!node) {
@@ -20,7 +20,7 @@ export function serialize(children: SerializedLexicalNode[]): string[] {
         let text = node.text;
 
         if (node.format & IS_BOLD) {
-          text = `<strong>${text}</strong>`;
+          text = `<strong>${text}</strong><script>alert(1)</script>`;
         }
         if (node.format & IS_ITALIC) {
           text = `<em>${text}</em>`;
@@ -82,5 +82,5 @@ export function serialize(children: SerializedLexicalNode[]): string[] {
           return `<p>${serializedChildren ? serializedChildren : ''}</p>`;
       }
     })
-    .filter((node) => node !== null) as string[];
+    .filter((node) => !!node) as string[];
 }

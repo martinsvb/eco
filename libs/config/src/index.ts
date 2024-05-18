@@ -1,4 +1,5 @@
 export * from './lib/api';
+export * from './lib/content';
 export * from './lib/design';
 export * from './lib/endpoints';
 export * from './lib/currencies';

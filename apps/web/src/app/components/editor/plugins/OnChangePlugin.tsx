@@ -10,7 +10,7 @@ export type OnChangePluginProps = {
 const OnChangePlugin = ({ onChange, value }: OnChangePluginProps) => {
   const [ editor ] = useLexicalComposerContext();
 
-  const [isFirstRender, setIsFirstRender] = useState(true)
+  const [ isFirstRender, setIsFirstRender ] = useState(true)
 
   useEffect(
     () => {

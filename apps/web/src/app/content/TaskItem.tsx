@@ -21,7 +21,7 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
           return undefined;
         }
         const parsed = JSON.parse(text);
-        return serialize(parsed.root.children);
+        return serialize(parsed.root.children).join('');
       }
       catch {
         return undefined;

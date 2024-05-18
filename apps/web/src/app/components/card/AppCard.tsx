@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Box, Card, CardActions, CardContent, CardProps, Stack, Typography } from '@mui/material';
+import sanitize from 'sanitize-html';
 import { useMobileDetection } from '../../hooks/useMobileDetection';
 
 interface AppCardProps extends CardProps {
@@ -7,8 +8,8 @@ interface AppCardProps extends CardProps {
   actionsAvailable?: boolean;
   cardTitle: ReactNode;
   label?: ReactNode;
-  textContent?: ReactNode;
-  htmlContent?: ReactNode;
+  textContent?: string;
+  htmlContent?: string;
   background?: string;
 }
 
@@ -43,11 +44,20 @@ export const AppCard = ({
         </Stack>
         {!!textContent &&
           <Typography variant='body1' color="text.secondary" gutterBottom>
-            {textContent}
+            {sanitize(textContent)}
           </Typography>
         }
         {!!htmlContent &&
-          <Box dangerouslySetInnerHTML={{__html: htmlContent}} />
+          <Box
+            sx={{
+              lineHeight: 0.25,
+              maxHeight: 70,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+            dangerouslySetInnerHTML={{__html: sanitize(htmlContent)}}
+          />
         }
       </CardContent>
       {!!actionsAvailable &&
