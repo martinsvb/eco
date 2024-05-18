@@ -12,8 +12,11 @@ import type { SerializedLexicalNode } from './types';
 export function serialize(children: SerializedLexicalNode[]): string[] {
   return children
     .map((node): string | null => {
+      if (!node) {
+        return null;
+      }
+
       if (node.type === 'text') {
-        //isText
         let text = node.text;
 
         if (node.format & IS_BOLD) {
@@ -44,10 +47,6 @@ export function serialize(children: SerializedLexicalNode[]): string[] {
         }
 
         return `${text}`;
-      }
-
-      if (!node) {
-        return null;
       }
 
       const serializedChildren = node.children

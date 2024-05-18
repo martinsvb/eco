@@ -16,10 +16,16 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
 
   const html = useMemo(
     () => {
-      if (!text) {
+      try {
+        if (!text) {
+          return undefined;
+        }
+        const parsed = JSON.parse(text);
+        return serialize(parsed.root.children);
+      }
+      catch {
         return undefined;
       }
-      return serialize(JSON.parse(text).root.children);
     },
     [text]
   );
