@@ -43,7 +43,11 @@ export const AppCard = ({
           {label}
         </Stack>
         {!!textContent &&
-          <Typography variant='body1' color="text.secondary" gutterBottom>
+          <Typography
+            variant='body1'
+            color="text.secondary"
+            gutterBottom
+          >
             {sanitize(textContent)}
           </Typography>
         }
