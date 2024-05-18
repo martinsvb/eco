@@ -16,7 +16,9 @@ const OnChangePlugin = ({ onChange, value }: OnChangePluginProps) => {
     () => {
       if (isFirstRender && value) {
         setIsFirstRender(false);
-        editor.setEditorState(editor.parseEditorState(value));
+        if (value.includes('"root":{"children":[{')) {
+          editor.setEditorState(editor.parseEditorState(value));
+        }
       }
 
       return editor.registerUpdateListener(({editorState}) => {
