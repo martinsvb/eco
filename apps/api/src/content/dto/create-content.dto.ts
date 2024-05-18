@@ -9,9 +9,9 @@ export class CreateContentDto {
   title: string;
 
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ description: 'Content text' })
-  text: string;
+  @IsOptional()
+  @ApiProperty({ description: 'Content text', required: false })
+  text?: string;
   
   @IsString()
   @IsNotEmpty()

@@ -8,7 +8,7 @@ export const getContentValidationSchema = () => {
   return yup.object().shape({
     [ContentItems.Title]: yup.string()
       .required(t('validation:required', {Field: t('labels:title')})),
-    [ContentItems.Text]: yup.string(),
+    [ContentItems.Text]: yup.string().nullable(),
     [ContentItems.DateTime]: yup.date().nullable(),
   });
 }

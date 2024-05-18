@@ -25,7 +25,7 @@ export const useEditorDesign = () => {
         outline: 0,
         py: 2,
         px: 1.5, 
-        caretColor: '#444',
+        caretColor: grey[800],
       },
       '& .editor-text-bold': {
         fontWeight: 'bold',

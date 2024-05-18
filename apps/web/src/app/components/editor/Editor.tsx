@@ -25,13 +25,15 @@ const editorConfig = {
 
 export type EditorProps = {
   label: ReactNode;
+  value?: string;
 } & Pick<InputBaseProps, 'id' | 'disabled'>;
 
 const Editor = forwardRef(({
   id,
   disabled,
   label,
-  onChange
+  onChange,
+  value
 }: EditorProps & Pick<ControllerRenderProps, 'onChange'>, ref) => {
 
   const { editorContainerSx, editorInnerSx } = useEditorDesign();
@@ -61,7 +63,7 @@ const Editor = forwardRef(({
               ErrorBoundary={LexicalErrorBoundary}
             />
             <HistoryPlugin />
-            <OnChangePlugin onChange={onChange} />
+            <OnChangePlugin onChange={onChange} value={value} />
             <CapturePlugin ref={ref} />
           </Box>
         </Box>

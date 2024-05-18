@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Card, CardActions, CardContent, CardProps, Stack, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardProps, Stack, Typography } from '@mui/material';
 import { useMobileDetection } from '../../hooks/useMobileDetection';
 
 interface AppCardProps extends CardProps {
@@ -7,11 +7,20 @@ interface AppCardProps extends CardProps {
   actionsAvailable?: boolean;
   cardTitle: ReactNode;
   label?: ReactNode;
-  cardContent: ReactNode;
+  textContent?: ReactNode;
+  htmlContent?: ReactNode;
   background?: string;
 }
 
-export const AppCard = ({actions, actionsAvailable, cardTitle, background, label, cardContent}: AppCardProps) => {
+export const AppCard = ({
+  actions,
+  actionsAvailable,
+  cardTitle,
+  background,
+  label,
+  textContent,
+  htmlContent
+}: AppCardProps) => {
 
   const isMobile = useMobileDetection();
 
@@ -32,9 +41,14 @@ export const AppCard = ({actions, actionsAvailable, cardTitle, background, label
           </Typography>
           {label}
         </Stack>
-        <Typography variant='body1' color="text.secondary" gutterBottom>
-          {cardContent}
-        </Typography>
+        {!!textContent &&
+          <Typography variant='body1' color="text.secondary" gutterBottom>
+            {textContent}
+          </Typography>
+        }
+        {!!htmlContent &&
+          <Box dangerouslySetInnerHTML={{__html: htmlContent}} />
+        }
       </CardContent>
       {!!actionsAvailable &&
         <CardActions

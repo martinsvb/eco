@@ -44,7 +44,7 @@ export const AccountItem = ({id, name, iban, currency}: Account) => {
       }
       actionsAvailable={accounts.edit || accounts.delete}
       cardTitle={name}
-      cardContent={iban}
+      textContent={iban}
       label={<Chip label={currency} />}
     />
   );

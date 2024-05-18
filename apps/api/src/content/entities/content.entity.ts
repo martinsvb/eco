@@ -9,8 +9,8 @@ export class ContentEntity implements Content {
   @ApiProperty({ description: 'Content title' })
   title: string;
 
-  @ApiProperty({ description: 'Content text' })
-  text: string;
+  @ApiProperty({ description: 'Content text', required: false })
+  text: string | null;
 
   @ApiProperty({ description: 'Content type' })
   type: string;
