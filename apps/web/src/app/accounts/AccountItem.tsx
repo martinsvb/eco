@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Account } from '@prisma/client';
-import { Chip, IconButton, Tooltip } from '@mui/material';
+import { Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import ms from 'ms';
 import { routes } from '@eco/config';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
 import AccountDeleteButton from './AccountDeleteButton';
 import { AppCard } from '../components/card/AppCard';
+import AppIconButton from '../components/buttons/AppIconButton';
 
 export const AccountItem = ({id, name, iban, currency}: Account) => {
 
@@ -30,14 +30,11 @@ export const AccountItem = ({id, name, iban, currency}: Account) => {
       actions={
         <>
           {accounts.edit &&
-            <Tooltip
+            <AppIconButton
               title={t('labels:edit')}
-              enterDelay={ms('0.1s')}
-            >
-              <IconButton onClick={handleEdit}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
+              id='accountEdit'
+              onClick={handleEdit}
+            ><EditIcon /></AppIconButton>
           }
           {accounts.delete && <AccountDeleteButton id={id} />}
         </>

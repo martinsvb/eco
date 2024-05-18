@@ -27,7 +27,7 @@ import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import { Divider, Stack } from '@mui/material';
-import Icon from '../../buttons/Icon';
+import AppIconButton from '../../buttons/AppIconButton';
 
 const LowPriority = 1;
 
@@ -99,64 +99,64 @@ export default function ToolbarPlugin() {
       }}
       ref={toolbarRef}
     >
-      <Icon
+      <AppIconButton
         title={t('editor:undo')}
         disabled={!canUndo}
         id='editorUndo'
         onClick={handleClick(UNDO_COMMAND)}
-      ><UndoIcon /></Icon>
-      <Icon
+      ><UndoIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:redo')}
         disabled={!canRedo}
         id='editorRedo'
         onClick={handleClick(REDO_COMMAND)}
-      ><RedoIcon /></Icon>
+      ><RedoIcon /></AppIconButton>
       <Divider orientation='vertical' sx={{mx: 1}} flexItem />
-      <Icon
+      <AppIconButton
         title={t('editor:bold')}
         id='editorBold'
         color={isBold ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'bold')}
-      ><FormatBoldIcon /></Icon>
-      <Icon
+      ><FormatBoldIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:italic')}
         id='editorItalic'
         color={isItalic ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'italic')}
-      ><FormatItalicIcon /></Icon>
-      <Icon
+      ><FormatItalicIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:underline')}
         id='editorUnderline'
         color={isUnderline ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'underline')}
-      ><FormatUnderlinedIcon /></Icon>
-      <Icon
+      ><FormatUnderlinedIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:strikethrough')}
         id='editorStrikethrough'
         color={isStrikethrough ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'strikethrough')}
-      ><StrikethroughSIcon /></Icon>
+      ><StrikethroughSIcon /></AppIconButton>
       <Divider orientation='vertical' sx={{mx: 1}} flexItem />
-      <Icon
+      <AppIconButton
         title={t('editor:leftAlignment')}
         id='editorLeftAlign'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'left')}
-      ><FormatAlignLeftIcon /></Icon>
-      <Icon
+      ><FormatAlignLeftIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:centerAlignment')}
         id='editorCenterAlignment'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'center')}
-      ><FormatAlignCenterIcon /></Icon>
-      <Icon
+      ><FormatAlignCenterIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:rightAlignment')}
         id='editorRightAlignment'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'right')}
-      ><FormatAlignRightIcon /></Icon>
-      <Icon
+      ><FormatAlignRightIcon /></AppIconButton>
+      <AppIconButton
         title={t('editor:justifyAlignment')}
         id='editorJustifyAlignment'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'justify')}
-      ><FormatAlignJustifyIcon /></Icon>
+      ><FormatAlignJustifyIcon /></AppIconButton>
     </Stack>
   );
 }

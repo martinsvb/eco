@@ -2,12 +2,12 @@ import { ReactNode, memo } from 'react';
 import { Tooltip, IconButton, IconButtonProps } from '@mui/material';
 import ms from 'ms';
 
-interface IconProps extends Omit<IconButtonProps, 'aria-label'> {
+interface AppIconButtonProps extends Omit<IconButtonProps, 'aria-label'> {
   children: ReactNode;
   title: string;
 }
 
-const Icon = ({children, title, ...rest}: IconProps) => {
+const AppIconButton = ({children, title, ...rest}: AppIconButtonProps) => {
 
   return (
     <Tooltip
@@ -26,4 +26,4 @@ const Icon = ({children, title, ...rest}: IconProps) => {
   )
 }
 
-export default memo(Icon);
+export default memo(AppIconButton);

@@ -1,12 +1,12 @@
 import { MouseEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
-import ms from 'ms';
 import { apiDeleteContent, selectIsContentsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { ApiOperations, ContentTypes } from '@eco/types';
 import AppDialog, { useDialog } from '../components/dialog/AppDialog';
+import AppIconButton from '../components/buttons/AppIconButton';
 
 interface ContentDeleteButtonProps {
   id: string;
@@ -38,18 +38,11 @@ const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
 
   return (
     <>
-      <Tooltip
+      <AppIconButton
         title={t('labels:delete')}
-        enterDelay={ms('0.1s')}
-      >
-        <IconButton
-          aria-label={t('labels:delete')}
-          id="content-delete-button"
-          onClick={handleClickOpen}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
+        id='content-delete-button'
+        onClick={handleClickOpen}
+      ><DeleteIcon /></AppIconButton>
       <AppDialog
         actions={
           <>
