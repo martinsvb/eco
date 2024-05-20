@@ -3,7 +3,7 @@ import { THEME_MODE } from '../../../config';
 
 export const useEditorDesign = () => {
 
-  const { palette: { background, common, grey, mode }, shape, typography } = useTheme();
+  const { palette: { background, common, grey, mode }, shape, spacing, typography } = useTheme();
 
   return {
     editorContainerSx: {
@@ -42,6 +42,14 @@ export const useEditorDesign = () => {
       '& .editor-text-underlineStrikethrough': {
         textDecoration: 'underline line-through',
       },
+      '& table': {
+        borderCollapse: 'collapse',
+        '& th, td': {
+          width: '200px',
+          padding: spacing(1),
+          border: `1px solid ${grey[800]}`,
+        },
+      }
     }
   }
 }

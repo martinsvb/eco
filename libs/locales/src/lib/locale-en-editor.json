@@ -1,13 +1,21 @@
 {
   "bold": "Font bold",
   "centerAlignment": "Center align",
+  "editorTableColumnsCount": "Columns count",
+  "editorTableRowsCount": "Rows count",
+  "heading": "Heading {{level}}",
+  "headingShortcut": "H{{level}}",
+  "insertTableTitle": "Insert table",
   "italic": "Font italic",
   "justifyAlignment": "Justify align",
   "leftAlignment": "Left align",
+  "orderedList": "Ordered list",
   "placeholder": "Enter text here...",
   "redo": "Redo",
   "rightAlignment": "Right align",
   "strikethrough": "Font strikethrough",
+  "table": "Table",
   "underline": "Font underline",
-  "undo": "Undo"
+  "undo": "Undo",
+  "unorderedList": "Unordered list"
 }

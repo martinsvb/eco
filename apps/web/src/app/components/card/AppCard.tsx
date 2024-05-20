@@ -6,7 +6,7 @@ import { useMobileDetection } from '../../hooks/useMobileDetection';
 interface AppCardProps extends CardProps {
   actions: ReactNode;
   actionsAvailable?: boolean;
-  cardTitle: ReactNode;
+  cardTitle: string;
   label?: ReactNode;
   textContent?: string;
   htmlContent?: string;
@@ -38,7 +38,7 @@ export const AppCard = ({
       <CardContent>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="h5" component="div" mb={1}>
-            {cardTitle}
+            {sanitize(cardTitle)}
           </Typography>
           {label}
         </Stack>

@@ -1,13 +1,21 @@
 {
   "bold": "Tučné písmo",
   "centerAlignment": "Zarovnání na střed",
+  "editorTableColumnsCount": "Počet sloupců",
+  "editorTableRowsCount": "Počet řádek",
+  "heading": "Nadpis {{level}}",
+  "headingShortcut": "H{{level}}",
+  "insertTableTitle": "Vložit tabulku",
   "italic": "Kurzíva",
   "justifyAlignment": "Zarovnání na obě strany",
   "leftAlignment": "Zarovnání vlevo",
+  "orderedList": "Číslovaný seznam",
   "placeholder": "Zde napiště text...",
   "redo": "Vpřed",
   "rightAlignment": "Zarování vpravo",
   "strikethrough": "Přeškrtnuté písmo",
+  "table": "Tabulka",
   "underline": "Podtržené písmo",
-  "undo": "Zpět"
+  "undo": "Zpět",
+  "unorderedList": "Odrážkový seznam"
 }

@@ -16,6 +16,7 @@ import {
   TextFormatType,
   UNDO_COMMAND,
 } from 'lexical';
+import { Divider, Stack } from '@mui/material';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
@@ -26,12 +27,24 @@ import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
-import { Divider, Stack } from '@mui/material';
 import AppIconButton from '../../buttons/AppIconButton';
+import HeadingsPlugin from './HeadingsPlugin';
+import ListsPlugin from './ListsPlugin';
+import TableToolbar from './table/TableToolbar';
 
 const LowPriority = 1;
 
-export default function ToolbarPlugin() {
+export interface ToolbarPluginProps {
+  showHeadingsPlugin?: boolean;
+  showListsPlugin?: boolean;
+  showTablePlugin?: boolean;
+}
+
+const ToolbarPlugin = ({
+  showHeadingsPlugin = true,
+  showListsPlugin = true,
+  showTablePlugin = true,
+}: ToolbarPluginProps) => {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
@@ -87,7 +100,10 @@ export default function ToolbarPlugin() {
     );
   }, [editor, $updateToolbar]);
 
-  const handleClick = (type: LexicalCommand<void>, payload?: TextFormatType | ElementFormatType) => () => {
+  const handleClick = (
+    type: LexicalCommand<void>,
+    payload?: TextFormatType | ElementFormatType
+  ) => () => {
     editor.dispatchCommand(type, payload as void);
   };
 
@@ -104,59 +120,99 @@ export default function ToolbarPlugin() {
         disabled={!canUndo}
         id='editorUndo'
         onClick={handleClick(UNDO_COMMAND)}
-      ><UndoIcon /></AppIconButton>
+      >
+        <UndoIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:redo')}
         disabled={!canRedo}
         id='editorRedo'
         onClick={handleClick(REDO_COMMAND)}
-      ><RedoIcon /></AppIconButton>
+      >
+        <RedoIcon />
+      </AppIconButton>
+      {showHeadingsPlugin && (
+        <>
+          <Divider orientation='vertical' sx={{mx: 1}} flexItem />
+          <HeadingsPlugin />
+        </>
+      )}
       <Divider orientation='vertical' sx={{mx: 1}} flexItem />
       <AppIconButton
         title={t('editor:bold')}
         id='editorBold'
         color={isBold ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'bold')}
-      ><FormatBoldIcon /></AppIconButton>
+      >
+        <FormatBoldIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:italic')}
         id='editorItalic'
         color={isItalic ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'italic')}
-      ><FormatItalicIcon /></AppIconButton>
+      >
+        <FormatItalicIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:underline')}
         id='editorUnderline'
         color={isUnderline ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'underline')}
-      ><FormatUnderlinedIcon /></AppIconButton>
+      >
+        <FormatUnderlinedIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:strikethrough')}
         id='editorStrikethrough'
         color={isStrikethrough ? 'primary' : 'inherit'}
         onClick={handleClick(FORMAT_TEXT_COMMAND, 'strikethrough')}
-      ><StrikethroughSIcon /></AppIconButton>
+      >
+        <StrikethroughSIcon />
+      </AppIconButton>
       <Divider orientation='vertical' sx={{mx: 1}} flexItem />
       <AppIconButton
         title={t('editor:leftAlignment')}
         id='editorLeftAlign'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'left')}
-      ><FormatAlignLeftIcon /></AppIconButton>
+      >
+        <FormatAlignLeftIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:centerAlignment')}
         id='editorCenterAlignment'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'center')}
-      ><FormatAlignCenterIcon /></AppIconButton>
+      >
+        <FormatAlignCenterIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:rightAlignment')}
         id='editorRightAlignment'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'right')}
-      ><FormatAlignRightIcon /></AppIconButton>
+      >
+        <FormatAlignRightIcon />
+      </AppIconButton>
       <AppIconButton
         title={t('editor:justifyAlignment')}
         id='editorJustifyAlignment'
         onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'justify')}
-      ><FormatAlignJustifyIcon /></AppIconButton>
+      >
+        <FormatAlignJustifyIcon />
+      </AppIconButton>
+      {showListsPlugin && (
+        <>
+          <Divider orientation='vertical' sx={{mx: 1}} flexItem />
+          <ListsPlugin />
+        </>
+      )}
+      {showTablePlugin && (
+        <>
+          <Divider orientation='vertical' sx={{mx: 1}} flexItem />
+          <TableToolbar />
+        </>
+      )}
     </Stack>
   );
 }
+
+export default ToolbarPlugin;
