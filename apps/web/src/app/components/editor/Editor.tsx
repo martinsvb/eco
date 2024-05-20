@@ -68,16 +68,16 @@ const Editor = forwardRef(({
         <Box sx={editorContainerSx}>
           <ToolbarPlugin {...toolbarProps} />
           <Box sx={editorInnerSx}>
-              <RichTextPlugin
-                contentEditable={<ContentEditable className="editor-input" id={id} />}
-                placeholder={<Placeholder />}
-                ErrorBoundary={LexicalErrorBoundary}
-              />
-              <HistoryPlugin />
-              <OnChangePlugin onChange={onChange} value={value} />
-              <CapturePlugin ref={ref} />
-              {toolbarProps.showListsPlugin && <ListPlugin />}
-              {toolbarProps.showTablePlugin && <TablePlugin />}
+            <RichTextPlugin
+              contentEditable={<ContentEditable className="editor-input" id={id} />}
+              placeholder={<Placeholder />}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <HistoryPlugin />
+            <OnChangePlugin onChange={onChange} value={value} />
+            <CapturePlugin ref={ref} />
+            {toolbarProps.showListsPlugin && <ListPlugin />}
+            {toolbarProps.showTablePlugin && <TablePlugin />}
           </Box>
         </Box>
       </Stack>
