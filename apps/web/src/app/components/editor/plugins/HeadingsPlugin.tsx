@@ -1,6 +1,6 @@
 import { $getSelection, $isRangeSelection } from "lexical";
 import { useTranslation } from "react-i18next";
-import { Typography, useTheme } from "@mui/material";
+import { Stack, Typography, useTheme } from "@mui/material";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $setBlocksType } from '@lexical/selection';
 import { $createHeadingNode } from '@lexical/rich-text';
@@ -28,11 +28,12 @@ const HeadingsPlugin = () => {
   };
 
   return (
-    <>
+    <Stack direction="row">
       {headingLevels.map((level) => (
         <AppIconButton
           title={t('editor:heading', {level})}
           id={`editorHeading-${level}`}
+          key={`editorHeading-${level}`}
           onClick={handleClick(level)}
         >
           <Typography
@@ -47,7 +48,7 @@ const HeadingsPlugin = () => {
           </Typography>
         </AppIconButton>
       ))}
-    </>
+    </Stack>
   );
 }
 

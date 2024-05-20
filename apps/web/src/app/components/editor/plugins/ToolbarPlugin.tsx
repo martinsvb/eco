@@ -16,7 +16,7 @@ import {
   TextFormatType,
   UNDO_COMMAND,
 } from 'lexical';
-import { Divider, Stack } from '@mui/material';
+import { Box, Divider, Stack } from '@mui/material';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
@@ -31,6 +31,7 @@ import AppIconButton from '../../buttons/AppIconButton';
 import HeadingsPlugin from './HeadingsPlugin';
 import ListsPlugin from './ListsPlugin';
 import TableToolbar from './table/TableToolbar';
+import { useMobilePortraitDetection } from '../../../hooks/useMobileDetection';
 
 const LowPriority = 1;
 
@@ -45,16 +46,21 @@ const ToolbarPlugin = ({
   showListsPlugin = true,
   showTablePlugin = true,
 }: ToolbarPluginProps) => {
-  const [editor] = useLexicalComposerContext();
-  const toolbarRef = useRef(null);
-  const [canUndo, setCanUndo] = useState(false);
-  const [canRedo, setCanRedo] = useState(false);
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
+
+  const [ editor ] = useLexicalComposerContext();
 
   const { t } = useTranslation();
+
+  const toolbarRef = useRef(null);
+
+  const isMobilePortrait = useMobilePortraitDetection();
+
+  const [ canUndo, setCanUndo ] = useState(false);
+  const [ canRedo, setCanRedo ] = useState(false);
+  const [ isBold, setIsBold ] = useState(false);
+  const [ isItalic, setIsItalic ] = useState(false);
+  const [ isUnderline, setIsUnderline ] = useState(false);
+  const [ isStrikethrough, setIsStrikethrough ] = useState(false);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -109,107 +115,113 @@ const ToolbarPlugin = ({
 
   return (
     <Stack
-      direction="row"
+      direction={isMobilePortrait ? 'column' : 'row'}
       sx={{
         p: 0.5
       }}
       ref={toolbarRef}
     >
-      <AppIconButton
-        title={t('editor:undo')}
-        disabled={!canUndo}
-        id='editorUndo'
-        onClick={handleClick(UNDO_COMMAND)}
-      >
-        <UndoIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:redo')}
-        disabled={!canRedo}
-        id='editorRedo'
-        onClick={handleClick(REDO_COMMAND)}
-      >
-        <RedoIcon />
-      </AppIconButton>
+      <Box>
+        <AppIconButton
+          title={t('editor:undo')}
+          disabled={!canUndo}
+          id='editorUndo'
+          onClick={handleClick(UNDO_COMMAND)}
+        >
+          <UndoIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:redo')}
+          disabled={!canRedo}
+          id='editorRedo'
+          onClick={handleClick(REDO_COMMAND)}
+        >
+          <RedoIcon />
+        </AppIconButton>
+      </Box>
       {showHeadingsPlugin && (
-        <>
-          <Divider orientation='vertical' sx={{mx: 1}} flexItem />
+        <Stack direction={isMobilePortrait ? 'column' : 'row'}>
+          <Divider orientation={isMobilePortrait ? 'horizontal' : 'vertical'} sx={{mx: 1}} flexItem />
           <HeadingsPlugin />
-        </>
+        </Stack>
       )}
-      <Divider orientation='vertical' sx={{mx: 1}} flexItem />
-      <AppIconButton
-        title={t('editor:bold')}
-        id='editorBold'
-        color={isBold ? 'primary' : 'inherit'}
-        onClick={handleClick(FORMAT_TEXT_COMMAND, 'bold')}
-      >
-        <FormatBoldIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:italic')}
-        id='editorItalic'
-        color={isItalic ? 'primary' : 'inherit'}
-        onClick={handleClick(FORMAT_TEXT_COMMAND, 'italic')}
-      >
-        <FormatItalicIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:underline')}
-        id='editorUnderline'
-        color={isUnderline ? 'primary' : 'inherit'}
-        onClick={handleClick(FORMAT_TEXT_COMMAND, 'underline')}
-      >
-        <FormatUnderlinedIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:strikethrough')}
-        id='editorStrikethrough'
-        color={isStrikethrough ? 'primary' : 'inherit'}
-        onClick={handleClick(FORMAT_TEXT_COMMAND, 'strikethrough')}
-      >
-        <StrikethroughSIcon />
-      </AppIconButton>
-      <Divider orientation='vertical' sx={{mx: 1}} flexItem />
-      <AppIconButton
-        title={t('editor:leftAlignment')}
-        id='editorLeftAlign'
-        onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'left')}
-      >
-        <FormatAlignLeftIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:centerAlignment')}
-        id='editorCenterAlignment'
-        onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'center')}
-      >
-        <FormatAlignCenterIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:rightAlignment')}
-        id='editorRightAlignment'
-        onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'right')}
-      >
-        <FormatAlignRightIcon />
-      </AppIconButton>
-      <AppIconButton
-        title={t('editor:justifyAlignment')}
-        id='editorJustifyAlignment'
-        onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'justify')}
-      >
-        <FormatAlignJustifyIcon />
-      </AppIconButton>
+      <Divider orientation={isMobilePortrait ? 'horizontal' : 'vertical'} sx={{mx: 1}} flexItem />
+      <Box>
+        <AppIconButton
+          title={t('editor:bold')}
+          id='editorBold'
+          color={isBold ? 'primary' : 'inherit'}
+          onClick={handleClick(FORMAT_TEXT_COMMAND, 'bold')}
+        >
+          <FormatBoldIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:italic')}
+          id='editorItalic'
+          color={isItalic ? 'primary' : 'inherit'}
+          onClick={handleClick(FORMAT_TEXT_COMMAND, 'italic')}
+        >
+          <FormatItalicIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:underline')}
+          id='editorUnderline'
+          color={isUnderline ? 'primary' : 'inherit'}
+          onClick={handleClick(FORMAT_TEXT_COMMAND, 'underline')}
+        >
+          <FormatUnderlinedIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:strikethrough')}
+          id='editorStrikethrough'
+          color={isStrikethrough ? 'primary' : 'inherit'}
+          onClick={handleClick(FORMAT_TEXT_COMMAND, 'strikethrough')}
+        >
+          <StrikethroughSIcon />
+        </AppIconButton>
+      </Box>
+      <Divider orientation={isMobilePortrait ? 'horizontal' : 'vertical'} sx={{mx: 1}} flexItem />
+      <Box>
+        <AppIconButton
+          title={t('editor:leftAlignment')}
+          id='editorLeftAlign'
+          onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'left')}
+        >
+          <FormatAlignLeftIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:centerAlignment')}
+          id='editorCenterAlignment'
+          onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'center')}
+        >
+          <FormatAlignCenterIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:rightAlignment')}
+          id='editorRightAlignment'
+          onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'right')}
+        >
+          <FormatAlignRightIcon />
+        </AppIconButton>
+        <AppIconButton
+          title={t('editor:justifyAlignment')}
+          id='editorJustifyAlignment'
+          onClick={handleClick(FORMAT_ELEMENT_COMMAND, 'justify')}
+        >
+          <FormatAlignJustifyIcon />
+        </AppIconButton>
+      </Box>
       {showListsPlugin && (
-        <>
-          <Divider orientation='vertical' sx={{mx: 1}} flexItem />
+        <Stack direction={isMobilePortrait ? 'column' : 'row'}>
+          <Divider orientation={isMobilePortrait ? 'horizontal' : 'vertical'} sx={{mx: 1}} flexItem />
           <ListsPlugin />
-        </>
+        </Stack>
       )}
       {showTablePlugin && (
-        <>
-          <Divider orientation='vertical' sx={{mx: 1}} flexItem />
+        <Stack direction={isMobilePortrait ? 'column' : 'row'}>
+          <Divider orientation={isMobilePortrait ? 'horizontal' : 'vertical'} sx={{mx: 1}} flexItem />
           <TableToolbar />
-        </>
+        </Stack>
       )}
     </Stack>
   );

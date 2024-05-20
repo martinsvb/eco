@@ -43,7 +43,7 @@ const Editor = forwardRef(({
   toolbarProps = {
     showHeadingsPlugin: true,
     showListsPlugin: true,
-    showTablePlugin: true,
+    showTablePlugin: false,
   },
 }: EditorProps & Pick<ControllerRenderProps, 'onChange'>, ref) => {
 
@@ -68,8 +68,6 @@ const Editor = forwardRef(({
         <Box sx={editorContainerSx}>
           <ToolbarPlugin {...toolbarProps} />
           <Box sx={editorInnerSx}>
-              {toolbarProps.showListsPlugin && <ListPlugin />}
-              {toolbarProps.showTablePlugin && <TablePlugin />}
               <RichTextPlugin
                 contentEditable={<ContentEditable className="editor-input" id={id} />}
                 placeholder={<Placeholder />}
@@ -78,6 +76,8 @@ const Editor = forwardRef(({
               <HistoryPlugin />
               <OnChangePlugin onChange={onChange} value={value} />
               <CapturePlugin ref={ref} />
+              {toolbarProps.showListsPlugin && <ListPlugin />}
+              {toolbarProps.showTablePlugin && <TablePlugin />}
           </Box>
         </Box>
       </Stack>

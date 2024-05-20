@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Stack } from "@mui/material";
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -26,7 +27,7 @@ const ListsPlugin = () => {
   };
 
   return (
-    <>
+    <Stack direction="row">
       <AppIconButton
         title={t('editor:orderedList')}
         id={`editorList-${Lists.OrderedList}`}
@@ -41,7 +42,7 @@ const ListsPlugin = () => {
       >
         <FormatListBulletedIcon />
       </AppIconButton>
-    </>
+    </Stack>
   );
 }
 
