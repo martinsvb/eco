@@ -20,18 +20,18 @@ export const serialize = (children: SerializedLexicalNode[]): string[] => {
         let text = node.text;
 
         if (node.format & IS_BOLD) {
-          text = `<strong>${text}</strong><script>alert(1)</script>`;
+          text = `<strong>${text}</strong>`;
         }
         if (node.format & IS_ITALIC) {
           text = `<em>${text}</em>`;
         }
 
         if (node.format & IS_STRIKETHROUGH) {
-          text = `<span class="line-through">${text}</span>`;
+          text = `<span class="editor-text-strikethrough">${text}</span>`;
         }
 
         if (node.format & IS_UNDERLINE) {
-          text = `<span class="underline">${text}</span>`;
+          text = `<span class="editor-text-underline">${text}</span>`;
         }
 
         if (node.format & IS_CODE) {
@@ -56,15 +56,15 @@ export const serialize = (children: SerializedLexicalNode[]): string[] => {
       switch (node.type) {
         case 'linebreak':
           return `<br>`;
-        case 'list': //TODO handle properly, especially nested lists
+        case 'list':
           if (node.listType === 'bullet') {
             return `
-						<ul class="list-disc mb-4 pl-8">
+						<ul>
 						  ${serializedChildren}
 						</ul>`;
           } else {
             return `
-						<ol class="list-disc mb-4 pl-8">
+						<ol>
 						  ${serializedChildren}
 						</ol>`;
           }
@@ -78,7 +78,7 @@ export const serialize = (children: SerializedLexicalNode[]): string[] => {
 								<${node.tag}>
 								  ${serializedChildren}
 								</${node.tag}>`;
-        default: //Probably just a normal paragraph
+        default:
           return `<p>${serializedChildren ? serializedChildren : ''}</p>`;
       }
     })

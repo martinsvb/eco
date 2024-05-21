@@ -8,8 +8,6 @@ import { store } from '@eco/redux';
 import { router } from './Router/routerConfiguration';
 import MuiProviders from './MuiProviders';
 
-import './app/components/editor/styles.css';
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

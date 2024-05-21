@@ -15,7 +15,7 @@ import ExampleTheme from './ExampleTheme';
 import ToolbarPlugin, { ToolbarPluginProps } from './plugins/ToolbarPlugin';
 import OnChangePlugin from './plugins/OnChangePlugin';
 import CapturePlugin from './plugins/CapturePlugin';
-import { useEditorDesign } from './useEditorDesign';
+import { EditorDesign, editorMinHeight, useEditorDesign } from './useEditorDesign';
 import Placeholder from './Placeholder';
 
 const editorConfig = {
@@ -32,6 +32,7 @@ export type EditorProps = {
   label: ReactNode;
   value?: string;
   toolbarProps?: ToolbarPluginProps;
+  editorDesign: EditorDesign;
 } & Pick<InputBaseProps, 'id' | 'disabled'>;
 
 const Editor = forwardRef(({
@@ -45,9 +46,12 @@ const Editor = forwardRef(({
     showListsPlugin: true,
     showTablePlugin: false,
   },
+  editorDesign = {
+    minHeight: editorMinHeight
+  }
 }: EditorProps & Pick<ControllerRenderProps, 'onChange'>, ref) => {
 
-  const { editorContainerSx, editorInnerSx } = useEditorDesign();
+  const { editorContainerSx, editorInnerSx } = useEditorDesign(editorDesign);
 
   const formControlStates = { disabled };
 
