@@ -1,67 +1,65 @@
 import { useTranslation } from 'react-i18next';
-import { alpha, Stack, Typography, useTheme } from '@mui/material';
+import { alpha, Stack, StackProps, useTheme } from '@mui/material';
 import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import AppAccordion from '../components/accordion/AppAccordion';
 
 interface TaskListProps {
   data: ContentFull[];
+  direction?: StackProps['direction'];
 }
 
-export const TaskList = ({data}: TaskListProps) => {
+export const TaskList = ({data, direction}: TaskListProps) => {
 
   const { t } = useTranslation();
 
-  const { palette, shape } = useTheme();
+  const { palette } = useTheme();
 
   const isMobile = useMobileDetection();
 
+  const isColumn = direction || isMobile;
+
   return (
     <Stack
-      direction={isMobile ? 'column' : 'row'}
-      width={isMobile ? '100%' : 800}
-      minHeight={isMobile ? undefined : 'calc(100vh - 180px)'}
+      direction={isColumn ? 'column' : 'row'}
+      width={isColumn ? '100%' : 840}
+      minHeight={isColumn ? undefined : 'calc(100vh - 180px)'}
     >
       <Stack
         mr={2}
-        mb={isMobile ? 2 : undefined}
-        p={2}
-        width={isMobile ? '100%' : 400}
-        sx={{
-          background: alpha(palette.warning.light, .5),
-          borderRadius: shape.borderRadius / 4
-        }}
+        mb={isColumn ? 2 : undefined}
+        width={isColumn ? '100%' : 420}
       >
-        <Typography
-          variant='h4'
-          mb={2}
-          textAlign='center'
+        <AppAccordion
+          defaultExpanded
+          id="tasksInProgressHeader"
+          title={t('labels:inProgress')}
+          sx={{
+            background: alpha(palette.warning.light, .5),
+          }}
         >
-          {t('labels:inProgress')}
-        </Typography>
-        {data.filter(({state}) => state !== ContentState.Done).map((content) => (
-          <TaskItem key={content.id} {...content} />
-        ))}
+          {data.filter(({state}) => state !== ContentState.Done).map((content) => (
+            <TaskItem key={content.id} {...content} />
+          ))}
+        </AppAccordion>
       </Stack>
       <Stack
         mr={2}
-        p={2}
-        width={isMobile ? '100%' : 400}
-        sx={{
-          background: alpha(palette.success.light, .5),
-          borderRadius: shape.borderRadius / 4
-        }}
+        width={isColumn ? '100%' : 420}
       >
-        <Typography
-          variant='h4'
-          mb={2}
-          textAlign='center'
+        <AppAccordion
+          defaultExpanded
+          id="tasksDoneHeader"
+          title={t('labels:done')}
+          sx={{
+            background: alpha(palette.success.light, .5),
+          }} 
         >
-          {t('labels:done')}
-        </Typography>
-        {data.filter(({state}) => state === ContentState.Done).map((content) => (
-          <TaskItem key={content.id} {...content} />
-        ))}
+          {data.filter(({state}) => state === ContentState.Done).map((content) => (
+            <TaskItem key={content.id} {...content} />
+          ))}
+        </AppAccordion>
       </Stack>
     </Stack>
   );

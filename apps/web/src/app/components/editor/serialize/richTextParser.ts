@@ -22,6 +22,7 @@ export const serialize = (children: SerializedLexicalNode[]): string[] => {
         if (node.format & IS_BOLD) {
           text = `<strong>${text}</strong>`;
         }
+
         if (node.format & IS_ITALIC) {
           text = `<em>${text}</em>`;
         }
@@ -75,9 +76,9 @@ export const serialize = (children: SerializedLexicalNode[]): string[] => {
 						</li>`;
         case 'heading':
           return `
-								<${node.tag}>
-								  ${serializedChildren}
-								</${node.tag}>`;
+            <${node.tag}>
+              ${serializedChildren}
+            </${node.tag}>`;
         default:
           return `<p>${serializedChildren ? serializedChildren : ''}</p>`;
       }

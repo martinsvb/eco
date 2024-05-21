@@ -74,6 +74,7 @@ export const useEditorElementsDesign = () => {
       },
       '& table': {
         borderCollapse: 'collapse',
+        my: 1,
         '& th, td': {
           width: '200px',
           padding: spacing(1),

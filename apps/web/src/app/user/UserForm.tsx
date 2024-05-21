@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { compose, filter, isEmpty, map, not, pick } from 'ramda';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Stack, Typography } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,6 +20,7 @@ import { getUserEditValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
 import ControllerPhoneField from '../components/formControls/ControllerPoneField';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
+import AppAccordion from '../components/accordion/AppAccordion';
 
 const UserForm = () => {
 
@@ -151,55 +151,49 @@ const UserForm = () => {
           />
         </Grid>
         <Grid xs={12}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ArrowDropDownIcon />}
-              aria-controls="panel2-content"
-              id="changePasswordHeader"
-            >
-              <Typography>{t('labels:passwordChange')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container rowSpacing={2} columnSpacing={2}>
-                <Grid xs={12}>
-                  <ControllerTextField
-                    name={UserItems.PasswordOld}
-                    control={control}
-                    defaultValue={data.passwordOld}
-                    fieldProps={{
-                      label: t('labels:passwordOld'),
-                      id: UserItems.PasswordOld,
-                      type: 'password'
-                    }}
-                  />
-                </Grid>
-                <Grid md={6} xs={12}>
-                  <ControllerTextField
-                    name={UserItems.Password}
-                    control={control}
-                    defaultValue={data.password}
-                    fieldProps={{
-                      label: t('labels:password'),
-                      id: UserItems.Password,
-                      type: 'password'
-                    }}
-                  />
-                </Grid>
-                <Grid md={6} xs={12}>
-                  <ControllerTextField
-                    name={UserItems.PasswordConfirmation}
-                    control={control}
-                    defaultValue={data.passwordConfirmation}
-                    fieldProps={{
-                      label: t('labels:passwordConfirmation'),
-                      id: UserItems.PasswordConfirmation,
-                      type: 'password'
-                    }}
-                  />
-                </Grid>
+          <AppAccordion
+            id="changePasswordHeader"
+            title={t('labels:passwordChange')}
+          >
+            <Grid container rowSpacing={2} columnSpacing={2}>
+              <Grid xs={12}>
+                <ControllerTextField
+                  name={UserItems.PasswordOld}
+                  control={control}
+                  defaultValue={data.passwordOld}
+                  fieldProps={{
+                    label: t('labels:passwordOld'),
+                    id: UserItems.PasswordOld,
+                    type: 'password'
+                  }}
+                />
               </Grid>
-            </AccordionDetails>
-          </Accordion>
+              <Grid md={6} xs={12}>
+                <ControllerTextField
+                  name={UserItems.Password}
+                  control={control}
+                  defaultValue={data.password}
+                  fieldProps={{
+                    label: t('labels:password'),
+                    id: UserItems.Password,
+                    type: 'password'
+                  }}
+                />
+              </Grid>
+              <Grid md={6} xs={12}>
+                <ControllerTextField
+                  name={UserItems.PasswordConfirmation}
+                  control={control}
+                  defaultValue={data.passwordConfirmation}
+                  fieldProps={{
+                    label: t('labels:passwordConfirmation'),
+                    id: UserItems.PasswordConfirmation,
+                    type: 'password'
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </AppAccordion>
         </Grid>
         <Grid xs={12}>
           <Stack direction="row" justifyContent="end">
