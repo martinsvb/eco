@@ -18,7 +18,11 @@ export const TaskList = ({data, direction}: TaskListProps) => {
 
   const isMobile = useMobileDetection();
 
-  const isColumn = direction || isMobile;
+  const isColumn = direction === 'column' || isMobile;
+
+  const inProgress = data.filter(({state}) => state !== ContentState.Done);
+
+  const done = data.filter(({state}) => state === ContentState.Done);
 
   return (
     <Stack
@@ -34,12 +38,12 @@ export const TaskList = ({data, direction}: TaskListProps) => {
         <AppAccordion
           defaultExpanded
           id="tasksInProgressHeader"
-          title={t('labels:inProgress')}
+          title={t('labels:inProgress', {count: inProgress.length})}
           sx={{
             background: alpha(palette.warning.light, .5),
           }}
         >
-          {data.filter(({state}) => state !== ContentState.Done).map((content) => (
+          {inProgress.map((content) => (
             <TaskItem key={content.id} {...content} />
           ))}
         </AppAccordion>
@@ -51,12 +55,12 @@ export const TaskList = ({data, direction}: TaskListProps) => {
         <AppAccordion
           defaultExpanded
           id="tasksDoneHeader"
-          title={t('labels:done')}
+          title={t('labels:done', {count: done.length})}
           sx={{
             background: alpha(palette.success.light, .5),
           }} 
         >
-          {data.filter(({state}) => state === ContentState.Done).map((content) => (
+          {done.map((content) => (
             <TaskItem key={content.id} {...content} />
           ))}
         </AppAccordion>
