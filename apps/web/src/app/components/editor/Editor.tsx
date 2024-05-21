@@ -32,7 +32,7 @@ export type EditorProps = {
   label: ReactNode;
   value?: string;
   toolbarProps?: ToolbarPluginProps;
-  editorDesign: EditorDesign;
+  editorDesign?: EditorDesign;
 } & Pick<InputBaseProps, 'id' | 'disabled'>;
 
 const Editor = forwardRef(({
