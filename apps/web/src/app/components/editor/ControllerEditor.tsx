@@ -15,12 +15,14 @@ const ControllerEditor = <V extends FieldValues, N extends FieldPath<V>>({
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
-        <Editor
-          {...field}
-          {...fieldProps}
-        />
-      )}
+      render={({ field }) => {
+        return (
+          <Editor
+            {...field}
+            {...fieldProps}
+          />
+        )
+      }}
       {...rest}
     />
   );

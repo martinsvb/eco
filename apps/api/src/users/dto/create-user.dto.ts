@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -40,6 +40,8 @@ export class CreateUserDto {
   @ApiProperty({ description: 'User origin' })
   origin: string;
 
+  @IsObject()
+  @IsNotEmpty()
   @ApiProperty({ description: 'User rigts' })
   rights: Prisma.JsonValue;
 

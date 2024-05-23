@@ -28,7 +28,7 @@ model Account {
 model Content {
   id        String    @id @default(uuid())
   title     String
-  text      String?
+  text      Json?
   dateTime  DateTime?
   type      String
   state     String?   @default("created")

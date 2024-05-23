@@ -25,7 +25,7 @@ export enum ContentItems {
 
 export interface ContentData {
   [ContentItems.Title]: string;
-  [ContentItems.Text]?: string | null;
+  [ContentItems.Text]: any;
   [ContentItems.DateTime]?: Date | null;
   [ContentItems.State]?: ContentState;
 }
@@ -38,4 +38,5 @@ export const contentScopes = {
 
 export type ContentFull = Content & {
   author: UserFull;
+  [ContentItems.Text]?: any;
 }

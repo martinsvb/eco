@@ -17,9 +17,9 @@ import OnChangePlugin from './plugins/OnChangePlugin';
 import CapturePlugin from './plugins/CapturePlugin';
 import { EditorDesign, editorMinHeight, useEditorDesign } from './useEditorDesign';
 import Placeholder from './Placeholder';
+import { EditorValue } from './types';
 
 const editorConfig = {
-  namespace: 'Editor',
   nodes: [HeadingNode, ListNode, ListItemNode, TableCellNode, TableNode, TableRowNode],
   // Handling of errors during update
   onError(error: Error) {
@@ -30,7 +30,7 @@ const editorConfig = {
 
 export type EditorProps = {
   label: ReactNode;
-  value?: string;
+  value?: EditorValue;
   toolbarProps?: ToolbarPluginProps;
   editorDesign?: EditorDesign;
 } & Pick<InputBaseProps, 'id' | 'disabled'>;
@@ -56,7 +56,12 @@ const Editor = forwardRef(({
   const formControlStates = { disabled };
 
   return (
-    <LexicalComposer initialConfig={editorConfig}>
+    <LexicalComposer
+      initialConfig={{
+        ...editorConfig,
+        namespace: `Editor-${id}`
+      }}
+    >
       <Stack>
         <InputLabel
           {...formControlStates}

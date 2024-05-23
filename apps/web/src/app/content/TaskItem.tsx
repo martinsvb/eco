@@ -17,11 +17,9 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
   const html = useMemo(
     () => {
       try {
-        if (!text) {
-          return undefined;
-        }
-        const parsed = JSON.parse(text);
-        return serialize(parsed.root.children).join('');
+        return text
+          ? serialize(text.root.children).join('')
+          : undefined;
       }
       catch {
         return undefined;

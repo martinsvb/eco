@@ -1,6 +1,7 @@
 import { ContentTypes } from '@eco/types';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Prisma } from '@prisma/client';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsObject } from 'class-validator';
 
 export class CreateContentDto {
   @IsString()
@@ -8,10 +9,10 @@ export class CreateContentDto {
   @ApiProperty({ description: 'Content title' })
   title: string;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
   @ApiProperty({ description: 'Content text', required: false })
-  text?: string;
+  text?: Prisma.JsonValue;
   
   @IsString()
   @IsNotEmpty()

@@ -87,10 +87,10 @@ export class ContentController {
     @Req() {user}: Request,
     @Param('id') id: string,
     @Param('type') type: ContentTypes,
-    @Body() updateContentDto: UpdateContentDto
+    @Body() data: UpdateContentDto
   ) {
     return new ContentEntity(
-      await this.contentService.update(id, updateContentDto, user as UserFull, type)
+      await this.contentService.update(id, data, user as UserFull, type)
     );
   }
 

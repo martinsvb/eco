@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Content } from '@prisma/client';
+import { Content, Prisma } from '@prisma/client';
 import { UserEntity } from '../../users/entities/user.entity';
 
 export class ContentEntity implements Content {
@@ -10,7 +10,7 @@ export class ContentEntity implements Content {
   title: string;
 
   @ApiProperty({ description: 'Content text', required: false })
-  text: string | null;
+  text: Prisma.JsonValue;
 
   @ApiProperty({ description: 'Content type' })
   type: string;

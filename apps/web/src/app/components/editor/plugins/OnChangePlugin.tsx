@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { EditorValue } from "../types";
 
 export type OnChangePluginProps = {
   onChange: ControllerRenderProps['onChange'];
-  value?: string;
+  value?: EditorValue;
 }
 
 const OnChangePlugin = ({ onChange, value }: OnChangePluginProps) => {
@@ -16,14 +17,14 @@ const OnChangePlugin = ({ onChange, value }: OnChangePluginProps) => {
     () => {
       if (isFirstRender && value) {
         setIsFirstRender(false);
-        if (value.includes('"root":{"children":[{')) {
+        if (value.root) {
           editor.setEditorState(editor.parseEditorState(value));
         }
       }
 
       return editor.registerUpdateListener(({editorState}) => {
         editorState.read(() => {
-          onChange(JSON.stringify(editorState.toJSON()));
+          onChange(editorState.toJSON());
         });
       });
     },
