@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react';
-import { Link, To, useLocation, useNavigate } from 'react-router-dom';
+import { Link, LinkProps, To, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List, styled } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -18,17 +18,19 @@ interface NavItemProps {
   to: To;
 }
 
+const ListItemButtonLink = styled(ListItemButton)<LinkProps>(({ theme }) => null);
+
 const NavItem = ({icon, text, to}: NavItemProps) => {
   return (
     <ListItem disablePadding>
-      <ListItemButton LinkComponent={Link} to={to} >
+      <ListItemButtonLink LinkComponent={Link} to={to} >
         <ListItemIcon>
           {icon}
         </ListItemIcon>
         <ListItemText>
           {text}
         </ListItemText>
-      </ListItemButton>
+      </ListItemButtonLink>
     </ListItem>
   )
 }
