@@ -18,6 +18,9 @@ export class ContentEntity implements Content {
   @ApiProperty({ description: 'Content state', required: false })
   state: string | null;
 
+  @ApiProperty({ description: 'Content parent id', required: false })
+  parentId: string | null;
+
   @ApiProperty({ description: 'Published state', required: false })
   published: boolean | null;
 

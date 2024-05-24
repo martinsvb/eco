@@ -3,12 +3,12 @@ import { Chip } from '@mui/material';
 import dayjs from 'dayjs';
 import { ContentFull, ContentState, ContentTypes } from '@eco/types';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
-import ContentDeleteButton from './ContentDeleteButton';
-import { AppCard } from '../components/card/AppCard';
-import { ContentEditButton } from './ContentEditButton';
+import ContentDeleteButton from '../ContentDeleteButton';
+import { AppCard } from '../../components/card/AppCard';
+import { ContentEditButton } from '../ContentEditButton';
 import TaskSwitch from './TaskSwitch';
-import AppAvatar from '../components/avatar/AppAvatar';
-import { serialize } from '../components/editor/serialize/richTextParser';
+import AppAvatar from '../../components/avatar/AppAvatar';
+import { serialize } from '../../components/editor/serialize/richTextParser';
 
 export const TaskItem = ({ id, title, text, state, createdAt, author: { name, picture } }: ContentFull) => {
 
@@ -32,12 +32,8 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
     <AppCard
       actions={
         <>
-          {tasks.edit &&
-            <>
-              <TaskSwitch id={id} state={state as ContentState} />
-              <ContentEditButton id={id} type={ContentTypes.Task} />
-            </>
-          }
+          {tasks.edit && <TaskSwitch id={id} state={state as ContentState} />}
+          <ContentEditButton id={id} type={ContentTypes.Task} />
           {tasks.delete && <ContentDeleteButton id={id} type={ContentTypes.Task} />}
         </>
       }

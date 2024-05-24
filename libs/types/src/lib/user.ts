@@ -59,6 +59,7 @@ export enum RightsItems {
 export enum ScopeItems {
   Accounts = 'accounts',
   Articles = 'articles',
+  Records = 'records',
   Tasks = 'tasks',
   News = 'news',
   Users = 'users',
@@ -76,6 +77,7 @@ export interface Rights {
 export interface Scopes {
   [ScopeItems.Accounts]: Rights;
   [ScopeItems.Articles]?: Rights;
+  [ScopeItems.Records]: Rights;
   [ScopeItems.Tasks]: Rights;
   [ScopeItems.News]?: Rights;
   [ScopeItems.Users]?: Rights;

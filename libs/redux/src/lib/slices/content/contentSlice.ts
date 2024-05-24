@@ -1,52 +1,69 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiOperations, ContentFull, ContentTypes } from '@eco/types';
-import { contentDelete, contentGet, contentListGet, contentPatch, contentPost } from "./contentApi";
+import { ApiOperations, ContentFilterData, ContentFull, ContentTypes } from '@eco/types';
+import {
+  contentChildsListGet,
+  contentDelete,
+  contentGet,
+  contentListGet,
+  contentPatch,
+  contentPost
+} from "./contentApi";
 import { createSlice } from "../createSlice";
 
 export interface ContentState {
   content: {
-    [ContentTypes.Article]: {data: ContentFull | null, loaded: boolean};
-    [ContentTypes.Task]: {data: ContentFull | null, loaded: boolean};
-    [ContentTypes.New]: {data: ContentFull | null, loaded: boolean};
+    [ContentTypes.Article]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
+    [ContentTypes.Record]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
+    [ContentTypes.Task]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
+    [ContentTypes.New]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
   };
   contentList: {
     [ContentTypes.Article]: {data: ContentFull[], loaded: boolean};
+    [ContentTypes.Record]: {data: ContentFull[], loaded: boolean};
     [ContentTypes.Task]: {data: ContentFull[], loaded: boolean};
     [ContentTypes.New]: {data: ContentFull[], loaded: boolean};
   };
   error: {
     [ContentTypes.Article]: {[key: string]: unknown | null};
+    [ContentTypes.Record]: {[key: string]: unknown | null};
     [ContentTypes.Task]: {[key: string]: unknown | null};
     [ContentTypes.New]: {[key: string]: unknown | null};
   };
   loading: {
     [ContentTypes.Article]: {[key: string]: boolean};
+    [ContentTypes.Record]: {[key: string]: boolean};
     [ContentTypes.Task]: {[key: string]: boolean};
     [ContentTypes.New]: {[key: string]: boolean};
   };
+  filter: ContentFilterData;
 }
 
 export const initialContentState: ContentState = {
   content: {
-    [ContentTypes.Article]: {data: null, loaded: false},
-    [ContentTypes.Task]: {data: null, loaded: false},
-    [ContentTypes.New]: {data: null, loaded: false},
+    [ContentTypes.Article]: {data: null, childs: [], loaded: false},
+    [ContentTypes.Record]: {data: null, childs: [], loaded: false},
+    [ContentTypes.Task]: {data: null, childs: [], loaded: false},
+    [ContentTypes.New]: {data: null, childs: [], loaded: false},
   },
   contentList: {
     [ContentTypes.Article]: {data: [], loaded: false},
+    [ContentTypes.Record]: {data: [], loaded: false},
     [ContentTypes.Task]: {data: [], loaded: false},
     [ContentTypes.New]: {data: [], loaded: false},
   },
   error: {
     [ContentTypes.Article]: {},
+    [ContentTypes.Record]: {},
     [ContentTypes.Task]: {},
     [ContentTypes.New]: {},
   },
   loading: {
     [ContentTypes.Article]: {},
+    [ContentTypes.Record]: {},
     [ContentTypes.Task]: {},
     [ContentTypes.New]: {},
   },
+  filter: {}
 };
 
 const contentSlice = createSlice({
@@ -59,6 +76,9 @@ const contentSlice = createSlice({
       {payload: {data, type}}: PayloadAction<{data: ContentFull | null, type: ContentTypes}>
     ) => {
       state.content[type].data = data;
+    }),
+    setContentFilterData: create.reducer((state, {payload}: PayloadAction<ContentFilterData>) => {
+      state.filter = {...state.filter, ...payload};
     }),
     apiGetContentList: create.asyncThunk(
       contentListGet,
@@ -75,6 +95,14 @@ const contentSlice = createSlice({
         },
         settled: (state, { meta: { arg: { type } } }) => {
           state.loading[type][ApiOperations.getList] = false;
+        },
+      },
+    ),
+    apiGetContentChildsList: create.asyncThunk(
+      contentChildsListGet,
+      {
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          state.content[type].childs = payload;
         },
       },
     ),
@@ -171,6 +199,7 @@ const contentSlice = createSlice({
     selectIsContentsLoading: (state, type: ContentTypes, operation: ApiOperations) => {
       return !!state.loading[type][operation];
     },
+    selectContentFilter: (state) => state.filter,
   },
 });
 
@@ -178,16 +207,19 @@ export default contentSlice.reducer;
 
 export const {
   apiGetContentList,
+  apiGetContentChildsList,
   apiGetContent,
   apiPostContent,
   apiPatchContent,
   apiDeleteContent,
   resetContent,
-  setContent
+  setContent,
+  setContentFilterData
 } = contentSlice.actions;
 
 export const {
   selectContent,
   selectContentList,
-  selectIsContentsLoading
+  selectIsContentsLoading,
+  selectContentFilter
 } = contentSlice.selectors;

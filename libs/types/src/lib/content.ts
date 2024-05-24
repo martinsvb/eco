@@ -3,6 +3,7 @@ import { ScopeItems, UserFull } from "./user";
 
 export enum ContentTypes {
   Article = 'article',
+  Record = 'record',
   Task = 'task',
   New = 'new',
 }
@@ -20,6 +21,7 @@ export enum ContentItems {
   DateTime = 'dateTime',
   Type = 'type',
   State = 'state',
+  ParentId = 'parentId',
   Published = 'published',
 }
 
@@ -30,8 +32,11 @@ export interface ContentData {
   [ContentItems.State]?: ContentState;
 }
 
+export type ContentFilterData = Partial<Pick<ContentData, ContentItems.Title>>;
+
 export const contentScopes = {
   [ContentTypes.Article]: ScopeItems.Articles,
+  [ContentTypes.Record]: ScopeItems.Records,
   [ContentTypes.Task]: ScopeItems.Tasks,
   [ContentTypes.New]: ScopeItems.News,
 }

@@ -46,6 +46,18 @@ export const router = createBrowserRouter([
         element: <LoginWrapper><ContentEdit type={ContentTypes.Task} /></LoginWrapper>,
       },
       {
+        path: routes.content.record.list,
+        element: <LoginWrapper><ContentList type={ContentTypes.Record} /></LoginWrapper>,
+      },
+      {
+        path: routes.content.record.new,
+        element: <LoginWrapper><ContentNew type={ContentTypes.Record} /></LoginWrapper>,
+      },
+      {
+        path: routes.content.record.edit,
+        element: <LoginWrapper><ContentEdit type={ContentTypes.Record} /></LoginWrapper>,
+      },
+      {
         path: routes.home,
         element: <Home />,
       },

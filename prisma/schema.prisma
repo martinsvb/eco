@@ -32,6 +32,7 @@ model Content {
   dateTime  DateTime?
   type      String
   state     String?   @default("created")
+  parentId  String?
   published Boolean?  @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

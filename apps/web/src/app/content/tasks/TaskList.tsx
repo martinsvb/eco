@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { alpha, Stack, StackProps, useTheme } from '@mui/material';
 import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
-import { useMobileDetection } from '../hooks/useMobileDetection';
-import AppAccordion from '../components/accordion/AppAccordion';
+import { useMobileDetection } from '../../hooks/useMobileDetection';
+import AppAccordion from '../../components/accordion/AppAccordion';
 
 interface TaskListProps {
   data: ContentFull[];
@@ -38,7 +38,7 @@ export const TaskList = ({data, direction}: TaskListProps) => {
         <AppAccordion
           defaultExpanded
           id="tasksInProgressHeader"
-          title={t('labels:inProgress', {count: inProgress.length})}
+          title={t('labels:inProgress', {length: inProgress.length})}
           sx={{
             background: alpha(palette.warning.light, .5),
           }}
@@ -55,7 +55,7 @@ export const TaskList = ({data, direction}: TaskListProps) => {
         <AppAccordion
           defaultExpanded
           id="tasksDoneHeader"
-          title={t('labels:done', {count: done.length})}
+          title={t('labels:done', {length: done.length})}
           sx={{
             background: alpha(palette.success.light, .5),
           }} 

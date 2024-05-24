@@ -33,6 +33,7 @@ const rights = {
 
 const noneScopes = {
   accounts: rights.none,
+  records: rights.none,
   tasks: rights.none,
   users: rights.none,
   companies: rights.none,
@@ -40,6 +41,7 @@ const noneScopes = {
 
 const readerScopes = {
   accounts: rights.reader,
+  records: rights.reader,
   tasks: rights.reader,
   users: rights.reader,
   companies: rights.none,
@@ -47,6 +49,7 @@ const readerScopes = {
 
 const editorScopes = {
   accounts: rights.editor,
+  records: rights.editor,
   tasks: rights.editor,
   users: rights.reader,
   companies: rights.none,
@@ -54,6 +57,7 @@ const editorScopes = {
 
 const approvalEditorScopes = {
   accounts: rights.approvalEditor,
+  records: rights.approvalEditor,
   tasks: rights.approvalEditor,
   users: rights.approvalEditor,
   companies: rights.none,

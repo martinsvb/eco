@@ -5,15 +5,16 @@
   "edit": "Edit content",
   "editArticleTitle": "Edit article",
   "editNewTitle": "Edit new",
+  "editRecordTitle": "Edit record",
   "editTaskTitle": "Edit task",
   "new": "New content",
   "newArticleTitle": "New article",
   "newNewTitle": "Create new",
+  "newRecordTitle": "New record",
   "newTaskTitle": "New task",
   "taskSwitch": "Task state switch",
   "taskSwitchDone": "Switch task into done state",
   "taskSwitchedDone": "Task was switched into done state",
   "taskSwitchedInProgress": "Task was returned into progress",
-  "taskSwitchInProgress": "Return task into progress",
-  "title": "Tasks"
+  "taskSwitchInProgress": "Return task into progress"
 }

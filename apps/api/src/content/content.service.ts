@@ -1,6 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { ContentTypes, RightsItems, UserFull, checkRigts, contentScopes } from '@eco/types';
+import {
+  ContentFilterData,
+  ContentTypes,
+  RightsItems,
+  UserFull,
+  checkRigts,
+  contentScopes,
+  getPrismaOrFilter
+} from '@eco/types';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 
@@ -8,11 +16,11 @@ import { UpdateContentDto } from './dto/update-content.dto';
 export class ContentService {
   constructor(private prisma: PrismaService) {}
 
-  create(createContentDto: CreateContentDto, {id, companyId, rights}: UserFull) {
-    checkRigts(rights, contentScopes[createContentDto.type], RightsItems.Create);
+  create(data: CreateContentDto, {id, companyId, rights}: UserFull) {
+    checkRigts(rights, contentScopes[data.type], RightsItems.Create);
     return this.prisma.content.create({
       data: {
-        ...createContentDto,
+        ...data,
         authorId: id,
         companyId
       },
@@ -22,12 +30,26 @@ export class ContentService {
     });
   }
 
-  findAll({companyId, rights}: UserFull, type: ContentTypes) {
+  findAll({companyId, rights}: UserFull, type: ContentTypes, query: ContentFilterData) {
     checkRigts(rights, contentScopes[type], RightsItems.Read);
     return this.prisma.content.findMany({
       where: {
         companyId,
-        type
+        type,
+        ...getPrismaOrFilter(query)
+      },
+      include: {
+        author: true,
+      },
+    });
+  }
+
+  findAllChilds({companyId, rights}: UserFull, type: ContentTypes, parentId: string) {
+    checkRigts(rights, contentScopes[type], RightsItems.Read);
+    return this.prisma.content.findMany({
+      where: {
+        companyId,
+        parentId
       },
       include: {
         author: true,

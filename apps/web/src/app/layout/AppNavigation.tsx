@@ -5,6 +5,7 @@ import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from 
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BusinessIcon from '@mui/icons-material/Business';
+import DescriptionIcon from '@mui/icons-material/Description';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import GroupIcon from '@mui/icons-material/Group';
 import { routes } from '@eco/config';
@@ -59,6 +60,13 @@ export const AppNavigation = () => {
         {isUserLoggedIn
           ?
           <>
+            {rights.scopes[ScopeItems.Records]?.read &&
+              <NavItem
+                icon={<DescriptionIcon />}
+                text={t('records')}
+                to={routes.content.record.list}
+              />
+            }
             {rights.scopes[ScopeItems.Tasks]?.read &&
               <NavItem
                 icon={<FormatListBulletedIcon />}

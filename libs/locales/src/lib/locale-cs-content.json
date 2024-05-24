@@ -5,15 +5,16 @@
   "edit": "Úprava obsahu",
   "editArticleTitle": "Úprava článku",
   "editNewTitle": "Úprava novinky",
+  "editRecordTitle": "Úprava zápisu",
   "editTaskTitle": "Úprava úkolu",
   "new": "Nový obsah",
   "newArticleTitle": "Nový článek",
   "newNewTitle": "Vytvořit novinku",
+  "newRecordTitle": "Nový zápis",
   "newTaskTitle": "Nový úkol",
   "taskSwitch": "Přepínač stavu úkolu",
   "taskSwitchDone": "Přepnout úkol do stavu hotový",
   "taskSwitchedDone": "Úkol přepnut do stavu hotový",
   "taskSwitchedInProgress": "Úkol vrácen do řešení",
-  "taskSwitchInProgress": "Vrátit úkol do řešení",
-  "title": "Úkoly"
+  "taskSwitchInProgress": "Vrátit úkol do řešení"
 }

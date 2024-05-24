@@ -35,6 +35,7 @@ export const ContentEdit = ({type}: ContentEditProps) => {
     () => {
       const contentTitles = {
         [ContentTypes.Article]: t('content:editArticleTitle'),
+        [ContentTypes.Record]: t('content:editRecordTitle'),
         [ContentTypes.New]: t('content:editNewTitle'),
         [ContentTypes.Task]: t('content:editTaskTitle'),
       };

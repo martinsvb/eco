@@ -108,6 +108,28 @@ async function main() {
     },
   });
 
+  const content3 = await prisma.content.create({
+    data: {
+      title: 'Test record 1',
+      text: exampleRichText,
+      type: ContentTypes.Record,
+      state: ContentState.Created,
+      authorId: user1.id,
+      companyId: company1.id,
+    },
+  });
+
+  const content4 = await prisma.content.create({
+    data: {
+      title: 'Test record 2',
+      text: exampleRichText,
+      type: ContentTypes.Record,
+      state: ContentState.Created,
+      authorId: user2.id,
+      companyId: company2.id,
+    },
+  });
+
   console.log({
     account1,
     account2,
@@ -115,6 +137,8 @@ async function main() {
     company2,
     content1,
     content2,
+    content3,
+    content4,
     user1,
     user2,
     user3

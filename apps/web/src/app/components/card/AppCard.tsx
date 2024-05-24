@@ -58,7 +58,8 @@ export const AppCard = ({
           <Box
             sx={{
               lineHeight: 1,
-              maxHeight: 70,
+              minHeight: 60,
+              maxHeight: 60,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',

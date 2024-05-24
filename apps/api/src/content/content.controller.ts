@@ -8,7 +8,8 @@ import {
   Delete,
   UseGuards,
   Req,
-  NotFoundException
+  NotFoundException,
+  Query
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -54,8 +55,21 @@ export class ContentController {
     status: 200,
     description: 'Content list has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request, @Param('type') type: ContentTypes) {
-    const contents = await this.contentService.findAll(user as UserFull, type);
+  async findAll(@Req() {user}: Request, @Param('type') type: ContentTypes, @Query() query) {
+    const contents = await this.contentService.findAll(user as UserFull, type, query);
+    return contents.map((content) => new ContentEntity(content));
+  }
+
+  @Get('list-childs/:type/:parentId')
+  @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: ContentEntity, isArray: true })
+  @ApiResponse({
+    status: 200,
+    description: 'Content childs list has been successfully loaded.',
+  })
+  async findAllChilds(@Req() {user}: Request, @Param('type') type: ContentTypes, @Param('parentId') parentId: string) {
+    const contents = await this.contentService.findAllChilds(user as UserFull, type, parentId);
     return contents.map((content) => new ContentEntity(content));
   }
 

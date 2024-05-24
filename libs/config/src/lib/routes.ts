@@ -10,6 +10,11 @@ export const routes = {
             new: '/articles/new',
             edit: '/articles/edit/:id',
         },
+        record: {
+            list: '/records',
+            new: '/records/new',
+            edit: '/records/edit/:id',
+        },
         task: {
             list: '/tasks',
             new: '/tasks/new',

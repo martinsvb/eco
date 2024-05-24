@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Fab, IconButton, Typography } from '@mui/material';
@@ -8,7 +8,8 @@ import { routes } from '@eco/config';
 import { useShallowEqualSelector, useAppDispatch, selectContentList, apiGetContentList } from '@eco/redux';
 import { contentScopes, ContentTypes } from '@eco/types';
 import { Buttons } from '../components/buttons/Buttons';
-import { TaskList } from './TaskList';
+import { TaskList } from './tasks/TaskList';
+import Records from './records/Records';
 
 interface ContentListProps {
   type: ContentTypes;
@@ -47,10 +48,23 @@ export const ContentList = ({type}: ContentListProps) => {
     [dispatch, type]
   );
 
+  const titles = useMemo(
+    () => {
+      return {
+        [ContentTypes.Record]: t('records'),
+        [ContentTypes.Task]: t('tasks'),
+      } as {[key: string]: string}
+    },
+    [t]
+  );
+
   return (
     <>
-      <Typography variant='h3' mb={3}>{t('content:title')}</Typography>
+      <Typography variant='h3' mb={3}>{titles[type]}</Typography>
       <>
+        {type === ContentTypes.Record &&
+          <Records data={data} isLoading={isLoading} />
+        }
         {type === ContentTypes.Task &&
           <TaskList data={data} />
         }

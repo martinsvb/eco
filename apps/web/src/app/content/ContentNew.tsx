@@ -16,6 +16,7 @@ export const ContentNew = ({type}: ContentNewProps) => {
     () => {
       const contentTitles = {
         [ContentTypes.Article]: t('content:newArticleTitle'),
+        [ContentTypes.Record]: t('content:newRecordTitle'),
         [ContentTypes.New]: t('content:newNewTitle'),
         [ContentTypes.Task]: t('content:newTaskTitle'),
       };

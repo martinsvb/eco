@@ -24,6 +24,11 @@ export class CreateContentDto {
   @ApiProperty({ description: 'Content state', required: false })
   state?: string;
   
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Content parent id', required: false })
+  parentId?: string;
+
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ description: 'Published state', required: false })
