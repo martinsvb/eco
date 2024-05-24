@@ -33,11 +33,11 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
       actions={
         <>
           {tasks.edit && <TaskSwitch id={id} state={state as ContentState} />}
-          <ContentEditButton id={id} type={ContentTypes.Task} />
+          <ContentEditButton id={id} isEditable={tasks.edit} type={ContentTypes.Task} />
           {tasks.delete && <ContentDeleteButton id={id} type={ContentTypes.Task} />}
         </>
       }
-      actionsAvailable={tasks.edit || tasks.delete}
+      actionsAvailable={tasks.read || tasks.edit || tasks.delete}
       cardTitle={title}
       htmlContent={html}
       label={

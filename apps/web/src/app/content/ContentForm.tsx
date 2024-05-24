@@ -4,8 +4,16 @@ import { useParams } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { selectContent, selectIsContentsLoading, useAppSelector, useShallowEqualSelector } from '@eco/redux';
+import {
+  selectContent,
+  selectIsContentsLoading,
+  setContentPreview,
+  useAppDispatch,
+  useAppSelector,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
 import ControllerTextField from '../components/formControls/ControllerTextField';
@@ -14,6 +22,8 @@ import ControllerDateTimeField from '../components/formControls/ControllerDateTi
 import { useFormValues } from '../hooks/useFormValues';
 import { useContentFormHandlers } from './useContentFormHandlers';
 import ControllerEditor from '../components/editor/ControllerEditor';
+import AppIconButton from '../components/buttons/AppIconButton';
+import { useCallback } from 'react';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -26,6 +36,8 @@ const ContentForm = ({type}: ContentFormProps) => {
   const { id } = useParams();
 
   const isMobilePortrait = useMobilePortraitDetection();
+
+  const dispatch = useAppDispatch();
 
   const isLoading = useAppSelector(
     (state) => selectIsContentsLoading(state, type, id ? ApiOperations.edit : ApiOperations.create)
@@ -54,9 +66,26 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const { submit, handleClick, handleClose } = useContentFormHandlers(type, formData, id);
 
+  const handlePreviewClick = useCallback(
+    () => {
+      dispatch(setContentPreview(true));
+    },
+    [dispatch]
+  );
+
   return (
-    <form onSubmit={handleSubmit(submit)}>
-      <Grid container rowSpacing={2} columnSpacing={2} width={isMobilePortrait ? '100%' : 800}>
+    <Stack
+      component="form"
+      direction={isMobilePortrait ? 'column-reverse' : 'row'}
+      onSubmit={handleSubmit(submit)}
+    >
+      <Grid
+        container
+        rowSpacing={2}
+        columnSpacing={2}
+        width={isMobilePortrait ? '100%' : 800}
+        mr={2}
+      >
         <Grid md={6} xs={12}>
           <ControllerTextField
             name={ContentItems.Title}
@@ -88,7 +117,10 @@ const ContentForm = ({type}: ContentFormProps) => {
             defaultValue={formData.text}
             fieldProps={{
               label: t('labels:text'),
-              id: ContentItems.Text
+              id: ContentItems.Text,
+              editorDesign: {
+                minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '500px' : '200px',
+              }
             }}
           />
         </Grid>
@@ -113,7 +145,20 @@ const ContentForm = ({type}: ContentFormProps) => {
           </Stack>
         </Grid>
       </Grid>
-    </form>
+      <Stack
+        p={1}
+        mt={2}
+        alignSelf="baseline"
+      >
+        <AppIconButton
+          title={t('labels:preview')}
+          id='content-preview-button'
+          onClick={handlePreviewClick}
+        >
+          <VisibilityIcon />
+        </AppIconButton>
+      </Stack>
+    </Stack>
   );
 };
 

@@ -2,21 +2,34 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
-import { apiGetContent, setContent, useAppDispatch } from '@eco/redux';
+import {
+  apiGetContent,
+  selectContentPreview,
+  selectUserAuth,
+  setContent,
+  useAppDispatch,
+  useAppSelector,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { ContentTypes } from '@eco/types';
 import ContentForm from './ContentForm';
+import ContentPreview from './ContentPreview';
 
-interface ContentEditProps {
+interface ContentDetailProps {
   type: ContentTypes;
 }
 
-export const ContentEdit = ({type}: ContentEditProps) => {
+export const ContentDetail = ({type}: ContentDetailProps) => {
 
   const { t } = useTranslation();
 
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
+
+  const { rights: { scopes: { tasks } } } = useShallowEqualSelector(selectUserAuth);
+
+  const isPreview = useAppSelector(selectContentPreview);
 
   useEffect(
     () => {
@@ -47,8 +60,11 @@ export const ContentEdit = ({type}: ContentEditProps) => {
 
   return (
     <>
-      <Typography variant='h3' mb={3}>{title}</Typography>
-      <ContentForm type={type} />
+      {!isPreview && <Typography variant='h3' mb={3}>{title}</Typography>}
+      {!isPreview && tasks.edit
+        ? <ContentForm type={type} />
+        : <ContentPreview type={type} />
+      }
     </>
   );
 };

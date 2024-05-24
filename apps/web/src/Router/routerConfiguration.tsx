@@ -5,7 +5,7 @@ import App from "../app/app";
 import { Home } from "../app/Home";
 import { Accounts, AccountsNew, AccountsEdit } from "../app/accounts";
 import { Users } from "../app/Users/Users";
-import { ContentEdit, ContentList, ContentNew } from "../app/content";
+import { ContentDetail, ContentList, ContentNew } from "../app/content";
 import LoginWrapper from "../app/user/LoginWrapper";
 import Invitation from "../app/Auth/Invitation";
 import { UserEdit } from "../app/user/UserEdit";
@@ -42,8 +42,8 @@ export const router = createBrowserRouter([
         element: <LoginWrapper><ContentNew type={ContentTypes.Task} /></LoginWrapper>,
       },
       {
-        path: routes.content.task.edit,
-        element: <LoginWrapper><ContentEdit type={ContentTypes.Task} /></LoginWrapper>,
+        path: routes.content.task.detail,
+        element: <LoginWrapper><ContentDetail type={ContentTypes.Task} /></LoginWrapper>,
       },
       {
         path: routes.content.record.list,
@@ -54,8 +54,8 @@ export const router = createBrowserRouter([
         element: <LoginWrapper><ContentNew type={ContentTypes.Record} /></LoginWrapper>,
       },
       {
-        path: routes.content.record.edit,
-        element: <LoginWrapper><ContentEdit type={ContentTypes.Record} /></LoginWrapper>,
+        path: routes.content.record.detail,
+        element: <LoginWrapper><ContentDetail type={ContentTypes.Record} /></LoginWrapper>,
       },
       {
         path: routes.home,

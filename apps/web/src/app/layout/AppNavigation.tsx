@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, To, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -15,18 +15,18 @@ import { ScopeItems } from '@eco/types';
 interface NavItemProps {
   icon: ReactNode;
   text: string;
-  to: string;
+  to: To;
 }
 
 const NavItem = ({icon, text, to}: NavItemProps) => {
   return (
     <ListItem disablePadding>
-      <ListItemButton>
+      <ListItemButton LinkComponent={Link} to={to} >
         <ListItemIcon>
           {icon}
         </ListItemIcon>
         <ListItemText>
-        <Link to={to}>{text}</Link>
+          {text}
         </ListItemText>
       </ListItemButton>
     </ListItem>

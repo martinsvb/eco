@@ -8,22 +8,22 @@ export const routes = {
         article: {
             list: '/articles',
             new: '/articles/new',
-            edit: '/articles/edit/:id',
+            detail: '/articles/detail/:id',
         },
         record: {
             list: '/records',
             new: '/records/new',
-            edit: '/records/edit/:id',
+            detail: '/records/detail/:id',
         },
         task: {
             list: '/tasks',
             new: '/tasks/new',
-            edit: '/tasks/edit/:id',
+            detail: '/tasks/detail/:id',
         },
         new: {
             list: '/news',
             new: '/news/new',
-            edit: '/news/edit/:id',
+            detail: '/news/detail/:id',
         },
     },
     home: '/home',

@@ -36,6 +36,7 @@ export interface ContentState {
     [ContentTypes.New]: {[key: string]: boolean};
   };
   filter: ContentFilterData;
+  preview: boolean;
 }
 
 export const initialContentState: ContentState = {
@@ -63,7 +64,8 @@ export const initialContentState: ContentState = {
     [ContentTypes.Task]: {},
     [ContentTypes.New]: {},
   },
-  filter: {}
+  filter: {},
+  preview: false
 };
 
 const contentSlice = createSlice({
@@ -79,6 +81,9 @@ const contentSlice = createSlice({
     }),
     setContentFilterData: create.reducer((state, {payload}: PayloadAction<ContentFilterData>) => {
       state.filter = {...state.filter, ...payload};
+    }),
+    setContentPreview: create.reducer((state, {payload}: PayloadAction<boolean>) => {
+      state.preview = payload;
     }),
     apiGetContentList: create.asyncThunk(
       contentListGet,
@@ -200,6 +205,7 @@ const contentSlice = createSlice({
       return !!state.loading[type][operation];
     },
     selectContentFilter: (state) => state.filter,
+    selectContentPreview: (state) => state.preview,
   },
 });
 
@@ -214,12 +220,14 @@ export const {
   apiDeleteContent,
   resetContent,
   setContent,
-  setContentFilterData
+  setContentFilterData,
+  setContentPreview
 } = contentSlice.actions;
 
 export const {
   selectContent,
   selectContentList,
   selectIsContentsLoading,
-  selectContentFilter
+  selectContentFilter,
+  selectContentPreview
 } = contentSlice.selectors;

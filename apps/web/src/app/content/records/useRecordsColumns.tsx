@@ -15,11 +15,11 @@ export const useRecordsColumns = (): RecordsColumns => {
   return {
     columns: [
       {
-        ...columnSettings(ContentItems.Title, 240, 'left'),
+        ...columnSettings(ContentItems.Title, 200, 'left'),
         headerName: t('labels:title'),
       },
       {
-        ...columnSettings(ContentItems.DateTime, 200),
+        ...columnSettings(ContentItems.DateTime, 200, 'left'),
         headerName: t('labels:dateTime'),
         type: 'string',
         valueFormatter: (value) => value ? dayjs(value).format('DD. MM. YYYY HH:mm') : '',

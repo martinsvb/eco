@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, useTheme } from '@mui/material';
-import { DataGrid, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridRowParams, gridClasses } from '@mui/x-data-grid';
 import { routes } from '@eco/config';
 import { ContentFull, ContentTypes } from '@eco/types';
 import { useRecordsColumns } from './useRecordsColumns';
@@ -29,7 +29,7 @@ const Records = ({
 
   const handleRowClick = useCallback(
     ({id}: GridRowParams) => {
-      navigate(routes.content[ContentTypes.Record].edit.replace(':id', id as string));
+      navigate(routes.content[ContentTypes.Record].detail.replace(':id', id as string));
     },
     [navigate]
   );
@@ -46,7 +46,12 @@ const Records = ({
         slots={{
           columnMenu: RecordsColumnMenu,
         }}
-        sx={getDataGridSx(palette, isMobilePortrait)}
+        sx={{
+          ...getDataGridSx(palette, isMobilePortrait),
+          [`& .${gridClasses.row}`]: {
+            cursor: 'pointer',
+          },
+        }}
       />
     </Box>
   );
