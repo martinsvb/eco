@@ -1,20 +1,45 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { Chip, Paper, Stack, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import { selectContent, selectUserAuth, setContentPreview, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
-import { ContentTypes } from '@eco/types';
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  selectContent,
+  selectContentPreview,
+  selectUserAuth,
+  setContentPreview,
+  useAppDispatch,
+  useAppSelector,
+  useShallowEqualSelector
+} from '@eco/redux';
+import { ContentFull, ContentTypes } from '@eco/types';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 import AppIconButton from '../components/buttons/AppIconButton';
+import { useHtml } from '../hooks/useHtml';
 
 interface ContentPreviewProps {
   type: ContentTypes;
 }
 
+const DateLabel = ({createdAt, dateTime}: ContentFull) => {
+  const { t } = useTranslation();
+
+  const label = useMemo(
+    () => {
+      return dateTime ? t('labels:dateTime') : t('labels:createdAt');
+    },
+    [dateTime, t]
+  )
+
+  return `${label}: ${dayjs(dateTime || createdAt).format('DD. MM. YYYY')}`;
+}
+
 const ContentPreview = ({type}: ContentPreviewProps) => {
 
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
 
   const isMobilePortrait = useMobilePortraitDetection();
 
@@ -22,14 +47,23 @@ const ContentPreview = ({type}: ContentPreviewProps) => {
 
   const { rights: { scopes: { tasks } } } = useShallowEqualSelector(selectUserAuth);
 
+  const isPreview = useAppSelector(selectContentPreview);
+
   const { data } = useShallowEqualSelector((state) => selectContent(state, type));
 
-  const handleEditClick = useCallback(
+  const handleCloseClick = useCallback(
     () => {
-      dispatch(setContentPreview(false));
+      if (isPreview) {
+        dispatch(setContentPreview(false));
+      }
+      if (!tasks.edit) {
+        navigate(-1);
+      }
     },
-    [dispatch]
+    [dispatch, navigate, tasks, isPreview]
   );
+
+  const innerHtml = useHtml(data?.text);
 
   return (
     <Stack>
@@ -41,34 +75,33 @@ const ContentPreview = ({type}: ContentPreviewProps) => {
           width={isMobilePortrait ? '100%' : 800}
         >
           <Typography variant="h3" mb={2}>{data?.title}</Typography>
-          <Chip
-            label={dayjs(data?.dateTime).format('DD. MM. YYYY')}
-          />
+          {data &&
+            <Chip
+              label={<DateLabel {...data} />}
+            />
+          }
         </Stack>
-        {tasks.edit &&
-          <Stack
-            p={1}
-            mt={2}
-            alignSelf="baseline"
+        <Stack
+          p={1}
+          alignSelf="baseline"
+        >
+          <AppIconButton
+            title={t('labels:close')}
+            id='content-preview-close-button'
+            onClick={handleCloseClick}
           >
-            <AppIconButton
-              title={t('labels:edit')}
-              id='content-edit-button'
-              onClick={handleEditClick}
-            >
-              <EditIcon />
-            </AppIconButton>
-          </Stack>
-        }
+            <CloseIcon />
+          </AppIconButton>
+        </Stack>
       </Stack>
       <Paper
         sx={{
           width: isMobilePortrait ? '100%' : 800,
-          minHeight: 700
+          minHeight: 700,
+          p: 2
         }}
-      >
-        <Typography variant="body1">{data?.title}</Typography>
-      </Paper>
+        dangerouslySetInnerHTML={innerHtml}
+      />
     </Stack>
   );
 };

@@ -60,7 +60,7 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
 
   return (
     <>
-      {!isPreview && <Typography variant='h3' mb={3}>{title}</Typography>}
+      {!isPreview && tasks.edit && <Typography variant='h3'>{title}</Typography>}
       {!isPreview && tasks.edit
         ? <ContentForm type={type} />
         : <ContentPreview type={type} />

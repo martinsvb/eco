@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { Box, Card, CardActions, CardContent, CardProps, Stack, Typography } from '@mui/material';
 import sanitize from 'sanitize-html';
-import { useMobileDetection } from '../../hooks/useMobileDetection';
 import { useEditorElementsDesign } from '../editor/useEditorDesign';
+import { useMobileDetection } from '../../hooks/useMobileDetection';
+import { useHtml } from '../../hooks/useHtml';
 
 interface AppCardProps extends CardProps {
   actions: ReactNode;
@@ -10,7 +11,7 @@ interface AppCardProps extends CardProps {
   cardTitle: string;
   label?: ReactNode;
   textContent?: string;
-  htmlContent?: string;
+  htmlContent?: any;
   background?: string;
 }
 
@@ -27,6 +28,8 @@ export const AppCard = ({
   const isMobile = useMobileDetection();
 
   const { editorElementsDesign } = useEditorElementsDesign();
+
+  const innerHtml = useHtml(htmlContent);
 
   return (
     <Card
@@ -65,11 +68,7 @@ export const AppCard = ({
               whiteSpace: 'nowrap',
               ...editorElementsDesign,
             }}
-            dangerouslySetInnerHTML={{__html: sanitize(htmlContent, {
-              allowedAttributes: {
-                'span': [ 'class' ]
-              }
-            })}}
+            dangerouslySetInnerHTML={innerHtml}
           />
         }
       </CardContent>

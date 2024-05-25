@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -22,8 +23,6 @@ import ControllerDateTimeField from '../components/formControls/ControllerDateTi
 import { useFormValues } from '../hooks/useFormValues';
 import { useContentFormHandlers } from './useContentFormHandlers';
 import ControllerEditor from '../components/editor/ControllerEditor';
-import AppIconButton from '../components/buttons/AppIconButton';
-import { useCallback } from 'react';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -76,9 +75,23 @@ const ContentForm = ({type}: ContentFormProps) => {
   return (
     <Stack
       component="form"
-      direction={isMobilePortrait ? 'column-reverse' : 'row'}
       onSubmit={handleSubmit(submit)}
     >
+      <Stack
+        px={2}
+        my={1}
+        width={isMobilePortrait ? '100%' : 800}
+        direction="row"
+        justifyContent="flex-end"
+      >
+        <Button
+          id='content-preview-button'
+          startIcon={<VisibilityIcon />}
+          onClick={handlePreviewClick}
+        >
+          {t('labels:preview')}
+        </Button>
+      </Stack>
       <Grid
         container
         rowSpacing={2}
@@ -145,19 +158,6 @@ const ContentForm = ({type}: ContentFormProps) => {
           </Stack>
         </Grid>
       </Grid>
-      <Stack
-        p={1}
-        mt={2}
-        alignSelf="baseline"
-      >
-        <AppIconButton
-          title={t('labels:preview')}
-          id='content-preview-button'
-          onClick={handlePreviewClick}
-        >
-          <VisibilityIcon />
-        </AppIconButton>
-      </Stack>
     </Stack>
   );
 };

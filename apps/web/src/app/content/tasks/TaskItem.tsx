@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Chip } from '@mui/material';
 import dayjs from 'dayjs';
 import { ContentFull, ContentState, ContentTypes } from '@eco/types';
@@ -8,25 +7,10 @@ import { AppCard } from '../../components/card/AppCard';
 import { ContentEditButton } from '../ContentEditButton';
 import TaskSwitch from './TaskSwitch';
 import AppAvatar from '../../components/avatar/AppAvatar';
-import { serialize } from '../../components/editor/serialize/richTextParser';
 
 export const TaskItem = ({ id, title, text, state, createdAt, author: { name, picture } }: ContentFull) => {
 
   const { rights: { scopes: { tasks } } } = useShallowEqualSelector(selectUserAuth);
-
-  const html = useMemo(
-    () => {
-      try {
-        return text
-          ? serialize(text.root.children).join('')
-          : undefined;
-      }
-      catch {
-        return undefined;
-      }
-    },
-    [text]
-  );
 
   return (
     <AppCard
@@ -39,7 +23,7 @@ export const TaskItem = ({ id, title, text, state, createdAt, author: { name, pi
       }
       actionsAvailable={tasks.read || tasks.edit || tasks.delete}
       cardTitle={title}
-      htmlContent={html}
+      htmlContent={text}
       label={
         <Chip
           avatar={
