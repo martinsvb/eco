@@ -132,7 +132,7 @@ const ContentForm = ({type}: ContentFormProps) => {
               label: t('labels:text'),
               id: ContentItems.Text,
               editorDesign: {
-                minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '500px' : '200px',
+                minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '470px' : '170px',
               }
             }}
           />

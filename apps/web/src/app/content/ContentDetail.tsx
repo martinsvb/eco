@@ -11,7 +11,7 @@ import {
   useAppSelector,
   useShallowEqualSelector
 } from '@eco/redux';
-import { ContentTypes } from '@eco/types';
+import { ContentTypes, contentScopes } from '@eco/types';
 import ContentForm from './ContentForm';
 import ContentPreview from './ContentPreview';
 
@@ -27,7 +27,7 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
 
   const dispatch = useAppDispatch();
 
-  const { rights: { scopes: { tasks } } } = useShallowEqualSelector(selectUserAuth);
+  const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
   const isPreview = useAppSelector(selectContentPreview);
 
@@ -58,12 +58,14 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
     [t, type]
   );
 
+  const scope = contentScopes[type];
+
   return (
     <>
-      {!isPreview && tasks.edit && <Typography variant='h3'>{title}</Typography>}
-      {!isPreview && tasks.edit
+      {!isPreview && scopes[scope]?.edit && <Typography variant='h3'>{title}</Typography>}
+      {!isPreview && scopes[scope]?.edit
         ? <ContentForm type={type} />
-        : <ContentPreview type={type} />
+        : <ContentPreview type={type} scope={scope} />
       }
     </>
   );

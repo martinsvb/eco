@@ -13,13 +13,14 @@ import {
   useAppSelector,
   useShallowEqualSelector
 } from '@eco/redux';
-import { ContentFull, ContentTypes } from '@eco/types';
+import { ContentFull, ContentTypes, ScopeItems } from '@eco/types';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 import AppIconButton from '../components/buttons/AppIconButton';
 import { useHtml } from '../hooks/useHtml';
 
 interface ContentPreviewProps {
   type: ContentTypes;
+  scope: ScopeItems;
 }
 
 const DateLabel = ({createdAt, dateTime}: ContentFull) => {
@@ -30,12 +31,17 @@ const DateLabel = ({createdAt, dateTime}: ContentFull) => {
       return dateTime ? t('labels:dateTime') : t('labels:createdAt');
     },
     [dateTime, t]
-  )
+  );
 
-  return `${label}: ${dayjs(dateTime || createdAt).format('DD. MM. YYYY')}`;
+  return (
+    <Stack>
+      <Typography variant="body2">{label}</Typography>
+      <Typography variant="body2">{dayjs(dateTime || createdAt).format('DD. MM. YYYY')}</Typography>
+    </Stack>
+  );
 }
 
-const ContentPreview = ({type}: ContentPreviewProps) => {
+const ContentPreview = ({type, scope}: ContentPreviewProps) => {
 
   const { t } = useTranslation();
 
@@ -45,7 +51,7 @@ const ContentPreview = ({type}: ContentPreviewProps) => {
 
   const dispatch = useAppDispatch();
 
-  const { rights: { scopes: { tasks } } } = useShallowEqualSelector(selectUserAuth);
+  const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
   const isPreview = useAppSelector(selectContentPreview);
 
@@ -56,11 +62,11 @@ const ContentPreview = ({type}: ContentPreviewProps) => {
       if (isPreview) {
         dispatch(setContentPreview(false));
       }
-      if (!tasks.edit) {
+      if (!scopes[scope]?.edit) {
         navigate(-1);
       }
     },
-    [dispatch, navigate, tasks, isPreview]
+    [dispatch, navigate, scopes, scope, isPreview]
   );
 
   const innerHtml = useHtml(data?.text);
@@ -77,6 +83,10 @@ const ContentPreview = ({type}: ContentPreviewProps) => {
           <Typography variant="h3" mb={2}>{data?.title}</Typography>
           {data &&
             <Chip
+              sx={{
+                height: '48px',
+                p: 0.5
+              }}
               label={<DateLabel {...data} />}
             />
           }
@@ -97,7 +107,7 @@ const ContentPreview = ({type}: ContentPreviewProps) => {
       <Paper
         sx={{
           width: isMobilePortrait ? '100%' : 800,
-          minHeight: 700,
+          minHeight: isMobilePortrait ? 500 : 700,
           p: 2
         }}
         dangerouslySetInnerHTML={innerHtml}
