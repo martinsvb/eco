@@ -56,8 +56,7 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
           fieldProps={{
             sx: {mb: 2},
             required: true,
-            label: t('labels:email'),
-            id: UserItems.Email
+            label: t('labels:email')
           }}
         />
         <ControllerTextField
@@ -68,7 +67,6 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
             sx: {mb: 2},
             required: true,
             label: t('labels:password'),
-            id: UserItems.Password,
             type: 'password'
           }}
         />

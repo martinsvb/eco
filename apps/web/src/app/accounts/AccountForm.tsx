@@ -61,8 +61,7 @@ const AccountForm = () => {
             fieldProps={{
               fullWidth: true,
               required: true,
-              label: t('labels:name'),
-              id: AccountItems.name
+              label: t('labels:name')
             }}
           />
         </Grid>
@@ -74,8 +73,7 @@ const AccountForm = () => {
             fieldProps={{
               fullWidth: true,
               required: true,
-              label: t('labels:iban'),
-              id: AccountItems.iban
+              label: t('labels:iban')
             }}
           />
         </Grid>
@@ -104,8 +102,7 @@ const AccountForm = () => {
             fieldProps={{
               fullWidth: true,
               multiline: true,
-              label: t('labels:description'),
-              id: AccountItems.description
+              label: t('labels:description')
             }}
           />
         </Grid>

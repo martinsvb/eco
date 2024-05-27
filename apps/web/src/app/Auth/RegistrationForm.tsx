@@ -74,8 +74,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             defaultValue={data.email}
             fieldProps={{
               required: true,
-              label: t('labels:email'),
-              id: UserItems.Email
+              label: t('labels:email')
             }}
           />
         </Grid>
@@ -86,8 +85,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             defaultValue={data.name}
             fieldProps={{
               required: true,
-              label: t('labels:name'),
-              id: UserItems.Name
+              label: t('labels:name')
             }}
           />
         </Grid>
@@ -99,7 +97,6 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             fieldProps={{
               required: true,
               label: t('labels:password'),
-              id: UserItems.Password,
               type: 'password'
             }}
           />
@@ -112,7 +109,6 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             fieldProps={{
               required: true,
               label: t('labels:passwordConfirmation'),
-              id: UserItems.PasswordConfirmation,
               type: 'password'
             }}
           />
@@ -124,8 +120,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             defaultValue={data.companyName}
             fieldProps={{
               required: true,
-              label: t('labels:companyName'),
-              id: RegistrationItems.companyName
+              label: t('labels:companyName')
             }}
           />
         </Grid>

@@ -82,8 +82,7 @@ const VerificationForm = ({handleClose}: VerificationFormProps) => {
           fieldProps={{
             sx: {mb: 2},
             required: true,
-            label: t('labels:otp'),
-            id: VerificationItems.otp
+            label: t('labels:otp')
           }}
         />
         <Stack direction="row" justifyContent="end">

@@ -69,8 +69,7 @@ const InvitationForm = () => {
             fieldProps={{
               readOnly: true,
               required: true,
-              label: t('labels:email'),
-              id: UserItems.Email
+              label: t('labels:email')
             }}
           />
         </Grid>
@@ -81,8 +80,7 @@ const InvitationForm = () => {
             defaultValue={data.name}
             fieldProps={{
               required: true,
-              label: t('labels:name'),
-              id: UserItems.Name
+              label: t('labels:name')
             }}
           />
         </Grid>
@@ -94,7 +92,6 @@ const InvitationForm = () => {
             fieldProps={{
               required: true,
               label: t('labels:password'),
-              id: UserItems.Password,
               type: 'password'
             }}
           />
@@ -107,7 +104,6 @@ const InvitationForm = () => {
             fieldProps={{
               required: true,
               label: t('labels:passwordConfirmation'),
-              id: UserItems.PasswordConfirmation,
               type: 'password'
             }}
           />

@@ -120,7 +120,6 @@ const UserForm = () => {
               fullWidth: true,
               required: true,
               label: t('labels:name'),
-              id: UserItems.Name
             }}
           />
         </Grid>
@@ -133,7 +132,6 @@ const UserForm = () => {
               fullWidth: true,
               required: true,
               label: t('labels:email'),
-              id: UserItems.Email
             }}
           />
         </Grid>
@@ -163,7 +161,6 @@ const UserForm = () => {
                   defaultValue={data.passwordOld}
                   fieldProps={{
                     label: t('labels:passwordOld'),
-                    id: UserItems.PasswordOld,
                     type: 'password'
                   }}
                 />
@@ -175,7 +172,6 @@ const UserForm = () => {
                   defaultValue={data.password}
                   fieldProps={{
                     label: t('labels:password'),
-                    id: UserItems.Password,
                     type: 'password'
                   }}
                 />
@@ -187,7 +183,6 @@ const UserForm = () => {
                   defaultValue={data.passwordConfirmation}
                   fieldProps={{
                     label: t('labels:passwordConfirmation'),
-                    id: UserItems.PasswordConfirmation,
                     type: 'password'
                   }}
                 />
