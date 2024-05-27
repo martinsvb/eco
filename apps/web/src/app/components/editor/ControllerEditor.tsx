@@ -1,8 +1,8 @@
 import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import Editor, { EditorProps } from "./Editor";
 
-export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: EditorProps;
+export type CustomEditorControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
+  fieldProps: Omit<EditorProps, 'id'>;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
 const ControllerEditor = <V extends FieldValues, N extends FieldPath<V>>({
@@ -10,7 +10,7 @@ const ControllerEditor = <V extends FieldValues, N extends FieldPath<V>>({
   control,
   fieldProps,
   ...rest
-}: CustomFieldControllerProps<V, N>) => {
+}: CustomEditorControllerProps<V, N>) => {
   return (
     <Controller
       name={name}

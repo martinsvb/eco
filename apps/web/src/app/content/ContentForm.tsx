@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,18 +10,19 @@ import {
   selectContent,
   selectIsContentsLoading,
   setContentPreview,
+  setContentTemp,
   useAppDispatch,
   useAppSelector,
   useShallowEqualSelector
 } from '@eco/redux';
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
-import ControllerTextField from '../components/formControls/ControllerTextField';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
-import ControllerDateTimeField from '../components/formControls/ControllerDateTimeField';
 import { useFormValues } from '../hooks/useFormValues';
 import { useContentFormHandlers } from './useContentFormHandlers';
-import ControllerEditor from '../components/editor/ControllerEditor';
+import { gridFieldSettings } from '../helpers/fields';
+import ContentFormButtons from './ContentFormButtons';
+import { GridControllerDateTimeField, GridControllerEditor, GridControllerTextField } from '../components';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -42,10 +42,12 @@ const ContentForm = ({type}: ContentFormProps) => {
     (state) => selectIsContentsLoading(state, type, id ? ApiOperations.edit : ApiOperations.create)
   );
 
-  const { data } = useShallowEqualSelector((state) => selectContent(state, type));
+  const { data: content, tempData } = useShallowEqualSelector((state) => selectContent(state, type));
+
+  const initData = (tempData || content) as {[key: string]: unknown} | null;
 
   const values = useFormValues<ContentData>(
-    data,
+    initData,
     [ContentItems.Title, ContentItems.Text, ContentItems.DateTime],
     [ContentItems.DateTime]
   );
@@ -61,15 +63,18 @@ const ContentForm = ({type}: ContentFormProps) => {
     values
   });
 
-  const formData = watch();
+  const data = watch();
 
-  const { submit, handleClick, handleClose } = useContentFormHandlers(type, formData, id);
+  const { submit, handleClick, handleClose } = useContentFormHandlers(type, data, id);
 
   const handlePreviewClick = useCallback(
     () => {
+      if (!id) {
+        dispatch(setContentTemp({data, type}));
+      }
       dispatch(setContentPreview(true));
     },
-    [dispatch]
+    [dispatch, data, id, type]
   );
 
   return (
@@ -99,64 +104,38 @@ const ContentForm = ({type}: ContentFormProps) => {
         width={isMobilePortrait ? '100%' : 800}
         mr={2}
       >
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={ContentItems.Title}
-            control={control}
-            defaultValue={formData.title}
-            fieldProps={{
-              fullWidth: true,
-              required: true,
-              label: t('labels:title'),
-              id: ContentItems.Title
-            }}
-          />
-        </Grid>
-        <Grid md={6} xs={12}>
-          <ControllerDateTimeField
-            name={ContentItems.DateTime}
-            control={control}
-            defaultValue={formData.dateTime}
-            fieldProps={{
-              label: t('labels:dateTime'),
-              id: ContentItems.DateTime
-            }}
-          />
-        </Grid>
-        <Grid xs={12}>
-          <ControllerEditor
-            name={ContentItems.Text}
-            control={control}
-            defaultValue={formData.text}
-            fieldProps={{
-              label: t('labels:text'),
-              id: ContentItems.Text,
-              editorDesign: {
-                minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '470px' : '170px',
-              }
-            }}
-          />
-        </Grid>
-        <Grid xs={12}>
-          <Stack direction="row" justifyContent="end">
-            <Button
-              variant="text"
-              onClick={handleClose}
-              sx={{mr: 1}}
-            >
-              {t('labels:close')}
-            </Button> 
-            <LoadingButton
-              disabled={!isValid}
-              loading={isLoading}
-              type="submit"
-              variant="contained"
-              onClick={handleClick}
-            >
-              {id ? t('labels:edit') : t('labels:create')}
-            </LoadingButton>
-          </Stack>
-        </Grid>
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, ContentItems.Title, data)}
+          control={control}
+          fieldProps={{
+            fullWidth: true,
+            required: true,
+            label: t('labels:title')
+          }}
+        />
+        <GridControllerDateTimeField
+          {...gridFieldSettings({md: 6, xs: 12}, ContentItems.DateTime, data)}
+          control={control}
+          fieldProps={{
+            label: t('labels:dateTime')
+          }}
+        />
+        <GridControllerEditor
+          {...gridFieldSettings({xs: 12}, ContentItems.Text, data)}
+          control={control}
+          fieldProps={{
+            label: t('labels:text'),
+            editorDesign: {
+              minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '470px' : '170px',
+            }
+          }}
+        />
+        <ContentFormButtons
+          isLoading={isLoading}
+          isValid={isValid}
+          handleClick={handleClick}
+          handleClose={handleClose}
+        />
       </Grid>
     </Stack>
   );

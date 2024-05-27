@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import {
   apiGetContent,
+  resetContentItem,
   selectContentPreview,
   selectUserAuth,
-  setContent,
   useAppDispatch,
   useAppSelector,
   useShallowEqualSelector
@@ -38,7 +38,7 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
       }
 
       return () => {
-        dispatch(setContent({data: null, type}));
+        dispatch(resetContentItem({type}));
       }
     },
     [dispatch, id, type]

@@ -2,8 +2,8 @@ import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-
 import DateTimePicker from "./DateTimePicker";
 import { DateTimePickerProps } from "./formControlsTypes";
 
-export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: DateTimePickerProps;
+export type CustomDateTimeFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
+  fieldProps: Omit<DateTimePickerProps, 'id'>;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
 const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>({
@@ -11,7 +11,7 @@ const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>(
   control,
   fieldProps,
   ...rest
-}: CustomFieldControllerProps<V, N>) => {
+}: CustomDateTimeFieldControllerProps<V, N>) => {
   return (
     <Controller
       name={name}

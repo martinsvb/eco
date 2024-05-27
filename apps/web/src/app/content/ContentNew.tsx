@@ -1,8 +1,17 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
-import { ContentTypes } from '@eco/types';
+import { ContentTypes, contentScopes } from '@eco/types';
 import ContentForm from './ContentForm';
+import {
+  useShallowEqualSelector,
+  selectUserAuth,
+  useAppSelector,
+  selectContentPreview,
+  resetContentItem,
+  useAppDispatch
+} from '@eco/redux';
+import ContentPreview from './ContentPreview';
 
 interface ContentNewProps {
   type: ContentTypes;
@@ -11,6 +20,21 @@ interface ContentNewProps {
 export const ContentNew = ({type}: ContentNewProps) => {
 
   const { t } = useTranslation();
+
+  const dispatch = useAppDispatch();
+
+  const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
+
+  const isPreview = useAppSelector(selectContentPreview);
+
+  useEffect(
+    () => {
+      return () => {
+        dispatch(resetContentItem({type}));
+      }
+    },
+    [dispatch, type]
+  );
 
   const title = useMemo(
     () => {
@@ -26,10 +50,15 @@ export const ContentNew = ({type}: ContentNewProps) => {
     [t, type]
   );
 
+  const scope = contentScopes[type];
+
   return (
     <>
-      <Typography variant='h3' mb={3}>{title}</Typography>
-      <ContentForm type={type} />
+      {!isPreview && scopes[scope]?.create && <Typography variant='h3'>{title}</Typography>}
+      {!isPreview && scopes[scope]?.create
+        ? <ContentForm type={type} />
+        : <ContentPreview type={type} scope={scope} />
+      }
     </>
   );
 };

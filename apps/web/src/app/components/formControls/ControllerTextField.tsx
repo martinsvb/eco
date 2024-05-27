@@ -6,7 +6,7 @@ export type CustomFieldProps = {
 } & TextFieldProps;
 
 export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: CustomFieldProps;
+  fieldProps: Omit<CustomFieldProps, 'id'>;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
 const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
@@ -23,6 +23,7 @@ const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
         <TextField
           {...field}
           {...fieldProps}
+          id={name}
           error={Boolean(error)}
           helperText={error?.message}
         />

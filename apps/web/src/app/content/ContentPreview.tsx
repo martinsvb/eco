@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -6,11 +6,9 @@ import { Chip, Paper, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   selectContent,
-  selectContentPreview,
   selectUserAuth,
   setContentPreview,
   useAppDispatch,
-  useAppSelector,
   useShallowEqualSelector
 } from '@eco/redux';
 import { ContentFull, ContentTypes, ScopeItems } from '@eco/types';
@@ -53,21 +51,28 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
 
   const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
-  const isPreview = useAppSelector(selectContentPreview);
-
-  const { data } = useShallowEqualSelector((state) => selectContent(state, type));
+  const { data: content, tempData } = useShallowEqualSelector((state) => selectContent(state, type));
 
   const handleCloseClick = useCallback(
     () => {
-      if (isPreview) {
-        dispatch(setContentPreview(false));
-      }
+      dispatch(setContentPreview(false));
       if (!scopes[scope]?.edit) {
         navigate(-1);
       }
     },
-    [dispatch, navigate, scopes, scope, isPreview]
+    [dispatch, navigate, scopes, scope]
   );
+
+  useEffect(
+    () => {
+      return () => {
+        dispatch(setContentPreview(false));
+      }
+    },
+    [dispatch]
+  );
+
+  const data = (tempData || content) as ContentFull;
 
   const innerHtml = useHtml(data?.text);
 
@@ -75,13 +80,13 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
     <Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Stack
-          direction="row"
+          direction={isMobilePortrait ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           width={isMobilePortrait ? '100%' : 800}
         >
           <Typography variant="h3" mb={2}>{data?.title}</Typography>
-          {data &&
+          {(data?.createdAt || data?.dateTime) &&
             <Chip
               sx={{
                 height: '48px',

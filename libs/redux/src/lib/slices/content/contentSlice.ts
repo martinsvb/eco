@@ -1,5 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiOperations, ContentFilterData, ContentFull, ContentTypes } from '@eco/types';
+import { equals } from 'ramda';
+import { ApiOperations, ContentData, ContentFilterData, ContentFull, ContentTypes } from '@eco/types';
 import {
   contentChildsListGet,
   contentDelete,
@@ -10,18 +11,42 @@ import {
 } from "./contentApi";
 import { createSlice } from "../createSlice";
 
+interface ContentItemData {
+  data: ContentFull | null;
+  tempData: ContentData | null;
+  childs: ContentFull[];
+  loaded: boolean;
+}
+
+interface ContentListData {
+  data: ContentFull[];
+  loaded: boolean;
+}
+
+export const initContentData = {
+  data: null,
+  tempData: null,
+  childs: [],
+  loaded: false
+}
+
+const initContentListData = {
+  data: [],
+  loaded: false
+}
+
 export interface ContentState {
   content: {
-    [ContentTypes.Article]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
-    [ContentTypes.Record]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
-    [ContentTypes.Task]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
-    [ContentTypes.New]: {data: ContentFull | null, childs: ContentFull[], loaded: boolean};
+    [ContentTypes.Article]: ContentItemData;
+    [ContentTypes.Record]: ContentItemData;
+    [ContentTypes.Task]: ContentItemData;
+    [ContentTypes.New]: ContentItemData;
   };
   contentList: {
-    [ContentTypes.Article]: {data: ContentFull[], loaded: boolean};
-    [ContentTypes.Record]: {data: ContentFull[], loaded: boolean};
-    [ContentTypes.Task]: {data: ContentFull[], loaded: boolean};
-    [ContentTypes.New]: {data: ContentFull[], loaded: boolean};
+    [ContentTypes.Article]: ContentListData;
+    [ContentTypes.Record]: ContentListData;
+    [ContentTypes.Task]: ContentListData;
+    [ContentTypes.New]: ContentListData;
   };
   error: {
     [ContentTypes.Article]: {[key: string]: unknown | null};
@@ -41,16 +66,16 @@ export interface ContentState {
 
 export const initialContentState: ContentState = {
   content: {
-    [ContentTypes.Article]: {data: null, childs: [], loaded: false},
-    [ContentTypes.Record]: {data: null, childs: [], loaded: false},
-    [ContentTypes.Task]: {data: null, childs: [], loaded: false},
-    [ContentTypes.New]: {data: null, childs: [], loaded: false},
+    [ContentTypes.Article]: initContentData,
+    [ContentTypes.Record]: initContentData,
+    [ContentTypes.Task]: initContentData,
+    [ContentTypes.New]: initContentData,
   },
   contentList: {
-    [ContentTypes.Article]: {data: [], loaded: false},
-    [ContentTypes.Record]: {data: [], loaded: false},
-    [ContentTypes.Task]: {data: [], loaded: false},
-    [ContentTypes.New]: {data: [], loaded: false},
+    [ContentTypes.Article]: initContentListData,
+    [ContentTypes.Record]: initContentListData,
+    [ContentTypes.Task]: initContentListData,
+    [ContentTypes.New]: initContentListData,
   },
   error: {
     [ContentTypes.Article]: {},
@@ -73,11 +98,25 @@ const contentSlice = createSlice({
   initialState: initialContentState,
   reducers: (create) => ({
     resetContent: create.reducer(() => initialContentState),
+    resetContentItem: create.reducer((
+      state,
+      {payload: {type}}: PayloadAction<{type: ContentTypes}>
+    ) => {
+      state.content[type] = initContentData;
+    }),
     setContent: create.reducer((
       state,
       {payload: {data, type}}: PayloadAction<{data: ContentFull | null, type: ContentTypes}>
     ) => {
       state.content[type].data = data;
+    }),
+    setContentTemp: create.reducer((
+      state,
+      {payload: {data, type}}: PayloadAction<{data: ContentData | null, type: ContentTypes}>
+    ) => {
+      if (!equals(state.content[type].tempData, data)) {
+        state.content[type].tempData = data;
+      }
     }),
     setContentFilterData: create.reducer((state, {payload}: PayloadAction<ContentFilterData>) => {
       state.filter = {...state.filter, ...payload};
@@ -190,6 +229,7 @@ const contentSlice = createSlice({
     selectContent: (state, type: ContentTypes) => {
       return {
         data: state.content[type].data,
+        tempData: state.content[type].tempData,
         loaded: state.contentList[type].loaded,
         isLoading: !!state.loading[type][ApiOperations.getItem]
       }
@@ -219,7 +259,9 @@ export const {
   apiPatchContent,
   apiDeleteContent,
   resetContent,
+  resetContentItem,
   setContent,
+  setContentTemp,
   setContentFilterData,
   setContentPreview
 } = contentSlice.actions;
