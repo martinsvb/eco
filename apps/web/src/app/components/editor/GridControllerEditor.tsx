@@ -1,12 +1,10 @@
-import { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
 import Grid, { Grid2Props } from '@mui/material/Unstable_Grid2';
-import ControllerEditor from "./ControllerEditor";
-import { EditorProps } from "./Editor";
+import ControllerEditor, { CustomEditorControllerProps } from "./ControllerEditor";
 
 export type CustomGridEditorControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: Omit<EditorProps, 'id'>;
   gridProps: Grid2Props;
-} & Omit<ControllerProps<V, N>, 'render'>;
+} & CustomEditorControllerProps<V, N>;
 
 export const GridControllerEditor = <V extends FieldValues, N extends FieldPath<V>>({
   gridProps,

@@ -1,18 +1,17 @@
 import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import TextField, { TextFieldProps } from "./TextField";
-
-export type CustomFieldProps = {
-  noNumberArrows?: boolean;
-} & TextFieldProps;
+import { getFieldId } from "./helpers";
 
 export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: Omit<CustomFieldProps, 'id'>;
+  fieldProps: Omit<TextFieldProps, 'id'>;
+  idApend?: string | number;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
 const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
+  idApend,
   ...rest
 }: CustomFieldControllerProps<V, N>) => {
   return (
@@ -23,7 +22,7 @@ const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
         <TextField
           {...field}
           {...fieldProps}
-          id={name}
+          id={getFieldId(name, idApend)}
           error={Boolean(error)}
           helperText={error?.message}
         />

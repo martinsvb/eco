@@ -15,7 +15,6 @@ export const getBaseFormControlShape = (palette: Palette, shape: Shape, error?: 
 export const getLabelShape = (marginTop: string) => ({
   'label + &': {
     marginTop,
-    fontSize: 14
   },
 });
 

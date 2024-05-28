@@ -17,12 +17,11 @@ import {
 } from '@eco/redux';
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
-import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
-import { useFormValues } from '../hooks/useFormValues';
+import { GridControllerDateTimeField, GridControllerEditor, GridControllerTextField } from '../components';
+import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useContentFormHandlers } from './useContentFormHandlers';
 import { gridFieldSettings } from '../helpers/fields';
 import ContentFormButtons from './ContentFormButtons';
-import { GridControllerDateTimeField, GridControllerEditor, GridControllerTextField } from '../components';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -105,8 +104,7 @@ const ContentForm = ({type}: ContentFormProps) => {
         mr={2}
       >
         <GridControllerTextField
-          {...gridFieldSettings({md: 6, xs: 12}, ContentItems.Title, data)}
-          control={control}
+          {...gridFieldSettings({md: 6, xs: 12}, control, ContentItems.Title, data)}
           fieldProps={{
             fullWidth: true,
             required: true,
@@ -114,15 +112,13 @@ const ContentForm = ({type}: ContentFormProps) => {
           }}
         />
         <GridControllerDateTimeField
-          {...gridFieldSettings({md: 6, xs: 12}, ContentItems.DateTime, data)}
-          control={control}
+          {...gridFieldSettings({md: 6, xs: 12}, control, ContentItems.DateTime, data)}
           fieldProps={{
             label: t('labels:dateTime')
           }}
         />
         <GridControllerEditor
-          {...gridFieldSettings({xs: 12}, ContentItems.Text, data)}
-          control={control}
+          {...gridFieldSettings({xs: 12}, control, ContentItems.Text, data)}
           fieldProps={{
             label: t('labels:text'),
             editorDesign: {

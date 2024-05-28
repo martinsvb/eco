@@ -32,10 +32,7 @@ const DateLabel = ({createdAt, dateTime}: ContentFull) => {
   );
 
   return (
-    <Stack>
-      <Typography variant="body2">{label}</Typography>
-      <Typography variant="body2">{dayjs(dateTime || createdAt).format('DD. MM. YYYY')}</Typography>
-    </Stack>
+    <Typography variant="body2">{`${label}: ${dayjs(dateTime || createdAt).format('DD. MM. YYYY')}`}</Typography>
   );
 }
 
@@ -80,19 +77,21 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
     <Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Stack
-          direction={isMobilePortrait ? 'column' : 'row'}
-          alignItems="center"
+          direction={isMobilePortrait ? 'column-reverse' : 'row'}
+          alignItems={isMobilePortrait ? 'left' : 'center'}
           justifyContent="space-between"
           width={isMobilePortrait ? '100%' : 800}
+          mb={2}
         >
-          <Typography variant="h3" mb={2}>{data?.title}</Typography>
+          <Typography variant="h3">{data?.title}</Typography>
           {(data?.createdAt || data?.dateTime) &&
             <Chip
-              sx={{
-                height: '48px',
-                p: 0.5
-              }}
               label={<DateLabel {...data} />}
+              sx={{
+                alignSelf: 'baseline',
+                mb: isMobilePortrait ? 1 : undefined
+              }}
+              variant="outlined"
             />
           }
         </Stack>
@@ -112,7 +111,7 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
       <Paper
         sx={{
           width: isMobilePortrait ? '100%' : 800,
-          minHeight: isMobilePortrait ? 500 : 700,
+          minHeight: isMobilePortrait ? 450 : 700,
           p: 2
         }}
         dangerouslySetInnerHTML={innerHtml}

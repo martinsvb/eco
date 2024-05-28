@@ -10,10 +10,12 @@ export const fieldSettings = <T>(
 
 export const gridFieldSettings = <T>(
   gridProps: Grid2Props,
+  control: any,
   name: T,
   data: any,
 ) => ({
   name,
+  control,
   defaultValue: data[name],
   gridProps
 });
