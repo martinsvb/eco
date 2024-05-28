@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { alpha, Stack, StackProps, useTheme } from '@mui/material';
 import { ContentFull, ContentState } from '@eco/types';
@@ -5,12 +6,24 @@ import { TaskItem } from './TaskItem';
 import { useMobileDetection } from '../../hooks/useMobileDetection';
 import AppAccordion from '../../components/accordion/AppAccordion';
 
+enum TaskItems {
+  InProgress = 'inProgress',
+  Done = 'done',
+}
+
 interface TaskListProps {
   data: ContentFull[];
   direction?: StackProps['direction'];
+  expandedInProgress?: boolean;
+  expandedDone?: boolean;
 }
 
-export const TaskList = ({data, direction}: TaskListProps) => {
+export const TaskList = ({
+  data,
+  direction,
+  expandedInProgress,
+  expandedDone
+}: TaskListProps) => {
 
   const { t } = useTranslation();
 
@@ -18,11 +31,20 @@ export const TaskList = ({data, direction}: TaskListProps) => {
 
   const isMobile = useMobileDetection();
 
+  const [ expanded, setExpanded ] = useState({
+    [TaskItems.InProgress]: !!expandedInProgress,
+    [TaskItems.Done]: !!expandedDone,
+  });
+
   const isColumn = direction === 'column' || isMobile;
 
   const inProgress = data.filter(({state}) => state !== ContentState.Done);
 
   const done = data.filter(({state}) => state === ContentState.Done);
+
+  const handleClick = (name: TaskItems) => () => {
+    setExpanded((prevExpanded) => ({...prevExpanded, [name]: !prevExpanded[name]}))
+  };
 
   return (
     <Stack
@@ -36,8 +58,9 @@ export const TaskList = ({data, direction}: TaskListProps) => {
         width={isColumn ? '100%' : 420}
       >
         <AppAccordion
-          defaultExpanded
+          expanded={expanded.inProgress}
           id="tasksInProgressHeader"
+          onClick={handleClick(TaskItems.InProgress)}
           title={t('labels:inProgress', {length: inProgress.length})}
           sx={{
             background: alpha(palette.warning.light, .5),
@@ -53,8 +76,9 @@ export const TaskList = ({data, direction}: TaskListProps) => {
         width={isColumn ? '100%' : 420}
       >
         <AppAccordion
-          defaultExpanded
+          expanded={expanded.done}
           id="tasksDoneHeader"
+          onClick={handleClick(TaskItems.Done)}
           title={t('labels:done', {length: done.length})}
           sx={{
             background: alpha(palette.success.light, .5),

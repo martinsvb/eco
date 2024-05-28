@@ -66,7 +66,11 @@ export const ContentList = ({type}: ContentListProps) => {
           <Records data={data} isLoading={isLoading} />
         }
         {type === ContentTypes.Task &&
-          <TaskList data={data} />
+          <TaskList
+            data={data}
+            expandedDone
+            expandedInProgress
+          />
         }
         <Buttons
           isLoading={isLoading}

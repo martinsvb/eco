@@ -229,6 +229,7 @@ const contentSlice = createSlice({
     selectContent: (state, type: ContentTypes) => {
       return {
         data: state.content[type].data,
+        childs: state.content[type].childs,
         tempData: state.content[type].tempData,
         loaded: state.contentList[type].loaded,
         isLoading: !!state.loading[type][ApiOperations.getItem]

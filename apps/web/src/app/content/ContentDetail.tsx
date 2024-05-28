@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import {
   apiGetContent,
+  apiGetContentChildsList,
   resetContentItem,
   selectContentPreview,
   selectUserAuth,
@@ -38,6 +39,7 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
     () => {
       if (id) {
         dispatch(apiGetContent({id, type}));
+        dispatch(apiGetContentChildsList({parentId: id, type}));
       }
 
       return () => {
