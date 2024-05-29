@@ -7,7 +7,7 @@ export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPat
   idApend?: string | number;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
-const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
+export const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
@@ -31,5 +31,3 @@ const ControllerTextField = <V extends FieldValues, N extends FieldPath<V>>({
     />
   );
 };
-
-export default ControllerTextField;

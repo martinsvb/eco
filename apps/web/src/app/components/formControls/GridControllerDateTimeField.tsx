@@ -1,6 +1,6 @@
 import { FieldPath, FieldValues } from "react-hook-form";
 import Grid, { Grid2Props } from '@mui/material/Unstable_Grid2';
-import ControllerDateTimeField, { CustomDateTimeFieldControllerProps } from "./ControllerDateTimeField";
+import { ControllerDateTimeField, CustomDateTimeFieldControllerProps } from "./ControllerDateTimeField";
 
 export type CustomGridDateTimeFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
   gridProps: Grid2Props;

@@ -22,12 +22,14 @@ import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useContentFormHandlers } from './useContentFormHandlers';
 import { gridFieldSettings } from '../helpers/fields';
 import ContentFormButtons from './ContentFormButtons';
+import TasksPanel from './tasks/TasksPanel';
 
 interface ContentFormProps {
   type: ContentTypes;
+  handleDialogClose?: () => void;
 }
 
-const ContentForm = ({type}: ContentFormProps) => {
+const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
 
   const { t } = useTranslation();
 
@@ -46,7 +48,7 @@ const ContentForm = ({type}: ContentFormProps) => {
   const initData = (tempData || content) as {[key: string]: unknown} | null;
 
   const values = useFormValues<ContentData>(
-    initData,
+    !handleDialogClose ? initData : null,
     [ContentItems.Title, ContentItems.Text, ContentItems.DateTime],
     [ContentItems.DateTime]
   );
@@ -64,7 +66,7 @@ const ContentForm = ({type}: ContentFormProps) => {
 
   const data = watch();
 
-  const { submit, handleClick, handleClose } = useContentFormHandlers(type, data, id);
+  const { submit, handleClose } = useContentFormHandlers(type, id, handleDialogClose);
 
   const handlePreviewClick = useCallback(
     () => {
@@ -79,60 +81,67 @@ const ContentForm = ({type}: ContentFormProps) => {
   return (
     <Stack
       component="form"
+      key={`form-${type}${handleDialogClose ? '-child' : ''}`}
+      id={`form-${type}${handleDialogClose ? '-child' : ''}`}
       onSubmit={handleSubmit(submit)}
     >
-      <Stack
-        px={2}
-        my={1}
-        width={isMobilePortrait ? '100%' : 800}
-        direction="row"
-        justifyContent="flex-end"
-      >
-        <Button
-          id='content-preview-button'
-          startIcon={<VisibilityIcon />}
-          onClick={handlePreviewClick}
+      {!handleDialogClose &&
+        <Stack
+          px={2}
+          my={1}
+          width={isMobilePortrait ? '100%' : 800}
+          direction="row"
+          justifyContent="flex-end"
         >
-          {t('labels:preview')}
-        </Button>
+          <Button
+            id='content-preview-button'
+            startIcon={<VisibilityIcon />}
+            onClick={handlePreviewClick}
+          >
+            {t('labels:preview')}
+          </Button>
+        </Stack>
+      }
+      <Stack direction={isMobilePortrait ? 'column' : 'row'} alignItems="baseline">
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={2}
+          width={isMobilePortrait ? '100%' : 800}
+          mr={2}
+        >
+          <GridControllerTextField
+            {...gridFieldSettings({md: 6, xs: 12}, control, ContentItems.Title, data)}
+            fieldProps={{
+              fullWidth: true,
+              required: true,
+              label: t('labels:title')
+            }}
+          />
+          <GridControllerDateTimeField
+            {...gridFieldSettings({md: 6, xs: 12}, control, ContentItems.DateTime, data)}
+            fieldProps={{
+              label: t('labels:dateTime')
+            }}
+          />
+          <GridControllerEditor
+            {...gridFieldSettings({xs: 12}, control, ContentItems.Text, data)}
+            fieldProps={{
+              label: t('labels:text'),
+              editorDesign: {
+                minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '470px' : '170px',
+              }
+            }}
+          />
+          <ContentFormButtons
+            isLoading={isLoading}
+            isValid={isValid}
+            isRoot={!handleDialogClose}
+            handleClose={handleClose}
+          />
+        </Grid>
+        {!handleDialogClose && id && <TasksPanel type={type} />}
       </Stack>
-      <Grid
-        container
-        rowSpacing={2}
-        columnSpacing={2}
-        width={isMobilePortrait ? '100%' : 800}
-        mr={2}
-      >
-        <GridControllerTextField
-          {...gridFieldSettings({md: 6, xs: 12}, control, ContentItems.Title, data)}
-          fieldProps={{
-            fullWidth: true,
-            required: true,
-            label: t('labels:title')
-          }}
-        />
-        <GridControllerDateTimeField
-          {...gridFieldSettings({md: 6, xs: 12}, control, ContentItems.DateTime, data)}
-          fieldProps={{
-            label: t('labels:dateTime')
-          }}
-        />
-        <GridControllerEditor
-          {...gridFieldSettings({xs: 12}, control, ContentItems.Text, data)}
-          fieldProps={{
-            label: t('labels:text'),
-            editorDesign: {
-              minHeight: !isMobilePortrait && [ContentTypes.Record].includes(type) ? '470px' : '170px',
-            }
-          }}
-        />
-        <ContentFormButtons
-          isLoading={isLoading}
-          isValid={isValid}
-          handleClick={handleClick}
-          handleClose={handleClose}
-        />
-      </Grid>
     </Stack>
   );
 };

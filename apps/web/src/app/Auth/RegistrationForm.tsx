@@ -13,8 +13,7 @@ import { AuthOperations, RegistrationData, RegistrationItems, UserItems } from '
 import { getRegistrationValidationSchema } from '@eco/validation';
 import { allowedCountries } from '@eco/config';
 import { Languages } from '@eco/locales';
-import ControllerTextField from '../components/formControls/ControllerTextField';
-import ControllerSelect from '../components/formControls/ControllerSelect';
+import { ControllerSelect, ControllerTextField } from '../components';
 
 interface RegistrationFormProps {
   handleClose: () => void;

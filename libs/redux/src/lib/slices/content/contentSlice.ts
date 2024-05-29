@@ -177,8 +177,13 @@ const contentSlice = createSlice({
         rejected: (state, { error, payload, meta: { arg: { type } } }) => {
           state.error[type][ApiOperations.create] = payload ?? error;
         },
-        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
-          state.contentList[type].data.push(payload);
+        fulfilled: (state, { payload, meta: { arg: { type, parentId } } }) => {
+          if (parentId) {
+            state.content[type].childs.push(payload);
+          }
+          else {
+            state.contentList[type].data.push(payload);
+          }
         },
         settled: (state, { meta: { arg: { type } } }) => {
           state.loading[type][ApiOperations.create] = false;
@@ -215,7 +220,7 @@ const contentSlice = createSlice({
           state.error[type][ApiOperations.deleteItem] = payload ?? error;
         },
         fulfilled: (state, { payload, meta: { arg: { type } } }) => {
-          if (payload.id) {
+          if (payload.id && state.contentList[type].data.length) {
             state.contentList[type].data = state.contentList[type].data.filter(({id}) => id !== payload.id);
           }
         },
@@ -229,10 +234,14 @@ const contentSlice = createSlice({
     selectContent: (state, type: ContentTypes) => {
       return {
         data: state.content[type].data,
-        childs: state.content[type].childs,
         tempData: state.content[type].tempData,
         loaded: state.contentList[type].loaded,
         isLoading: !!state.loading[type][ApiOperations.getItem]
+      }
+    },
+    selectContentChilds: (state, type: ContentTypes) => {
+      return {
+        childs: state.content[type].childs,
       }
     },
     selectContentList: (state, type: ContentTypes) => {
@@ -269,6 +278,7 @@ export const {
 
 export const {
   selectContent,
+  selectContentChilds,
   selectContentList,
   selectIsContentsLoading,
   selectContentFilter,

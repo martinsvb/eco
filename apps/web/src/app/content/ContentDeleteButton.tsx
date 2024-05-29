@@ -25,6 +25,8 @@ const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
 
   const handleDelete = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
       dispatch(apiDeleteContent({
         id,
         type,

@@ -1,4 +1,5 @@
 {
+  "addTask": "Přidat úkol",
   "createTask": "Vytvořit nový úkol",
   "delete-question-text": "Opravdu si přejete vymazat vybraný obsah?",
   "delete-question-title": "Smazání obsahu",
@@ -12,6 +13,8 @@
   "newNewTitle": "Vytvořit novinku",
   "newRecordTitle": "Nový zápis",
   "newTaskTitle": "Nový úkol",
+  "task-add-title": "Přidání úkolu",
+  "tasks": "Úkoly: {{length}}",
   "taskSwitch": "Přepínač stavu úkolu",
   "taskSwitchDone": "Přepnout úkol do stavu hotový",
   "taskSwitchedDone": "Úkol přepnut do stavu hotový",

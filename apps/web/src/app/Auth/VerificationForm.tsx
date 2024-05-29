@@ -10,7 +10,7 @@ import {
 } from '@eco/redux';
 import { VerificationData, VerificationItems } from '@eco/types';
 import { getVerificationValidationSchema } from '@eco/validation';
-import ControllerTextField from '../components/formControls/ControllerTextField';
+import { ControllerTextField } from '../components';
 
 interface VerificationFormProps {
   handleClose: () => void;

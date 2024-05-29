@@ -4,7 +4,11 @@ import { routes } from "@eco/config";
 import { apiPatchContent, apiPostContent, useAppDispatch } from "@eco/redux";
 import { ContentData, ContentTypes } from "@eco/types";
 
-export const useContentFormHandlers = (type: ContentTypes, formData: ContentData, id?: string) => {
+export const useContentFormHandlers = (
+  type: ContentTypes,
+  id?: string,
+  handleDialogClose?: () => void
+) => {
 
   const dispatch = useAppDispatch();
 
@@ -12,7 +16,7 @@ export const useContentFormHandlers = (type: ContentTypes, formData: ContentData
 
   const submit = useCallback(
     (body: ContentData) => {
-      if (id) {
+      if (id && !handleDialogClose) {
         dispatch(
           apiPatchContent({
             body,
@@ -25,22 +29,19 @@ export const useContentFormHandlers = (type: ContentTypes, formData: ContentData
         dispatch(
           apiPostContent({
             body,
+            parentId: id,
             type,
             onSuccess: () => {
-              navigate(routes.content[type].list);
+              if (!handleDialogClose) {
+                navigate(routes.content[type].list);
+              }
+              handleDialogClose?.();
             }
           })
         );
       } 
     },
-    [dispatch, navigate, id, type]
-  );
-
-  const handleClick = useCallback(
-    () => {
-      submit(formData);
-    },
-    [submit, formData]
+    [dispatch, navigate, id, handleDialogClose, type]
   );
 
   const handleClose = useCallback(
@@ -52,7 +53,6 @@ export const useContentFormHandlers = (type: ContentTypes, formData: ContentData
 
   return {
     submit,
-    handleClick,
     handleClose
   }
 }

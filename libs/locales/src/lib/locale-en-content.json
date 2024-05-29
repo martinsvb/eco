@@ -1,4 +1,5 @@
 {
+  "addTask": "Add task",
   "createTask": "Create new task",
   "delete-question-text": "Are you really want to delete chosen content?",
   "delete-question-title": "Content deletion",
@@ -12,6 +13,8 @@
   "newNewTitle": "Create new",
   "newRecordTitle": "New record",
   "newTaskTitle": "New task",
+  "task-add-title": "Task adding",
+  "tasks": "Tasks: {{length}}",
   "taskSwitch": "Task state switch",
   "taskSwitchDone": "Switch task into done state",
   "taskSwitchedDone": "Task was switched into done state",

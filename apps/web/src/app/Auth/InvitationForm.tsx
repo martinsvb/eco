@@ -11,8 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { apiPatchInvitationFinished, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, InvitationData, UserItems } from '@eco/types';
 import { getInvitationValidationSchema } from '@eco/validation';
-import ControllerTextField from '../components/formControls/ControllerTextField';
 import { routes } from '@eco/config';
+import { ControllerTextField } from '../components';
 
 const InvitationForm = () => {
 

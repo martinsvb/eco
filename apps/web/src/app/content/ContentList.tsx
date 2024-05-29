@@ -52,10 +52,10 @@ export const ContentList = ({type}: ContentListProps) => {
     () => {
       return {
         [ContentTypes.Record]: t('records'),
-        [ContentTypes.Task]: t('tasks'),
+        [ContentTypes.Task]: t('content:tasks', {length: data.length}),
       } as {[key: string]: string}
     },
-    [t]
+    [t, data]
   );
 
   return (

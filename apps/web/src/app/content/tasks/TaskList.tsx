@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { alpha, Stack, StackProps, useTheme } from '@mui/material';
 import { ContentFull, ContentState } from '@eco/types';
 import { TaskItem } from './TaskItem';
+import { AppAccordion } from '../../components';
 import { useMobileDetection } from '../../hooks/useMobileDetection';
-import AppAccordion from '../../components/accordion/AppAccordion';
 
 enum TaskItems {
   InProgress = 'inProgress',
@@ -43,7 +43,7 @@ export const TaskList = ({
   const done = data.filter(({state}) => state === ContentState.Done);
 
   const handleClick = (name: TaskItems) => () => {
-    setExpanded((prevExpanded) => ({...prevExpanded, [name]: !prevExpanded[name]}))
+    setExpanded((prevExpanded) => ({...prevExpanded, [name]: !prevExpanded[name]}));
   };
 
   return (

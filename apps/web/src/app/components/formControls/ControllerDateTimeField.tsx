@@ -8,7 +8,7 @@ export type CustomDateTimeFieldControllerProps<V extends FieldValues, N extends 
   idApend?: string | number;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
-const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>({
+export const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
@@ -30,5 +30,3 @@ const ControllerDateTimeField = <V extends FieldValues, N extends FieldPath<V>>(
     />
   );
 };
-
-export default ControllerDateTimeField;

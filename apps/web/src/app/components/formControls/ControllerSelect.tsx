@@ -1,15 +1,18 @@
 import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
+import { getFieldId } from "./helpers";
 import Select, { SelectProps } from "./Select";
 
-export type CustomFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
+export type CustomSelectControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
   fieldProps: SelectProps;
+  idApend?: string | number;
 } & Omit<ControllerProps<V, N>, 'render'>;
 
-const ControllerSelect = <V extends FieldValues, N extends FieldPath<V>>({
+export const ControllerSelect = <V extends FieldValues, N extends FieldPath<V>>({
   name,
   control,
   fieldProps,
-}: CustomFieldControllerProps<V, N>) => {
+  idApend,
+}: CustomSelectControllerProps<V, N>) => {
   return (
     <Controller
       name={name}
@@ -18,6 +21,7 @@ const ControllerSelect = <V extends FieldValues, N extends FieldPath<V>>({
         <Select
           {...field}
           {...fieldProps}
+          id={getFieldId(name, idApend)}
           error={Boolean(error)}
           helperText={error?.message}
         />
@@ -25,5 +29,3 @@ const ControllerSelect = <V extends FieldValues, N extends FieldPath<V>>({
     />
   );
 };
-
-export default ControllerSelect;

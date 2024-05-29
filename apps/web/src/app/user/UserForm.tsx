@@ -17,10 +17,8 @@ import {
 } from '@eco/redux';
 import { UserEditData, UserItems, ApiOperations } from '@eco/types';
 import { getUserEditValidationSchema } from '@eco/validation';
-import ControllerTextField from '../components/formControls/ControllerTextField';
-import ControllerPhoneField from '../components/formControls/ControllerPoneField';
+import { AppAccordion, ControllerPhoneField, ControllerTextField } from '../components';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
-import AppAccordion from '../components/accordion/AppAccordion';
 
 const UserForm = () => {
 

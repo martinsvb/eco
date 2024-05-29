@@ -7,7 +7,7 @@ import { LoadingButton } from '@mui/lab';
 import { apiPostLogin, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { AuthOperations, LoginData, UserItems } from '@eco/types';
 import { getLoginValidationSchema } from '@eco/validation';
-import ControllerTextField from '../components/formControls/ControllerTextField';
+import { ControllerTextField } from '../components';
 
 interface LoginFormProps {
   handleClose: () => void;

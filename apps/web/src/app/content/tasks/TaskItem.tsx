@@ -2,11 +2,10 @@ import { Chip } from '@mui/material';
 import dayjs from 'dayjs';
 import { ContentFull, ContentState, ContentTypes } from '@eco/types';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
+import { AppAvatar, AppCard } from '../../components';
 import ContentDeleteButton from '../ContentDeleteButton';
-import { AppCard } from '../../components/card/AppCard';
 import { ContentEditButton } from '../ContentEditButton';
 import TaskSwitch from './TaskSwitch';
-import AppAvatar from '../../components/avatar/AppAvatar';
 
 export const TaskItem = ({ id, title, text, state, createdAt, author: { name, picture } }: ContentFull) => {
 

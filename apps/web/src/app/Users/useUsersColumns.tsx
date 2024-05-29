@@ -9,8 +9,7 @@ import dayjs from 'dayjs';
 import { omit } from 'ramda';
 import { UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
-import { DialogClickOpen } from '../components/dialog/AppDialog';
-import AppAvatar from '../components/avatar/AppAvatar';
+import { AppAvatar, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers/dataGrid';
 
 interface UsersColumns {

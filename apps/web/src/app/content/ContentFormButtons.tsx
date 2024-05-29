@@ -8,14 +8,14 @@ import { LoadingButton } from '@mui/lab';
 interface ContentFormButtonsProps {
   isLoading: boolean;
   isValid: boolean;
-  handleClick: () => void;
+  isRoot?: boolean;
   handleClose: () => void;
 }
 
 const ContentFormButtons = ({
   isLoading,
   isValid,
-  handleClick,
+  isRoot,
   handleClose,
 }: ContentFormButtonsProps) => {
 
@@ -26,21 +26,22 @@ const ContentFormButtons = ({
   return (
     <Grid xs={12}>
       <Stack direction="row" justifyContent="end">
-        <Button
-          variant="text"
-          onClick={handleClose}
-          sx={{mr: 1}}
-        >
-          {t('labels:close')}
-        </Button> 
+        {isRoot &&
+          <Button
+            variant="text"
+            onClick={handleClose}
+            sx={{mr: 1}}
+          >
+            {t('labels:close')}
+          </Button>
+        }
         <LoadingButton
           disabled={!isValid}
           loading={isLoading}
           type="submit"
           variant="contained"
-          onClick={handleClick}
         >
-          {id ? t('labels:edit') : t('labels:create')}
+          {isRoot && id ? t('labels:edit') : t('labels:create')}
         </LoadingButton>
       </Stack>
     </Grid>

@@ -6,12 +6,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  useMediaQuery,
-  useTheme
+  DialogContentProps
 } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
 import { DialogTransition } from './DialogTransition';
 import { is } from 'ramda';
+import { useMobileDetection } from '../../hooks';
 
 export type DialogClickOpen = (id?: GridRowId | null) => void;
 
@@ -51,13 +51,12 @@ interface AppDialogProps extends DialogProps {
   id: string;
   dialogTitle: ReactNode;
   contentText: ReactNode;
+  dialogContentProps?: DialogContentProps;
 }
 
-const AppDialog = ({actions, id, dialogTitle, contentText, ...rest}: AppDialogProps) => {
+const AppDialog = ({actions, id, dialogTitle, contentText, dialogContentProps, ...rest}: AppDialogProps) => {
 
-  const { breakpoints } = useTheme();
-
-  const fullScreen = useMediaQuery(breakpoints.down('md'));
+  const fullScreen = useMobileDetection();
 
   return (
     <Dialog
@@ -68,7 +67,7 @@ const AppDialog = ({actions, id, dialogTitle, contentText, ...rest}: AppDialogPr
       <DialogTitle id={`${id}-dialog-title`}>
         {dialogTitle}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent {...dialogContentProps}>
         <DialogContentText id={`${id}-dialog-content-text`}>
           {contentText}
         </DialogContentText>

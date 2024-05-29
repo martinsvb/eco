@@ -8,7 +8,7 @@ interface AppAccordionProps extends Omit<AccordionProps, 'children'> {
   children: ReactNode;
 }
 
-const AppAccordion = ({
+export const AppAccordion = ({
   id,
   children,
   title,
@@ -34,5 +34,3 @@ const AppAccordion = ({
     </Accordion>
   )
 }
-
-export default AppAccordion;

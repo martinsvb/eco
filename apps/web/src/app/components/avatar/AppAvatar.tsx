@@ -7,8 +7,7 @@ export type AppAvatarProps = {
   showTooltip?: boolean;
 } & Pick<UserFull, UserItems.Name | UserItems.Picture> & AvatarProps;
 
-
-const AppAvatar = ({
+export const AppAvatar = memo(({
   name,
   picture,
   showTooltip,
@@ -38,6 +37,4 @@ const AppAvatar = ({
       :
       avatar
   )
-}
-
-export default memo(AppAvatar);
+});

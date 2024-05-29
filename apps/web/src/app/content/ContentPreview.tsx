@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
-import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
+import { Chip, Paper, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   selectContent,
@@ -15,7 +15,7 @@ import { ContentFull, ContentTypes, ScopeItems } from '@eco/types';
 import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 import AppIconButton from '../components/buttons/AppIconButton';
 import { useHtml } from '../hooks/useHtml';
-import { TaskList } from './tasks/TaskList';
+import TasksPanel from './tasks/TasksPanel';
 
 interface ContentPreviewProps {
   type: ContentTypes;
@@ -49,7 +49,7 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
 
   const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
-  const { data: content, childs, tempData } = useShallowEqualSelector((state) => selectContent(state, type));
+  const { data: content, tempData } = useShallowEqualSelector((state) => selectContent(state, type));
 
   const handleCloseClick = useCallback(
     () => {
@@ -119,14 +119,7 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
           }}
           dangerouslySetInnerHTML={innerHtml}
         />
-        <Box width={440}>
-          <Typography variant='h5' mb={2}>{t('tasks')}</Typography>
-          <TaskList
-            data={childs}
-            direction="column"
-            expandedInProgress
-          />
-        </Box>
+        <TasksPanel type={type} />
       </Stack>
     </Stack>
   );

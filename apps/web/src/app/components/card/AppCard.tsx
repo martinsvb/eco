@@ -43,7 +43,7 @@ export const AppCard = ({
     >
       <CardContent>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="h5" component="div" mb={1}>
+          <Typography variant="h6" component="div" mb={1}>
             {sanitize(cardTitle)}
           </Typography>
           {label}
@@ -61,8 +61,8 @@ export const AppCard = ({
           <Box
             sx={{
               lineHeight: 1,
-              minHeight: 60,
-              maxHeight: 60,
+              minHeight: 40,
+              maxHeight: 40,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',

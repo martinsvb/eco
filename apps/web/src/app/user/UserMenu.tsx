@@ -16,9 +16,9 @@ import {
   useShallowEqualSelector
 } from '@eco/redux';
 import { routes } from '@eco/config';
+import { AppAvatar } from '../components';
 import UserLanguage from './UserLanguage';
 import UserColorMode from './UserColorMode';
-import AppAvatar from '../components/avatar/AppAvatar';
 
 interface UserMenuProps {
   isMobile?: boolean;

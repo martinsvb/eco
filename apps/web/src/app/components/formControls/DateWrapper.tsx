@@ -29,8 +29,7 @@ export const DateWrapper = ({
         '& .MuiInputBase-input': {
           position: 'relative',
           width: '100%',
-          p: 1.6,
-          fontSize: 14
+          p: 1.6
         },
       }}
     >

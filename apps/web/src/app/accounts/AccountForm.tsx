@@ -11,10 +11,8 @@ import { selectAccount, selectIsAccountsLoading, useAppSelector, useShallowEqual
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
 import { allowedCurrencies } from '@eco/config';
-import ControllerTextField from '../components/formControls/ControllerTextField';
-import ControllerSelect from '../components/formControls/ControllerSelect';
-import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
-import { useFormValues } from '../hooks/useFormValues';
+import { ControllerSelect, ControllerTextField } from '../components';
+import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useAccountFormHandlers } from './useAccountFormHandlers';
 
 const AccountForm = () => {
