@@ -4,7 +4,7 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from '@lexical/list';
-import AppIconButton from "../../buttons/AppIconButton";
+import { AppIconButton } from "../../buttons";
 
 enum Lists {
   OrderedList = 'ol',

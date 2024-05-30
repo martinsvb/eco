@@ -4,9 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { INSERT_TABLE_COMMAND, InsertTableCommandPayload } from "@lexical/table";
 import { Button, Stack } from "@mui/material";
 import TableViewIcon from '@mui/icons-material/TableView';
-import AppDialog, { useDialog } from "../../../dialog/AppDialog";
-import AppIconButton from "../../../buttons/AppIconButton";
-import TextField from "../../../formControls/TextField";
+import { AppDialog, AppIconButton, TextField, useDialog } from "../../..";
 
 enum TableItems {
   Columns = 'columns',

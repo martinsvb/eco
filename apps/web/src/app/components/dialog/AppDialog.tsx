@@ -1,4 +1,5 @@
 import { MouseEvent, ReactNode, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogProps,
@@ -6,12 +7,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  DialogContentProps
+  DialogContentProps,
+  Stack
 } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
+import CloseIcon from '@mui/icons-material/Close';
 import { DialogTransition } from './DialogTransition';
 import { is } from 'ramda';
 import { useMobileDetection } from '../../hooks';
+import { AppIconButton } from '../buttons';
 
 export type DialogClickOpen = (id?: GridRowId | null) => void;
 
@@ -47,36 +51,67 @@ export const useDialog = () => {
 }
 
 interface AppDialogProps extends DialogProps {
-  actions: ReactNode;
+  actions?: ReactNode;
   id: string;
   dialogTitle: ReactNode;
   contentText: ReactNode;
   dialogContentProps?: DialogContentProps;
+  handleClose?: () => void;
 }
 
-const AppDialog = ({actions, id, dialogTitle, contentText, dialogContentProps, ...rest}: AppDialogProps) => {
+export const AppDialog = ({
+  actions,
+  id,
+  dialogTitle,
+  contentText,
+  dialogContentProps,
+  handleClose,
+  ...rest
+}: AppDialogProps) => {
+
+  const { t } = useTranslation();
 
   const fullScreen = useMobileDetection();
 
   return (
     <Dialog
+      {...rest}
       fullScreen={fullScreen}
       TransitionComponent={DialogTransition}
-      {...rest}
+      sx={{
+        ...rest.sx,
+        '& .MuiDialogTitle-root': {
+          pb: 1
+        }
+      }}
     >
-      <DialogTitle id={`${id}-dialog-title`}>
-        {dialogTitle}
-      </DialogTitle>
+      <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+        <DialogTitle id={`dialog-title-${id}`}>
+          {dialogTitle}
+        </DialogTitle>
+        {handleClose &&
+          <AppIconButton
+            title={t('labels:close')}
+            id={`dialog-close-button-${id}`}
+            onClick={handleClose}
+            sx={{
+              mr: 4
+            }}
+          >
+            <CloseIcon />
+          </AppIconButton>
+        }
+      </Stack>
       <DialogContent {...dialogContentProps}>
-        <DialogContentText id={`${id}-dialog-content-text`}>
+        <DialogContentText id={`dialog-content-text-${id}`}>
           {contentText}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        {actions}
-      </DialogActions>
+      {actions && (
+        <DialogActions>
+          {actions}
+        </DialogActions>
+      )}
     </Dialog>
   );
 }
-
-export default AppDialog;

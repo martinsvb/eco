@@ -12,9 +12,8 @@ import {
   useShallowEqualSelector
 } from '@eco/redux';
 import { ContentFull, ContentTypes, ScopeItems } from '@eco/types';
-import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
-import AppIconButton from '../components/buttons/AppIconButton';
-import { useHtml } from '../hooks/useHtml';
+import { AppIconButton } from '../components';
+import { useHtml, useMobilePortraitDetection } from '../hooks';
 import TasksPanel from './tasks/TasksPanel';
 
 interface ContentPreviewProps {

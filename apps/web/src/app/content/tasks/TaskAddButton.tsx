@@ -1,11 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { ContentTypes } from '@eco/types';
-import AppDialog, { useDialog } from '../../components/dialog/AppDialog';
 import ContentForm from '../ContentForm';
 import { useMobileDetection } from '../../hooks';
-import AppIconButton from '../../components/buttons/AppIconButton';
+import { AppDialog, AppIconButton, useDialog } from '../../components';
 
 const TaskAddButton = () => {
 
@@ -27,24 +25,16 @@ const TaskAddButton = () => {
         }}
       ><AddIcon /></AppIconButton>
       <AppDialog
-        actions={
-          <Button
-            autoFocus
-            id="task-add-button-close"
-            onClick={handleClose}
-          >
-            {t('labels:close')}
-          </Button>
-        }
         id="content-delete"
         dialogTitle={t('content:task-add-title')}
         contentText={
           <ContentForm
-            type={ContentTypes.Task}
-            handleDialogClose={handleClose}
+          type={ContentTypes.Task}
+          handleDialogClose={handleClose}
           />
         }
         open={open}
+        handleClose={handleClose}
         sx={!isMobile
           ? {
             '& .MuiDialog-paper': {

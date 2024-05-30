@@ -5,8 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import { apiDeleteAccount, selectIsAccountsLoading, useAppDispatch, useAppSelector } from '@eco/redux';
 import { ApiOperations } from '@eco/types';
-import AppDialog, { useDialog } from '../components/dialog/AppDialog';
-import AppIconButton from '../components/buttons/AppIconButton';
+import { AppDialog, AppIconButton, useDialog } from '../components';
 
 interface AccountDeleteButtonProps {
   id: string;

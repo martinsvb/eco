@@ -7,7 +7,7 @@ interface AppIconButtonProps extends Omit<IconButtonProps, 'aria-label'> {
   title: string;
 }
 
-const AppIconButton = ({children, title, ...rest}: AppIconButtonProps) => {
+export const AppIconButton = memo(({children, title, ...rest}: AppIconButtonProps) => {
 
   return (
     <Tooltip
@@ -24,6 +24,4 @@ const AppIconButton = ({children, title, ...rest}: AppIconButtonProps) => {
       </span>
     </Tooltip>
   )
-}
-
-export default memo(AppIconButton);
+});

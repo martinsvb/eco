@@ -42,7 +42,7 @@ const BootstrapInput = styled<FC<CustomTextFieldProps>>(InputBase, {
   '& .MuiInputBase-input::-webkit-inner-spin-button': noNumberArrows ? noNumberArrowsStyle : undefined,
 }));
 
-const TextField: FC<TextFieldProps> = forwardRef(
+export const TextField: FC<TextFieldProps> = memo(forwardRef(
   (
     {
       defaultValue,
@@ -83,8 +83,4 @@ const TextField: FC<TextFieldProps> = forwardRef(
       </FormControl>
     );
   }
-);
-
-TextField.displayName = 'TextField';
-
-export default memo(TextField);
+));

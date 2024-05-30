@@ -5,7 +5,7 @@ import { InputBaseProps, SelectChangeEvent, Stack } from '@mui/material';
 import { allowedCountries } from '@eco/config';
 import { BaseFormControlProps } from './formControlsTypes';
 import Select, { SelectedValue } from './Select';
-import TextField from './TextField';
+import { TextField } from './TextField';
 import { TCountryCode } from 'countries-list';
 
 export type PhoneFieldProps = BaseFormControlProps & InputBaseProps & Omit<

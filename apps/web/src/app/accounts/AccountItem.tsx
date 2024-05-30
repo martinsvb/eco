@@ -7,8 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { routes } from '@eco/config';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
 import AccountDeleteButton from './AccountDeleteButton';
-import { AppCard } from '../components/card/AppCard';
-import AppIconButton from '../components/buttons/AppIconButton';
+import { AppCard, AppIconButton } from '../components';
 
 export const AccountItem = ({id, name, iban, currency}: Account) => {
 

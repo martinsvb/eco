@@ -2,7 +2,7 @@ import { memo, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import AppDialog from '../components/dialog/AppDialog';
+import { AppDialog } from '../components';
 
 interface UsersDialogProps {
   isLoading: boolean;

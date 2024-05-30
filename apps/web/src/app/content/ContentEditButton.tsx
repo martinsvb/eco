@@ -6,7 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { routes } from '@eco/config';
 import { ContentTypes } from '@eco/types';
 import { setContentPreview, useAppDispatch } from '@eco/redux';
-import AppIconButton from '../components/buttons/AppIconButton';
+import { AppIconButton } from '../components';
 
 interface ContentEditButtonProps {
   id: string;

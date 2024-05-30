@@ -27,11 +27,11 @@ import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
-import AppIconButton from '../../buttons/AppIconButton';
 import HeadingsPlugin from './HeadingsPlugin';
 import ListsPlugin from './ListsPlugin';
 import TableToolbar from './table/TableToolbar';
 import { useMobilePortraitDetection } from '../../../hooks/useMobileDetection';
+import { AppIconButton } from '../../buttons';
 
 const LowPriority = 1;
 

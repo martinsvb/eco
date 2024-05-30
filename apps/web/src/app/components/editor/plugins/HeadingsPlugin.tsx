@@ -4,7 +4,7 @@ import { Stack, Typography, useTheme } from "@mui/material";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $setBlocksType } from '@lexical/selection';
 import { $createHeadingNode } from '@lexical/rich-text';
-import AppIconButton from "../../buttons/AppIconButton";
+import { AppIconButton } from "../../buttons";
 
 type HeadingTag = 'h1' | 'h2' | 'h3';
 

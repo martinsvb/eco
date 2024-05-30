@@ -8,7 +8,7 @@ import Chip from '@mui/material/Chip';
 
 import { IconSVGSpan } from 'components/Icon/Icon';
 import { AutocompleteValue } from './AutocompleteTypes';
-import TextField from './TextField';
+import { TextField } from './TextField';
 import { BaseFormControlProps } from './formControlsTypes';
 
 type MuiAutocompleteFilteredProps = Omit<
