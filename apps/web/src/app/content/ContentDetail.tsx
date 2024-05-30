@@ -13,9 +13,9 @@ import {
   useShallowEqualSelector
 } from '@eco/redux';
 import { ContentTypes, contentScopes } from '@eco/types';
+import { useMobileDetection } from '../hooks';
 import ContentForm from './ContentForm';
 import ContentPreview from './ContentPreview';
-import { useMobileDetection } from '../hooks/useMobileDetection';
 
 interface ContentDetailProps {
   type: ContentTypes;
@@ -39,7 +39,7 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
     () => {
       if (id) {
         dispatch(apiGetContent({id, type}));
-        dispatch(apiGetContentChildsList({parentId: id, type}));
+        dispatch(apiGetContentChildsList({parentId: id, type: ContentTypes.Task}));
       }
 
       return () => {

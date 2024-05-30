@@ -137,7 +137,7 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
             handleClose={handleClose}
           />
         </Grid>
-        {!handleDialogClose && id && <TasksPanel type={type} />}
+        {!handleDialogClose && id && <TasksPanel parentId={id} />}
       </Stack>
     </Stack>
   );

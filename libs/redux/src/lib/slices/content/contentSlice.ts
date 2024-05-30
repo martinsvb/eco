@@ -14,7 +14,6 @@ import { createSlice } from "../createSlice";
 interface ContentItemData {
   data: ContentFull | null;
   tempData: ContentData | null;
-  childs: ContentFull[];
   loaded: boolean;
 }
 
@@ -26,7 +25,6 @@ interface ContentListData {
 export const initContentData = {
   data: null,
   tempData: null,
-  childs: [],
   loaded: false
 }
 
@@ -145,8 +143,18 @@ const contentSlice = createSlice({
     apiGetContentChildsList: create.asyncThunk(
       contentChildsListGet,
       {
+        pending: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.getList] = true;
+          state.contentList[type].loaded = false;
+        },
+        rejected: (state, { error, payload, meta: { arg: { type } } }) => {
+          state.error[type][ApiOperations.getList] = payload ?? error;
+        },
         fulfilled: (state, { payload, meta: { arg: { type } } }) => {
-          state.content[type].childs = payload;
+          state.contentList[type].data = payload;
+        },
+        settled: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.getList] = false;
         },
       },
     ),
@@ -177,13 +185,8 @@ const contentSlice = createSlice({
         rejected: (state, { error, payload, meta: { arg: { type } } }) => {
           state.error[type][ApiOperations.create] = payload ?? error;
         },
-        fulfilled: (state, { payload, meta: { arg: { type, parentId } } }) => {
-          if (parentId) {
-            state.content[type].childs.push(payload);
-          }
-          else {
-            state.contentList[type].data.push(payload);
-          }
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          state.contentList[type].data.push(payload);
         },
         settled: (state, { meta: { arg: { type } } }) => {
           state.loading[type][ApiOperations.create] = false;
@@ -239,9 +242,9 @@ const contentSlice = createSlice({
         isLoading: !!state.loading[type][ApiOperations.getItem]
       }
     },
-    selectContentChilds: (state, type: ContentTypes) => {
+    selectContentChilds: (state, type: ContentTypes, parentId: string) => {
       return {
-        childs: state.content[type].childs,
+        data: state.contentList[type].data.filter((item) => item.parentId === parentId),
       }
     },
     selectContentList: (state, type: ContentTypes) => {

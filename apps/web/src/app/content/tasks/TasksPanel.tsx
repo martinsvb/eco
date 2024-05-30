@@ -7,10 +7,10 @@ import { TaskList } from './TaskList';
 import TaskAddButton from './TaskAddButton';
 
 interface TasksPanelProps {
-  type: ContentTypes;
+  parentId: string;
 }
 
-const TasksPanel = ({type}: TasksPanelProps) => {
+const TasksPanel = ({parentId}: TasksPanelProps) => {
 
   const { t } = useTranslation();
 
@@ -18,7 +18,7 @@ const TasksPanel = ({type}: TasksPanelProps) => {
 
   const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
-  const { childs } = useShallowEqualSelector((state) => selectContentChilds(state, type));
+  const { data } = useShallowEqualSelector((state) => selectContentChilds(state, ContentTypes.Task, parentId));
 
   return (
     <Box width={isMobilePortrait ? '100%' : 400}>
@@ -28,14 +28,14 @@ const TasksPanel = ({type}: TasksPanelProps) => {
           variant="h5"
           alignSelf="center"
         >
-          {t('content:tasks', {length: childs.length})}
+          {t('content:tasks', {length: data.length})}
         </Typography>
       </Stack>
-      {!!childs.length &&
+      {!!data.length &&
         <TaskList
-          data={childs}
+          data={data}
           direction="column"
-          expandedInProgress={!!childs.filter(({state}) => state !== ContentState.Done).length}
+          expandedInProgress={!!data.filter(({state}) => state !== ContentState.Done).length}
         />
       }
     </Box>
