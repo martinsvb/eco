@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { Chip, Paper, Stack, Typography } from '@mui/material';
@@ -40,6 +40,8 @@ const DateLabel = ({createdAt, dateTime}: ContentFull) => {
 const ContentPreview = ({type, scope}: ContentPreviewProps) => {
 
   const { t } = useTranslation();
+
+  const { id } = useParams();
 
   const navigate = useNavigate();
 
@@ -119,7 +121,7 @@ const ContentPreview = ({type, scope}: ContentPreviewProps) => {
           }}
           dangerouslySetInnerHTML={innerHtml}
         />
-        <TasksPanel type={type} />
+        {id && <TasksPanel parentId={id} />}
       </Stack>
     </Stack>
   );
