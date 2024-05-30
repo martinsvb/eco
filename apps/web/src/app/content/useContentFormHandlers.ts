@@ -6,6 +6,7 @@ import { ContentData, ContentTypes } from "@eco/types";
 
 export const useContentFormHandlers = (
   type: ContentTypes,
+  data: ContentData,
   id?: string,
   handleDialogClose?: () => void
 ) => {
@@ -44,6 +45,13 @@ export const useContentFormHandlers = (
     [dispatch, navigate, id, handleDialogClose, type]
   );
 
+  const handleClick = useCallback(
+    () => {
+      submit(data);
+    },
+    [submit, data]
+  );
+
   const handleClose = useCallback(
     () => {
       navigate(routes.content[type].list);
@@ -52,7 +60,7 @@ export const useContentFormHandlers = (
   );
 
   return {
-    submit,
+    handleClick,
     handleClose
   }
 }

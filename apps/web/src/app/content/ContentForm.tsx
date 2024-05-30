@@ -56,7 +56,6 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
   const {
     control,
     formState: { isValid },
-    handleSubmit,
     watch
   } = useForm<ContentData>({
     resolver: yupResolver(getContentValidationSchema()),
@@ -66,7 +65,7 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
 
   const data = watch();
 
-  const { submit, handleClose } = useContentFormHandlers(type, id, handleDialogClose);
+  const { handleClick, handleClose } = useContentFormHandlers(type, data, id, handleDialogClose);
 
   const handlePreviewClick = useCallback(
     () => {
@@ -81,9 +80,6 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
   return (
     <Stack
       component="form"
-      key={`form-${type}${handleDialogClose ? '-child' : ''}`}
-      id={`form-${type}${handleDialogClose ? '-child' : ''}`}
-      onSubmit={handleSubmit(submit)}
     >
       {!handleDialogClose &&
         <Stack
@@ -137,6 +133,7 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
             isLoading={isLoading}
             isValid={isValid}
             isRoot={!handleDialogClose}
+            handleClick={handleClick}
             handleClose={handleClose}
           />
         </Grid>

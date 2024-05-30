@@ -60,10 +60,12 @@ export const TaskList = ({
         <AppAccordion
           expanded={expanded.inProgress}
           id="tasksInProgressHeader"
-          onClick={handleClick(TaskItems.InProgress)}
           title={t('labels:inProgress', {length: inProgress.length})}
           sx={{
             background: alpha(palette.warning.light, .5),
+          }}
+          summaryProps={{
+            onClick: handleClick(TaskItems.InProgress)
           }}
         >
           {inProgress.map((content) => (
@@ -78,11 +80,13 @@ export const TaskList = ({
         <AppAccordion
           expanded={expanded.done}
           id="tasksDoneHeader"
-          onClick={handleClick(TaskItems.Done)}
           title={t('labels:done', {length: done.length})}
           sx={{
             background: alpha(palette.success.light, .5),
-          }} 
+          }}
+          summaryProps={{
+            onClick: handleClick(TaskItems.Done)
+          }}
         >
           {done.map((content) => (
             <TaskItem key={content.id} {...content} />

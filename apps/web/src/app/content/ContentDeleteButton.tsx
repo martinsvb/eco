@@ -25,7 +25,6 @@ const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
 
   const handleDelete = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
       e.stopPropagation();
       dispatch(apiDeleteContent({
         id,
@@ -58,7 +57,6 @@ const ContentDeleteButton = ({id, type}: ContentDeleteButtonProps) => {
             <LoadingButton
               id="content-delete-button-submit"
               loading={isLoading}
-              type="submit"
               variant="contained"
               onClick={handleDelete}
             >

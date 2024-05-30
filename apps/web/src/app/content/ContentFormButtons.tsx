@@ -9,6 +9,7 @@ interface ContentFormButtonsProps {
   isLoading: boolean;
   isValid: boolean;
   isRoot?: boolean;
+  handleClick: () => void;
   handleClose: () => void;
 }
 
@@ -16,6 +17,7 @@ const ContentFormButtons = ({
   isLoading,
   isValid,
   isRoot,
+  handleClick,
   handleClose,
 }: ContentFormButtonsProps) => {
 
@@ -38,8 +40,8 @@ const ContentFormButtons = ({
         <LoadingButton
           disabled={!isValid}
           loading={isLoading}
-          type="submit"
           variant="contained"
+          onClick={handleClick}
         >
           {isRoot && id ? t('labels:edit') : t('labels:create')}
         </LoadingButton>
