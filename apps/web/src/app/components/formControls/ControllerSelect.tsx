@@ -3,7 +3,7 @@ import { getFieldId } from "./helpers";
 import { Select, SelectProps } from "./Select";
 
 export type CustomSelectControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
-  fieldProps: SelectProps;
+  fieldProps: Omit<SelectProps, 'id'>;
   idApend?: string | number;
 } & Omit<ControllerProps<V, N>, 'render'>;
 

@@ -11,7 +11,8 @@ import { selectAccount, selectIsAccountsLoading, useAppSelector, useShallowEqual
 import { AccountData, AccountItems, ApiOperations } from '@eco/types';
 import { getAccountValidationSchema } from '@eco/validation';
 import { allowedCurrencies } from '@eco/config';
-import { ControllerSelect, ControllerTextField } from '../components';
+import { GridControllerSelect, GridControllerTextField } from '../components';
+import { gridFieldSettings } from '../helpers';
 import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useAccountFormHandlers } from './useAccountFormHandlers';
 
@@ -46,64 +47,44 @@ const AccountForm = () => {
 
   const language = i18n.language.includes('-') ? i18n.language.split('-')[0] : i18n.language;
 
-  const { submit, handleClick, handleClose } = useAccountFormHandlers(data, id);
+  const { submit, handleClose } = useAccountFormHandlers(id);
 
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Grid container rowSpacing={2} columnSpacing={2} width={isMobilePortrait ? '100%' : 800}>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={AccountItems.name}
-            control={control}
-            defaultValue={data.name}
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.name, data)}
+          fieldProps={{
+            required: true,
+            label: t('labels:name')
+          }}
+        />
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.iban, data)}
+          fieldProps={{
+            required: true,
+            label: t('labels:iban')
+          }}
+        />
+        {!!currencies[language] &&
+          <GridControllerSelect
+            {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.currency, data)}
             fieldProps={{
-              fullWidth: true,
               required: true,
-              label: t('labels:name')
+              label: t('labels:currency'),
+              values: Object.entries(currencies[language])
+                .filter(([currency]) => allowedCurrencies.includes(currency))
+                .map(([id, {name}]) => ({id, label: name}))
             }}
           />
-        </Grid>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={AccountItems.iban}
-            control={control}
-            defaultValue={data.iban}
-            fieldProps={{
-              fullWidth: true,
-              required: true,
-              label: t('labels:iban')
-            }}
-          />
-        </Grid>
-        <Grid md={6} xs={12}>
-          {!!currencies[language] &&
-            <ControllerSelect
-              name={AccountItems.currency}
-              control={control}
-              defaultValue={data.currency}
-              fieldProps={{
-                required: true,
-                label: t('labels:currency'),
-                id: AccountItems.currency,
-                values: Object.entries(currencies[language])
-                  .filter(([currency]) => allowedCurrencies.includes(currency))
-                  .map(([id, {name}]) => ({id, label: name}))
-              }}
-            />
-          }
-        </Grid>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={AccountItems.description}
-            control={control}
-            defaultValue={data.description}
-            fieldProps={{
-              fullWidth: true,
-              multiline: true,
-              label: t('labels:description')
-            }}
-          />
-        </Grid>
+        }
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.description, data)}
+          fieldProps={{
+            multiline: true,
+            label: t('labels:description')
+          }}
+        />
         <Grid xs={12}>
           <Stack direction="row" justifyContent="end">
             <Button
@@ -118,7 +99,6 @@ const AccountForm = () => {
               loading={isLoading}
               type="submit"
               variant="contained"
-              onClick={handleClick}
             >
               {id ? t('labels:edit') : t('labels:create')}
             </LoadingButton>

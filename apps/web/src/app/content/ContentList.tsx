@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box, Fab, IconButton, Typography } from '@mui/material';
+import { Fab, IconButton, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
 import { routes } from '@eco/config';
@@ -10,7 +10,6 @@ import { contentScopes, ContentTypes } from '@eco/types';
 import { Buttons } from '../components/buttons/Buttons';
 import { TaskList } from './tasks/TaskList';
 import Records from './records/Records';
-import { useMobileDetection } from '../hooks';
 
 interface ContentListProps {
   type: ContentTypes;
@@ -23,8 +22,6 @@ export const ContentList = ({type}: ContentListProps) => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-
-  const isMobile = useMobileDetection();
 
   const { data, isLoading, loaded } = useShallowEqualSelector((state) => selectContentList(state, type));
 
@@ -62,7 +59,7 @@ export const ContentList = ({type}: ContentListProps) => {
   );
 
   return (
-    <Box px={isMobile ? undefined : 2}>
+    <>
       <Typography variant='h3' mb={3}>{titles[type]}</Typography>
       <>
         {type === ContentTypes.Record &&
@@ -101,6 +98,6 @@ export const ContentList = ({type}: ContentListProps) => {
           }
         />
       </>
-    </Box>
+    </>
   );
 };

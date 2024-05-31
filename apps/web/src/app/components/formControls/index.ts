@@ -6,6 +6,8 @@ export * from './ControllerDateTimeField';
 export * from './ControllerPoneField';
 export * from './ControllerSelect';
 export * from './ControllerTextField';
+export * from './ControllerSelect';
 export * from './GridControllerDateTimeField';
 export * from './GridControllerTextField';
+export * from './GridControllerSelect';
 export * from './helpers';

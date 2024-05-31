@@ -20,7 +20,7 @@ import { getContentValidationSchema } from '@eco/validation';
 import { GridControllerDateTimeField, GridControllerEditor, GridControllerTextField } from '../components';
 import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useContentFormHandlers } from './useContentFormHandlers';
-import { gridFieldSettings } from '../helpers/fields';
+import { gridFieldSettings } from '../helpers';
 import ContentFormButtons from './ContentFormButtons';
 import TasksPanel from './tasks/TasksPanel';
 

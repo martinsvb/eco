@@ -5,7 +5,7 @@ import { routes } from "@eco/config";
 import { apiPatchAccount, apiPostAccount, useAppDispatch } from "@eco/redux";
 import { AccountData, AccountItems } from "@eco/types";
 
-export const useAccountFormHandlers = (data: AccountData, id?: string) => {
+export const useAccountFormHandlers = (id?: string) => {
 
   const dispatch = useAppDispatch();
 
@@ -33,13 +33,6 @@ export const useAccountFormHandlers = (data: AccountData, id?: string) => {
     [dispatch, id]
   );
 
-  const handleClick = useCallback(
-    () => {
-      submit(data);
-    },
-    [submit, data]
-  );
-
   const handleClose = useCallback(
     () => {
       navigate(routes.accounts);
@@ -49,7 +42,6 @@ export const useAccountFormHandlers = (data: AccountData, id?: string) => {
 
   return {
     submit,
-    handleClick,
     handleClose
   }
 }

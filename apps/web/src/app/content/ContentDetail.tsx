@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import {
   apiGetContent,
   apiGetContentChildsList,
@@ -13,7 +13,6 @@ import {
   useShallowEqualSelector
 } from '@eco/redux';
 import { ContentTypes, contentScopes } from '@eco/types';
-import { useMobileDetection } from '../hooks';
 import ContentForm from './ContentForm';
 import ContentPreview from './ContentPreview';
 
@@ -26,8 +25,6 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
   const { t } = useTranslation();
 
   const { id } = useParams();
-
-  const isMobile = useMobileDetection();
 
   const dispatch = useAppDispatch();
 
@@ -66,12 +63,12 @@ export const ContentDetail = ({type}: ContentDetailProps) => {
   const scope = contentScopes[type];
 
   return (
-    <Box px={isMobile ? undefined : 2}>
+    <>
       {!isPreview && scopes[scope]?.edit && <Typography variant='h3'>{title}</Typography>}
       {!isPreview && scopes[scope]?.edit
         ? <ContentForm type={type} />
         : <ContentPreview type={type} scope={scope} />
       }
-    </Box>
+    </>
   );
 };

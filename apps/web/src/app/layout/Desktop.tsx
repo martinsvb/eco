@@ -41,7 +41,8 @@ const Desktop = () => {
           component="main"
           sx={{
             height: 'calc(100vh - 64px)',
-            p: 2,
+            py: 2,
+            px: 4,
             overflowY: 'auto',
             ...getScrollbarDesign({
               trackColor: palette.background.default,
