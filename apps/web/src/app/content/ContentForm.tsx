@@ -18,9 +18,9 @@ import {
 import { ContentData, ContentItems, ApiOperations, ContentTypes } from '@eco/types';
 import { getContentValidationSchema } from '@eco/validation';
 import { GridControllerDateTimeField, GridControllerEditor, GridControllerTextField } from '../components';
+import { gridFieldSettings } from '../helpers';
 import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useContentFormHandlers } from './useContentFormHandlers';
-import { gridFieldSettings } from '../helpers';
 import ContentFormButtons from './ContentFormButtons';
 import TasksPanel from './tasks/TasksPanel';
 

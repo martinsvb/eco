@@ -41,8 +41,8 @@ export class CreateUserDto {
   origin: string;
 
   @IsObject()
-  @IsNotEmpty()
-  @ApiProperty({ description: 'User rigts' })
+  @IsOptional()
+  @ApiProperty({ description: 'User rigts', required: false })
   rights: Prisma.JsonValue;
 
   @IsString()

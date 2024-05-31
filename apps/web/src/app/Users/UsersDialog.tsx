@@ -34,7 +34,6 @@ const UsersDialog = ({
           <LoadingButton
             id="user-delete-button-submit"
             loading={isLoading}
-            type="submit"
             variant="contained"
             onClick={handleDelete}
           >
