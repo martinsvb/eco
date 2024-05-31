@@ -131,7 +131,6 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             fieldProps={{
               required: true,
               label: t('labels:country'),
-              id: RegistrationItems.country,
               values: allowedCountries.map((id) => ({
                 id,
                 label: countries[id][language === Languages.en ? 'name' : 'native']
