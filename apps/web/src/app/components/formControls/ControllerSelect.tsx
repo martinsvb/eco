@@ -1,6 +1,6 @@
 import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import { getFieldId } from "./helpers";
-import Select, { SelectProps } from "./Select";
+import { Select, SelectProps } from "./Select";
 
 export type CustomSelectControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
   fieldProps: SelectProps;

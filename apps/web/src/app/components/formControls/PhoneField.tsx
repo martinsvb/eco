@@ -1,10 +1,9 @@
 import { ChangeEvent, FC, forwardRef, memo, useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import ReactPhoneInput, { CountryData, PhoneInputProps } from 'react-phone-input-material-ui';
 import { InputBaseProps, SelectChangeEvent, Stack } from '@mui/material';
 import { allowedCountries } from '@eco/config';
 import { BaseFormControlProps } from './formControlsTypes';
-import Select, { SelectedValue } from './Select';
+import { Select, SelectedValue } from './Select';
 import { TextField } from './TextField';
 import { TCountryCode } from 'countries-list';
 
@@ -13,9 +12,7 @@ export type PhoneFieldProps = BaseFormControlProps & InputBaseProps & Omit<
   'component' | 'label' | 'onChange'
 >;
 
-const PhoneField: FC<PhoneFieldProps> = forwardRef(({label, onChange, ...rest}, ref) => {
-
-  const { t } = useTranslation();
+export const PhoneField: FC<PhoneFieldProps> = memo(forwardRef(({label, onChange, ...rest}, ref) => {
 
   const [ country, setCountry ] = useState(allowedCountries[0]);
 
@@ -43,12 +40,17 @@ const PhoneField: FC<PhoneFieldProps> = forwardRef(({label, onChange, ...rest}, 
       direction="row"
       sx={{
         '& .react-tel-input': {
-          width: 'calc(100% - 58px)'
+          width: 'calc(100% - 58px)',
+          '& .MuiInputBase-root': {
+            borderLeft: 0,
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+          }
         }
       }}
     >
       <Select
-        label={t('labels:phoneCountry')}
+        label={label as string}
         fullWidth={false}
         onChange={handleCountryChange}
         value={country}
@@ -56,6 +58,16 @@ const PhoneField: FC<PhoneFieldProps> = forwardRef(({label, onChange, ...rest}, 
           id,
           label: id
         }))}
+        formControlProps={{
+          sx: {
+            width: '64px',
+            '& .MuiInputBase-root': {
+              borderRight: 0,
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+            }
+          }
+        }}
       />
       <ReactPhoneInput
         {...rest}
@@ -64,14 +76,10 @@ const PhoneField: FC<PhoneFieldProps> = forwardRef(({label, onChange, ...rest}, 
           ref
         }}
         country={country.toLowerCase()}
-        label={label as string}
+        label=""
         component={TextField}
         onChange={handleChange}
       />
     </Stack>
   );
-});
-
-PhoneField.displayName = 'PhoneField';
-
-export default memo(PhoneField);
+}));

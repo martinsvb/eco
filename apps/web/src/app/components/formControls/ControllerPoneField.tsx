@@ -1,7 +1,7 @@
 import { Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import { getFieldId } from "./helpers";
 import { TextFieldProps } from "./TextField";
-import PhoneField from "./PhoneField";
+import { PhoneField } from "./PhoneField";
 
 export type CustomPhoneFieldControllerProps<V extends FieldValues, N extends FieldPath<V>> = {
   fieldProps: TextFieldProps;

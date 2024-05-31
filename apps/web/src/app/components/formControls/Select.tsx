@@ -1,5 +1,5 @@
 import { FC, forwardRef, memo } from 'react';
-import FormControl from '@mui/material/FormControl';
+import FormControl, { FormControlProps } from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import MuiSelect, { SelectProps as MuiSelectProps } from '@mui/material/Select';
@@ -12,6 +12,7 @@ import { BaseFormControlProps } from './formControlsTypes';
 export type SelectedValue = number | string | undefined;
 
 export interface SelectProps extends Omit<MuiSelectProps<SelectedValue>, 'variant'> {
+  formControlProps?: FormControlProps;
   fullWidth?: boolean;
   values: SelectValue[];
 }
@@ -39,17 +40,38 @@ const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Ele
   })
 );
 
-const Select: FC<BaseFormControlProps & SelectProps> = forwardRef(
+export const Select: FC<BaseFormControlProps & SelectProps> = memo(forwardRef(
   (
-    { disabled, error, fullWidth = true, formHelperTextProps, helperText, id, name, required, values, ...rest },
+    {
+      disabled,
+      error,
+      fullWidth = true,
+      formControlProps,
+      formHelperTextProps,
+      helperText,
+      id,
+      name,
+      required,
+      values,
+      ...rest
+    },
     ref
   ) => {
 
     const formControlStates = { disabled, error, required };
 
     return (
-      <FormControl {...formControlStates} fullWidth={fullWidth} variant="standard">
-        <InputLabel {...formControlStates} shrink id={`select-label-${id}`}>
+      <FormControl
+        {...formControlProps}
+        {...formControlStates}
+        fullWidth={fullWidth}
+        variant="standard"
+      >
+        <InputLabel
+          {...formControlStates}
+          shrink
+          id={`select-label-${id}`}
+        >
           {rest.label}
         </InputLabel>
         <BootstrapSelect
@@ -76,8 +98,4 @@ const Select: FC<BaseFormControlProps & SelectProps> = forwardRef(
       </FormControl>
     );
   }
-);
-
-Select.displayName = 'Select';
-
-export default memo(Select);
+));

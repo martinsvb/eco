@@ -1,8 +1,8 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { compose, filter, isEmpty, map, not, pick } from 'ramda';
+import { compose, filter, isEmpty, not, pick } from 'ramda';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -17,8 +17,9 @@ import {
 } from '@eco/redux';
 import { UserEditData, UserItems, ApiOperations } from '@eco/types';
 import { getUserEditValidationSchema } from '@eco/validation';
-import { AppAccordion, ControllerPhoneField, ControllerTextField } from '../components';
-import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
+import { gridFieldSettings } from '../helpers/fields';
+import { AppAccordion, ControllerPhoneField, GridControllerTextField } from '../components';
+import { useFormValues, useMobilePortraitDetection } from '../hooks';
 
 const UserForm = () => {
 
@@ -38,26 +39,16 @@ const UserForm = () => {
 
   const user = useShallowEqualSelector(selectUser);
 
-  const values = useMemo(
-    () => {
-      return user ?
-        {
-          ...map((item) => item || '', pick([UserItems.Name, UserItems.Email, UserItems.Phone], user)),
-          [UserItems.PasswordOld]: '',
-          [UserItems.Password]: '',
-          [UserItems.PasswordConfirmation]: '',
-        } as UserEditData
-        :
-        {
-          [UserItems.Name]: '',
-          [UserItems.Email]: '',
-          [UserItems.Phone]: '',
-          [UserItems.PasswordOld]: '',
-          [UserItems.Password]: '',
-          [UserItems.PasswordConfirmation]: '',
-        }
-    },
-    [user]
+  const values = useFormValues<UserEditData>(
+    user ? pick([UserItems.Name, UserItems.Email, UserItems.Phone], user) : null,
+    [
+      UserItems.Name,
+      UserItems.Email,
+      UserItems.Phone,
+      UserItems.Password,
+      UserItems.PasswordConfirmation,
+      UserItems.PasswordOld
+    ]
   );
 
   const { control, formState: { isValid }, handleSubmit, watch } = useForm<UserEditData>({
@@ -92,13 +83,6 @@ const UserForm = () => {
     [dispatch, id]
   );
 
-  const handleClick = useCallback(
-    () => {
-      submit(data);
-    },
-    [submit, data]
-  );
-
   const handleClose = useCallback(
     () => {
       navigate(-1);
@@ -109,37 +93,28 @@ const UserForm = () => {
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Grid container rowSpacing={2} columnSpacing={2} width={isMobilePortrait ? '100%' : 800}>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={UserItems.Name}
-            control={control}
-            defaultValue={data.name}
-            fieldProps={{
-              fullWidth: true,
-              required: true,
-              label: t('labels:name'),
-            }}
-          />
-        </Grid>
-        <Grid md={6} xs={12}>
-          <ControllerTextField
-            name={UserItems.Email}
-            control={control}
-            defaultValue={data.email}
-            fieldProps={{
-              fullWidth: true,
-              required: true,
-              label: t('labels:email'),
-            }}
-          />
-        </Grid>
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, UserItems.Name, data)}
+          fieldProps={{
+            autoComplete: 'username',
+            required: true,
+            label: t('labels:name')
+          }}
+        />
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, UserItems.Email, data)}
+          fieldProps={{
+            autoComplete: 'email',
+            required: true,
+            label: t('labels:email')
+          }}
+        />
         <Grid md={6} xs={12}>
           <ControllerPhoneField
             name={UserItems.Phone}
             control={control}
             defaultValue={data.phone}
             fieldProps={{
-              fullWidth: true,
               required: true,
               label: t('labels:phone'),
               id: UserItems.Email
@@ -152,39 +127,30 @@ const UserForm = () => {
             title={t('labels:passwordChange')}
           >
             <Grid container rowSpacing={2} columnSpacing={2}>
-              <Grid xs={12}>
-                <ControllerTextField
-                  name={UserItems.PasswordOld}
-                  control={control}
-                  defaultValue={data.passwordOld}
-                  fieldProps={{
-                    label: t('labels:passwordOld'),
-                    type: 'password'
-                  }}
-                />
-              </Grid>
-              <Grid md={6} xs={12}>
-                <ControllerTextField
-                  name={UserItems.Password}
-                  control={control}
-                  defaultValue={data.password}
-                  fieldProps={{
-                    label: t('labels:password'),
-                    type: 'password'
-                  }}
-                />
-              </Grid>
-              <Grid md={6} xs={12}>
-                <ControllerTextField
-                  name={UserItems.PasswordConfirmation}
-                  control={control}
-                  defaultValue={data.passwordConfirmation}
-                  fieldProps={{
-                    label: t('labels:passwordConfirmation'),
-                    type: 'password'
-                  }}
-                />
-              </Grid>
+              <GridControllerTextField
+                {...gridFieldSettings({xs: 12}, control, UserItems.PasswordOld, data)}
+                fieldProps={{
+                  autoComplete: 'current-password',
+                  label: t('labels:passwordOld'),
+                  type: 'password'
+                }}
+              />
+              <GridControllerTextField
+                {...gridFieldSettings({md: 6, xs: 12}, control, UserItems.Password, data)}
+                fieldProps={{
+                  autoComplete: 'new-password',
+                  label: t('labels:password'),
+                  type: 'password'
+                }}
+              />
+              <GridControllerTextField
+                {...gridFieldSettings({md: 6, xs: 12}, control, UserItems.PasswordConfirmation, data)}
+                fieldProps={{
+                  autoComplete: 'new-password',
+                  label: t('labels:passwordConfirmation'),
+                  type: 'password'
+                }}
+              />
             </Grid>
           </AppAccordion>
         </Grid>
@@ -202,7 +168,6 @@ const UserForm = () => {
               loading={isLoading}
               type="submit"
               variant="contained"
-              onClick={handleClick}
             >
               {id ? t('labels:edit') : t('labels:create')}
             </LoadingButton>

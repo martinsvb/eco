@@ -1,4 +1,6 @@
 export * from './DateTimePicker';
+export * from './PhoneField';
+export * from './Select';
 export * from './TextField';
 export * from './ControllerDateTimeField';
 export * from './ControllerPoneField';
