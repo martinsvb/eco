@@ -1,5 +1,7 @@
 {
+  "approve": "Obsah byl schválen",
   "created": "Obsah byl vytvořen",
   "deleted": "Obsah byl smazán",
+  "unapprove": "Schválení bylo zrušeno",
   "updated": "Obsah byl změněn"
 }

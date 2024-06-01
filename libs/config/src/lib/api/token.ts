@@ -1,7 +1,14 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 
-export const decodeToken = (token: string) => {
+export interface DecodeTokenResult {
+    exp: number;
+    iat: number;
+    isEmailConfirmed: boolean;
+    userId: string;
+}
+
+export const decodeToken = (token: string): DecodeTokenResult => {
     if (!token) {
         throw new UnauthorizedException('Missing token');
     }

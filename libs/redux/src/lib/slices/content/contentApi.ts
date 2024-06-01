@@ -115,6 +115,29 @@ export const contentPatch = async (
   }
 }
 
+export const contentApproval = async (
+  {
+    approve,
+    type,
+    id
+  }: {approve: boolean, id: string} & ContentIdentification,
+  { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const token = await tokenValidation(dispatch, getState);
+
+    const data = await checkResponse(
+      await fetch(`/api/${endPoints.content}/approve/${id}/${type}`, patchHeaders({signal, token}))
+    ).json();
+
+    successSnackbar(approve ? i18n.t('contentLibs:unapprove') : i18n.t('contentLibs:approve'));
+
+    return data;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
 export const contentDelete = async (
   {id, type, onSuccess}: {id: string, onSuccess: () => void} & ContentIdentification,
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import {
   ContentFilterData,
@@ -11,6 +11,7 @@ import {
 } from '@eco/types';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
+import { toggleArrayItem } from '@eco/config';
 
 @Injectable()
 export class ContentService {
@@ -76,6 +77,25 @@ export class ContentService {
         id
       },
       data,
+      include: {
+        author: true,
+      },
+    });
+  }
+
+  async approve(id: string, user: UserFull, type: ContentTypes) {
+    checkRigts(user.rights, contentScopes[type], RightsItems.Approve);
+    const content = await this.findOne(id, user, type);
+    if (!content) {
+      throw new NotFoundException(`Content with ${id} does not exist.`);
+    }
+    return this.prisma.content.update({
+      where: {
+        id
+      },
+      data: {
+        approvedBy: toggleArrayItem(user.id, content.approvedBy)
+      },
       include: {
         author: true,
       },

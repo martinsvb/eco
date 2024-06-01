@@ -26,20 +26,21 @@ model Account {
 }
 
 model Content {
-  id        String    @id @default(uuid())
-  title     String
-  text      Json?
-  dateTime  DateTime?
-  type      String
-  state     String?   @default("created")
-  parentId  String?
-  published Boolean?  @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
-  company   Company   @relation(fields: [companyId], references: [id])
-  companyId String
+  id          String    @id @default(uuid())
+  title       String
+  text        Json?
+  dateTime    DateTime?
+  type        String
+  state       String?   @default("created")
+  parentId    String?
+  approvedBy  String[]  @default([])
+  published   Boolean?  @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    String
+  company     Company   @relation(fields: [companyId], references: [id])
+  companyId   String
 }
 
 model User {

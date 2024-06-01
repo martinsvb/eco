@@ -43,5 +43,6 @@ export const contentScopes = {
 
 export type ContentFull = Content & {
   author: UserFull;
+  isApproved: boolean;
   [ContentItems.Text]?: any;
 }

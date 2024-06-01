@@ -2,6 +2,7 @@ import * as qs from 'qs';
 import { is, isEmpty } from 'ramda';
 
 export enum ApiOperations {
+  approve = 'approve',
   getList = 'getList',
   getItem = 'getItem',
   create = 'create',

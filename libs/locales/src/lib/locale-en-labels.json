@@ -1,5 +1,6 @@
 {
   "actions": "Actions",
+  "approve": "Approve",
   "avatar": "Avatar",
   "cancel": "Cancel",
   "close": "Close",
@@ -47,6 +48,7 @@
   "submit": "Submit",
   "text": "Text",
   "title": "Title",
+  "unapprove": "Unapprove",
   "userMenu": "User menu",
   "verify": "Verify"
 }

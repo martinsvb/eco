@@ -2,6 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { equals } from 'ramda';
 import { ApiOperations, ContentData, ContentFilterData, ContentFull, ContentTypes } from '@eco/types';
 import {
+  contentApproval,
   contentChildsListGet,
   contentDelete,
   contentGet,
@@ -213,6 +214,27 @@ const contentSlice = createSlice({
         },
       },
     ),
+    apiApproveContent: create.asyncThunk(
+      contentApproval,
+      {
+        pending: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.approve] = true;
+        },
+        rejected: (state, { error, payload, meta: { arg: { type } } }) => {
+          state.error[type][ApiOperations.approve] = payload ?? error;
+        },
+        fulfilled: (state, { payload, meta: { arg: { type } } }) => {
+          state.content[type].data = payload;
+          const index = state.contentList[type].data.findIndex(({id}) => id === payload.id);
+          if (index > -1) {
+            state.contentList[type].data[index] = payload;
+          }
+        },
+        settled: (state, { meta: { arg: { type } } }) => {
+          state.loading[type][ApiOperations.approve] = false;
+        },
+      },
+    ),
     apiDeleteContent: create.asyncThunk(
       contentDelete,
       {
@@ -270,6 +292,7 @@ export const {
   apiGetContent,
   apiPostContent,
   apiPatchContent,
+  apiApproveContent,
   apiDeleteContent,
   resetContent,
   resetContentItem,

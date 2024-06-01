@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Content, Prisma } from '@prisma/client';
 import { UserEntity } from '../../users/entities/user.entity';
+import { UserFull } from '@eco/types';
 
 export class ContentEntity implements Content {
   @ApiProperty({ description: 'Id' })
@@ -17,6 +18,12 @@ export class ContentEntity implements Content {
 
   @ApiProperty({ description: 'Content state', required: false })
   state: string | null;
+
+  @ApiProperty({ description: 'Content approval user ids' })
+  approvedBy: string[];
+
+  @ApiProperty({ description: 'Content approved by user' })
+  isApproved: boolean;
 
   @ApiProperty({ description: 'Content parent id', required: false })
   parentId: string | null;
@@ -42,8 +49,11 @@ export class ContentEntity implements Content {
   @ApiProperty({ description: 'Company id' })
   companyId: string;
 
-  constructor({ author, ...data }: Partial<ContentEntity>) {
-    Object.assign(this, data);
+  constructor({ author, ...data }: Partial<ContentEntity>, { id }: UserFull) {
+    Object.assign(this, {
+      ...data,
+      isApproved: data.approvedBy.includes(id)
+    });
 
     if (author) {
       this.author = new UserEntity(author);

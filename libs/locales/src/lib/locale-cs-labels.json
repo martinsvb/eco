@@ -1,5 +1,6 @@
 {
   "actions": "Akce",
+  "approve": "Schválit",
   "avatar": "Avatar",
   "cancel": "Zrušit",
   "close": "Zavřít",
@@ -47,6 +48,7 @@
   "submit": "Potvrdit",
   "text": "Text",
   "title": "Titulek",
+  "unapprove": "Zrušit schválení",
   "userMenu": "Nabídka uživatele",
   "verify": "Ověřit"
 }

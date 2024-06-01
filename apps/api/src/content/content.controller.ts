@@ -43,7 +43,8 @@ export class ContentController {
   })
   async create(@Req() {user}: Request, @Body() createContentDto: CreateContentDto) {
     return new ContentEntity(
-      await this.contentService.create(createContentDto, user as UserFull)
+      await this.contentService.create(createContentDto, user as UserFull),
+      user as UserFull
     );
   }
 
@@ -57,7 +58,7 @@ export class ContentController {
   })
   async findAll(@Req() {user}: Request, @Param('type') type: ContentTypes, @Query() query) {
     const contents = await this.contentService.findAll(user as UserFull, type, query);
-    return contents.map((content) => new ContentEntity(content));
+    return contents.map((content) => new ContentEntity(content, user as UserFull));
   }
 
   @Get('list-childs/:type/:parentId')
@@ -70,7 +71,7 @@ export class ContentController {
   })
   async findAllChilds(@Req() {user}: Request, @Param('type') type: ContentTypes, @Param('parentId') parentId: string) {
     const contents = await this.contentService.findAllChilds(user as UserFull, type, parentId);
-    return contents.map((content) => new ContentEntity(content));
+    return contents.map((content) => new ContentEntity(content, user as UserFull));
   }
 
   @Get(':id/:type')
@@ -82,7 +83,11 @@ export class ContentController {
     description: 'Content has been successfully loaded.',
   })
   async findOne(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
-    const content = new ContentEntity(await this.contentService.findOne(id, user as UserFull, type));
+    const data = await this.contentService.findOne(id, user as UserFull, type);
+    if (!data) {
+      throw new NotFoundException(`Content with ${id} does not exist.`);
+    }
+    const content = new ContentEntity(data, user as UserFull);
     if (!content) {
       throw new NotFoundException(`Content with ${id} does not exist.`);
     }
@@ -104,7 +109,23 @@ export class ContentController {
     @Body() data: UpdateContentDto
   ) {
     return new ContentEntity(
-      await this.contentService.update(id, data, user as UserFull, type)
+      await this.contentService.update(id, data, user as UserFull, type),
+      user as UserFull
+    );
+  }
+
+  @Patch('approve/:id/:type')
+  @UseGuards(JwtAuthGuard, EmailGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: ContentEntity })
+  @ApiResponse({
+    status: 200,
+    description: 'Content approval has been successfully updated.',
+  })
+  async approve(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
+    return new ContentEntity(
+      await this.contentService.approve(id, user as UserFull, type),
+      user as UserFull
     );
   }
 
@@ -117,6 +138,9 @@ export class ContentController {
     description: 'Content has been successfully deleted.',
   })
   async remove(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
-    return new ContentEntity(await this.contentService.remove(id, user as UserFull, type));
+    return new ContentEntity(
+      await this.contentService.remove(id, user as UserFull, type),
+      user as UserFull
+    );
   }
 }

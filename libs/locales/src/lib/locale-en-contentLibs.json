@@ -1,5 +1,7 @@
 {
+  "approve": "Content was approved",
   "created": "Content was created",
   "deleted": "Content was deleted",
+  "unapprove": "Approval was canceled",
   "updated": "Content was successfully updated"
 }
