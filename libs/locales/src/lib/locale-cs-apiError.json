@@ -1,0 +1,22 @@
+{
+  "ACTION_FAILED": "Akce selhala",
+  "BAD_REQUEST": "Špatný požadavek",
+  "CONFLICT": "Záznam v systému již existuje",
+  "FORBIDDEN": "Nemáte oprávnění provést danou operaci",
+  "GATEWAY_TIMEOUT": "Vypšel čas na zpracování požadavku",
+  "INSUFFICIENT_SPACE_ON_RESOURCE": "Nedostatek kapacity na serveru",
+  "INTERNAL_SERVER_ERROR": "Chyba serveru",
+  "LOCKED": "Objekt uzamčen",
+  "METHOD_FAILURE": "Operace selhala",
+  "METHOD_NOT_ALLOWED": "Tato operace není podporována",
+  "NOT_ACCEPTABLE": "Neplatný požadavek",
+  "NOT_FOUND": "Nenalezeno",
+  "NOT_IMPLEMENTED": "Metoda není implementována",
+  "REQUEST_TIMEOUT": "Čas na zpracování vypršel",
+  "SERVICE_UNAVAILABLE": "Služba je nedostupná",
+  "STATUS": "Stav požadavku: {{status}}",
+  "TOO_MANY_REQUESTS": "Server přetížen",
+  "UNAUTHORIZED": "Neautorizovaný přístup",
+  "UNPROCESSABLE_ENTITY": "Nelze zpracovat",
+  "UNSUPPORTED_MEDIA_TYPE": "Nepodporovaný typ souboru"
+}

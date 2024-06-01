@@ -43,6 +43,7 @@ const LoginButton = ({isMobile}: LoginButtonProps) => {
       {isMobile ?
         <IconButton
           aria-label={t('labels:loginButton')}
+          id="loginButton"
           onClick={handleClickOpen}
         >
           <LoginIcon />
@@ -50,6 +51,7 @@ const LoginButton = ({isMobile}: LoginButtonProps) => {
         :
         <Button
           color="inherit"
+          id="loginButton"
           onClick={handleClickOpen}
         >
           {t('labels:loginButton')}

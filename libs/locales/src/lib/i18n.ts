@@ -5,6 +5,7 @@ import { LocalStorageItems } from "@eco/config";
 import { Languages } from './languages';
 import accountsCs from './locale-cs-accounts.json';
 import accountsLibsCs from './locale-cs-accountsLibs.json';
+import apiErrorCs from './locale-cs-apiError.json';
 import authLibsCs from './locale-cs-authLibs.json';
 import companiesCs from './locale-cs-companies.json';
 import contentCs from './locale-cs-content.json';
@@ -19,9 +20,10 @@ import usersCs from './locale-cs-users.json';
 import usersLibsCs from './locale-cs-usersLibs.json';
 import accountsEn from './locale-en-accounts.json';
 import accountsLibsEn from './locale-en-accountsLibs.json';
+import apiErrorEn from './locale-en-apiError.json';
+import authLibsEn from './locale-en-authLibs.json';
 import contentLibsEn from './locale-en-contentLibs.json';
 import editorEn from './locale-en-editor.json';
-import authLibsEn from './locale-en-authLibs.json';
 import companiesEn from './locale-en-companies.json';
 import contentEn from './locale-en-content.json';
 import labelsEn from './locale-en-labels.json';
@@ -53,6 +55,7 @@ i18n
         registration: registrationCs,
         accounts: accountsCs,
         accountsLibs: accountsLibsCs,
+        apiError: apiErrorCs,
         authLibs: authLibsCs,
         companies: companiesCs,
         content: contentCs,
@@ -69,6 +72,7 @@ i18n
         registration: registrationEn,
         accounts: accountsEn,
         accountsLibs: accountsLibsEn,
+        apiError: apiErrorEn,
         authLibs: authLibsEn,
         companies: companiesEn,
         content: contentEn,

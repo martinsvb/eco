@@ -1,4 +1,3 @@
-import { enqueueSnackbar } from 'notistack';
 import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsyncThunk';
 import {
   LocalStorageItems,
@@ -19,6 +18,7 @@ import {
 } from '@eco/types';
 import i18n from '@eco/locales';
 import { initialAuthState, setRegistration, setRegistrationEmail } from './authSlice';
+import { successSnackbar } from '../snackbars';
 
 export const loginPost = async (
   body: LoginData,
@@ -103,7 +103,7 @@ export const invitationFinishPatch = async (
       )
     ).json();
 
-    enqueueSnackbar(i18n.t('authLibs:invitationFinish'), {variant: 'success'});
+    successSnackbar(i18n.t('authLibs:invitationFinish'));
 
     return data;
   } catch (error: unknown) {

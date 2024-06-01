@@ -1,6 +1,5 @@
 import { GridRowId } from '@mui/x-data-grid';
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { enqueueSnackbar } from 'notistack';
 import {
   checkResponse,
   endPoints,
@@ -14,6 +13,7 @@ import { CompanyData, getUrl } from '@eco/types';
 import i18n from '@eco/locales';
 import { tokenValidation } from '../../tokenValidation';
 import { RootState } from '../../store';
+import { successSnackbar } from '../snackbars';
 
 export const companiesGet = async (
   id: string,
@@ -60,7 +60,7 @@ export const companiesPost = async (
       await fetch(`/api/${endPoints.companies}`, postHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('companiesLibs:created'), {variant: 'success'});
+    successSnackbar(i18n.t('companiesLibs:created'));
 
     return data;
   } catch (error: unknown) {
@@ -79,7 +79,7 @@ export const companiesPatch = async (
       await fetch(`/api/${endPoints.companies}/${id}`, patchHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('companiesLibs:updated'), {variant: 'success'});
+    successSnackbar(i18n.t('companiesLibs:updated'));
 
     return data;
   } catch (error: unknown) {
@@ -98,7 +98,7 @@ export const companyDelete = async (
       await fetch(`/api/${endPoints.companies}/${id}`, delHeaders({signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('companiesLibs:deleted'), {variant: 'success'});
+    successSnackbar(i18n.t('companiesLibs:deleted'));
 
     return data;
   } catch (error: unknown) {

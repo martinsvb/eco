@@ -1,6 +1,5 @@
 import { GridRowId } from '@mui/x-data-grid';
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { enqueueSnackbar } from 'notistack';
 import { pick } from 'ramda';
 import {
   checkResponse,
@@ -16,6 +15,7 @@ import i18n from '@eco/locales';
 import { tokenValidation } from '../../tokenValidation';
 import { RootState } from '../../store';
 import { setAuthUser } from '../auth/authSlice';
+import { successSnackbar } from '../snackbars';
 
 export const usersGet = async (
   id: string,
@@ -63,7 +63,7 @@ export const usersPost = async (
       await fetch(`/api/${endPoints.users}`, postHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('usersLibs:created'), {variant: 'success'});
+    successSnackbar(i18n.t('usersLibs:created'));
 
     return data;
   } catch (error: unknown) {
@@ -82,7 +82,7 @@ export const usersPatch = async (
       await fetch(`/api/${endPoints.users}/${id}`, patchHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('usersLibs:updated'), {variant: 'success'});
+    successSnackbar(i18n.t('usersLibs:updated'));
 
     if (body.name || body.email) {
       dispatch(setAuthUser(pick([UserItems.Name, UserItems.Email], data)));
@@ -103,7 +103,7 @@ export const userDelete = async (
 
     const data = await checkResponse(await fetch(`/api/${endPoints.users}/${id}`, delHeaders({signal, token}))).json();
 
-    enqueueSnackbar(i18n.t('usersLibs:deleted'), {variant: 'success'});
+    successSnackbar(i18n.t('usersLibs:deleted'));
 
     return data;
   } catch (error: unknown) {

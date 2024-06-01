@@ -1,0 +1,22 @@
+{
+  "ACTION_FAILED": "Action failed",
+  "BAD_REQUEST": "Bad request",
+  "CONFLICT": "Subject already exists in the system",
+  "FORBIDDEN": "You are forbidden from accessing this resource",
+  "GATEWAY_TIMEOUT": "Gateway timeout",
+  "INSUFFICIENT_SPACE_ON_RESOURCE": "Insufficient space on resource",
+  "INTERNAL_SERVER_ERROR": "Internal server error",
+  "LOCKED": "Locked",
+  "METHOD_FAILURE": "Method failure",
+  "METHOD_NOT_ALLOWED": "Product does not support this operation in its current state",
+  "NOT_ACCEPTABLE": "Not acceptable",
+  "NOT_FOUND": "Not found",
+  "NOT_IMPLEMENTED": "Not implemented",
+  "REQUEST_TIMEOUT": "Request timeout",
+  "SERVICE_UNAVAILABLE": "Service unavailable",
+  "STATUS": "Request status: {{status}}",
+  "TOO_MANY_REQUESTS": "Too many requests",
+  "UNAUTHORIZED": "Unauthorized",
+  "UNPROCESSABLE_ENTITY": "Can't be processed",
+  "UNSUPPORTED_MEDIA_TYPE": "Unsupported media type"
+}

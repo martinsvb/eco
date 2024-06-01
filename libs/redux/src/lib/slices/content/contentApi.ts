@@ -1,5 +1,4 @@
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { enqueueSnackbar } from 'notistack';
 import {
   checkResponse,
   endPoints,
@@ -13,6 +12,7 @@ import i18n from '@eco/locales';
 import { ContentData, ContentTypes, getUrl } from '@eco/types';
 import { tokenValidation } from '../../tokenValidation';
 import { RootState } from '../../store';
+import { successSnackbar } from '../snackbars';
 
 type ContentIdentification = {
   parentId?: string;
@@ -80,7 +80,7 @@ export const contentPost = async (
       await fetch(`/api/${endPoints.content}`, postHeaders({body: {...body, type, parentId}, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('contentLibs:created'), {variant: 'success'});
+    successSnackbar(i18n.t('contentLibs:created'));
 
     onSuccess();
 
@@ -107,7 +107,7 @@ export const contentPatch = async (
       await fetch(`/api/${endPoints.content}/${id}/${type}`, patchHeaders({body: {...body, parentId}, signal, token}))
     ).json();
 
-    enqueueSnackbar(successMsg || i18n.t('contentLibs:updated'), {variant: 'success'});
+    successSnackbar(successMsg || i18n.t('contentLibs:updated'));
 
     return data;
   } catch (error: unknown) {
@@ -126,7 +126,7 @@ export const contentDelete = async (
       await fetch(`/api/${endPoints.content}/${id}/${type}`, delHeaders({signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('contentLibs:deleted'), {variant: 'success'});
+    successSnackbar(i18n.t('contentLibs:deleted'));
 
     onSuccess();
 

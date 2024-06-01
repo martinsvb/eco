@@ -9,7 +9,7 @@ interface ScrollbarDesignParams {
   height?: CSSProperties['height'];
 }
 
-export const getScrollbarDesign = ({ trackColor, thumbColor, width = 6, height = 6 }: ScrollbarDesignParams) => ({
+export const getScrollbarDesign = ({ trackColor, thumbColor, width = 8, height = 8 }: ScrollbarDesignParams) => ({
   pr: 1,
   '&::-webkit-scrollbar': {
     height,

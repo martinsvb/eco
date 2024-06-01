@@ -1,5 +1,4 @@
 import { GetThunkAPI, AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { enqueueSnackbar } from 'notistack';
 import {
   checkResponse,
   endPoints,
@@ -12,6 +11,7 @@ import {
 import i18n from '@eco/locales';
 import { AccountData } from '@eco/types';
 import { tokenValidation } from '../../tokenValidation';
+import { successSnackbar } from '../snackbars';
 
 export const accountsGet = async (
   id: string,
@@ -50,7 +50,7 @@ export const accountsPost = async (
       await fetch(`/api/${endPoints.accounts}`, postHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('accountsLibs:created'), {variant: 'success'});
+    successSnackbar(i18n.t('accountsLibs:created'));
 
     return data;
   } catch (error: unknown) {
@@ -69,7 +69,7 @@ export const accountsPatch = async (
       await fetch(`/api/${endPoints.accounts}/${id}`, patchHeaders({body, signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('accountsLibs:updated'), {variant: 'success'});
+    successSnackbar(i18n.t('accountsLibs:updated'));
 
     return data;
   } catch (error: unknown) {
@@ -88,7 +88,7 @@ export const accountDelete = async (
       await fetch(`/api/${endPoints.accounts}/${id}`, delHeaders({signal, token}))
     ).json();
 
-    enqueueSnackbar(i18n.t('accountsLibs:deleted'), {variant: 'success'});
+    successSnackbar(i18n.t('accountsLibs:deleted'));
 
     onSuccess();
 
