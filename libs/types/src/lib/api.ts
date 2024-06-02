@@ -19,10 +19,12 @@ export const getUrl = (endpoint: string, filter: Record<string, any>) => {
   return url;
 }
 
-export const getPrismaOrFilter = <T extends {}>(query: T) => {
+export const getPrismaOrFilter = <T extends object>(query: T) => {
   return Object.entries(query).reduce(
     (acc, [item, value]) => value
-      ? { ...acc, [item]: { contains: value } }
+      ? is(Array, value)
+        ? { ...acc, OR: value.map((val) => ({[item]: { contains: val }})) }
+        : { ...acc, [item]: { contains: value } }
       : acc,
     {}
   );

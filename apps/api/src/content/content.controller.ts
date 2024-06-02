@@ -23,6 +23,7 @@ import { endPoints } from '@eco/config';
 import { ContentTypes, UserFull } from '@eco/types';
 import { EmailGuard } from '../auth/email.guard';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UsersService } from '../users/users.service';
 import { ContentEntity } from './entities/content.entity';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './dto/create-content.dto';
@@ -31,7 +32,10 @@ import { UpdateContentDto } from './dto/update-content.dto';
 @ApiTags('Content')
 @Controller(endPoints.content)
 export class ContentController {
-  constructor(private readonly contentService: ContentService) {}
+  constructor(
+    private readonly contentService: ContentService,
+    private readonly usersService: UsersService
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, EmailGuard)
@@ -57,7 +61,8 @@ export class ContentController {
     description: 'Content list has been successfully loaded.',
   })
   async findAll(@Req() {user}: Request, @Param('type') type: ContentTypes, @Query() query) {
-    const contents = await this.contentService.findAll(user as UserFull, type, query);
+    const approvalUsersIds = await this.usersService.findAllApprovalUsersIds(user as UserFull);
+    const contents = await this.contentService.findAll(user as UserFull, type, query, approvalUsersIds);
     return contents.map((content) => new ContentEntity(content, user as UserFull));
   }
 

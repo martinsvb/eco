@@ -10,6 +10,7 @@ import {
   UserFilterData,
   UserFull,
   UserItems,
+  approvalUsersRoles,
   checkRigts,
   getPrismaOrFilter,
   userRights
@@ -68,6 +69,11 @@ export class UsersService {
         ...getPrismaOrFilter(query)
       }
     });
+  }
+
+  async findAllApprovalUsersIds(user: UserFull) {
+    const data = await this.findAll(user, {[UserItems.Role]: approvalUsersRoles});
+    return data.map(({id}) => id);
   }
 
   findOne(id: string, {rights}: UserFull) {

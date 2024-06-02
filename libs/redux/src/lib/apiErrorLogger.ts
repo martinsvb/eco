@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { is } from 'ramda';
+import { routes } from '@eco/config';
 import i18n from '@eco/locales';
 import { errorSnackbar } from './slices/snackbars';
 import { errorMessages } from './messages';
@@ -14,8 +15,10 @@ export const apiErrorLogger: Middleware = (api: MiddlewareAPI) => (next) => (act
     if (is(Number, parsedError?.status)) {
       const { status } = parsedError;
       if (status === HttpStatus.UNAUTHORIZED) {
-        const loginButton: HTMLButtonElement | null = document.querySelector("#loginButton");
-        loginButton?.click();
+        if (![routes.base, routes.home].includes(location.pathname)) {
+          const loginButton: HTMLButtonElement | null = document.querySelector("#loginButton");
+          loginButton?.click();
+        }
       }
       else {
         errorSnackbar(

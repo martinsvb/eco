@@ -66,6 +66,19 @@ async function main() {
     },
   });
 
+  const user4 = await prisma.user.create({
+    data: {
+      name: 'User 4',
+      email: 'user4@email.com',
+      origin: UserOrigins.internal,
+      password: await bcrypt.hash('user4password', parseInt(process.env.HASHING_ROUNDS, 10)),
+      isEmailConfirmed: true,
+      companyId: company1.id,
+      rights: userRights[UserRoles.CompanyAdmin],
+      role: UserRoles.CompanyAdmin,
+    },
+  });
+
   const account1 = await prisma.account.create({
     data: {
       name: 'Account 1',
@@ -141,7 +154,8 @@ async function main() {
     content4,
     user1,
     user2,
-    user3
+    user3,
+    user4
   });
 }
 

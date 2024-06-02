@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { nanoid } from '@reduxjs/toolkit';
+import { equals } from 'ramda';
 
 export enum UserItems {
   Id = 'id',
@@ -41,7 +42,9 @@ export interface UserEditData {
   [UserItems.PasswordConfirmation]?: string;
 }
 
-export type UserFilterData = Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;
+export type UserFilterData = {
+  [UserItems.Role]: UserRoles[];
+} & Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;
 
 export enum UserOrigins {
   internal = 'internal',
@@ -143,3 +146,11 @@ export const getNewUserData = () => {
     }
   }
 }
+
+export const approvalUsersRoles = [UserRoles.ApprovalEditor, UserRoles.CompanyAdmin];
+
+export const isApprovedByAllApprovalUsers = (role: UserRoles, approvalUsersIds: string[]) => ({
+  approvedBy
+}: {approvedBy: string[]}) => (
+  approvalUsersRoles.includes(role) || equals(approvedBy, approvalUsersIds)
+);

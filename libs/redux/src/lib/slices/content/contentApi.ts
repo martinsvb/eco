@@ -130,7 +130,7 @@ export const contentApproval = async (
       await fetch(`/api/${endPoints.content}/approve/${id}/${type}`, patchHeaders({signal, token}))
     ).json();
 
-    successSnackbar(approve ? i18n.t('contentLibs:unapprove') : i18n.t('contentLibs:approve'));
+    successSnackbar(approve ? i18n.t('contentLibs:approve') : i18n.t('contentLibs:unapprove'));
 
     return data;
   } catch (error: unknown) {

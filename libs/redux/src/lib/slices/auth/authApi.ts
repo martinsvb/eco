@@ -2,9 +2,11 @@ import { AsyncThunkConfig, GetThunkAPI } from '@reduxjs/toolkit/dist/createAsync
 import {
   LocalStorageItems,
   checkResponse,
+  decodeToken,
   endPoints,
   getErrorValue,
   getHeaders,
+  isTokenValid,
   patchHeaders,
   postHeaders
 } from '@eco/config';
@@ -156,7 +158,7 @@ export const authUserGet = async (
   try {
     const token = localStorage.getItem(LocalStorageItems.Token);
 
-    return token
+    return token && isTokenValid(decodeToken(token))
       ? await checkResponse(
           await fetch(
             `/api/${endPoints.user}`,

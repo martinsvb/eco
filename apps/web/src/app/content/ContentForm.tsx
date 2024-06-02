@@ -117,13 +117,15 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
           direction="row"
           justifyContent="flex-end"
         >
-          <Button
-            id='content-preview-button'
-            startIcon={<VisibilityIcon />}
-            onClick={handlePreviewClick}
-          >
-            {t('labels:preview')}
-          </Button>
+          {!handleDialogClose &&
+            <Button
+              id='content-preview-button'
+              startIcon={<VisibilityIcon />}
+              onClick={handlePreviewClick}
+            >
+              {t('labels:preview')}
+            </Button>
+          }
           {scopes[scope]?.approve && content &&
             <LoadingButton
               id="content-approve-button"
