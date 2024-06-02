@@ -3,6 +3,8 @@
   "companies": "Companies",
   "home": "Home",
   "invitation": "Invitation",
+  "notFoundPage": "Page not found",
+  "notFoundPageInfo": "Page wasn't found. Link below redirects you to home page.",
   "records": "Records",
   "tasks": "Tasks",
   "users": "Users"

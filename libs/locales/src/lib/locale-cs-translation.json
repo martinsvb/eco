@@ -3,6 +3,8 @@
   "companies": "Společnosti",
   "home": "Domů",
   "invitation": "Pozvání",
+  "notFoundPage": "Stránka nenalezena",
+  "notFoundPageInfo": "Hledaná stránka nebyla nalezena. Odkaz níže Vás přesměruje na domovskou stránku.",
   "records": "Zápisy",
   "tasks": "Úkoly",
   "users": "Uživatelé"

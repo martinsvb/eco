@@ -1,5 +1,6 @@
 export const routes = {
     base: '/',
+    notFound: '*',
     accounts: '/accounts',
     accountsNew: '/accounts/new',
     accountsEdit: '/accounts/edit/:id',

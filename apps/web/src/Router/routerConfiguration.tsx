@@ -10,6 +10,7 @@ import LoginWrapper from "../app/user/LoginWrapper";
 import Invitation from "../app/Auth/Invitation";
 import { UserEdit } from "../app/user/UserEdit";
 import { Companies } from "../app/Companies/Companies";
+import { NotFound } from "../app/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
       {
         path: routes.usersEdit,
         element: <LoginWrapper><UserEdit /></LoginWrapper>,
+      },
+      {
+        path: routes.notFound,
+        element: <NotFound />,
       },
     ],
   },
