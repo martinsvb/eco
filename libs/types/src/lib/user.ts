@@ -43,7 +43,7 @@ export interface UserEditData {
 }
 
 export type UserFilterData = {
-  [UserItems.Role]: UserRoles[];
+  [UserItems.Role]?: UserRoles[];
 } & Partial<Pick<UserData, UserItems.Name | UserItems.Email>>;
 
 export enum UserOrigins {
