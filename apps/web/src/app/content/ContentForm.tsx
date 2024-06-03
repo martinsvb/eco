@@ -1,21 +1,13 @@
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
-import GradingIcon from '@mui/icons-material/Grading';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  apiApproveContent,
   selectContent,
   selectIsContentsLoading,
   selectUserAuth,
-  setContentPreview,
-  setContentTemp,
-  useAppDispatch,
   useAppSelector,
   useShallowEqualSelector
 } from '@eco/redux';
@@ -24,10 +16,8 @@ import { getContentValidationSchema } from '@eco/validation';
 import { GridControllerDateTimeField, GridControllerEditor, GridControllerTextField } from '../components';
 import { gridFieldSettings } from '../helpers';
 import { useFormValues, useMobilePortraitDetection } from '../hooks';
-import { useContentFormHandlers } from './useContentFormHandlers';
-import ContentFormButtons from './ContentFormButtons';
 import TasksPanel from './tasks/TasksPanel';
-import { LoadingButton } from '@mui/lab';
+import { ContentFormButtons, ContentFormToolbar, useContentFormHandlers } from '.';
 
 interface ContentFormProps {
   type: ContentTypes;
@@ -42,16 +32,10 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
 
   const isMobilePortrait = useMobilePortraitDetection();
 
-  const dispatch = useAppDispatch();
-
   const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
   const isLoading = useAppSelector(
     (state) => selectIsContentsLoading(state, type, id ? ApiOperations.edit : ApiOperations.create)
-  );
-
-  const isApprovalLoading = useAppSelector(
-    (state) => selectIsContentsLoading(state, type, ApiOperations.approve)
   );
 
   const { data: content, tempData } = useShallowEqualSelector((state) => selectContent(state, type));
@@ -78,31 +62,6 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
 
   const { handleClick, handleClose } = useContentFormHandlers(type, data, id, handleDialogClose);
 
-  const handlePreviewClick = useCallback(
-    () => {
-      if (!id) {
-        dispatch(setContentTemp({data, type}));
-      }
-      dispatch(setContentPreview(true));
-    },
-    [dispatch, data, id, type]
-  );
-
-  const handleApprove = useCallback(
-    () => {
-      if (id) {
-        dispatch(
-          apiApproveContent({
-            approve: !content?.isApproved,
-            id,
-            type,
-          })
-        );
-      }
-    },
-    [dispatch, content?.isApproved, id, type]
-  );
-
   const scope = contentScopes[type];
 
   return (
@@ -110,38 +69,11 @@ const ContentForm = ({type, handleDialogClose}: ContentFormProps) => {
       component="form"
     >
       {(!handleDialogClose || scopes[scope]?.approve) &&
-        <Stack
-          px={2}
-          my={1}
-          width={isMobilePortrait ? '100%' : 800}
-          direction="row"
-          justifyContent="flex-end"
-        >
-          {!handleDialogClose &&
-            <Button
-              id='content-preview-button'
-              startIcon={<VisibilityIcon />}
-              onClick={handlePreviewClick}
-            >
-              {t('labels:preview')}
-            </Button>
-          }
-          {scopes[scope]?.approve && content &&
-            <LoadingButton
-              id="content-approve-button"
-              loading={isApprovalLoading}
-              startIcon={content.isApproved ? <DoDisturbOnIcon /> : <GradingIcon />}
-              onClick={handleApprove}
-              color={content.isApproved ? 'warning' : 'success'}
-              variant="contained"
-              sx={{
-                ml: 1
-              }}
-            >
-              {content.isApproved ? t('labels:unapprove') : t('labels:approve')}
-            </LoadingButton>
-          }
-        </Stack>
+        <ContentFormToolbar
+          {...content}
+          data={data}
+          type={type}
+        />
       }
       <Stack direction={isMobilePortrait ? 'column' : 'row'} alignItems="baseline">
         <Grid

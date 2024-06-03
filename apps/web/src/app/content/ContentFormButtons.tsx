@@ -13,7 +13,7 @@ interface ContentFormButtonsProps {
   handleClose: () => void;
 }
 
-const ContentFormButtons = ({
+export const ContentFormButtons = memo(({
   isLoading,
   isValid,
   isRoot,
@@ -48,6 +48,4 @@ const ContentFormButtons = ({
       </Stack>
     </Grid>
   );
-};
-
-export default memo(ContentFormButtons);
+});

@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { nanoid } from '@reduxjs/toolkit';
-import { equals } from 'ramda';
 
 export enum UserItems {
   Id = 'id',
@@ -149,8 +148,6 @@ export const getNewUserData = () => {
 
 export const approvalUsersRoles = [UserRoles.ApprovalEditor, UserRoles.CompanyAdmin];
 
-export const isApprovedByAllApprovalUsers = (role: UserRoles, approvalUsersIds: string[]) => ({
-  approvedBy
-}: {approvedBy: string[]}) => (
-  approvalUsersRoles.includes(role) || equals(approvedBy, approvalUsersIds)
+export const isItemAvailable = (role: UserRoles) => ({published}: {published: boolean}) => (
+  published || [...approvalUsersRoles, UserRoles.Editor].includes(role)
 );

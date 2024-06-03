@@ -61,8 +61,7 @@ export class ContentController {
     description: 'Content list has been successfully loaded.',
   })
   async findAll(@Req() {user}: Request, @Param('type') type: ContentTypes, @Query() query) {
-    const approvalUsersIds = await this.usersService.findAllApprovalUsersIds(user as UserFull);
-    const contents = await this.contentService.findAll(user as UserFull, type, query, approvalUsersIds);
+    const contents = await this.contentService.findAll(user as UserFull, type, query);
     return contents.map((content) => new ContentEntity(content, user as UserFull));
   }
 
@@ -128,8 +127,9 @@ export class ContentController {
     description: 'Content approval has been successfully updated.',
   })
   async approve(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
+    const approvalUsersIds = await this.usersService.findAllApprovalUsersIds(user as UserFull);
     return new ContentEntity(
-      await this.contentService.approve(id, user as UserFull, type),
+      await this.contentService.approve(id, user as UserFull, type, approvalUsersIds),
       user as UserFull
     );
   }
