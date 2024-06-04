@@ -20,6 +20,7 @@ import {
   getPrismaOrFilter,
   isItemAvailable
 } from '@eco/types';
+import { content } from '../locales';
 import { UsersService } from '../users/users.service';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
@@ -40,8 +41,6 @@ export class ContentService {
   ) {
     const {id, companyId, rights} = user;
     checkRigts(rights, contentScopes[data.type], RightsItems.Create);
-    const users = await this.usersService.findUsersByRoles(user as UserFull, [...approvalUsersRoles, UserRoles.Editor]);
-    const emails = users.map(({email}) => email);
 
     const createdContent = await this.prisma.content.create({
       data: {
@@ -54,8 +53,22 @@ export class ContentService {
       },
     });
 
+    const users = await this.usersService.findUsersByRoles(
+      user,
+      [...approvalUsersRoles, UserRoles.Editor]
+    );
+    const emails = users.map(({email}) => email);
+
+    const translation = content[language || 'en'];
+
     for (const email of emails) {
-      this.sendNotification(email, `${origin}${routes.content[data.type].detail.replace(':id', createdContent.id)}`);
+      this.sendNotification(
+        email,
+        translation.newDocument,
+        translation.created.replace('{{type}}', translation[data.type]),
+        translation.openDocument,
+        `${origin}${routes.content[data.type].detail.replace(':id', createdContent.id)}`
+      );
     }
 
     return createdContent;
@@ -161,31 +174,57 @@ export class ContentService {
     id: string,
     user: UserFull,
     type: ContentTypes,
-    language: string
+    language: string,
+    origin: string
   ) {
     checkRigts(user.rights, contentScopes[type], RightsItems.Approve);
-    const content = await this.findOne(id, user, type);
-    if (!content) {
+
+    const data = await this.findOne(id, user, type);
+    if (!data) {
       throw new NotFoundException(`Content with ${id} does not exist.`);
     }
-    if (content.published) {
+    if (data.published) {
       throw new UnprocessableEntityException(
         `Content with ${id} can't be unapproved/approved, because it's already published.`
       );
     }
+
     const users = await this.usersService.findUsersByRoles(user as UserFull, approvalUsersRoles);
     const approvalUsersIds = users.map(({id}) => id);
+
     await this.approveAllChilds(user, type, id, approvalUsersIds);
-    const approvedBy = toggleArrayItem(user.id, content.approvedBy);
-    return this.prisma.content.update({
+
+    const approvedBy = toggleArrayItem(user.id, data.approvedBy);
+    const published = equals(approvedBy, approvalUsersIds);
+    const updatedContent = await this.prisma.content.update({
       where: {
         id
       },
       data: {
         approvedBy,
-        published: equals(approvedBy, approvalUsersIds)
+        published
       }
     });
+
+    const notifyUsers = await this.usersService.findUsersByRoles(
+      user,
+      [...approvalUsersRoles, UserRoles.Editor, UserRoles.Reader]
+    );
+    const emails = notifyUsers.map(({email}) => email);
+
+    const translation = content[language || 'en'];
+
+    for (const email of emails) {
+      this.sendNotification(
+        email,
+        translation.publishedDocument,
+        translation.published.replace('{{type}}', translation[type]),
+        translation.openDocument,
+        `${origin}${routes.content[type].detail.replace(':id', updatedContent.id)}`
+      );
+    }
+
+    return updatedContent;
   }
 
   remove(
@@ -197,15 +236,17 @@ export class ContentService {
     return this.prisma.content.delete({ where: { id } });
   }
 
-  sendNotification(email: string, link: string) {
+  sendNotification(email: string, subject: string, title: string, text: string, link: string) {
  
     return this.mailerService
       .sendMail({
         to: email,
-        subject: 'Notification',
+        subject,
         template: './notification',
         context: {
           link,
+          text,
+          title,
         },
       })
       .catch(() => {

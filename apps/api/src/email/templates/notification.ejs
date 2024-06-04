@@ -19,7 +19,6 @@
             role="presentation"
           >
             <%- include("./shared/logo.ejs") %>
-            <!-- Email Body -->
             <tr>
               <td
                 class="email-body"
@@ -35,18 +34,15 @@
                   cellspacing="0"
                   role="presentation"
                 >
-                  <!-- Body content -->
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>There was created new content!</h1>
+                        <h1><%= locals.title %></h1>
                         <a
                           href="<%= locals.link %>"
                           target="_blank"
-                          class="f-fallback email-masthead_name"
-                        >
-                          Document
-                        </a>
+                          class="f-fallback"
+                        ><%= locals.text %></a>
                       </div>
                     </td>
                   </tr>

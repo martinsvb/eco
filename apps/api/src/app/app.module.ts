@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import {
-  PrismaModule,
-  providePrismaClientExceptionFilter,
-} from 'nestjs-prisma';
+import { PrismaModule, providePrismaClientExceptionFilter } from 'nestjs-prisma';
 import { prismaExceptions } from '@eco/config';
-import { AppController } from './app.controller';
 import { AccountModule } from '../account/account.module';
 import { AccountsModule } from '../accounts/accounts.module';
 import { AuthModule } from '../auth/auth.module';
@@ -14,6 +10,7 @@ import { CompaniesModule } from '../companies/companies.module';
 import { ContentModule } from '../content/content.module';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [

@@ -146,10 +146,11 @@ export class ContentController {
     @Req() {user}: Request,
     @Param('id') id: string,
     @Param('type') type: ContentTypes,
-    @Param('language') language: string
+    @Param('language') language: string,
+    @Headers('origin') origin: string
   ) {
     return new ContentEntity(
-      await this.contentService.approve(id, user as UserFull, type, language),
+      await this.contentService.approve(id, user as UserFull, type, language, origin),
       user as UserFull
     );
   }
