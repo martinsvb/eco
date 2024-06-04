@@ -6,19 +6,19 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
-import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { ICountry, TCountryCode, TLanguageCode, countries } from 'countries-list';
 import { TokenPayload } from 'google-auth-library';
+import { nanoid } from 'nanoid'
+import { pick } from 'ramda';
 import { allowedCountries, isTokenValid } from '@eco/config';
 import { UserItems, UserOrigins, UserRoles, userRights } from '@eco/types';
-import { nanoid } from 'nanoid'
-import { ICountry, TCountryCode, TLanguageCode, countries } from 'countries-list';
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
 import { VerifyDto } from './dto/verify.dto';
 import { RegisterDto } from './dto/register.dto';
 import { InvitationFinishDto } from './dto/invitationFinish.dto';
-import { pick } from 'ramda';
 
 @Injectable()
 export class AuthService {
@@ -245,7 +245,7 @@ export class AuthService {
           otp,
         },
       })
-      .catch((error) => {
+      .catch(() => {
         throw new ServiceUnavailableException(`Verification email failed: ${email}`)
       });
   }

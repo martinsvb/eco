@@ -8,7 +8,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import { countries } from 'countries-list';
 import dayjs from 'dayjs';
 import { allowedCountries } from '@eco/config';
-import { Languages } from '@eco/locales';
+import { Languages, getLanguageCode } from '@eco/locales';
 import { CompanyItems } from '@eco/types';
 import { cancelCompany, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { DialogClickOpen } from '../components/dialog/AppDialog';
@@ -75,7 +75,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         type: 'singleSelect',
         valueOptions: allowedCountries.map((value) => ({
           value,
-          label: countries[value][language === Languages.en ? 'name' : 'native']
+          label: countries[value][getLanguageCode(language) === Languages.en ? 'name' : 'native']
         })),
         editable: companies?.edit,
         sortable: true,

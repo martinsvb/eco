@@ -11,7 +11,7 @@ import 'dayjs/locale/sk';
 import ms from 'ms';
 import { SnackbarProvider } from 'notistack';
 import { LocalStorageItems } from '@eco/config';
-import { Languages } from '@eco/locales';
+import { Languages, getLanguageCode } from '@eco/locales';
 import { THEME_MODE } from './config';
 
 interface MuiProvidersProps {
@@ -77,7 +77,7 @@ const MuiProviders: FC<MuiProvidersProps> = ({ children }) => {
       >
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
-          adapterLocale={Object.values(Languages).includes(language as Languages) ? language : Languages.en}
+          adapterLocale={getLanguageCode(language)}
         >
           {children}
         </LocalizationProvider>

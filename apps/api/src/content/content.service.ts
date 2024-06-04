@@ -1,30 +1,49 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ServiceUnavailableException,
+  UnprocessableEntityException
+} from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { PrismaService } from 'nestjs-prisma';
 import { equals } from 'ramda';
-import { toggleArrayItem } from '@eco/config';
+import { routes, toggleArrayItem } from '@eco/config';
 import {
   ContentFilterData,
   ContentTypes,
   RightsItems,
   UserFull,
+  UserRoles,
+  approvalUsersRoles,
   checkRigts,
   contentScopes,
   getPrismaOrFilter,
   isItemAvailable
 } from '@eco/types';
+import { UsersService } from '../users/users.service';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 
 @Injectable()
 export class ContentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly mailerService: MailerService,
+    private readonly usersService: UsersService
+  ) {}
 
-  create(
+  async create(
     data: CreateContentDto,
-    {id, companyId, rights}: UserFull
+    user: UserFull,
+    language: string,
+    origin: string
   ) {
+    const {id, companyId, rights} = user;
     checkRigts(rights, contentScopes[data.type], RightsItems.Create);
-    return this.prisma.content.create({
+    const users = await this.usersService.findUsersByRoles(user as UserFull, [...approvalUsersRoles, UserRoles.Editor]);
+    const emails = users.map(({email}) => email);
+
+    const createdContent = await this.prisma.content.create({
       data: {
         ...data,
         authorId: id,
@@ -34,6 +53,12 @@ export class ContentService {
         author: true,
       },
     });
+
+    for (const email of emails) {
+      this.sendNotification(email, `${origin}${routes.content[data.type].detail.replace(':id', createdContent.id)}`);
+    }
+
+    return createdContent;
   }
 
   async findAll(
@@ -136,7 +161,7 @@ export class ContentService {
     id: string,
     user: UserFull,
     type: ContentTypes,
-    approvalUsersIds: string[]
+    language: string
   ) {
     checkRigts(user.rights, contentScopes[type], RightsItems.Approve);
     const content = await this.findOne(id, user, type);
@@ -148,6 +173,8 @@ export class ContentService {
         `Content with ${id} can't be unapproved/approved, because it's already published.`
       );
     }
+    const users = await this.usersService.findUsersByRoles(user as UserFull, approvalUsersRoles);
+    const approvalUsersIds = users.map(({id}) => id);
     await this.approveAllChilds(user, type, id, approvalUsersIds);
     const approvedBy = toggleArrayItem(user.id, content.approvedBy);
     return this.prisma.content.update({
@@ -168,5 +195,21 @@ export class ContentService {
   ) {
     checkRigts(rights, contentScopes[type], RightsItems.Delete);
     return this.prisma.content.delete({ where: { id } });
+  }
+
+  sendNotification(email: string, link: string) {
+ 
+    return this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'Notification',
+        template: './notification',
+        context: {
+          link,
+        },
+      })
+      .catch(() => {
+        throw new ServiceUnavailableException(`Notification email failed: ${email}`)
+      });
   }
 }

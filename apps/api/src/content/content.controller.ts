@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Body,
+  Headers,
   Patch,
   Param,
   Delete,
@@ -23,7 +24,6 @@ import { endPoints } from '@eco/config';
 import { ContentTypes, UserFull } from '@eco/types';
 import { EmailGuard } from '../auth/email.guard';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { UsersService } from '../users/users.service';
 import { ContentEntity } from './entities/content.entity';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './dto/create-content.dto';
@@ -33,11 +33,10 @@ import { UpdateContentDto } from './dto/update-content.dto';
 @Controller(endPoints.content)
 export class ContentController {
   constructor(
-    private readonly contentService: ContentService,
-    private readonly usersService: UsersService
+    private readonly contentService: ContentService
   ) {}
 
-  @Post()
+  @Post('/:language')
   @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ContentEntity })
@@ -45,9 +44,14 @@ export class ContentController {
     status: 201,
     description: 'Content has been successfully created.',
   })
-  async create(@Req() {user}: Request, @Body() createContentDto: CreateContentDto) {
+  async create(
+    @Req() {user}: Request,
+    @Param('language') language: string,
+    @Body() createContentDto: CreateContentDto,
+    @Headers('origin') origin: string
+  ) {
     return new ContentEntity(
-      await this.contentService.create(createContentDto, user as UserFull),
+      await this.contentService.create(createContentDto, user as UserFull, language, origin),
       user as UserFull
     );
   }
@@ -60,7 +64,11 @@ export class ContentController {
     status: 200,
     description: 'Content list has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request, @Param('type') type: ContentTypes, @Query() query) {
+  async findAll(
+    @Req() {user}: Request,
+    @Param('type') type: ContentTypes,
+    @Query() query
+  ) {
     const contents = await this.contentService.findAll(user as UserFull, type, query);
     return contents.map((content) => new ContentEntity(content, user as UserFull));
   }
@@ -73,7 +81,11 @@ export class ContentController {
     status: 200,
     description: 'Content childs list has been successfully loaded.',
   })
-  async findAllChilds(@Req() {user}: Request, @Param('type') type: ContentTypes, @Param('parentId') parentId: string) {
+  async findAllChilds(
+    @Req() {user}: Request,
+    @Param('type') type: ContentTypes,
+    @Param('parentId') parentId: string
+  ) {
     const contents = await this.contentService.findAllChilds(user as UserFull, type, parentId);
     return contents.map((content) => new ContentEntity(content, user as UserFull));
   }
@@ -86,7 +98,11 @@ export class ContentController {
     status: 200,
     description: 'Content has been successfully loaded.',
   })
-  async findOne(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
+  async findOne(
+    @Req() {user}: Request,
+    @Param('id') id: string,
+    @Param('type') type: ContentTypes
+  ) {
     const data = await this.contentService.findOne(id, user as UserFull, type);
     if (!data) {
       throw new NotFoundException(`Content with ${id} does not exist.`);
@@ -118,7 +134,7 @@ export class ContentController {
     );
   }
 
-  @Patch('approve/:id/:type')
+  @Patch('approve/:id/:type/:language')
   @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: ContentEntity })
@@ -126,10 +142,14 @@ export class ContentController {
     status: 200,
     description: 'Content approval has been successfully updated.',
   })
-  async approve(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
-    const approvalUsersIds = await this.usersService.findAllApprovalUsersIds(user as UserFull);
+  async approve(
+    @Req() {user}: Request,
+    @Param('id') id: string,
+    @Param('type') type: ContentTypes,
+    @Param('language') language: string
+  ) {
     return new ContentEntity(
-      await this.contentService.approve(id, user as UserFull, type, approvalUsersIds),
+      await this.contentService.approve(id, user as UserFull, type, language),
       user as UserFull
     );
   }
@@ -142,7 +162,11 @@ export class ContentController {
     status: 200,
     description: 'Content has been successfully deleted.',
   })
-  async remove(@Req() {user}: Request, @Param('id') id: string, @Param('type') type: ContentTypes) {
+  async remove(
+    @Req() {user}: Request,
+    @Param('id') id: string,
+    @Param('type') type: ContentTypes
+  ) {
     return new ContentEntity(
       await this.contentService.remove(id, user as UserFull, type),
       user as UserFull

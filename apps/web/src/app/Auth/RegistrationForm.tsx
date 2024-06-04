@@ -12,7 +12,7 @@ import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useAppSelector } 
 import { AuthOperations, RegistrationData, RegistrationItems, UserItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
 import { allowedCountries } from '@eco/config';
-import { Languages } from '@eco/locales';
+import { Languages, getLanguageCode } from '@eco/locales';
 import { ControllerSelect, ControllerTextField } from '../components';
 
 interface RegistrationFormProps {
@@ -133,7 +133,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
               label: t('labels:country'),
               values: allowedCountries.map((id) => ({
                 id,
-                label: countries[id][language === Languages.en ? 'name' : 'native']
+                label: countries[id][getLanguageCode(language) === Languages.en ? 'name' : 'native']
               }))
             }}
           />

@@ -15,10 +15,11 @@ import { GridControllerSelect, GridControllerTextField } from '../components';
 import { gridFieldSettings } from '../helpers';
 import { useFormValues, useMobilePortraitDetection } from '../hooks';
 import { useAccountFormHandlers } from './useAccountFormHandlers';
+import { getLanguageCode } from '@eco/locales';
 
 const AccountForm = () => {
 
-  const { t, i18n } = useTranslation();
+  const { t, i18n: { language } } = useTranslation();
 
   const { id } = useParams();
 
@@ -45,7 +46,7 @@ const AccountForm = () => {
 
   const currencies = CurrencyList.getAll();
 
-  const language = i18n.language.includes('-') ? i18n.language.split('-')[0] : i18n.language;
+  const lngCode = getLanguageCode(language);
 
   const { submit, handleClose } = useAccountFormHandlers(id);
 
@@ -66,13 +67,13 @@ const AccountForm = () => {
             label: t('labels:iban')
           }}
         />
-        {!!currencies[language] &&
+        {!!currencies[lngCode] &&
           <GridControllerSelect
             {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.currency, data)}
             fieldProps={{
               required: true,
               label: t('labels:currency'),
-              values: Object.entries(currencies[language])
+              values: Object.entries(currencies[lngCode])
                 .filter(([currency]) => allowedCurrencies.includes(currency))
                 .map(([id, {name}]) => ({id, label: name}))
             }}

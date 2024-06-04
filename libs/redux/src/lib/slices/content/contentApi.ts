@@ -8,7 +8,7 @@ import {
   patchHeaders,
   delHeaders
 } from '@eco/config';
-import i18n from '@eco/locales';
+import i18n, { getLanguageCode } from '@eco/locales';
 import { ContentData, ContentTypes, getUrl } from '@eco/types';
 import { tokenValidation } from '../../tokenValidation';
 import { RootState } from '../../store';
@@ -77,7 +77,10 @@ export const contentPost = async (
     const token = await tokenValidation(dispatch, getState);
 
     const data = await checkResponse(
-      await fetch(`/api/${endPoints.content}`, postHeaders({body: {...body, type, parentId}, signal, token}))
+      await fetch(
+        `/api/${endPoints.content}/${getLanguageCode(i18n.language)}`,
+        postHeaders({body: {...body, type, parentId}, signal, token})
+      )
     ).json();
 
     successSnackbar(i18n.t('contentLibs:created'));
@@ -127,7 +130,10 @@ export const contentApproval = async (
     const token = await tokenValidation(dispatch, getState);
 
     const data = await checkResponse(
-      await fetch(`/api/${endPoints.content}/approve/${id}/${type}`, patchHeaders({signal, token}))
+      await fetch(
+        `/api/${endPoints.content}/approve/${id}/${type}/${getLanguageCode(i18n.language)}`,
+        patchHeaders({signal, token})
+      )
     ).json();
 
     successSnackbar(approve ? i18n.t('contentLibs:approve') : i18n.t('contentLibs:unapprove'));

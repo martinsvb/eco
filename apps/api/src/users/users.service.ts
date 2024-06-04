@@ -4,13 +4,14 @@ import { User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import * as bcrypt from 'bcrypt';
 import * as qs from 'qs';
+import { routes } from '@eco/config';
 import {
   RightsItems,
   ScopeItems,
   UserFilterData,
   UserFull,
   UserItems,
-  approvalUsersRoles,
+  UserRoles,
   checkRigts,
   getPrismaOrFilter,
   userRights
@@ -53,7 +54,7 @@ export class UsersService {
         subject: 'Invitation link',
         template: './invitation',
         context: {
-          link: `${origin}/invitation?${qs.stringify({email, name})}`,
+          link: `${origin}${routes.invitation}?${qs.stringify({email, name})}`,
         },
       })
       .catch(() => {
@@ -71,9 +72,9 @@ export class UsersService {
     });
   }
 
-  async findAllApprovalUsersIds(user: UserFull) {
-    const data = await this.findAll(user, {[UserItems.Role]: approvalUsersRoles});
-    return data.map(({id}) => id);
+  async findUsersByRoles(user: UserFull, roles: UserRoles[]) {
+    const data = await this.findAll(user, {[UserItems.Role]: roles});
+    return data;
   }
 
   findOne(id: string, {rights}: UserFull) {
