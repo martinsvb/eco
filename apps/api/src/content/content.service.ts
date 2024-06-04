@@ -46,7 +46,8 @@ export class ContentService {
       data: {
         ...data,
         authorId: id,
-        companyId
+        companyId,
+        published: [ContentTypes.Task].includes(data.type) && !data.parentId
       },
       include: {
         author: true,

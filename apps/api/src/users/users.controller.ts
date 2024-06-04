@@ -41,7 +41,11 @@ export class UsersController {
     status: 201,
     description: 'User has been successfully created.',
   })
-  async create(@Req() {user}: Request, @Body() createUserDto: CreateUserDto, @Headers('origin') origin: string) {
+  async create(
+    @Req() {user}: Request,
+    @Body() createUserDto: CreateUserDto,
+    @Headers('origin') origin: string
+  ) {
     return new UserEntity(
       await this.usersService.create({
           ...createUserDto,
@@ -61,7 +65,10 @@ export class UsersController {
     status: 200,
     description: 'Users has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request, @Query() query) {
+  async findAll(
+    @Req() {user}: Request,
+    @Query() query
+  ) {
     const users = await this.usersService.findAll(user as UserFull, query);
     return users.map((data) => new UserEntity(data));
   }
@@ -75,7 +82,10 @@ export class UsersController {
     status: 200,
     description: 'User has been successfully loaded.',
   })
-  async findOne(@Req() {user}: Request, @Param('id') id: string) {
+  async findOne(
+    @Req() {user}: Request,
+    @Param('id') id: string
+  ) {
     return new UserEntity(await this.usersService.findOne(id, user as UserFull));
   }
 
@@ -88,7 +98,11 @@ export class UsersController {
     status: 200,
     description: 'User has been successfully updated.',
   })
-  async update(@Req() {user}: Request, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Req() {user}: Request,
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
     return new UserEntity(await this.usersService.update(id, updateUserDto, user as UserFull));
   }
 
@@ -101,7 +115,10 @@ export class UsersController {
     status: 200,
     description: 'User has been successfully deleted.',
   })
-  async remove(@Req() {user}: Request, @Param('id') id: string) {
+  async remove(
+    @Req() {user}: Request,
+    @Param('id') id: string
+  ) {
     return new UserEntity(await this.usersService.remove(id, user as UserFull));
   }
 }

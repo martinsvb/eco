@@ -1,4 +1,9 @@
-import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ServiceUnavailableException,
+  UnauthorizedException,
+  UnprocessableEntityException
+} from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
@@ -26,17 +31,25 @@ export class UsersService {
     private readonly mailerService: MailerService
   ) {}
 
-  async create({role, ...rest}: CreateUserDto, {companyId, rights}: UserFull, origin: string) {
+  async create(
+    data: CreateUserDto,
+    {companyId, rights, role}: UserFull,
+    origin: string
+  ) {
     checkRigts(rights, ScopeItems.Users, RightsItems.Create);
+
+    if (data.role === UserRoles.Admin && role !== UserRoles.Admin) {
+      throw new UnprocessableEntityException("Insufficient rights for creating administrator user");
+    }
 
     const user = await this.prisma.user.create({
       data: {
-        ...rest,
+        ...data,
         companyId,
-        role,
-        [UserItems.Rights]: userRights[role],
-        password: rest.password
-          ? await bcrypt.hash(rest.password, parseInt(process.env.HASHING_ROUNDS, 10))
+        role: data.role,
+        [UserItems.Rights]: userRights[data.role],
+        password: data.password
+          ? await bcrypt.hash(data.password, parseInt(process.env.HASHING_ROUNDS, 10))
           : undefined,
       },
     });
@@ -82,33 +95,45 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async update(id: string, {role, ...rest}: UpdateUserDto, {id: userId, password, rights}: UserFull) {
+  async update(
+    id: string,
+    data: UpdateUserDto,
+    {id: userId, password, rights, role}: UserFull
+  ) {
     if (id !== userId) {
       checkRigts(rights, ScopeItems.Users, RightsItems.Edit);
     }
 
-    if (rest.passwordOld) {
-      if (rest.password) {
+    if (data.role === UserRoles.Admin && role !== UserRoles.Admin) {
+      throw new UnprocessableEntityException("Insufficient rights for updating administrator user");
+    }
 
-        const isOldPasswordValid = await bcrypt.compare(rest.passwordOld, password);
+    if (data.passwordOld) {
+      if (data.password) {
+
+        const isOldPasswordValid = await bcrypt.compare(data.passwordOld, password);
   
         if (!isOldPasswordValid) {
           throw new UnauthorizedException('Invalid old password');
         }
   
-        rest.password = await bcrypt.hash(
-          rest.password,
+        data.password = await bcrypt.hash(
+          data.password,
           parseInt(process.env.HASHING_ROUNDS, 10)
         );
   
       }
 
-      delete rest.passwordOld;
+      delete data.passwordOld;
     }
 
     return this.prisma.user.update({
-      where: { id },
-      data: role ? {...rest, role, [UserItems.Rights]: userRights[role]} : rest
+      where: {
+        id
+      },
+      data: data.role
+        ? {...data, [UserItems.Rights]: userRights[data.role]}
+        : data
     });
   }
 

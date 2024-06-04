@@ -146,7 +146,7 @@ export const getNewUserData = () => {
   }
 }
 
-export const approvalUsersRoles = [UserRoles.ApprovalEditor, UserRoles.CompanyAdmin];
+export const approvalUsersRoles = [UserRoles.ApprovalEditor, UserRoles.CompanyAdmin, UserRoles.Admin];
 
 export const isItemAvailable = (role: UserRoles) => ({published}: {published: boolean}) => (
   published || [...approvalUsersRoles, UserRoles.Editor].includes(role)

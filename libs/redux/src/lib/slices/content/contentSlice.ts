@@ -187,7 +187,9 @@ const contentSlice = createSlice({
           state.error[type][ApiOperations.create] = payload ?? error;
         },
         fulfilled: (state, { payload, meta: { arg: { type } } }) => {
-          state.contentList[type].data.push(payload);
+          if (payload) {
+            state.contentList[type].data.push(payload);
+          }
         },
         settled: (state, { meta: { arg: { type } } }) => {
           state.loading[type][ApiOperations.create] = false;
