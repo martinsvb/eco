@@ -11,17 +11,26 @@ import { BaseFormControlProps } from './formControlsTypes';
 
 export type SelectedValue = number | string | undefined;
 
-export interface SelectProps extends Omit<MuiSelectProps<SelectedValue>, 'variant'> {
+export type SelectProps = {
   formControlProps?: FormControlProps;
   fullWidth?: boolean;
   values: SelectValue[];
-}
+} & MuiSelectProps<SelectedValue> & Pick<BaseFormControlProps, 'noBorder' | 'noBorderFocus' | 'noLabelMargin'>
 
 // eslint-disable-next-line no-undef
-const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Element>(MuiSelect)(
-  ({ theme: { palette, shape, spacing }, error }) => ({
-    ...getBaseFormControlShape(palette, shape, error),
-    ...getLabelShape(spacing(2.25)),
+const BootstrapSelect = styled<(props: Omit<SelectProps, 'values'>) => JSX.Element>(MuiSelect, {
+  shouldForwardProp: (prop) => (
+    !['noBorder', 'noBorderFocus', 'noLabelMargin'].includes(prop as string)
+  ),
+})(({
+    theme: { palette, shape, spacing },
+    error,
+    noBorder,
+    noBorderFocus,
+    noLabelMargin
+  }) => ({
+    ...getBaseFormControlShape(palette, shape, error, noBorder),
+    ...getLabelShape(!noLabelMargin ? spacing(2.25) : 0),
     '& .MuiSelect-select': {
       padding: spacing(1.5),
     },
@@ -35,7 +44,7 @@ const BootstrapSelect = styled<(props: MuiSelectProps<SelectedValue>) => JSX.Ele
       border: 0,
     },
     '&.MuiInputBase-root&.Mui-focused': {
-      border: getFocusedBorder(palette, error),
+      border: getFocusedBorder(palette, error, noBorderFocus),
     },
   })
 );
@@ -53,6 +62,7 @@ export const Select: FC<BaseFormControlProps & SelectProps> = memo(forwardRef(
       name,
       required,
       values,
+      variant = 'standard',
       ...rest
     },
     ref
@@ -65,7 +75,7 @@ export const Select: FC<BaseFormControlProps & SelectProps> = memo(forwardRef(
         {...formControlProps}
         {...formControlStates}
         fullWidth={fullWidth}
-        variant="standard"
+        variant={variant}
       >
         <InputLabel
           {...formControlStates}
@@ -79,11 +89,11 @@ export const Select: FC<BaseFormControlProps & SelectProps> = memo(forwardRef(
           labelId={`select-label-${id}`}
           name={name}
           ref={ref}
-          variant="standard"
+          variant={variant}
           {...formControlStates}
           {...rest}
         >
-          {values.map(({ id: itemId, label: itemLabel }) => (
+          {values?.map(({ id: itemId, label: itemLabel }) => (
             <MenuItem key={`${itemId}`} value={itemId}>
               {itemLabel}
             </MenuItem>

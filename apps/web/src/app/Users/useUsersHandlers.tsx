@@ -1,5 +1,4 @@
-import { MouseEvent, SetStateAction, useCallback, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { MouseEvent, SetStateAction, useCallback } from 'react';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -9,7 +8,6 @@ import {
   GridEventListener,
   GridRowEditStopReasons
 } from '@mui/x-data-grid';
-import * as qs from 'qs';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff } from '@eco/config';
 import {
@@ -18,42 +16,18 @@ import {
   apiPatchUser,
   apiPostUser,
   unshiftUser,
-  apiDeleteUser,
-  setFilterData
+  apiDeleteUser
 } from '@eco/redux';
 import { UserData, UserFull, UserItems, getNewUserData } from '@eco/types';
-import { appGridClasses } from '../components/dataGrid/design';
+import { appGridClasses } from '../components';
 
 export const useUsersHandlers = (
-  loaded: boolean,
   setRowModesModel: (value: SetStateAction<GridRowModesModel>) => void,
   setOpen: (value: SetStateAction<boolean>) => void,
   dialogItemId: GridRowId | null
 ) => {
 
   const dispatch = useAppDispatch();
-
-  const { search } = useLocation();
-
-  const filter = qs.parse(search.substring(1));
-
-  useEffect(
-    () => { 
-      if (!loaded) {
-        dispatch(apiGetUsers(''));
-      }
-    },
-    [loaded, dispatch]
-  );
-
-  useEffect(
-    () => { 
-      if (!!filter[UserItems.Name] || !!filter[UserItems.Email]) {
-        dispatch(setFilterData(filter));
-      }
-    },
-    [filter, dispatch]
-  );
 
   const handleNew = useCallback(
     () => {

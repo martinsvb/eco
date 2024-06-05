@@ -4,11 +4,11 @@ import { Stack } from '@mui/material';
 import { GridColumnMenuProps } from '@mui/x-data-grid';
 import { apiGetUsers, selectFilter, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { UserFilterData } from '@eco/types';
-import Search from '../components/search/Search';
+import { Search } from '../components';
 
 export const UsersColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
 
-  let [, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const filter = useShallowEqualSelector(selectFilter);
 
@@ -18,7 +18,7 @@ export const UsersColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
     (e: ChangeEvent<HTMLInputElement>) => {
       dispatch(setFilterData({[field]: e.target.value}));
     },
-    [dispatch]
+    [dispatch, field]
   );
 
   const handleClear = useCallback(
@@ -31,7 +31,7 @@ export const UsersColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
       dispatch(setFilterData({[field]: ''}));
       dispatch(apiGetUsers(''));
     },
-    [filter, dispatch]
+    [filter, setSearchParams, dispatch, field]
   );
 
   const handleSearch = useCallback(
@@ -43,7 +43,7 @@ export const UsersColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
       setSearchParams(newFilter);
       dispatch(apiGetUsers(''));
     },
-    [filter, dispatch]
+    [filter, setSearchParams, dispatch]
   );
 
   return (

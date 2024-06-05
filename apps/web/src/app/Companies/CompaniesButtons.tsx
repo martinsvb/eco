@@ -4,7 +4,7 @@ import { Fab, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { ScopeItems } from '@eco/types';
-import { Buttons } from '../components/buttons/Buttons';
+import { Buttons } from '../components';
 
 interface CompaniesButtonsProps {
   isLoading: boolean;

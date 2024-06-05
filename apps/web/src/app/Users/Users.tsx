@@ -1,7 +1,11 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { selectUsers, useShallowEqualSelector } from '@eco/redux';
+import * as qs from 'qs';
+import { UserItems } from '@eco/types';
+import { apiGetUsers, selectUsers, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
 import { useUsersColumns } from './useUsersColumns';
@@ -18,7 +22,31 @@ export const Users = () => {
 
   const isMobilePortrait = useMobilePortraitDetection();
 
+  const dispatch = useAppDispatch();
+
   const { users, isLoading, loaded } = useShallowEqualSelector(selectUsers);
+
+  const { search } = useLocation();
+
+  const filter = qs.parse(search.substring(1));
+
+  useEffect(
+    () => { 
+      if (!loaded) {
+        dispatch(apiGetUsers(''));
+      }
+    },
+    [loaded, dispatch]
+  );
+
+  useEffect(
+    () => { 
+      if (!!filter[UserItems.Name] || !!filter[UserItems.Email]) {
+        dispatch(setFilterData(filter));
+      }
+    },
+    [filter, dispatch]
+  );
 
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
@@ -29,7 +57,7 @@ export const Users = () => {
     handleDelete,
     handleRefresh,
     handleNew
-  } = useUsersHandlers(loaded, setRowModesModel, setOpen, dialogItemId);
+  } = useUsersHandlers(setRowModesModel, setOpen, dialogItemId);
 
   return (
     <>

@@ -18,14 +18,23 @@ const noNumberArrowsStyle = {
   margin: 0,
 };
 
-const BootstrapInput = styled<FC<CustomTextFieldProps>>(InputBase, {
-  shouldForwardProp: (prop) => prop !== 'noNumberArrows',
-})(({ theme: { palette, shape, spacing, transitions }, error, noNumberArrows }) => ({
-  ...getBaseFormControlShape(palette, shape, error),
-  ...getLabelShape(spacing(2.25)),
+const BootstrapInput = styled<FC<TextFieldProps>>(InputBase, {
+  shouldForwardProp: (prop) => (
+    !['noNumberArrows', 'noBorder', 'noBorderFocus', 'noLabelMargin'].includes(prop as string)
+  ),
+})(({
+  theme: { palette, shape, spacing, transitions },
+  error,
+  noNumberArrows,
+  noBorder,
+  noBorderFocus,
+  noLabelMargin
+}) => ({
+  ...getBaseFormControlShape(palette, shape, error, noBorder),
+  ...getLabelShape(!noLabelMargin ? spacing(2.25) : 0),
   padding: spacing(1.5),
   [`&.${inputBaseClasses.focused}`]: {
-    border: getFocusedBorder(palette, error),
+    border: getFocusedBorder(palette, error, noBorderFocus),
   },
   '& .MuiInputBase-input': {
     position: 'relative',

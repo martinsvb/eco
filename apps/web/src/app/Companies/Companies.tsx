@@ -1,15 +1,18 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { selectCompanies, useShallowEqualSelector } from '@eco/redux';
+import * as qs from 'qs';
+import { CompanyItems } from '@eco/types';
+import { apiGetCompanies, selectCompanies, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
+import { useMobilePortraitDetection } from '../hooks';
 import { useCompaniesColumns } from './useCompaniesColumns';
-import { useDialog } from '../components/dialog/AppDialog';
 import { CompaniesColumnMenu } from './CompaniesColumnMenu';
-import { getDataGridSx, getDataGridWrapperSx } from '../components/dataGrid/design';
 import CompaniesButtons from './CompaniesButtons';
 import CompaniesDialog from './CompaniesDialog';
 import { useCompaniesHandlers } from './useCompaniesHandlers';
-import { useMobilePortraitDetection } from '../hooks/useMobileDetection';
 
 export const Companies = () => {
 
@@ -19,7 +22,31 @@ export const Companies = () => {
 
   const isMobilePortrait = useMobilePortraitDetection();
 
+  const dispatch = useAppDispatch();
+
   const { companies, isLoading, loaded } = useShallowEqualSelector(selectCompanies);
+
+  const { search } = useLocation();
+
+  const filter = qs.parse(search.substring(1));
+
+  useEffect(
+    () => { 
+      if (!loaded) {
+        dispatch(apiGetCompanies(''));
+      }
+    },
+    [loaded, dispatch]
+  );
+
+  useEffect(
+    () => { 
+      if (!!filter[CompanyItems.Name] || !!filter[CompanyItems.Country]) {
+        dispatch(setFilterData(filter));
+      }
+    },
+    [filter, dispatch]
+  );
 
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
@@ -30,7 +57,7 @@ export const Companies = () => {
     handleDelete,
     handleRefresh,
     handleNew
-  } = useCompaniesHandlers(loaded, setRowModesModel, setOpen, dialogItemId);
+  } = useCompaniesHandlers(setRowModesModel, setOpen, dialogItemId);
 
   return (
     <>

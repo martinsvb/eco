@@ -9,6 +9,9 @@ export interface BaseFormControlProps {
   formHelperTextProps?: Partial<FormHelperTextProps>;
   helperText?: ReactNode;
   label?: ReactNode;
+  noBorder?: boolean;
+  noBorderFocus?: boolean;
+  noLabelMargin?: boolean;
 }
 
 type DatePickerBaseProps = {

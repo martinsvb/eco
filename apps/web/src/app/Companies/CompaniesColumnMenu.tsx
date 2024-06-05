@@ -10,7 +10,7 @@ import {
   useShallowEqualSelector
 } from '@eco/redux';
 import { CompanyFilterData } from '@eco/types';
-import Search from '../components/search/Search';
+import { Search } from '../components';
 
 export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
 

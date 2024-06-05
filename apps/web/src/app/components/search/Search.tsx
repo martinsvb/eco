@@ -10,7 +10,7 @@ interface SearchProps {
   handleClear: () => void;
 }
 
-const Search = ({
+export const Search = memo(({
   inputProps,
   buttonProps,
   handleClear,
@@ -58,6 +58,4 @@ const Search = ({
       </IconButton>
     </Stack>
   );
-}
-
-export default memo(Search);
+});

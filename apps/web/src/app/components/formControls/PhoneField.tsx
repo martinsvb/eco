@@ -12,7 +12,14 @@ export type PhoneFieldProps = BaseFormControlProps & InputBaseProps & Omit<
   'component' | 'label' | 'onChange'
 >;
 
-export const PhoneField: FC<PhoneFieldProps> = memo(forwardRef(({label, onChange, ...rest}, ref) => {
+export const PhoneField: FC<PhoneFieldProps> = memo(forwardRef(({
+  label,
+  onChange,
+  noBorder,
+  noBorderFocus,
+  noLabelMargin,
+  ...rest
+}, ref) => {
 
   const [ country, setCountry ] = useState(allowedCountries[0]);
 
@@ -52,6 +59,9 @@ export const PhoneField: FC<PhoneFieldProps> = memo(forwardRef(({label, onChange
       <Select
         label={label as string}
         fullWidth={false}
+        noBorder={noBorder}
+        noBorderFocus={noBorderFocus}
+        noLabelMargin={noLabelMargin}
         onChange={handleCountryChange}
         value={country}
         values={allowedCountries.map((id) => ({
@@ -73,6 +83,9 @@ export const PhoneField: FC<PhoneFieldProps> = memo(forwardRef(({label, onChange
         {...rest}
         inputProps={{
           fullWidth: true,
+          noBorder,
+          noBorderFocus,
+          noLabelMargin,
           ref
         }}
         country={country.toLowerCase()}

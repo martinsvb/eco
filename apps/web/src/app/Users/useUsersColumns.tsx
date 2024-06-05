@@ -1,16 +1,24 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GridRowModesModel, GridRowModes, GridColDef, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
+import {
+  GridRowModesModel,
+  GridRowModes,
+  GridColDef,
+  GridActionsCellItem,
+  GridRowId,
+  GridRenderEditCellParams
+} from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import { omit } from 'ramda';
-import { UserItems, UserRoles } from '@eco/types';
+import { UserFull, UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { AppAvatar, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers/dataGrid';
+import { UsersPhoneField } from './UsersPhoneField';
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -113,8 +121,15 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(UserItems.Phone, 160),
+        ...columnSettings(UserItems.Phone, 240),
         headerName: t('labels:phone'),
+        renderEditCell: (params: GridRenderEditCellParams<UserFull, string>) => {
+          return (
+            <UsersPhoneField
+              {...params}
+            />
+          );
+        },
         sortable: false,
         disableColumnMenu: true,
         editable: users?.edit

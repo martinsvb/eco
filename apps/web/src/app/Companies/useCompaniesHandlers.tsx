@@ -1,5 +1,4 @@
-import { MouseEvent, SetStateAction, useCallback, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { MouseEvent, SetStateAction, useCallback } from 'react';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -9,7 +8,6 @@ import {
   GridEventListener,
   GridRowEditStopReasons
 } from '@mui/x-data-grid';
-import * as qs from 'qs';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff } from '@eco/config';
 import {
@@ -18,42 +16,18 @@ import {
   apiPatchCompany,
   apiPostCompany,
   unshiftCompany,
-  apiDeleteCompany,
-  setFilterData
+  apiDeleteCompany
 } from '@eco/redux';
 import { CompanyData, CompanyFull, CompanyItems, getNewCompanyData } from '@eco/types';
 import { appGridClasses } from '../components/dataGrid/design';
 
 export const useCompaniesHandlers = (
-  loaded: boolean,
   setRowModesModel: (value: SetStateAction<GridRowModesModel>) => void,
   setOpen: (value: SetStateAction<boolean>) => void,
   dialogItemId: GridRowId | null
 ) => {
 
   const dispatch = useAppDispatch();
-
-  const { search } = useLocation();
-
-  const filter = qs.parse(search.substring(1));
-
-  useEffect(
-    () => { 
-      if (!loaded) {
-        dispatch(apiGetCompanies(''));
-      }
-    },
-    [loaded, dispatch]
-  );
-
-  useEffect(
-    () => { 
-      if (!!filter[CompanyItems.Name] || !!filter[CompanyItems.Country]) {
-        dispatch(setFilterData(filter));
-      }
-    },
-    [filter, dispatch]
-  );
 
   const handleNew = useCallback(
     () => {
