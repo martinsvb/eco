@@ -21,6 +21,7 @@ import {
   getPrismaOrFilter,
   userRights
 } from '@eco/types';
+import { invitation } from '../locales';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -34,7 +35,8 @@ export class UsersService {
   async create(
     data: CreateUserDto,
     {companyId, rights, role}: UserFull,
-    origin: string
+    origin: string,
+    language: string
   ) {
     checkRigts(rights, ScopeItems.Users, RightsItems.Create);
 
@@ -54,20 +56,24 @@ export class UsersService {
       },
     });
 
-    this.sendInvitation(user, origin);
+    this.sendInvitation(user, origin, language);
 
     return user;
   }
 
-  sendInvitation({email, name}: User, origin: string) {
+  sendInvitation({email, name}: User, origin: string, language: string) {
+
+    const translation = invitation[language || 'en'];
  
     return this.mailerService
       .sendMail({
         to: email,
-        subject: 'Invitation link',
+        subject: translation.subject,
         template: './invitation',
         context: {
           link: `${origin}${routes.invitation}?${qs.stringify({email, name})}`,
+          title: translation.title,
+          text: translation.text,
         },
       })
       .catch(() => {

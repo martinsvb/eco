@@ -33,7 +33,7 @@ import { EmailGuard } from '../auth/email.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('/:language')
   @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: UserEntity })
@@ -44,7 +44,8 @@ export class UsersController {
   async create(
     @Req() {user}: Request,
     @Body() createUserDto: CreateUserDto,
-    @Headers('origin') origin: string
+    @Headers('origin') origin: string,
+    @Param('language') language: string
   ) {
     return new UserEntity(
       await this.usersService.create({
@@ -52,7 +53,8 @@ export class UsersController {
           origin: UserOrigins.internal,
         },
         user as UserFull,
-        origin
+        origin,
+        language
       )
     );
   }

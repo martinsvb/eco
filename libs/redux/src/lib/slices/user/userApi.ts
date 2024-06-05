@@ -11,7 +11,7 @@ import {
   postHeaders
 } from '@eco/config';
 import { UserData, UserEditData, UserItems, getUrl } from '@eco/types';
-import i18n from '@eco/locales';
+import i18n, { getLanguageCode } from '@eco/locales';
 import { tokenValidation } from '../../tokenValidation';
 import { RootState } from '../../store';
 import { setAuthUser } from '../auth/authSlice';
@@ -60,7 +60,7 @@ export const usersPost = async (
     const token = await tokenValidation(dispatch, getState);
 
     const data = await checkResponse(
-      await fetch(`/api/${endPoints.users}`, postHeaders({body, signal, token}))
+      await fetch(`/api/${endPoints.users}/${getLanguageCode(i18n.language)}`, postHeaders({body, signal, token}))
     ).json();
 
     successSnackbar(i18n.t('usersLibs:created'));
