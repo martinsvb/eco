@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Response, Request } from 'express';
@@ -23,7 +23,10 @@ const client = new OAuth2Client(
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  setRefreshtoken(res: Response, refreshToken: string) {
+  setRefreshtoken(
+    res: Response,
+    refreshToken: string
+  ) {
     res.cookie(
       'refreshToken',
       refreshToken,
@@ -37,7 +40,10 @@ export class AuthController {
 
   @Post('login')
   @ApiOkResponse({ type: AuthEntity })
-  async login(@Res() res: Response, @Body() { email, password }: LoginDto) {
+  async login(
+    @Res() res: Response,
+    @Body() { email, password }: LoginDto
+  ) {
     const { auth, refreshToken } = await this.authService.login(email, password);
 
     this.setRefreshtoken(res, refreshToken);
@@ -47,7 +53,11 @@ export class AuthController {
 
   @Post('/login-google')
   @ApiOkResponse({ type: AuthEntity })
-  async loginGoogle(@Res() res: Response, @Body('idToken') idToken, @Body('language') language) {
+  async loginGoogle(
+    @Res() res: Response,
+    @Body('idToken') idToken,
+    @Body('language') language
+  ) {
     const ticket = await client.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -61,7 +71,10 @@ export class AuthController {
 
   @Post('refresh')
   @ApiOkResponse({ type: AccessTokenAuthEntity })
-  async refresh(@Res() res: Response, @Req() req: Request) {
+  async refresh(
+    @Res() res: Response,
+    @Req() req: Request
+  ) {
     const { accessToken, refreshToken } = await this.authService.refresh(req.cookies['refreshToken']);
     
     this.setRefreshtoken(res, refreshToken);
@@ -73,21 +86,30 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, EmailGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: BasicUserEntity })
-  getLoggedInUser(@Req() {user}: Request) {
+  getLoggedInUser(
+    @Req() {user}: Request
+  ) {
     return this.authService.loggedIn(user as User);
   }
 
-  @Post('register')
+  @Post('register/:language')
   @ApiOkResponse({ type: AuthEntity })
-  async register(@Res() res: Response, @Body() body: RegisterDto) {
-    await this.authService.register(body);
+  async register(
+    @Res() res: Response,
+    @Param('language') language: string,
+    @Body() body: RegisterDto
+  ) {
+    await this.authService.register(body, language);
 
     res.send({registered: true});
   }
 
   @Patch('invitation-finish')
   @ApiOkResponse({ type: AuthEntity })
-  async invitationFinish(@Res() res: Response, @Body() body: InvitationFinishDto) {
+  async invitationFinish(
+    @Res() res: Response,
+    @Body() body: InvitationFinishDto
+  ) {
     const { auth, refreshToken } = await this.authService.invitationFinish(body);
 
     this.setRefreshtoken(res, refreshToken);
@@ -97,7 +119,10 @@ export class AuthController {
 
   @Post('verify')
   @ApiOkResponse({ type: AuthEntity })
-  async verify(@Res() res: Response, @Body() body: VerifyDto) {
+  async verify(
+    @Res() res: Response,
+    @Body() body: VerifyDto
+  ) {
     const { auth, refreshToken } = await this.authService.verify(body);
 
     this.setRefreshtoken(res, refreshToken);
@@ -105,9 +130,12 @@ export class AuthController {
     res.send(auth);
   }
 
-  @Post('resend')
-  async resend(@Body('email') email) {
-    await this.authService.resendVerification(email);
+  @Post('resend/:language')
+  async resend(
+    @Body('email') email,
+    @Param('language') language: string
+  ) {
+    await this.authService.resendVerification(email, language);
     return {resent: true};
   }
 }

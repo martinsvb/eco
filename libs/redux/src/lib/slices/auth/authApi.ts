@@ -18,7 +18,7 @@ import {
   UserItems,
   VerificationPayload
 } from '@eco/types';
-import i18n from '@eco/locales';
+import i18n, { getLanguageCode } from '@eco/locales';
 import { initialAuthState, setRegistration, setRegistrationEmail } from './authSlice';
 import { successSnackbar } from '../snackbars';
 
@@ -80,7 +80,7 @@ export const registerPost = async (
   try {
     const data = await checkResponse(
       await fetch(
-        `/api/${endPoints.register}`,
+        `/api/${endPoints.register}/${getLanguageCode(i18n.language)}`,
         postHeaders({body, signal})
       )
     ).json();
@@ -140,7 +140,7 @@ export const resendPost = async (
   try {
     const data = await checkResponse(
       await fetch(
-        `/api/${endPoints.resend}`,
+        `/api/${endPoints.resend}/${getLanguageCode(i18n.language)}`,
         postHeaders({body, signal})
       )
     ).json();

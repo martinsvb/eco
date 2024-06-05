@@ -19,7 +19,6 @@
             role="presentation"
           >
             <%- include("./shared/logo.ejs") %>
-            <!-- Email Body -->
             <tr>
               <td
                 class="email-body"
@@ -35,18 +34,13 @@
                   cellspacing="0"
                   role="presentation"
                 >
-                  <!-- Body content -->
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>E-mail verification!</h1>
+                        <h1><%= locals.title %></h1>
                         <p>
-                          To Verify Your Email. Please Enter The OTP Below To
-                          Verify Your Email.
+                          <%= locals.text %>
                         </p>
-                        <!-- Action -->
-
-                        <p>For reference, here's your otp information:</p>
                         <table
                           class="attributes"
                           width="100%"

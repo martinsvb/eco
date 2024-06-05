@@ -15,6 +15,7 @@ import { nanoid } from 'nanoid'
 import { pick } from 'ramda';
 import { allowedCountries, isTokenValid } from '@eco/config';
 import { UserItems, UserOrigins, UserRoles, userRights } from '@eco/types';
+import { verification } from '../locales';
 import { AccessTokenAuthEntity, FullAuthEntity, RefreshTokenAuthEntity } from './entities/auth.entity';
 import { VerifyDto } from './dto/verify.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -137,14 +138,16 @@ export class AuthService {
   }
 
   async register({
-    email,
-    password,
-    companyName,
-    country,
-    contact,
-    identification,
-    ...rest
-  }: RegisterDto): Promise<FullAuthEntity> {
+      email,
+      password,
+      companyName,
+      country,
+      contact,
+      identification,
+      ...rest
+    }: RegisterDto,
+    language: string
+  ): Promise<FullAuthEntity> {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user && email) {
@@ -169,7 +172,7 @@ export class AuthService {
           otp
         },
       });
-      this.sendVerification(email, otp)
+      this.sendVerification(email, otp, language);
     }
 
     if (!user) {
@@ -219,7 +222,7 @@ export class AuthService {
     };
   }
 
-  async resendVerification(email: string) {
+  async resendVerification(email: string, language: string) {
     const otp = this.getOtpCode();
 
     await this.prisma.user.update({
@@ -231,18 +234,22 @@ export class AuthService {
       }
     });
 
-    this.sendVerification(email, otp);
+    this.sendVerification(email, otp, language);
   }
 
-  sendVerification(email: string, otp: number) {
+  sendVerification(email: string, otp: number, language: string) {
+
+    const translation = verification[language || 'en'];
  
     return this.mailerService
       .sendMail({
         to: email,
-        subject: 'Verification link',
+        subject: translation.subject,
         template: './verify-email',
         context: {
           otp,
+          title: translation.title,
+          text: translation.text,
         },
       })
       .catch(() => {
