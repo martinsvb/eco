@@ -11,7 +11,7 @@ export class EmailGuard implements CanActivate {
       return false;
     }
     
-    const decoded = jwtDecode<{userId: String, isEmailConfirmed: boolean}>(token);
+    const decoded = jwtDecode<{userId: string, isEmailConfirmed: boolean}>(token);
 
     if (!decoded.isEmailConfirmed) {
       throw new UnauthorizedException('Confirm your email first');

@@ -3,6 +3,7 @@ import {
   ServiceUnavailableException,
   NotFoundException,
   UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -62,6 +63,12 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`);
+    }
+    if (!user.isEmailConfirmed) {
+      throw new UnprocessableEntityException('Confirm your email first');
+    }
+    if (!user.password) {
+      throw new UnprocessableEntityException("User password isn't set");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);

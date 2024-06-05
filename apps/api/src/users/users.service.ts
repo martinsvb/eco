@@ -73,6 +73,7 @@ export class UsersService {
         context: {
           link: `${origin}${routes.invitation}?${qs.stringify({email, name})}`,
           title: translation.title,
+          info: translation.info,
           text: translation.text,
         },
       })
@@ -133,7 +134,7 @@ export class UsersService {
       delete data.passwordOld;
     }
 
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: {
         id
       },
@@ -141,10 +142,32 @@ export class UsersService {
         ? {...data, [UserItems.Rights]: userRights[data.role]}
         : data
     });
+
+    return updatedUser;
   }
 
-  remove(id: string, {rights}: UserFull) {
-    checkRigts(rights, ScopeItems.Users, RightsItems.Delete);
-    return this.prisma.user.delete({ where: { id } });
+  async remove(id: string, user: UserFull) {
+    checkRigts(user.rights, ScopeItems.Users, RightsItems.Delete);
+    try {
+      const data = await this.prisma.user.delete({ where: { id } });
+      return data;
+    } catch (error) {
+      if (error.code === 'P2003') {
+        const data = await this.update(
+          id,
+          {
+            [UserItems.Name]: '',
+            [UserItems.Password]: null,
+            [UserItems.Picture]: '',
+            [UserItems.Phone]: '',
+            [UserItems.IsEmailConfirmed]: false,
+            [UserItems.Role]: UserRoles.None,
+          },
+          user
+        );
+        return data;
+      }
+      throw error;
+    }
   }
 }

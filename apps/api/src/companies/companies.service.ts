@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { UserFull, UserFilterData, checkRigts, ScopeItems, RightsItems, getPrismaOrFilter } from '@eco/types';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -32,8 +32,16 @@ export class CompaniesService {
     return this.prisma.company.update({ where: { id }, data });
   }
 
-  remove({rights}: UserFull, id: string) {
+  async remove({rights}: UserFull, id: string) {
     checkRigts(rights, ScopeItems.Companies, RightsItems.Delete);
-    return this.prisma.company.delete({ where: { id } });
+    try {
+      const data = await this.prisma.company.delete({ where: { id } });
+      return data;
+    } catch (error) {
+      if (error.code === 'P2003') {
+        throw new UnprocessableEntityException("Company can't be deleted, because it contains data");
+      }
+      throw error;
+    }
   }
 }
