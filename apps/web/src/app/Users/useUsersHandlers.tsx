@@ -1,4 +1,5 @@
 import { MouseEvent, SetStateAction, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -28,6 +29,8 @@ export const useUsersHandlers = (
 ) => {
 
   const dispatch = useAppDispatch();
+
+  const { t } = useTranslation();
 
   const handleNew = useCallback(
     () => {
@@ -60,7 +63,12 @@ export const useUsersHandlers = (
   );
 
   const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
+    if (!newRow.name || !newRow.email) {
+      return oldRow as UserFull;
+    }
+
     const items = [UserItems.Name, UserItems.Email, UserItems.Role, UserItems.Phone];
+
     if (newRow.isNew) {
       dispatch(apiPostUser({body: pick([...items, UserItems.Origin], newRow)}));
     }

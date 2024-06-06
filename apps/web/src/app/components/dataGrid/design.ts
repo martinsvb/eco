@@ -7,7 +7,7 @@ export const appGridClasses = {
   rowSelected: 'rowSelected'
 }
 
-export const getDataGridWrapperSx = (isMobilePortrait: boolean) => ({
+export const getDataGridWrapperSx = ({error}: Palette, isMobilePortrait: boolean) => ({
   height: `calc(100vh - ${isMobilePortrait ? 212 : 180}px)`,
   width: `calc(100vw - ${isMobilePortrait ? 32 : 350}px)`,
   boxShadow: 2,
@@ -16,6 +16,9 @@ export const getDataGridWrapperSx = (isMobilePortrait: boolean) => ({
   },
   '& .textPrimary': {
     color: 'text.primary',
+  },
+  '& .Mui-error': {
+    background: error.light,
   },
 });
 

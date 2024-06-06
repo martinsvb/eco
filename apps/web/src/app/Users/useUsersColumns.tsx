@@ -1,21 +1,25 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Tooltip } from '@mui/material';
 import {
   GridRowModesModel,
   GridRowModes,
   GridColDef,
   GridActionsCellItem,
   GridRowId,
-  GridRenderEditCellParams
+  GridRenderEditCellParams,
+  GridPreProcessEditCellProps
 } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
+import ms from 'ms';
 import { omit } from 'ramda';
 import { UserFull, UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { getUserEditValidationSchema } from '@eco/validation';
 import { AppAvatar, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers/dataGrid';
 import { UsersPhoneField } from './UsersPhoneField';
@@ -26,11 +30,15 @@ interface UsersColumns {
   setRowModesModel: Dispatch<SetStateAction<GridRowModesModel>>
 }
 
+const userSchema = getUserEditValidationSchema();
+
 export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns => {
 
   const { t } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
+
+  const [ errors, setErrors ] = useState({});
 
   const dispatch = useAppDispatch();
 
@@ -59,6 +67,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
 
   const handleCancelClick = useCallback(
     (id: GridRowId) => () => {
+      setErrors({});
       setRowModesModel((prevRowModesModel) => ({
         ...prevRowModesModel,
         [id]: { mode: GridRowModes.View, ignoreModifications: true },
@@ -80,6 +89,22 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
     },
     [t]
   );
+
+  const processValidation = async (row: UserFull, item: UserItems, value?: string) => {
+    let message = undefined;
+    try {
+      await userSchema.validate({
+        ...row,
+        [item]: value
+      })
+    }
+    catch (error) {
+      ({ message } = error as {message: string});
+    }
+    setErrors((prevErrors) => ({...prevErrors, [item]: message}));
+
+    return !!message;
+  }
 
   return {
     columns: [
@@ -106,12 +131,20 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
       {
         ...columnSettings(UserItems.Name, 180, 'left'),
         headerName: t('labels:name'),
-        editable: users?.edit
+        editable: users?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, UserFull>) => {
+          const error = await processValidation(row, UserItems.Name, props.value);
+          return { ...props, error };
+        },
       },
       {
         ...columnSettings(UserItems.Email, 220, 'left'),
         headerName: t('labels:email'),
         editable: users?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, UserFull>) => {
+          const error = await processValidation(row, UserItems.Email, props.value);
+          return { ...props, error };
+        },
       },
       {
         ...columnSettings(UserItems.IsEmailConfirmed, 80),
@@ -166,7 +199,14 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
           return rowModesModel[id]?.mode === GridRowModes.Edit ?
             [
               <GridActionsCellItem
-                icon={<SaveIcon />}
+                icon={
+                  <Tooltip
+                    title={Object.values(errors).filter((value) => value).join(', ') || t('labels:save')}
+                    enterDelay={ms('0.1s')}
+                  >
+                    <SaveIcon />
+                  </Tooltip>
+                }
                 label={t('labels:save')}
                 sx={{
                   color: 'primary.main',
@@ -174,7 +214,14 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
                 onClick={handleSaveClick(id)}
               />,
               <GridActionsCellItem
-                icon={<CancelIcon />}
+                icon={
+                  <Tooltip
+                    title={t('labels:cancel')}
+                    enterDelay={ms('0.1s')}
+                  >
+                    <CancelIcon />
+                  </Tooltip>
+                }
                 label={t('labels:cancel')}
                 className="textPrimary"
                 onClick={handleCancelClick(id)}
@@ -184,14 +231,28 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
             :
             [
               <GridActionsCellItem
-                icon={<EditIcon />}
+                icon={
+                  <Tooltip
+                    title={t('labels:edit')}
+                    enterDelay={ms('0.1s')}
+                  >
+                    <EditIcon />
+                  </Tooltip>
+                }
                 label={t('labels:save')}
                 className="textPrimary"
                 onClick={handleEditClick(id)}
                 color="inherit"
               />,
               <GridActionsCellItem
-                icon={<DeleteIcon />}
+                icon={
+                  <Tooltip
+                    title={t('labels:delete')}
+                    enterDelay={ms('0.1s')}
+                  >
+                    <DeleteIcon />
+                  </Tooltip>
+                }
                 label={t('labels:delete')}
                 onClick={handleDeleteClick(id)}
                 color="inherit"

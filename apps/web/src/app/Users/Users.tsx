@@ -62,7 +62,7 @@ export const Users = () => {
   return (
     <>
       <Typography variant='h3' mb={3}>{t('users:title')}</Typography>
-      <Box sx={getDataGridWrapperSx(isMobilePortrait)}>
+      <Box sx={getDataGridWrapperSx(palette, isMobilePortrait)}>
         <DataGrid
           rows={users}
           columns={columns}

@@ -35,7 +35,7 @@ const Records = ({
   );
 
   return (
-    <Box sx={getDataGridWrapperSx(isMobilePortrait)}>
+    <Box sx={getDataGridWrapperSx(palette, isMobilePortrait)}>
       <DataGrid
         rows={data}
         columns={columns}
