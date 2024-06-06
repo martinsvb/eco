@@ -91,7 +91,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
   );
 
   const processValidation = async (row: UserFull, item: UserItems, value?: string) => {
-    let message = undefined;
+    let message: string | undefined = undefined;
     try {
       await userSchema.validate({
         ...row,

@@ -1,5 +1,4 @@
 import { MouseEvent, SetStateAction, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -29,8 +28,6 @@ export const useUsersHandlers = (
 ) => {
 
   const dispatch = useAppDispatch();
-
-  const { t } = useTranslation();
 
   const handleNew = useCallback(
     () => {
