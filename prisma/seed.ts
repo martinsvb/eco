@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { allowedCountries, exampleRichText } from 'libs/config/src';
-import { ContentState, ContentTypes, UserOrigins, UserRoles, userRights } from 'libs/types/src';
+import { allowedCountries } from 'libs/config/src/lib/countries';
+import { exampleRichText } from 'libs/config/src/lib/content';
+import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
+import { UserRoles } from '../libs/types/src/lib/user';
+import { userRights } from '../libs/types/src/lib/userRights';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
