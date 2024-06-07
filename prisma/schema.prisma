@@ -67,8 +67,11 @@ model Company {
   id               String    @id @default(uuid())
   name             String    @unique
   country          String
-  contact          Json?
-  identification   Json?  
+  ico              Int?      @unique
+  vat              String?   @unique
+  address          String?
+  email            String?
+  identification   Json?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]

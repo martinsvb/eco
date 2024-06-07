@@ -1,5 +1,6 @@
 export * from './lib/account';
 export * from './lib/api';
+export * from './lib/aresSubject';
 export * from './lib/auth';
 export * from './lib/company';
 export * from './lib/content';

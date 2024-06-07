@@ -1,18 +1,28 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GridRowModesModel, GridRowModes, GridColDef, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
+import {
+  GridRowModesModel,
+  GridRowModes,
+  GridColDef,
+  GridRowId,
+  GridPreProcessEditCellProps,
+  GridRenderEditCellParams
+} from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { countries } from 'countries-list';
 import dayjs from 'dayjs';
+import { is } from 'ramda';
 import { allowedCountries } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
-import { CompanyItems } from '@eco/types';
+import { CompanyFull, CompanyItems } from '@eco/types';
 import { cancelCompany, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
-import { DialogClickOpen } from '../components/dialog/AppDialog';
-import { columnSettings, setRowMode } from '../helpers/dataGrid';
+import { getCompanuEditValidationSchema } from '@eco/validation';
+import { AppGridButton, DialogClickOpen } from '../components';
+import { columnSettings, setRowMode } from '../helpers';
+import { CompaniesSearchField } from './CompaniesSearchField';
 
 interface CompaniesColumns {
   columns: GridColDef[];
@@ -20,11 +30,15 @@ interface CompaniesColumns {
   setRowModesModel: Dispatch<SetStateAction<GridRowModesModel>>
 }
 
+const companySchema = getCompanuEditValidationSchema();
+
 export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): CompaniesColumns => {
 
   const { t, i18n: { language } } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
+
+  const [ errors, setErrors ] = useState({});
 
   const dispatch = useAppDispatch();
 
@@ -62,12 +76,75 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
     [dispatch]
   );
 
+  const processValidation = async (row: CompanyFull, item: CompanyItems, value?: string) => {
+    let message: string | undefined = undefined;
+    try {
+      await companySchema.validate({
+        ...row,
+        [item]: value
+      });
+    }
+    catch (error) {
+      ({ message } = error as {message: string});
+    }
+    setErrors((prevErrors) => ({...prevErrors, [item]: message}));
+
+    return !!message;
+  }
+
   return {
     columns: [
       {
         ...columnSettings(CompanyItems.Name, 180, 'left'),
         headerName: t('labels:name'),
-        editable: companies?.edit
+        editable: companies?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(row, CompanyItems.Name, props.value);
+          return { ...props, error };
+        },
+      },
+      {
+        ...columnSettings(CompanyItems.Email, 220, 'left'),
+        headerName: t('labels:email'),
+        editable: companies?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(row, CompanyItems.Email, props.value);
+          return { ...props, error };
+        },
+      },
+      {
+        ...columnSettings(CompanyItems.Ico, 190),
+        headerName: t('labels:ico'),
+        editable: companies?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(row, CompanyItems.Ico, props.value);
+          return { ...props, error };
+        },
+        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+          return (
+            <CompaniesSearchField
+              {...params}
+            />
+          );
+        },
+      },
+      {
+        ...columnSettings(CompanyItems.Vat, 190),
+        headerName: t('labels:vat'),
+        editable: companies?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(row, CompanyItems.Vat, props.value);
+          return { ...props, error };
+        },
+      },
+      {
+        ...columnSettings(CompanyItems.Address, 300, 'left'),
+        headerName: t('labels:address'),
+        editable: companies?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(row, CompanyItems.Address, props.value);
+          return { ...props, error };
+        },
       },
       {
         ...columnSettings(CompanyItems.Country, 200),
@@ -98,37 +175,37 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
 
           return rowModesModel[id]?.mode === GridRowModes.Edit ?
             [
-              <GridActionsCellItem
-                icon={<SaveIcon />}
+              <AppGridButton
+                title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
                 label={t('labels:save')}
-                sx={{
-                  color: 'primary.main',
-                }}
                 onClick={handleSaveClick(id)}
-              />,
-              <GridActionsCellItem
-                icon={<CancelIcon />}
+                color="primary"
+              >
+                <SaveIcon />
+              </AppGridButton>,
+              <AppGridButton
                 label={t('labels:cancel')}
-                className="textPrimary"
                 onClick={handleCancelClick(id)}
-                color="inherit"
-              />,
+                className="textPrimary"
+              >
+                <CancelIcon />
+              </AppGridButton>,
             ]
             :
             [
-              <GridActionsCellItem
-                icon={<EditIcon />}
-                label={t('labels:save')}
-                className="textPrimary"
+              <AppGridButton
+                label={t('labels:edit')}
                 onClick={handleEditClick(id)}
-                color="inherit"
-              />,
-              <GridActionsCellItem
-                icon={<DeleteIcon />}
+                className="textPrimary"
+              >
+                <EditIcon />
+              </AppGridButton>,
+              <AppGridButton
                 label={t('labels:delete')}
                 onClick={handleDeleteClick(id)}
-                color="inherit"
-              />,
+              >
+                <DeleteIcon />
+              </AppGridButton>,
             ]
         },
       },

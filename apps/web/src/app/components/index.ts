@@ -2,6 +2,7 @@ export * from './accordion/AppAccordion';
 export * from './avatar/AppAvatar';
 export * from './buttons';
 export * from './card/AppCard';
+export * from './dataGrid/AppGridButton';
 export * from './dataGrid/design';
 export * from './dialog';
 export * from './formControls';

@@ -5,6 +5,7 @@ export enum ApiOperations {
   approve = 'approve',
   getList = 'getList',
   getItem = 'getItem',
+  getExternalItem = 'getExternalItem',
   create = 'create',
   edit = 'edit',
   deleteItem = 'deleteItem',

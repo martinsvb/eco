@@ -14,9 +14,18 @@ export class CompanyEntity implements Company {
 
   @ApiProperty({ description: 'Country code'})
   country: string;
-  
-  @ApiProperty({ description: 'Company contact', required: false })
-  contact: Prisma.JsonValue | null;
+
+  @ApiProperty({ description: 'Company email', required: false })
+  email: string | null;
+
+  @ApiProperty({ description: 'Company ico', required: false })
+  ico: number | null;
+
+  @ApiProperty({ description: 'Company vat', required: false })
+  vat: string | null;
+
+  @ApiProperty({ description: 'Company address', required: false })
+  address: string | null;
 
   @ApiProperty({ description: 'Company identification', required: false })
   identification: Prisma.JsonValue | null;

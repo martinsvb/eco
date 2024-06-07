@@ -2,13 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Quer
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { endPoints } from '@eco/config';
+import { UserFull } from '@eco/types';
+import { EmailGuard } from '../auth/email.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { EmailGuard } from '../auth/email.guard';
-import { JwtAuthGuard } from '../auth/jwt.guard';
 import { CompanyEntity } from './entities/company.entity';
-import { UserFull } from '@eco/types';
 
 @ApiTags('Companies')
 @Controller(endPoints.companies)
@@ -23,9 +23,12 @@ export class CompaniesController {
     status: 201,
     description: 'Company has been successfully created.',
   })
-  async create(@Req() {user}: Request, @Body() createCompanyDto: CreateCompanyDto) {
+  async create(
+    @Req() {user}: Request,
+    @Body() data: CreateCompanyDto
+  ) {
     return new CompanyEntity(
-      await this.companiesService.create(user as UserFull, createCompanyDto)
+      await this.companiesService.create(user as UserFull, data)
     );
   }
 
@@ -38,7 +41,10 @@ export class CompaniesController {
     status: 200,
     description: 'Company has been successfully loaded.',
   })
-  async findOne(@Req() {user}: Request, @Param('id') id: string) {
+  async findOne(
+    @Req() {user}: Request,
+    @Param('id') id: string
+  ) {
     return new CompanyEntity(await this.companiesService.findOne(user as UserFull, id));
   }
 
@@ -50,7 +56,10 @@ export class CompaniesController {
     status: 200,
     description: 'Companies has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request, @Query() query) {
+  async findAll(
+    @Req() {user}: Request,
+    @Query() query
+  ) {
     const companies = await this.companiesService.findAll(user as UserFull, query);
     return companies.map((data) => new CompanyEntity(data));
   }
@@ -64,8 +73,12 @@ export class CompaniesController {
     status: 200,
     description: 'Company has been successfully updated.',
   })
-  async update(@Req() {user}: Request, @Param('id') id: string, @Body() updateUserDto: UpdateCompanyDto) {
-    return new CompanyEntity(await this.companiesService.update(user as UserFull, id, updateUserDto));
+  async update(
+    @Req() {user}: Request,
+    @Param('id') id: string,
+    @Body() data: UpdateCompanyDto
+  ) {
+    return new CompanyEntity(await this.companiesService.update(user as UserFull, id, data));
   }
 
   @Delete(':id')
@@ -77,7 +90,10 @@ export class CompaniesController {
     status: 200,
     description: 'Company has been successfully deleted.',
   })
-  async remove(@Req() {user}: Request, @Param('id') id: string) {
+  async remove(
+    @Req() {user}: Request,
+    @Param('id') id: string
+  ) {
     return new CompanyEntity(await this.companiesService.remove(user as UserFull, id));
   }
 }

@@ -1,11 +1,9 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from '@mui/material';
 import {
   GridRowModesModel,
   GridRowModes,
   GridColDef,
-  GridActionsCellItem,
   GridRowId,
   GridRenderEditCellParams,
   GridPreProcessEditCellProps
@@ -15,13 +13,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
-import ms from 'ms';
 import { is, omit } from 'ramda';
 import { UserFull, UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getUserEditValidationSchema } from '@eco/validation';
-import { AppAvatar, DialogClickOpen } from '../components';
-import { columnSettings, setRowMode } from '../helpers/dataGrid';
+import { AppAvatar, AppGridButton, DialogClickOpen } from '../components';
+import { columnSettings, setRowMode } from '../helpers';
 import { UsersPhoneField } from './UsersPhoneField';
 
 interface UsersColumns {
@@ -158,6 +155,9 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
       {
         ...columnSettings(UserItems.Phone, 240),
         headerName: t('labels:phone'),
+        sortable: false,
+        disableColumnMenu: true,
+        editable: users?.edit,
         renderEditCell: (params: GridRenderEditCellParams<UserFull, string>) => {
           return (
             <UsersPhoneField
@@ -165,9 +165,6 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
             />
           );
         },
-        sortable: false,
-        disableColumnMenu: true,
-        editable: users?.edit
       },
       {
         ...columnSettings(UserItems.Role, 200),
@@ -200,65 +197,37 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
 
           return rowModesModel[id]?.mode === GridRowModes.Edit ?
             [
-              <GridActionsCellItem
-                icon={
-                  <Tooltip
-                    title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
-                    enterDelay={ms('0.1s')}
-                  >
-                    <SaveIcon />
-                  </Tooltip>
-                }
+              <AppGridButton
+                title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
                 label={t('labels:save')}
-                sx={{
-                  color: 'primary.main',
-                }}
                 onClick={handleSaveClick(id)}
-              />,
-              <GridActionsCellItem
-                icon={
-                  <Tooltip
-                    title={t('labels:cancel')}
-                    enterDelay={ms('0.1s')}
-                  >
-                    <CancelIcon />
-                  </Tooltip>
-                }
+                color="primary"
+              >
+                <SaveIcon />
+              </AppGridButton>,
+              <AppGridButton
                 label={t('labels:cancel')}
-                className="textPrimary"
                 onClick={handleCancelClick(id)}
-                color="inherit"
-              />,
+                className="textPrimary"
+              >
+                <CancelIcon />
+              </AppGridButton>,
             ]
             :
             [
-              <GridActionsCellItem
-                icon={
-                  <Tooltip
-                    title={t('labels:edit')}
-                    enterDelay={ms('0.1s')}
-                  >
-                    <EditIcon />
-                  </Tooltip>
-                }
-                label={t('labels:save')}
-                className="textPrimary"
+              <AppGridButton
+                label={t('labels:edit')}
                 onClick={handleEditClick(id)}
-                color="inherit"
-              />,
-              <GridActionsCellItem
-                icon={
-                  <Tooltip
-                    title={t('labels:delete')}
-                    enterDelay={ms('0.1s')}
-                  >
-                    <DeleteIcon />
-                  </Tooltip>
-                }
+                className="textPrimary"
+              >
+                <EditIcon />
+              </AppGridButton>,
+              <AppGridButton
                 label={t('labels:delete')}
                 onClick={handleDeleteClick(id)}
-                color="inherit"
-              />,
+              >
+                <DeleteIcon />
+              </AppGridButton>,
             ]
         },
       },

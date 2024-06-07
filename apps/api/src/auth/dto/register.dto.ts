@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prisma } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class RegisterDto {
@@ -20,9 +19,6 @@ export class RegisterDto {
   @ApiProperty({ description: 'User password' })
   password: string;
 
-  @ApiProperty({ description: 'User rigts' })
-  rights: Prisma.JsonValue;
-
   @IsString()
   @MinLength(3)
   @ApiProperty({ description: 'Company name' })
@@ -32,12 +28,4 @@ export class RegisterDto {
   @MinLength(2)
   @ApiProperty({ description: 'Country code' })
   country: string;
-
-  @IsOptional()
-  @ApiProperty({ description: 'Company identification' })
-  identification?: Prisma.JsonValue;
-
-  @IsOptional()
-  @ApiProperty({ description: 'Company contact' })
-  contact?: Prisma.JsonValue;
 }

@@ -1,5 +1,6 @@
 {
   "actions": "Akce",
+  "address": "Adresa",
   "approve": "Schválit",
   "avatar": "Avatar",
   "cancel": "Zrušit",
@@ -23,6 +24,7 @@
   "filterSearch": "Vyhledat",
   "filterSearchClear": "Vymazat filtr",
   "iban": "Iban",
+  "ico": "Ičo",
   "inProgress": "V řešení: {{length}}",
   "insert": "Vložit",
   "isEmailConfirmed": "Ověřen",
@@ -51,5 +53,6 @@
   "title": "Titulek",
   "unapprove": "Zrušit schválení",
   "userMenu": "Nabídka uživatele",
+  "vat": "Dič",
   "verify": "Ověřit"
 }

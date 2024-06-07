@@ -1,12 +1,14 @@
 import { GridRowId } from "@mui/x-data-grid";
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiOperations, CompanyFilterData, CompanyFull } from '@eco/types';
+import { ApiOperations, AresSubject, CompanyFilterData, CompanyFull } from '@eco/types';
 import { companyDelete, companyGet, companiesGet, companiesPatch, companiesPost } from "./companyApi";
 import { createSlice } from '../createSlice';
+import { companyGetAres } from "./companyExternalApi";
 
 export interface CompanyState {
   company: CompanyFull | null;
   companies: CompanyFull[];
+  companyAresSubjects: {[key: string]: AresSubject};
   filter: CompanyFilterData;
   error: {[key: string]: unknown | null};
   loading: {[key: string]: boolean};
@@ -16,6 +18,7 @@ export interface CompanyState {
 export const initialCompanyState: CompanyState = {
   company: null,
   companies: [],
+  companyAresSubjects: {},
   filter: {},
   error: {},
   loading: {},
@@ -72,6 +75,24 @@ const companySlice = createSlice({
         },
         settled: (state) => {
           state.loading[ApiOperations.getItem] = false;
+        },
+      },
+    ),
+    apiGetCompanyAres: create.asyncThunk(
+      companyGetAres,
+      {
+        pending: (state) => {
+          state.loading[ApiOperations.getExternalItem] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.error[ApiOperations.getExternalItem] = payload ?? error;
+        },
+        fulfilled: (state, { meta: { arg }, payload }) => {
+          state.loaded[ApiOperations.getExternalItem] = true;
+          state.companyAresSubjects[arg] = payload;
+        },
+        settled: (state) => {
+          state.loading[ApiOperations.getExternalItem] = false;
         },
       },
     ),
@@ -142,6 +163,7 @@ const companySlice = createSlice({
     selectCompany: (state) => state.company,
     selectCompanyFilter: (state) => state.filter,
     selectIsCompaniesLoading: (state, operation: ApiOperations) => !!state.loading[operation],
+    selectCompanyAresSubject: (state, ico: string) => state.companyAresSubjects[ico],
   },
 });
 
@@ -150,6 +172,7 @@ export default companySlice.reducer;
 export const {
   apiGetCompanies,
   apiGetCompany,
+  apiGetCompanyAres,
   apiPostCompany,
   apiPatchCompany,
   apiDeleteCompany,
@@ -157,7 +180,7 @@ export const {
   resetCompanies,
   setCompanyFilterData,
   setCompany,
-  unshiftCompany
+  unshiftCompany,
 } = companySlice.actions
 
 export const {
@@ -165,4 +188,5 @@ export const {
   selectCompanies,
   selectCompany,
   selectIsCompaniesLoading,
+  selectCompanyAresSubject,
 } = companySlice.selectors

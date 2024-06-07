@@ -1,4 +1,5 @@
 export * from './lib/account';
+export * from './lib/company';
 export * from './lib/content';
 export * from './lib/invitation';
 export * from './lib/login';

@@ -1,5 +1,6 @@
 {
   "actions": "Actions",
+  "address": "Address",
   "approve": "Approve",
   "avatar": "Avatar",
   "cancel": "Cancel",
@@ -23,6 +24,7 @@
   "filterSearch": "Search",
   "filterSearchClear": "Clear filter",
   "iban": "Iban",
+  "ico": "Crn",
   "inProgress": "In progress: {{length}}",
   "insert": "Insert",
   "isEmailConfirmed": "Confirmed",
@@ -51,5 +53,6 @@
   "title": "Title",
   "unapprove": "Unapprove",
   "userMenu": "User menu",
+  "vat": "Vat",
   "verify": "Verify"
 }

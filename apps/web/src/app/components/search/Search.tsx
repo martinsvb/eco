@@ -1,17 +1,29 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconButton, IconButtonProps, InputBase, InputBaseProps, Stack, useTheme } from '@mui/material';
+import {
+  CircularProgress,
+  IconButton,
+  IconButtonProps,
+  InputBase,
+  InputBaseProps,
+  Stack,
+  useTheme
+} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 
-interface SearchProps {
+export interface SearchProps {
   inputProps: InputBaseProps;
   buttonProps: IconButtonProps;
   handleClear: () => void;
+  inputWidth?: number;
+  isLoading?: boolean;
 }
 
 export const Search = memo(({
   inputProps,
+  inputWidth,
+  isLoading,
   buttonProps,
   handleClear,
 }: SearchProps) => {
@@ -41,21 +53,33 @@ export const Search = memo(({
           </IconButton>
         }
         sx={{
-          width: 160,
+          ...inputProps.sx,
+          width: inputWidth || 160,
           p: 0.5
         }}
       />
-      <IconButton
-        {...buttonProps}
-        aria-label={t('labels:filterSearch')}
-        id={`toggle-table-filter-button-${inputProps.name}`}
-        sx={{
-          alignSelf: 'center',
-          mr: 0.5
-        }}
-      >
-        <SearchIcon />
-      </IconButton>
+      {isLoading ?
+        <CircularProgress
+          color="inherit"
+          size={30}
+          sx={{
+            alignSelf: 'center',
+            mr: 0.5
+          }}
+        />
+        :
+        <IconButton
+          {...buttonProps}
+          aria-label={t('labels:filterSearch')}
+          id={`toggle-table-filter-button-${inputProps.name}`}
+          sx={{
+            alignSelf: 'center',
+            mr: 0.5
+          }}
+        >
+          <SearchIcon />
+        </IconButton>
+      }
     </Stack>
   );
 });
