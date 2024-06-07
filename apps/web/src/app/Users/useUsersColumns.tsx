@@ -16,7 +16,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import ms from 'ms';
-import { omit } from 'ramda';
+import { is, omit } from 'ramda';
 import { UserFull, UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getUserEditValidationSchema } from '@eco/validation';
@@ -96,13 +96,15 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
       await userSchema.validate({
         ...row,
         [item]: value
-      })
+      }, {
+        stripUnknown: true
+      });
     }
     catch (error) {
       ({ message } = error as {message: string});
     }
     setErrors((prevErrors) => ({...prevErrors, [item]: message}));
-console.log({message, userSchema})
+
     return !!message;
   }
 
@@ -201,7 +203,7 @@ console.log({message, userSchema})
               <GridActionsCellItem
                 icon={
                   <Tooltip
-                    title={Object.values(errors).filter((value) => value).join(', ') || t('labels:save')}
+                    title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
                     enterDelay={ms('0.1s')}
                   >
                     <SaveIcon />
