@@ -102,7 +102,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
       ({ message } = error as {message: string});
     }
     setErrors((prevErrors) => ({...prevErrors, [item]: message}));
-
+console.log({message, userSchema})
     return !!message;
   }
 
