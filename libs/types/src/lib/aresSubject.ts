@@ -30,6 +30,28 @@ interface AresSidlo {
   pscTxt: string;
 }
 
+interface AresMarketData {
+  platnostOd: string;
+  platnostDo: string;
+  obchodniJmeno: string;
+  primarniZaznam: boolean;
+}
+
+interface AdditionalDataPlace {
+  sidlo: AresSidlo;
+  primarniZaznam: boolean;
+  platnostOd: string;
+  platnostDo: string;
+}
+
+interface AdditionalData {
+  obchodniJmeno: AresMarketData[];
+  sidlo: AdditionalDataPlace[];
+  pravniForma: number;
+  spisovaZnacka: string;
+  datovyZdroj: string;
+}
+
 export interface AresSubject {
   ico: number;
   obchodniJmeno: string;
@@ -62,23 +84,7 @@ export interface AresSubject {
     stavZdrojeRed: string;
   };
   primarniZdroj: string;
-  dalsiUdaje: {
-    obchodniJmeno: {
-      platnostOd: string;
-      platnostDo: string;
-      obchodniJmeno: string;
-      primarniZaznam: boolean;
-    }[];
-    sidlo: {
-      sidlo: AresSidlo;
-      primarniZaznam: boolean;
-      platnostOd: string;
-      platnostDo: string;
-    }[];
-    pravniForma: number;
-    spisovaZnacka: string;
-    datovyZdroj: string;
-  }[];
+  dalsiUdaje: AdditionalData[];
   czNace: string[];
   subRegistrSzr: string;
   dicSkDph: string;
