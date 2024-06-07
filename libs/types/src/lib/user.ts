@@ -35,7 +35,7 @@ export interface UserData {
 export interface UserEditData {
   [UserItems.Name]: string;
   [UserItems.Email]: string;
-  [UserItems.Phone]?: string;
+  [UserItems.Phone]?: string | null;
   [UserItems.PasswordOld]?: string;
   [UserItems.Password]?: string;
   [UserItems.PasswordConfirmation]?: string;
