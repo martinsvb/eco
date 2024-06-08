@@ -73,8 +73,10 @@ export const refreshPost = async (
   }
 }
 
+type RegisterPostParams = {body: Omit<RegistrationData, UserItems.PasswordConfirmation>, onSuccess: () => void}
+
 export const registerPost = async (
-  {body, onSuccess}: {body: Omit<RegistrationData, UserItems.PasswordConfirmation>, onSuccess: () => void},
+  {body, onSuccess}: RegisterPostParams,
   { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {

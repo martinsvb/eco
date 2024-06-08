@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import i18n from '@eco/locales';
-import { RegistrationItems, UserItems, VerificationItems } from '@eco/types';
+import { CompanyItems, RegistrationItems, UserItems, VerificationItems } from '@eco/types';
 
 export const getRegistrationValidationSchema = () => {
   const { t } = i18n;
@@ -20,8 +20,11 @@ export const getRegistrationValidationSchema = () => {
       ),
     [RegistrationItems.companyName]: yup.string()
       .required(t('validation:required', {Field: t('labels:companyName')})),
-    [RegistrationItems.country]: yup.string()
+    [CompanyItems.Country]: yup.string()
       .required(t('validation:required', {Field: t('labels:country')})),
+    [CompanyItems.Address]: yup.string().nullable(),
+    [CompanyItems.Ico]: yup.string().nullable(),
+    [CompanyItems.Vat]: yup.string().nullable(),
   });
 }
 

@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { GridColumnMenuProps } from '@mui/x-data-grid';
@@ -13,6 +14,8 @@ import { CompanyFilterData } from '@eco/types';
 import { Search } from '../components';
 
 export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
+
+  const { t } = useTranslation();
 
   const [, setSearchParams] = useSearchParams();
 
@@ -64,6 +67,7 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
           onClick: handleSearch,
         }}
         handleClear={handleClear}
+        title={t('labels:filterSearch')}
       />
     </Stack>
   );

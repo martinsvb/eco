@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { ApiOperations, CompanyFull } from "@eco/types";
 import {
@@ -16,6 +17,8 @@ export const CompaniesSearchField = ({
 }: GridRenderEditCellParams<CompanyFull, string | number>) => {
 
   const apiRef = useGridApiContext();
+
+  const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -71,13 +74,14 @@ export const CompaniesSearchField = ({
         name: field,
         value: valueState || '',
       }}
-      inputWidth={140}
+      inputWidth={130}
       isLoading={isLoading}
       buttonProps={{
         onClick: handleSearch,
         disabled: !valueState
       }}
       handleClear={handleClear}
+      title={t('labels:filterSearch')}
     />
   )
 }

@@ -1,8 +1,8 @@
+import { CompanyItems } from "./company";
 import { UserItems } from "./user";
 
 export enum RegistrationItems {
   companyName = 'companyName',
-  country = 'country'
 }
 
 export interface RegistrationData {
@@ -11,7 +11,10 @@ export interface RegistrationData {
   [UserItems.Password]: string;
   [UserItems.PasswordConfirmation]: string;
   [RegistrationItems.companyName]: string;
-  [RegistrationItems.country]: string;
+  [CompanyItems.Country]: string;
+  [CompanyItems.Ico]?: string | null;
+  [CompanyItems.Vat]?: string | null;
+  [CompanyItems.Address]?: string | null;
 }
 
 export enum RegistrationState {

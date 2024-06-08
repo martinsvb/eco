@@ -28,4 +28,19 @@ export class RegisterDto {
   @MinLength(2)
   @ApiProperty({ description: 'Country code' })
   country: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Company ico', required: false })
+  ico: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Company vat', required: false })
+  vat: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Company address', required: false })
+  address: string;
 }

@@ -112,7 +112,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Email, 220, 'left'),
+        ...columnSettings(CompanyItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: companies?.edit,
         preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
@@ -121,7 +121,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Ico, 180, 'left'),
+        ...columnSettings(CompanyItems.Ico, 170, 'left'),
         headerName: t('labels:ico'),
         sortable: false,
         editable: companies?.edit,
@@ -183,7 +183,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(CompanyItems.CreatedAt, 200),
+        ...columnSettings(CompanyItems.CreatedAt, 180),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),

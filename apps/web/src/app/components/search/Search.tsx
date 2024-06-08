@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CircularProgress,
-  IconButton,
   IconButtonProps,
   InputBase,
   InputBaseProps,
@@ -11,14 +10,16 @@ import {
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
+import { AppIconButton } from '../buttons';
 
 export interface SearchProps {
   inputProps: InputBaseProps;
   buttonProps: IconButtonProps;
   handleClear: () => void;
-  inputWidth?: number;
+  inputWidth?: string | number;
   isLoading?: boolean;
   noBorder?: boolean;
+  title: string;
 }
 
 export const Search = memo(({
@@ -27,6 +28,7 @@ export const Search = memo(({
   isLoading,
   buttonProps,
   noBorder,
+  title,
   handleClear,
 }: SearchProps) => {
 
@@ -37,8 +39,9 @@ export const Search = memo(({
   return (
     <Stack
       direction="row"
+      alignItems="baseline"
       sx={{
-        border: noBorder ? 0 : `1px solid ${palette.grey[300]}`,
+        border: noBorder ? 0 : `1px solid ${palette.grey[500]}`,
         borderRadius: shape.borderRadius / 4,
       }}
     >
@@ -46,13 +49,13 @@ export const Search = memo(({
         {...inputProps}
         id={`toggle-table-filter-input-${inputProps.name}`}
         endAdornment={!!inputProps.value &&
-          <IconButton
-            aria-label={t('labels:filterSearchClear')}
+          <AppIconButton
+            title={t('labels:filterSearchClear')}
             id={`toggle-table-filter-clear-button-${inputProps.name}`}
             onClick={handleClear}
           >
             <ClearIcon />
-          </IconButton>
+          </AppIconButton>
         }
         sx={{
           ...inputProps.sx,
@@ -70,9 +73,9 @@ export const Search = memo(({
           }}
         />
         :
-        <IconButton
+        <AppIconButton
           {...buttonProps}
-          aria-label={t('labels:filterSearch')}
+          title={title}
           id={`toggle-table-filter-button-${inputProps.name}`}
           sx={{
             alignSelf: 'center',
@@ -80,7 +83,7 @@ export const Search = memo(({
           }}
         >
           <SearchIcon />
-        </IconButton>
+        </AppIconButton>
       }
     </Stack>
   );

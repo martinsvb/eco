@@ -149,6 +149,9 @@ export class AuthService {
       password,
       companyName,
       country,
+      ico,
+      vat,
+      address,
       ...rest
     }: RegisterDto,
     language: string
@@ -160,7 +163,10 @@ export class AuthService {
       const company = await this.prisma.company.create({
         data: {
           name: companyName,
-          country
+          country,
+          ico,
+          vat,
+          address,
         },
       });
       user = await this.prisma.user.create({

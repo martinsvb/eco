@@ -13,7 +13,7 @@ export const getCompanuEditValidationSchema = () => {
     [CompanyItems.Email]: yup.string().nullable()
       .email(t('validation:email')),
     [CompanyItems.Address]: yup.string().nullable(),
-    [CompanyItems.Ico]: yup.number().nullable(),
+    [CompanyItems.Ico]: yup.string().nullable(),
     [CompanyItems.Vat]: yup.string().nullable(),
   });
 }

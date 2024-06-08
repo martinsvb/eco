@@ -1,9 +1,9 @@
 import { GridRowId } from "@mui/x-data-grid";
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiOperations, CompanyFilterData, CompanyFull, CompanyItems } from '@eco/types';
+import { ApiOperations, CompanyFilterData, CompanyFull, CompanyItems, RegistrationItems } from '@eco/types';
 import { companyDelete, companyGet, companiesGet, companiesPatch, companiesPost } from "./companyApi";
 import { createSlice } from '../createSlice';
-import { companyGetAres } from "./companyExternalApi";
+import { companyGetAres, companyGetFromAres } from "./companyExternalApi";
 
 export interface CompanyState {
   company: CompanyFull | null;
@@ -108,6 +108,32 @@ const companySlice = createSlice({
         },
       },
     ),
+    apiGetCompanyFromAres: create.asyncThunk(
+      companyGetFromAres,
+      {
+        pending: (state) => {
+          state.loading[ApiOperations.getExternalItem] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.error[ApiOperations.getExternalItem] = payload ?? error;
+        },
+        fulfilled: (
+          state,
+          { meta: { arg: { ico, setValue } }, payload: { ico: aresIco, dic, obchodniJmeno, sidlo } }
+        ) => {
+          state.loaded[ApiOperations.getExternalItem] = true;
+          if (ico === aresIco) {
+            setValue(RegistrationItems.companyName, obchodniJmeno);
+            setValue(CompanyItems.Country, sidlo.kodStatu);
+            setValue(CompanyItems.Vat, dic);
+            setValue(CompanyItems.Address, sidlo.textovaAdresa);
+          }
+        },
+        settled: (state) => {
+          state.loading[ApiOperations.getExternalItem] = false;
+        },
+      },
+    ),
     apiPostCompany: create.asyncThunk(
       companiesPost,
       {
@@ -184,6 +210,7 @@ export const {
   apiGetCompanies,
   apiGetCompany,
   apiGetCompanyAres,
+  apiGetCompanyFromAres,
   apiPostCompany,
   apiPatchCompany,
   apiDeleteCompany,

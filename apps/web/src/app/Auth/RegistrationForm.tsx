@@ -9,11 +9,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
 import { countries } from 'countries-list';
 import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
-import { AuthOperations, RegistrationData, RegistrationItems, UserItems } from '@eco/types';
+import { AuthOperations, CompanyItems, RegistrationData, RegistrationItems, UserItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
 import { allowedCountries } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
 import { ControllerSelect, ControllerTextField } from '../components';
+import { CompanySearchField } from './CompanySearchField';
 
 interface RegistrationFormProps {
   handleClose: () => void;
@@ -29,7 +30,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
-  const { control, formState: { isValid }, handleSubmit, watch } = useForm<RegistrationData>({
+  const { control, formState: { isValid }, handleSubmit, setValue, watch } = useForm<RegistrationData>({
     resolver: yupResolver(getRegistrationValidationSchema()),
     mode: 'onTouched',
     values: {
@@ -38,7 +39,10 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
       [UserItems.Password]: '',
       [UserItems.PasswordConfirmation]: '',
       [RegistrationItems.companyName]: '',
-      [RegistrationItems.country]: '',
+      [CompanyItems.Country]: '',
+      [CompanyItems.Ico]: '',
+      [CompanyItems.Vat]: '',
+      [CompanyItems.Address]: '',
     }
   });
 
@@ -100,7 +104,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             }}
           />
         </Grid>
-        <Grid md={6} xs={12}>
+        <Grid md={6} xs={12} mb={2}>
           <ControllerTextField
             name={UserItems.PasswordConfirmation}
             control={control}
@@ -112,7 +116,15 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             }}
           />
         </Grid>
-        <Grid md={6} xs={12}>
+        <Grid xs={12}>
+          <CompanySearchField
+            name={CompanyItems.Ico}
+            label={t('labels:companySearchByIco')}
+            defaultValue={data.ico}
+            setValue={setValue}
+          />
+        </Grid>
+        <Grid xs={12}>
           <ControllerTextField
             name={RegistrationItems.companyName}
             control={control}
@@ -123,9 +135,29 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
             }}
           />
         </Grid>
+        <Grid xs={12}>
+          <ControllerTextField
+            name={CompanyItems.Address}
+            control={control}
+            defaultValue={data.address}
+            fieldProps={{
+              label: t('labels:address')
+            }}
+          />
+        </Grid>
+        <Grid md={6} xs={12}>
+          <ControllerTextField
+            name={CompanyItems.Vat}
+            control={control}
+            defaultValue={data.vat}
+            fieldProps={{
+              label: t('labels:vat')
+            }}
+          />
+        </Grid>
         <Grid md={6} xs={12}>
           <ControllerSelect
-            name={RegistrationItems.country}
+            name={CompanyItems.Country}
             control={control}
             defaultValue={data.country}
             fieldProps={{

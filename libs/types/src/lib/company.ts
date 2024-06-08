@@ -17,7 +17,7 @@ export enum CompanyItems {
 export interface CompanyData {
   [CompanyItems.Name]: string;
   [CompanyItems.Country]: string;
-  [CompanyItems.Ico]?: number | null;
+  [CompanyItems.Ico]?: string | null;
   [CompanyItems.Vat]?: string | null;
   [CompanyItems.Address]?: string | null;
   [CompanyItems.Email]?: string | null;
