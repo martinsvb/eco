@@ -19,7 +19,7 @@ export class CompanyEntity implements Company {
   email: string | null;
 
   @ApiProperty({ description: 'Company ico', required: false })
-  ico: number | null;
+  ico: string | null;
 
   @ApiProperty({ description: 'Company vat', required: false })
   vat: string | null;

@@ -1,15 +1,9 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
-import { ApiOperations, CompanyFull } from "@eco/types";
-import {
-  apiGetCompanyAres,
-  selectIsCompaniesLoading,
-  useAppDispatch,
-  useAppSelector
-} from "@eco/redux";
-import { Search } from "../components";
+import { CompanyFull } from "@eco/types";
+import { Input } from "../components";
 
-export const CompaniesSearchField = ({
+export const CompaniesInputField = ({
   field,
   id,
   value
@@ -17,11 +11,16 @@ export const CompaniesSearchField = ({
 
   const apiRef = useGridApiContext();
 
-  const dispatch = useAppDispatch();
-
   const [valueState, setValueState] = useState(value);
 
-  const isLoading = useAppSelector((state) => selectIsCompaniesLoading(state, ApiOperations.getExternalItem));
+  useEffect(
+    () => {
+      if (value && value !== valueState) {
+        setValueState(value);
+      }
+    },
+    [value, valueState]
+  );
 
   const updateValue = useCallback(
     (newValue: string | number) => {
@@ -47,37 +46,13 @@ export const CompaniesSearchField = ({
     [updateValue],
   );
 
-  const handleClear = useCallback(
-    () => {
-      updateValue('');
-    },
-    [updateValue]
-  );
-
-  const handleSearch = useCallback(
-    () => {
-      if (valueState) {
-        dispatch(apiGetCompanyAres({id, ico: `${valueState}`, apiRef}));
-      }
-    },
-    [apiRef, dispatch, id, valueState]
-  );
-
   return (
-    <Search
-      noBorder
+    <Input
       inputProps={{
         onChange: handleChange,
         name: field,
         value: valueState || '',
       }}
-      inputWidth={140}
-      isLoading={isLoading}
-      buttonProps={{
-        onClick: handleSearch,
-        disabled: !valueState
-      }}
-      handleClear={handleClear}
     />
   )
 }

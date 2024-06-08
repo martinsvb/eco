@@ -18,6 +18,7 @@ export interface SearchProps {
   handleClear: () => void;
   inputWidth?: number;
   isLoading?: boolean;
+  noBorder?: boolean;
 }
 
 export const Search = memo(({
@@ -25,6 +26,7 @@ export const Search = memo(({
   inputWidth,
   isLoading,
   buttonProps,
+  noBorder,
   handleClear,
 }: SearchProps) => {
 
@@ -36,7 +38,7 @@ export const Search = memo(({
     <Stack
       direction="row"
       sx={{
-        border: `1px solid ${palette.grey[300]}`,
+        border: noBorder ? 0 : `1px solid ${palette.grey[300]}`,
         borderRadius: shape.borderRadius / 4,
       }}
     >

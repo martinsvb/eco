@@ -67,7 +67,7 @@ model Company {
   id               String    @id @default(uuid())
   name             String    @unique
   country          String
-  ico              Int?      @unique
+  ico              String?   @unique
   vat              String?   @unique
   address          String?
   email            String?

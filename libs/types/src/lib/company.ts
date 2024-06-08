@@ -42,7 +42,8 @@ export const getNewCompanyData = () => {
       [CompanyItems.Vat]: null,
       [CompanyItems.Address]: null,
       [CompanyItems.Email]: null,
-      isNew: true
+      isNew: true,
+      isSelected: false
     }
   }
 }

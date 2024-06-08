@@ -60,7 +60,15 @@ export const useCompaniesHandlers = (
   );
 
   const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
-    const items = [CompanyItems.Name, CompanyItems.Country];
+    const items = [
+      CompanyItems.Name,
+      CompanyItems.Email,
+      CompanyItems.Ico,
+      CompanyItems.Vat,
+      CompanyItems.Address,
+      CompanyItems.Country
+    ];
+
     if (newRow.isNew) {
       dispatch(apiPostCompany({body: pick(items, newRow)}));
     }

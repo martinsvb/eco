@@ -1,4 +1,5 @@
 export * from './DateTimePicker';
+export * from './Input';
 export * from './PhoneField';
 export * from './Select';
 export * from './TextField';

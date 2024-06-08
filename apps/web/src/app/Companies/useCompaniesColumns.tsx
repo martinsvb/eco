@@ -23,6 +23,7 @@ import { getCompanuEditValidationSchema } from '@eco/validation';
 import { AppGridButton, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
 import { CompaniesSearchField } from './CompaniesSearchField';
+import { CompaniesInputField } from './CompaniesInputField';
 
 interface CompaniesColumns {
   columns: GridColDef[];
@@ -95,12 +96,19 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
   return {
     columns: [
       {
-        ...columnSettings(CompanyItems.Name, 180, 'left'),
+        ...columnSettings(CompanyItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: companies?.edit,
         preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
           const error = await processValidation(row, CompanyItems.Name, props.value);
           return { ...props, error };
+        },
+        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+          return (
+            <CompaniesInputField
+              {...params}
+            />
+          );
         },
       },
       {
@@ -113,8 +121,9 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Ico, 190),
+        ...columnSettings(CompanyItems.Ico, 180, 'left'),
         headerName: t('labels:ico'),
+        sortable: false,
         editable: companies?.edit,
         preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
           const error = await processValidation(row, CompanyItems.Ico, props.value);
@@ -129,21 +138,36 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Vat, 190),
+        ...columnSettings(CompanyItems.Vat, 140, 'left'),
         headerName: t('labels:vat'),
+        sortable: false,
         editable: companies?.edit,
         preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
           const error = await processValidation(row, CompanyItems.Vat, props.value);
           return { ...props, error };
         },
+        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+          return (
+            <CompaniesInputField
+              {...params}
+            />
+          );
+        },
       },
       {
-        ...columnSettings(CompanyItems.Address, 300, 'left'),
+        ...columnSettings(CompanyItems.Address, 320, 'left'),
         headerName: t('labels:address'),
         editable: companies?.edit,
         preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
           const error = await processValidation(row, CompanyItems.Address, props.value);
           return { ...props, error };
+        },
+        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+          return (
+            <CompaniesInputField
+              {...params}
+            />
+          );
         },
       },
       {
