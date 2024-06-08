@@ -2,7 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { allowedCountries } from 'libs/config/src/lib/countries';
 import { exampleRichText } from 'libs/config/src/lib/content';
-import { ContentState, ContentTypes, UserOrigins } from 'libs/types/src';
+import { ContentState, ContentTypes } from 'libs/types/src/lib/content';
+import { UserOrigins } from 'libs/types/src/lib/user';
 import { UserRoles } from '../libs/types/src/lib/user';
 import { userRights } from '../libs/types/src/lib/userRights';
 
