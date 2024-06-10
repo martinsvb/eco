@@ -66,6 +66,7 @@ export enum ScopeItems {
   News = 'news',
   Users = 'users',
   Companies = 'companies',
+  Contacts = 'contacts',
 }
 
 export interface Rights {
@@ -84,6 +85,7 @@ export interface Scopes {
   [ScopeItems.News]?: Rights;
   [ScopeItems.Users]?: Rights;
   [ScopeItems.Companies]?: Rights;
+  [ScopeItems.Contacts]: Rights;
 }
 
 export interface UserRights {

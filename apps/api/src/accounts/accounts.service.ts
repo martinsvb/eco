@@ -8,9 +8,9 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createAccountDto: CreateAccountDto, { id, companyId, rights }: UserFull) {
+  create(data: CreateAccountDto, { id, companyId, rights }: UserFull) {
     checkRigts(rights, ScopeItems.Accounts, RightsItems.Create);
-    return this.prisma.account.create({ data: {...createAccountDto, creatorId: id, companyId} });
+    return this.prisma.account.create({ data: {...data, creatorId: id, companyId} });
   }
 
   findAll({ companyId, rights }: UserFull) {

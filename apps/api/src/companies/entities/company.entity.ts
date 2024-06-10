@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Company, Prisma } from "@prisma/client";
+import { Company } from "@prisma/client";
 
 export class CompanyEntity implements Company {
   constructor(partial: Partial<CompanyEntity>) {
@@ -26,9 +26,6 @@ export class CompanyEntity implements Company {
 
   @ApiProperty({ description: 'Company address', required: false })
   address: string | null;
-
-  @ApiProperty({ description: 'Company identification', required: false })
-  identification: Prisma.JsonValue | null;
 
   @ApiProperty({ description: 'Date of creation' })
   createdAt: Date;

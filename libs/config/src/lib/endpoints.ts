@@ -2,6 +2,7 @@ export const endPoints = {
   account: 'account',
   accounts: 'accounts',
   companies: 'companies',
+  contacts: 'contacts',
   content: 'content',
   login: 'auth/login',
   invitationFinish: 'auth/invitation-finish',

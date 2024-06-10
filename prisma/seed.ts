@@ -11,9 +11,10 @@ import { userRights } from '../libs/types/src/lib/userRights';
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.deleteMany();
   await prisma.account.deleteMany();
+  await prisma.contact.deleteMany();
   await prisma.content.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.company.deleteMany();
 
   const company1 = await prisma.company.create({
@@ -85,6 +86,9 @@ async function main() {
     data: {
       name: 'Account 1',
       iban: 'CZ0000000000000000000001',
+      number: 1000000000,
+      bankCode: 1000,
+      bic: 'ABCDCZPP',
       currency: 'EUR',
       creatorId: user1.id,
       companyId: company1.id,
@@ -95,7 +99,28 @@ async function main() {
     data: {
       name: 'Account 2',
       iban: 'CZ0000000000000000000002',
+      number: 2000000000,
+      bankCode: 2000,
+      bic: 'EFGHCZPP',
       currency: 'EUR',
+      creatorId: user2.id,
+      companyId: company2.id,
+    },
+  });
+
+  const contact1 = await prisma.contact.create({
+    data: {
+      name: 'Contact 1',
+      country: allowedCountries[0],
+      creatorId: user1.id,
+      companyId: company1.id,
+    },
+  });
+
+  const contact2 = await prisma.contact.create({
+    data: {
+      name: 'Contact 2',
+      country: allowedCountries[0],
       creatorId: user2.id,
       companyId: company2.id,
     },
@@ -148,6 +173,8 @@ async function main() {
   console.log({
     account1,
     account2,
+    contact1,
+    contact2,
     company1,
     company2,
     content1,

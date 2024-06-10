@@ -13,6 +13,9 @@ datasource db {
 model Account {
   id          String    @id @default(uuid())
   iban        String    @unique
+  number      Int
+  bankCode    Int
+  bic         String
   name        String
   currency    String
   description String?
@@ -43,6 +46,23 @@ model Content {
   companyId   String
 }
 
+model Contact {
+  id               String    @id @default(uuid())
+  name             String
+  country          String
+  ico              String?
+  vat              String?
+  address          String?
+  email            String?
+  phone            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
+  creator          User      @relation(fields: [creatorId], references: [id])
+  creatorId        String
+  company          Company   @relation(fields: [companyId], references: [id])
+  companyId        String
+}
+
 model User {
   id               String    @id @default(uuid())
   name             String?
@@ -59,6 +79,7 @@ model User {
   updatedAt        DateTime? @updatedAt
   accounts         Account[]
   content          Content[]
+  Contact          Contact[]
   company          Company  @relation(fields: [companyId], references: [id])
   companyId        String
 }
@@ -71,10 +92,10 @@ model Company {
   vat              String?   @unique
   address          String?
   email            String?
-  identification   Json?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]
   content          Content[]
+  Contact          Contact[]
   users            User[]
 }
