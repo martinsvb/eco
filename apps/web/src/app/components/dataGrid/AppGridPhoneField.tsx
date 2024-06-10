@@ -1,9 +1,8 @@
 import { ChangeEvent, useCallback, useRef, useState } from "react";
-import { UserFull, UserItems } from "@eco/types";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
-import { PhoneField } from "../components";
+import { PhoneField } from "..";
 
-export const UsersPhoneField = ({ error, field, id, value }: GridRenderEditCellParams<UserFull, string>) => {
+export const AppGridPhoneField = ({ error, field, id, value }: GridRenderEditCellParams<any, string>) => {
 
   const apiRef = useGridApiContext();
   const phoneRef = useRef(null);
@@ -35,7 +34,7 @@ export const UsersPhoneField = ({ error, field, id, value }: GridRenderEditCellP
       noBorderFocus
       noLabelMargin
       id={`${field}-${id}`}
-      name={UserItems.Phone}
+      name={field}
       value={valueState ?? ''}
       error={error}
       onChange={handleChange}

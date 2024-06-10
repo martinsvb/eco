@@ -17,22 +17,22 @@ import dayjs from 'dayjs';
 import { is } from 'ramda';
 import { allowedCountries } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
-import { CompanyFull, CompanyItems } from '@eco/types';
-import { cancelCompany, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
-import { getCompanyEditValidationSchema } from '@eco/validation';
-import { AppGridButton, AppGridInputField, DialogClickOpen } from '../components';
+import { ContactFull, ContactItems } from '@eco/types';
+import { cancelContact, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { getContactEditValidationSchema } from '@eco/validation';
+import { AppGridButton, AppGridInputField, AppGridPhoneField, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
-import { CompaniesSearchField } from '.';
+import { ContactsSearchField } from '.';
 
-interface CompaniesColumns {
+interface ContactsColumns {
   columns: GridColDef[];
   rowModesModel: GridRowModesModel;
   setRowModesModel: Dispatch<SetStateAction<GridRowModesModel>>
 }
 
-const companySchema = getCompanyEditValidationSchema();
+const contactSchema = getContactEditValidationSchema();
 
-export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): CompaniesColumns => {
+export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsColumns => {
 
   const { t, i18n: { language } } = useTranslation();
 
@@ -42,7 +42,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
 
   const dispatch = useAppDispatch();
 
-  const { rights: { scopes: { companies } } } = useShallowEqualSelector(selectUserAuth);
+  const { rights: { scopes: { contacts } } } = useShallowEqualSelector(selectUserAuth);
 
   const handleSaveClick = useCallback(
     (id: GridRowId) => () => {
@@ -71,16 +71,15 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         ...prevRowModesModel,
         [id]: { mode: GridRowModes.View, ignoreModifications: true },
       }));
-      dispatch(cancelCompany(id));
+      dispatch(cancelContact(id));
     },
     [dispatch]
   );
 
-  const processValidation = async (row: CompanyFull, item: CompanyItems, value?: string) => {
+  const processValidation = async (row: ContactFull, item: ContactItems, value?: string) => {
     let message: string | undefined = undefined;
     try {
-      await companySchema.validate({
-        ...row,
+      await contactSchema.validate({
         [item]: value
       });
     }
@@ -95,14 +94,14 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
   return {
     columns: [
       {
-        ...columnSettings(CompanyItems.Name, 200, 'left'),
+        ...columnSettings(ContactItems.Name, 200, 'left'),
         headerName: t('labels:name'),
-        editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Name, props.value);
+        editable: contacts?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(row, ContactItems.Name, props.value);
           return { ...props, error };
         },
-        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+        renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
@@ -111,41 +110,55 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Email, 200, 'left'),
+        ...columnSettings(ContactItems.Email, 200, 'left'),
         headerName: t('labels:email'),
-        editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Email, props.value);
+        editable: contacts?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(row, ContactItems.Email, props.value);
           return { ...props, error };
         },
       },
       {
-        ...columnSettings(CompanyItems.Ico, 150, 'left'),
+        ...columnSettings(ContactItems.Phone, 200),
+        headerName: t('labels:phone'),
+        sortable: false,
+        disableColumnMenu: true,
+        editable: contacts?.edit,
+        renderEditCell: (params: GridRenderEditCellParams<ContactFull, string>) => {
+          return (
+            <AppGridPhoneField
+              {...params}
+            />
+          );
+        },
+      },
+      {
+        ...columnSettings(ContactItems.Ico, 150, 'left'),
         headerName: t('labels:ico'),
         sortable: false,
-        editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Ico, props.value);
+        editable: contacts?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(row, ContactItems.Ico, props.value);
           return { ...props, error };
         },
-        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+        renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
-            <CompaniesSearchField
+            <ContactsSearchField
               {...params}
             />
           );
         },
       },
       {
-        ...columnSettings(CompanyItems.Vat, 140, 'left'),
+        ...columnSettings(ContactItems.Vat, 140, 'left'),
         headerName: t('labels:vat'),
         sortable: false,
-        editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Vat, props.value);
+        editable: contacts?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(row, ContactItems.Vat, props.value);
           return { ...props, error };
         },
-        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+        renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
@@ -154,14 +167,14 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Address, 320, 'left'),
+        ...columnSettings(ContactItems.Address, 320, 'left'),
         headerName: t('labels:address'),
-        editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Address, props.value);
+        editable: contacts?.edit,
+        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(row, ContactItems.Address, props.value);
           return { ...props, error };
         },
-        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+        renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
@@ -170,19 +183,19 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Country, 140),
+        ...columnSettings(ContactItems.Country, 140),
         headerName: t('labels:country'),
         type: 'singleSelect',
         valueOptions: allowedCountries.map((value) => ({
           value,
           label: countries[value][getLanguageCode(language) === Languages.en ? 'name' : 'native']
         })),
-        editable: companies?.edit,
+        editable: contacts?.edit,
         sortable: true,
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(CompanyItems.CreatedAt, 160),
+        ...columnSettings(ContactItems.CreatedAt, 160),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),

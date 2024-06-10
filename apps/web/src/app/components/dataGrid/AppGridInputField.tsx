@@ -1,9 +1,9 @@
 import { ChangeEvent, useCallback } from "react";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { CompanyFull } from "@eco/types";
-import { Input } from "../components";
+import { Input } from "..";
 
-export const CompaniesInputField = ({
+export const AppGridInputField = ({
   field,
   id,
   value

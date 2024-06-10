@@ -8,6 +8,8 @@ import accountsLibsCs from './locale-cs-accountsLibs.json';
 import apiErrorCs from './locale-cs-apiError.json';
 import authLibsCs from './locale-cs-authLibs.json';
 import companiesCs from './locale-cs-companies.json';
+import contactsCs from './locale-cs-contacts.json';
+import contactsLibsCs from './locale-cs-contactsLibs.json';
 import contentCs from './locale-cs-content.json';
 import contentLibsCs from './locale-cs-contentLibs.json';
 import editorCs from './locale-cs-editor.json';
@@ -28,6 +30,8 @@ import companiesEn from './locale-en-companies.json';
 import contentEn from './locale-en-content.json';
 import labelsEn from './locale-en-labels.json';
 import companiesLibsEn from './locale-en-companiesLibs.json';
+import contactsEn from './locale-en-contacts.json';
+import contactsLibsEn from './locale-en-contactsLibs.json';
 import registrationEn from './locale-en-registration.json';
 import translationEn from './locale-en-translation.json';
 import validationEn from './locale-en-validation.json';
@@ -58,6 +62,8 @@ i18n
         apiError: apiErrorCs,
         authLibs: authLibsCs,
         companies: companiesCs,
+        contacts: contactsCs,
+        contactsLibs: contactsLibsCs,
         content: contentCs,
         contentLibs: contentLibsCs,
         editor: editorCs,
@@ -75,6 +81,8 @@ i18n
         apiError: apiErrorEn,
         authLibs: authLibsEn,
         companies: companiesEn,
+        contacts: contactsEn,
+        contactsLibs: contactsLibsEn,
         content: contentEn,
         contentLibs: contentLibsEn,
         editor: editorEn,

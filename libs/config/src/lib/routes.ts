@@ -5,6 +5,7 @@ export const routes = {
     accountsNew: '/accounts/new',
     accountsEdit: '/accounts/edit/:id',
     companies: '/companies',
+    contacts: '/contacts',
     content: {
         article: {
             list: '/articles',

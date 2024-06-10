@@ -9,6 +9,7 @@ import {
   logout,
   resetAccounts,
   resetCompanies,
+  resetContacts,
   resetContent,
   resetUsers,
   selectUserAuth,
@@ -67,6 +68,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       setAnchorElUser(null);
       dispatch(logout());
       dispatch(resetAccounts());
+      dispatch(resetContacts());
       dispatch(resetContent());
       dispatch(resetUsers());
       dispatch(resetCompanies());

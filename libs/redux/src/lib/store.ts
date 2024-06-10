@@ -7,6 +7,7 @@ import {
 import auth from "./slices/auth/authSlice";
 import account from "./slices/account/accountSlice";
 import company from "./slices/company/companySlice";
+import contact from "./slices/contact/contactSlice";
 import content from "./slices/content/contentSlice";
 import user from "./slices/user/userSlice";
 import { apiErrorLogger } from "./apiErrorLogger";
@@ -14,6 +15,7 @@ import { apiErrorLogger } from "./apiErrorLogger";
 const reducer = combineReducers({
   account,
   company,
+  contact,
   content,
   auth,
   user,

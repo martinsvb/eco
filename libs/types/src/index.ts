@@ -3,6 +3,7 @@ export * from './lib/api';
 export * from './lib/aresSubject';
 export * from './lib/auth';
 export * from './lib/company';
+export * from './lib/contact';
 export * from './lib/content';
 export * from './lib/invitation';
 export * from './lib/login';

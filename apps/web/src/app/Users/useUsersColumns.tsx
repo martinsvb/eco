@@ -17,9 +17,8 @@ import { is, omit } from 'ramda';
 import { UserFull, UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getUserEditValidationSchema } from '@eco/validation';
-import { AppAvatar, AppGridButton, DialogClickOpen } from '../components';
+import { AppAvatar, AppGridButton, AppGridPhoneField, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
-import { UsersPhoneField } from './UsersPhoneField';
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -160,7 +159,7 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         editable: users?.edit,
         renderEditCell: (params: GridRenderEditCellParams<UserFull, string>) => {
           return (
-            <UsersPhoneField
+            <AppGridPhoneField
               {...params}
             />
           );

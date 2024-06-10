@@ -4,28 +4,28 @@ import { useSearchParams } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { GridColumnMenuProps } from '@mui/x-data-grid';
 import {
-  apiGetCompanies,
-  selectCompanyFilter,
-  setCompanyFilterData,
+  apiGetContacts,
+  selectContactFilter,
+  setContactFilterData,
   useAppDispatch,
   useShallowEqualSelector
 } from '@eco/redux';
-import { CompanyFilterData } from '@eco/types';
+import { ContactFilterData } from '@eco/types';
 import { Search } from '../components';
 
-export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
+export const ContactsColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) => {
 
   const { t } = useTranslation();
 
   const [, setSearchParams] = useSearchParams();
 
-  const filter = useShallowEqualSelector(selectCompanyFilter);
+  const filter = useShallowEqualSelector(selectContactFilter);
 
   const dispatch = useAppDispatch();
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch(setCompanyFilterData({[field]: e.target.value}));
+      dispatch(setContactFilterData({[field]: e.target.value}));
     },
     [dispatch, field]
   );
@@ -37,8 +37,8 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
         {} as Record<string, string>
       );
       setSearchParams(newFilter);
-      dispatch(setCompanyFilterData({[field]: ''}));
-      dispatch(apiGetCompanies(''));
+      dispatch(setContactFilterData({[field]: ''}));
+      dispatch(apiGetContacts(''));
     },
     [dispatch, setSearchParams, field, filter]
   );
@@ -50,7 +50,7 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
         {} as Record<string, string>
       );
       setSearchParams(newFilter);
-      dispatch(apiGetCompanies(''));
+      dispatch(apiGetContacts(''));
     },
     [dispatch, setSearchParams, filter]
   );
@@ -61,7 +61,7 @@ export const CompaniesColumnMenu = ({ colDef: { field } }: GridColumnMenuProps) 
         inputProps={{
           onChange: handleChange,
           name: field,
-          value: filter[field as keyof CompanyFilterData] || '',
+          value: filter[field as keyof ContactFilterData] || '',
         }}
         buttonProps={{
           onClick: handleSearch,

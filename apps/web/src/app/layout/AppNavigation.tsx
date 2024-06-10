@@ -5,6 +5,7 @@ import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List, styled
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BusinessIcon from '@mui/icons-material/Business';
+import ContactsIcon from '@mui/icons-material/Contacts';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import GroupIcon from '@mui/icons-material/Group';
@@ -81,6 +82,13 @@ export const AppNavigation = () => {
                 icon={<AccountBalanceWalletIcon />}
                 text={t('accounts')}
                 to={routes.accounts}
+              />
+            }
+            {rights.scopes[ScopeItems.Contacts]?.read &&
+              <NavItem
+                icon={<ContactsIcon />}
+                text={t('contacts')}
+                to={routes.contacts}
               />
             }
             {rights.scopes[ScopeItems.Users]?.read &&

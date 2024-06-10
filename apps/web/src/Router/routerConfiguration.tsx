@@ -10,6 +10,7 @@ import LoginWrapper from "../app/user/LoginWrapper";
 import Invitation from "../app/Auth/Invitation";
 import { UserEdit } from "../app/user/UserEdit";
 import { Companies } from "../app/Companies/Companies";
+import { Contacts } from "../app/Contacts/Contacts";
 import { NotFound } from "../app/NotFound";
 
 export const router = createBrowserRouter([
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: routes.companies,
         element: <LoginWrapper><Companies /></LoginWrapper>,
+      },
+      {
+        path: routes.contacts,
+        element: <LoginWrapper><Contacts /></LoginWrapper>,
       },
       {
         path: routes.content.task.list,
