@@ -12,7 +12,7 @@ interface CompaniesButtonsProps {
   handleRefresh: () => void;
 }
 
-const CompaniesButtons = ({
+export const CompaniesButtons = memo(({
   isLoading,
   handleNew,
   handleRefresh,
@@ -47,6 +47,4 @@ const CompaniesButtons = ({
       }
     />
   );
-};
-
-export default memo(CompaniesButtons);
+});

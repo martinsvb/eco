@@ -8,11 +8,7 @@ import { CompanyItems } from '@eco/types';
 import { apiGetCompanies, selectCompanies, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
-import { useCompaniesColumns } from './useCompaniesColumns';
-import { CompaniesColumnMenu } from './CompaniesColumnMenu';
-import CompaniesButtons from './CompaniesButtons';
-import CompaniesDialog from './CompaniesDialog';
-import { useCompaniesHandlers } from './useCompaniesHandlers';
+import { CompaniesButtons, CompaniesColumnMenu, CompaniesDialog, useCompaniesColumns, useCompaniesHandlers } from '.';
 
 export const Companies = () => {
 

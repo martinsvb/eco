@@ -11,7 +11,7 @@ interface CompaniesDialogProps {
   handleDelete: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const CompaniesDialog = ({
+export const CompaniesDialog = memo(({
   isLoading,
   open,
   handleClose,
@@ -48,6 +48,4 @@ const CompaniesDialog = ({
       open={open}
     />
   );
-};
-
-export default memo(CompaniesDialog);
+});

@@ -79,32 +79,32 @@ const companySlice = createSlice({
     apiGetCompanyAres: create.asyncThunk(
       companyGetAres,
       {
-        pending: (state) => {
-          state.loading[ApiOperations.getExternalItem] = true;
+        pending: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.getExternalItem}-${id}`] = true;
         },
-        rejected: (state, { error, payload }) => {
-          state.error[ApiOperations.getExternalItem] = payload ?? error;
+        rejected: (state, { meta: { arg: { id } }, error, payload }) => {
+          state.error[`${ApiOperations.getExternalItem}-${id}`] = payload ?? error;
         },
         fulfilled: (
           state,
           { meta: { arg: { id, ico, apiRef } }, payload: { ico: aresIco, dic, obchodniJmeno, sidlo } }
         ) => {
-          state.loaded[ApiOperations.getExternalItem] = true;
+          state.loaded[`${ApiOperations.getExternalItem}-${id}`] = true;
           const index = state.companies.findIndex((item) => item.id === id);
           if (index > -1 && ico === aresIco) {
             apiRef.current.setEditCellValue(
-              { id, field: CompanyItems.Name, value: obchodniJmeno, debounceMs: 100 },
+              { id, field: CompanyItems.Name, value: obchodniJmeno, debounceMs: 10 },
             );
             apiRef.current.setEditCellValue(
-              { id, field: CompanyItems.Vat, value: dic, debounceMs: 100 },
+              { id, field: CompanyItems.Vat, value: dic, debounceMs: 10 },
             );
             apiRef.current.setEditCellValue(
-              { id, field: CompanyItems.Address, value: sidlo.textovaAdresa, debounceMs: 100 },
+              { id, field: CompanyItems.Address, value: sidlo.textovaAdresa, debounceMs: 10 },
             );
           }
         },
-        settled: (state) => {
-          state.loading[ApiOperations.getExternalItem] = false;
+        settled: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.getExternalItem}-${id}`] = false;
         },
       },
     ),
@@ -200,7 +200,7 @@ const companySlice = createSlice({
     }),
     selectCompany: (state) => state.company,
     selectCompanyFilter: (state) => state.filter,
-    selectIsCompaniesLoading: (state, operation: ApiOperations) => !!state.loading[operation],
+    selectIsCompaniesLoading: (state, operation: string) => !!state.loading[operation],
   },
 });
 

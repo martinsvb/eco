@@ -22,8 +22,7 @@ import { cancelCompany, selectUserAuth, useAppDispatch, useShallowEqualSelector 
 import { getCompanuEditValidationSchema } from '@eco/validation';
 import { AppGridButton, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
-import { CompaniesSearchField } from './CompaniesSearchField';
-import { CompaniesInputField } from './CompaniesInputField';
+import { CompaniesInputField, CompaniesSearchField } from '.';
 
 interface CompaniesColumns {
   columns: GridColDef[];

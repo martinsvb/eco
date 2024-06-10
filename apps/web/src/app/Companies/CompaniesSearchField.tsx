@@ -1,13 +1,8 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { ApiOperations, CompanyFull } from "@eco/types";
-import {
-  apiGetCompanyAres,
-  selectIsCompaniesLoading,
-  useAppDispatch,
-  useAppSelector
-} from "@eco/redux";
+import { apiGetCompanyAres, selectIsCompaniesLoading, useAppDispatch, useAppSelector } from "@eco/redux";
 import { Search } from "../components";
 
 export const CompaniesSearchField = ({
@@ -22,9 +17,9 @@ export const CompaniesSearchField = ({
 
   const dispatch = useAppDispatch();
 
-  const [valueState, setValueState] = useState(value);
-
-  const isLoading = useAppSelector((state) => selectIsCompaniesLoading(state, ApiOperations.getExternalItem));
+  const isLoading = useAppSelector(
+    (state) => selectIsCompaniesLoading(state, `${ApiOperations.getExternalItem}-${id}`)
+  );
 
   const updateValue = useCallback(
     (newValue: string | number) => {
@@ -35,9 +30,8 @@ export const CompaniesSearchField = ({
         parsedValue = column.valueParser(newValue, apiRef.current.getRow(id), column, apiRef);
       }
 
-      setValueState(parsedValue);
       apiRef.current.setEditCellValue(
-        { id, field, value: parsedValue, debounceMs: 200, unstable_skipValueParser: true },
+        { id, field, value: parsedValue, debounceMs: 10, unstable_skipValueParser: true },
       );
     },
     [apiRef, field, id],
@@ -59,11 +53,11 @@ export const CompaniesSearchField = ({
 
   const handleSearch = useCallback(
     () => {
-      if (valueState) {
-        dispatch(apiGetCompanyAres({id, ico: `${valueState}`, apiRef}));
+      if (value) {
+        dispatch(apiGetCompanyAres({id, ico: `${value}`, apiRef}));
       }
     },
-    [apiRef, dispatch, id, valueState]
+    [apiRef, dispatch, id, value]
   );
 
   return (
@@ -72,13 +66,13 @@ export const CompaniesSearchField = ({
       inputProps={{
         onChange: handleChange,
         name: field,
-        value: valueState || '',
+        value: value || '',
       }}
       inputWidth={130}
       isLoading={isLoading}
       buttonProps={{
         onClick: handleSearch,
-        disabled: !valueState
+        disabled: !value
       }}
       handleClear={handleClear}
       title={t('labels:filterSearch')}

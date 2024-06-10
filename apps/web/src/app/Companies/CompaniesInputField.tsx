@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { CompanyFull } from "@eco/types";
 import { Input } from "../components";
@@ -11,19 +11,10 @@ export const CompaniesInputField = ({
 
   const apiRef = useGridApiContext();
 
-  const [valueState, setValueState] = useState(value);
+  const handleChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
 
-  useEffect(
-    () => {
-      if (value && value !== valueState) {
-        setValueState(value);
-      }
-    },
-    [value, valueState]
-  );
-
-  const updateValue = useCallback(
-    (newValue: string | number) => {
       const column = apiRef.current.getColumn(field);
 
       let parsedValue = newValue;
@@ -31,19 +22,11 @@ export const CompaniesInputField = ({
         parsedValue = column.valueParser(newValue, apiRef.current.getRow(id), column, apiRef);
       }
 
-      setValueState(parsedValue);
       apiRef.current.setEditCellValue(
-        { id, field, value: parsedValue, debounceMs: 200, unstable_skipValueParser: true },
+        { id, field, value: parsedValue, debounceMs: 10, unstable_skipValueParser: true },
       );
     },
     [apiRef, field, id],
-  );
-
-  const handleChange = useCallback(
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      updateValue(event.target.value);
-    },
-    [updateValue],
   );
 
   return (
@@ -51,7 +34,7 @@ export const CompaniesInputField = ({
       inputProps={{
         onChange: handleChange,
         name: field,
-        value: valueState || '',
+        value: value || '',
       }}
     />
   )
