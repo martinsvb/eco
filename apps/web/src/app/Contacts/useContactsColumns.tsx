@@ -76,12 +76,10 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
     [dispatch]
   );
 
-  const processValidation = async (row: ContactFull, item: ContactItems, value?: string) => {
+  const processValidation = async (item: ContactItems, value?: string) => {
     let message: string | undefined = undefined;
     try {
-      await contactSchema.validate({
-        [item]: value
-      });
+      await contactSchema.validateAt(item, {[item]: value});
     }
     catch (error) {
       ({ message } = error as {message: string});
@@ -97,8 +95,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         ...columnSettings(ContactItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(row, ContactItems.Name, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(ContactItems.Name, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
@@ -113,8 +111,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         ...columnSettings(ContactItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(row, ContactItems.Email, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(ContactItems.Email, props.value);
           return { ...props, error };
         },
       },
@@ -137,8 +135,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         headerName: t('labels:ico'),
         sortable: false,
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(row, ContactItems.Ico, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(ContactItems.Ico, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
@@ -154,8 +152,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         headerName: t('labels:vat'),
         sortable: false,
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(row, ContactItems.Vat, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(ContactItems.Vat, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
@@ -170,8 +168,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         ...columnSettings(ContactItems.Address, 320, 'left'),
         headerName: t('labels:address'),
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(row, ContactItems.Address, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(ContactItems.Address, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {

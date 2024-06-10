@@ -4,6 +4,7 @@ import { CompanyFull } from "@eco/types";
 import { Input } from "..";
 
 export const AppGridInputField = ({
+  error,
   field,
   id,
   value
@@ -32,6 +33,7 @@ export const AppGridInputField = ({
   return (
     <Input
       inputProps={{
+        error: error,
         onChange: handleChange,
         name: field,
         value: value || '',

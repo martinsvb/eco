@@ -76,13 +76,10 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
     [dispatch]
   );
 
-  const processValidation = async (row: CompanyFull, item: CompanyItems, value?: string) => {
+  const processValidation = async (item: CompanyItems, value?: string) => {
     let message: string | undefined = undefined;
     try {
-      await companySchema.validate({
-        ...row,
-        [item]: value
-      });
+      await companySchema.validateAt(item, {[item]: value});
     }
     catch (error) {
       ({ message } = error as {message: string});
@@ -98,8 +95,8 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         ...columnSettings(CompanyItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Name, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Name, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
@@ -114,8 +111,8 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         ...columnSettings(CompanyItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Email, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Email, props.value);
           return { ...props, error };
         },
       },
@@ -124,8 +121,8 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         headerName: t('labels:ico'),
         sortable: false,
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Ico, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Ico, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
@@ -141,8 +138,8 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         headerName: t('labels:vat'),
         sortable: false,
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Vat, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Vat, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
@@ -157,8 +154,8 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         ...columnSettings(CompanyItems.Address, 320, 'left'),
         headerName: t('labels:address'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(row, CompanyItems.Address, props.value);
+        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Address, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
