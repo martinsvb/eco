@@ -19,7 +19,7 @@ const Records = ({
   isLoading
 }: RecordsProps) => {
 
-  const { palette } = useTheme();
+  const theme = useTheme();
 
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const Records = ({
   );
 
   return (
-    <Box sx={getDataGridWrapperSx(palette, isMobilePortrait)}>
+    <Box sx={getDataGridWrapperSx(theme, isMobilePortrait)}>
       <DataGrid
         rows={data}
         columns={columns}
@@ -47,7 +47,7 @@ const Records = ({
           columnMenu: RecordsColumnMenu,
         }}
         sx={{
-          ...getDataGridSx(palette, isMobilePortrait),
+          ...getDataGridSx(theme.palette, isMobilePortrait),
           [`& .${gridClasses.row}`]: {
             cursor: 'pointer',
           },

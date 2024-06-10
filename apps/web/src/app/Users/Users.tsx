@@ -18,7 +18,7 @@ export const Users = () => {
 
   const { t } = useTranslation();
 
-  const { palette } = useTheme();
+  const theme = useTheme();
 
   const isMobilePortrait = useMobilePortraitDetection();
 
@@ -62,7 +62,7 @@ export const Users = () => {
   return (
     <>
       <Typography variant='h3' mb={3}>{t('users:title')}</Typography>
-      <Box sx={getDataGridWrapperSx(palette, isMobilePortrait)}>
+      <Box sx={getDataGridWrapperSx(theme, isMobilePortrait)}>
         <DataGrid
           rows={users}
           columns={columns}
@@ -74,7 +74,7 @@ export const Users = () => {
           slots={{
             columnMenu: UsersColumnMenu,
           }}
-          sx={getDataGridSx(palette, isMobilePortrait)}
+          sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />
       </Box>
       <UsersButtons
