@@ -53,6 +53,7 @@ export const Search = memo(({
             title={t('labels:filterSearchClear')}
             id={`toggle-table-filter-clear-button-${inputProps.name}`}
             onClick={handleClear}
+            size={buttonProps.size}
           >
             <ClearIcon />
           </AppIconButton>

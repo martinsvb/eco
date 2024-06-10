@@ -68,11 +68,12 @@ export const CompaniesSearchField = ({
         name: field,
         value: value || '',
       }}
-      inputWidth={120}
+      inputWidth={115}
       isLoading={isLoading}
       buttonProps={{
         onClick: handleSearch,
-        disabled: !value
+        disabled: !value,
+        size: 'small'
       }}
       handleClear={handleClear}
       title={t('labels:filterSearch')}

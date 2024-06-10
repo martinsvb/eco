@@ -120,7 +120,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Ico, 160, 'left'),
+        ...columnSettings(CompanyItems.Ico, 150, 'left'),
         headerName: t('labels:ico'),
         sortable: false,
         editable: companies?.edit,
@@ -137,7 +137,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Vat, 150, 'left'),
+        ...columnSettings(CompanyItems.Vat, 140, 'left'),
         headerName: t('labels:vat'),
         sortable: false,
         editable: companies?.edit,
@@ -170,7 +170,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Country, 160),
+        ...columnSettings(CompanyItems.Country, 140),
         headerName: t('labels:country'),
         type: 'singleSelect',
         valueOptions: allowedCountries.map((value) => ({
@@ -182,7 +182,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(CompanyItems.CreatedAt, 180),
+        ...columnSettings(CompanyItems.CreatedAt, 160),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),
