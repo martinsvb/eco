@@ -14,7 +14,7 @@ export const Companies = () => {
 
   const { t } = useTranslation();
 
-  const { palette } = useTheme();
+  const theme = useTheme();
 
   const isMobilePortrait = useMobilePortraitDetection();
 
@@ -58,7 +58,7 @@ export const Companies = () => {
   return (
     <>
       <Typography variant='h3' mb={3}>{t('companies:title')}</Typography>
-      <Box sx={getDataGridWrapperSx(palette, isMobilePortrait)}>
+      <Box sx={getDataGridWrapperSx(theme, isMobilePortrait)}>
         <DataGrid
           rows={companies}
           columns={columns}
@@ -70,7 +70,7 @@ export const Companies = () => {
           slots={{
             columnMenu: CompaniesColumnMenu,
           }}
-          sx={getDataGridSx(palette, isMobilePortrait)}
+          sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />
       </Box>
       <CompaniesButtons

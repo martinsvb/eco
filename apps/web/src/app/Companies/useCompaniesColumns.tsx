@@ -120,7 +120,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Ico, 170, 'left'),
+        ...columnSettings(CompanyItems.Ico, 160, 'left'),
         headerName: t('labels:ico'),
         sortable: false,
         editable: companies?.edit,
@@ -137,7 +137,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Vat, 140, 'left'),
+        ...columnSettings(CompanyItems.Vat, 150, 'left'),
         headerName: t('labels:vat'),
         sortable: false,
         editable: companies?.edit,
@@ -170,7 +170,7 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         },
       },
       {
-        ...columnSettings(CompanyItems.Country, 200),
+        ...columnSettings(CompanyItems.Country, 160),
         headerName: t('labels:country'),
         type: 'singleSelect',
         valueOptions: allowedCountries.map((value) => ({

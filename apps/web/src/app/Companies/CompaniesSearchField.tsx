@@ -68,7 +68,7 @@ export const CompaniesSearchField = ({
         name: field,
         value: value || '',
       }}
-      inputWidth={130}
+      inputWidth={120}
       isLoading={isLoading}
       buttonProps={{
         onClick: handleSearch,
