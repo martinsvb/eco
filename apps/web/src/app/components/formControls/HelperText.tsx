@@ -15,7 +15,11 @@ const HelperText: FC<HelperTextProps & HelperTextStatesProps> = memo(
     const helperTextId = helperText && id ? `${id}-helper-text` : undefined;
 
     return helperText ? (
-      <FormHelperText id={helperTextId} {...formHelperTextProps} error={error}>
+      <FormHelperText
+        {...formHelperTextProps}
+        id={helperTextId}
+        error={error}
+      >
         {helperText}
       </FormHelperText>
     ) : null;

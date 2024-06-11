@@ -1,14 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridRowModes, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { ContactItems } from '@eco/types';
 import { apiGetContacts, selectContacts, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
-import { ContactsButtons, ContactsColumnMenu, ContactsDialog, useContactsColumns, useContactsHandlers } from '.';
+import {
+  ContactsButtons,
+  ContactsColumnMenu,
+  ContactsDialog,
+  ContactsErrors,
+  useContactsColumns,
+  useContactsHandlers
+} from '.';
 
 export const Contacts = () => {
 
@@ -18,6 +25,8 @@ export const Contacts = () => {
 
   const isMobilePortrait = useMobilePortraitDetection();
 
+  const [ errors, setErrors ] = useState<ContactsErrors>({});
+
   const dispatch = useAppDispatch();
 
   const { contacts, isLoading, loaded } = useShallowEqualSelector(selectContacts);
@@ -25,6 +34,8 @@ export const Contacts = () => {
   const { search } = useLocation();
 
   const filter = qs.parse(search.substring(1));
+
+  const apiRef = useGridApiRef();
 
   useEffect(
     () => { 
@@ -46,7 +57,7 @@ export const Contacts = () => {
 
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
-  const { columns, rowModesModel, setRowModesModel } = useContactsColumns(handleClickOpen);
+  const { columns, rowModesModel, setRowModesModel } = useContactsColumns(handleClickOpen, errors, setErrors);
 
   const {
     dataGridHandlers,
@@ -60,6 +71,7 @@ export const Contacts = () => {
       <Typography variant='h3' mb={3}>{t('contacts')}</Typography>
       <Box sx={getDataGridWrapperSx(theme, isMobilePortrait)}>
         <DataGrid
+          apiRef={apiRef}
           rows={contacts}
           columns={columns}
           editMode="row"
@@ -67,6 +79,12 @@ export const Contacts = () => {
           loading={isLoading}
           rowModesModel={rowModesModel}
           {...dataGridHandlers}
+          getRowHeight={({id}) => {
+            const mode = apiRef.current.getRowMode(id);
+            return mode === GridRowModes.Edit && errors[id] && Object.values(errors[id]).filter((error) => !!error).length
+              ? 62
+              : 52
+          }}
           slots={{
             columnMenu: ContactsColumnMenu,
           }}

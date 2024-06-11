@@ -3,12 +3,17 @@ import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { CompanyFull } from "@eco/types";
 import { Input } from "..";
 
+type AppGridInputFieldProps = {
+  helperText?: string;
+} & GridRenderEditCellParams<CompanyFull, string | number>;
+
 export const AppGridInputField = ({
   error,
   field,
+  helperText,
   id,
   value
-}: GridRenderEditCellParams<CompanyFull, string | number>) => {
+}: AppGridInputFieldProps) => {
 
   const apiRef = useGridApiContext();
 
@@ -32,6 +37,7 @@ export const AppGridInputField = ({
 
   return (
     <Input
+      helperText={helperText}
       inputProps={{
         error: error,
         onChange: handleChange,

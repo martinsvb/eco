@@ -14,7 +14,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { countries } from 'countries-list';
 import dayjs from 'dayjs';
-import { is } from 'ramda';
 import { allowedCountries } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
 import { ContactFull, ContactItems } from '@eco/types';
@@ -24,6 +23,16 @@ import { AppGridButton, AppGridInputField, AppGridPhoneField, DialogClickOpen } 
 import { columnSettings, setRowMode } from '../helpers';
 import { ContactsSearchField } from '.';
 
+export interface ContactErrors {
+  name: string;
+  email: string;
+  ico: string;
+  vat: string;
+  address: string;
+}
+
+export type ContactsErrors = {[key: string]: Partial<ContactErrors>};
+
 interface ContactsColumns {
   columns: GridColDef[];
   rowModesModel: GridRowModesModel;
@@ -32,13 +41,23 @@ interface ContactsColumns {
 
 const contactSchema = getContactEditValidationSchema();
 
-export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsColumns => {
+export const initContactsErrors = {
+  [ContactItems.Name]: '',
+  [ContactItems.Email]: '',
+  [ContactItems.Ico]: '',
+  [ContactItems.Vat]: '',
+  [ContactItems.Address]: '',
+}
+
+export const useContactsColumns = (
+  handleClickOpen: DialogClickOpen,
+  errors: ContactsErrors,
+  setErrors: Dispatch<SetStateAction<ContactsErrors>>
+): ContactsColumns => {
 
   const { t, i18n: { language } } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
-
-  const [ errors, setErrors ] = useState({});
 
   const dispatch = useAppDispatch();
 
@@ -72,11 +91,15 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         [id]: { mode: GridRowModes.View, ignoreModifications: true },
       }));
       dispatch(cancelContact(id));
+      setErrors((prevErrors) => ({
+        ...prevErrors, 
+        [id]: {}
+      }));
     },
-    [dispatch]
+    [dispatch, setErrors]
   );
 
-  const processValidation = async (item: ContactItems, value?: string) => {
+  const processValidation = async (id: GridRowId, item: ContactItems, value?: string) => {
     let message: string | undefined = undefined;
     try {
       await contactSchema.validateAt(item, {[item]: value});
@@ -84,7 +107,13 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
     catch (error) {
       ({ message } = error as {message: string});
     }
-    setErrors((prevErrors) => ({...prevErrors, [item]: message}));
+    setErrors((prevErrors) => ({
+      ...prevErrors, 
+      [id]: {
+        ...prevErrors[id],
+        [item]: message
+      }
+    }));
 
     return !!message;
   }
@@ -95,14 +124,15 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         ...columnSettings(ContactItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(ContactItems.Name, props.value);
+        preProcessEditCellProps: async ({id, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(id, ContactItems.Name, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
+              helperText={errors[params.id] && errors[params.id].name}
             />
           );
         },
@@ -111,8 +141,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         ...columnSettings(ContactItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(ContactItems.Email, props.value);
+        preProcessEditCellProps: async ({id, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(id, ContactItems.Email, props.value);
           return { ...props, error };
         },
       },
@@ -135,8 +165,8 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         headerName: t('labels:ico'),
         sortable: false,
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(ContactItems.Ico, props.value);
+        preProcessEditCellProps: async ({id, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(id, ContactItems.Ico, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
@@ -152,14 +182,15 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         headerName: t('labels:vat'),
         sortable: false,
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(ContactItems.Vat, props.value);
+        preProcessEditCellProps: async ({id, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(id, ContactItems.Vat, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
+              helperText={errors[params.id] && errors[params.id].vat}
             />
           );
         },
@@ -168,14 +199,15 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
         ...columnSettings(ContactItems.Address, 320, 'left'),
         headerName: t('labels:address'),
         editable: contacts?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, ContactFull>) => {
-          const error = await processValidation(ContactItems.Address, props.value);
+        preProcessEditCellProps: async ({id, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
+          const error = await processValidation(id, ContactItems.Address, props.value);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
+              helperText={errors[params.id] && errors[params.id].address}
             />
           );
         },
@@ -210,7 +242,10 @@ export const useContactsColumns = (handleClickOpen: DialogClickOpen): ContactsCo
           return rowModesModel[id]?.mode === GridRowModes.Edit ?
             [
               <AppGridButton
-                title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
+                title={errors[id]
+                    ? Object.values(errors[id]).filter((error) => !!error).join(', ') || t('labels:save')
+                    : t('labels:save')
+                  }
                 label={t('labels:save')}
                 onClick={handleSaveClick(id)}
                 color="primary"
