@@ -57,7 +57,7 @@ export const Contacts = () => {
 
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
-  const { columns, rowModesModel, setRowModesModel } = useContactsColumns(handleClickOpen, errors, setErrors);
+  const { columns, rowModesModel, setRowModesModel } = useContactsColumns(apiRef, handleClickOpen, errors, setErrors);
 
   const {
     dataGridHandlers,
@@ -81,7 +81,8 @@ export const Contacts = () => {
           {...dataGridHandlers}
           getRowHeight={({id}) => {
             const mode = apiRef.current.getRowMode(id);
-            return mode === GridRowModes.Edit && errors[id] && Object.values(errors[id]).filter((error) => !!error).length
+            const hasError = !!(errors[id] && Object.values(errors[id]).filter((error) => !!error).length);
+            return mode === GridRowModes.Edit && hasError
               ? 62
               : 52
           }}

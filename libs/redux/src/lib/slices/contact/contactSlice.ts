@@ -117,8 +117,11 @@ const contactSlice = createSlice({
         rejected: (state, { meta: { arg: { id } }, error, payload }) => {
           state.error[`${ApiOperations.create}-${id}`] = payload ?? error;
         },
-        fulfilled: (state, { payload }) => {
-          state.contacts[0] = payload;
+        fulfilled: (state, { meta: { arg }, payload }) => {
+          const index = state.contacts.findIndex(({id}) => id === arg.id);
+          if (index > -1) {
+            state.contacts[index] = payload;
+          }
         },
         settled: (state, { meta: { arg: { id } } }) => {
           state.loading[`${ApiOperations.create}-${id}`] = false;
@@ -128,11 +131,11 @@ const contactSlice = createSlice({
     apiPatchContact: create.asyncThunk(
       contactsPatch,
       {
-        pending: (state) => {
-          state.loading[ApiOperations.edit] = true;
+        pending: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.edit}-${id}`] = true;
         },
-        rejected: (state, { error, payload }) => {
-          state.error[ApiOperations.edit] = payload ?? error;
+        rejected: (state, { meta: { arg: { id } }, error, payload }) => {
+          state.error[`${ApiOperations.edit}-${id}`] = payload ?? error;
         },
         fulfilled: (state, { meta: { arg }, payload }) => {
           const index = state.contacts.findIndex(({id}) => id === arg.id);
@@ -141,8 +144,8 @@ const contactSlice = createSlice({
           }
           state.contact = payload;
         },
-        settled: (state) => {
-          state.loading[ApiOperations.edit] = false;
+        settled: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.edit}-${id}`] = false;
         },
       },
     ),
@@ -175,6 +178,7 @@ const contactSlice = createSlice({
     selectContact: (state) => state.contact,
     selectContactFilter: (state) => state.filter,
     selectIsContactsLoading: (state, operation: string) => !!state.loading[operation],
+    selectContactsLoading: (state) => state.loading,
   },
 });
 
@@ -199,4 +203,5 @@ export const {
   selectContacts,
   selectContact,
   selectIsContactsLoading,
+  selectContactsLoading,
 } = contactSlice.selectors

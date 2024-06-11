@@ -1,25 +1,26 @@
-import { ChangeEvent, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
-import { ApiOperations, ContactFull } from "@eco/types";
-import { apiGetContactAres, selectIsContactsLoading, useAppDispatch, useAppSelector } from "@eco/redux";
-import { Search } from "../components";
+import { ChangeEvent, MutableRefObject, useCallback } from "react";
+import { GridRenderEditCellParams } from "@mui/x-data-grid";
+import { GridApiCommunity } from "@mui/x-data-grid/internals";
+import { Search } from "..";
 
-export const ContactsSearchField = ({
+type AppGridSearchFieldProps = {
+  apiRef: MutableRefObject<GridApiCommunity>;
+  handleSearch: () => void;
+  inputWidth?: string | number;
+  isLoading: boolean;
+  title: string;
+} & GridRenderEditCellParams<any, string | number>;
+
+export const AppGridSearchField = ({
+  apiRef,
   field,
+  handleSearch,
   id,
-  value
-}: GridRenderEditCellParams<ContactFull, string | number>) => {
-
-  const apiRef = useGridApiContext();
-
-  const { t } = useTranslation();
-
-  const dispatch = useAppDispatch();
-
-  const isLoading = useAppSelector(
-    (state) => selectIsContactsLoading(state, `${ApiOperations.getExternalItem}-${id}`)
-  );
+  inputWidth,
+  isLoading,
+  value,
+  title
+}: AppGridSearchFieldProps) => {
 
   const updateValue = useCallback(
     (newValue: string | number) => {
@@ -51,15 +52,6 @@ export const ContactsSearchField = ({
     [updateValue]
   );
 
-  const handleSearch = useCallback(
-    () => {
-      if (value) {
-        dispatch(apiGetContactAres({id, ico: `${value}`, apiRef}));
-      }
-    },
-    [apiRef, dispatch, id, value]
-  );
-
   return (
     <Search
       noBorder
@@ -68,7 +60,7 @@ export const ContactsSearchField = ({
         name: field,
         value: value || '',
       }}
-      inputWidth={115}
+      inputWidth={inputWidth}
       isLoading={isLoading}
       buttonProps={{
         onClick: handleSearch,
@@ -76,7 +68,7 @@ export const ContactsSearchField = ({
         size: 'small'
       }}
       handleClear={handleClear}
-      title={t('labels:filterSearch')}
+      title={title}
     />
   )
 }

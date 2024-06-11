@@ -59,7 +59,7 @@ export const useContactsHandlers = (
     [dispatch, dialogItemId, setOpen]
   );
 
-  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
     const items = [
       ContactItems.Name,
       ContactItems.Email,
@@ -70,13 +70,14 @@ export const useContactsHandlers = (
       ContactItems.Country
     ];
 
+    let result;
     if (newRow.isNew) {
-      dispatch(apiPostContact({body: pick(items, newRow), id: newRow.id}));
+      result = await dispatch(apiPostContact({body: pick(items, newRow), id: newRow.id}));
     }
     else {
       const body = getObjectDiff<ContactData>(newRow, oldRow, items);
       if (!isEmpty(body)) {
-        dispatch(
+        result = await dispatch(
           apiPatchContact({
             body,
             id: newRow.id
@@ -85,7 +86,10 @@ export const useContactsHandlers = (
       }
     }
 
-    return { ...newRow, isNew: undefined } as ContactFull;
+    return {
+      ...newRow,
+      isNew: newRow.isNew && !result?.type.includes('rejected') ? undefined : newRow.isNew
+    } as ContactFull;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
