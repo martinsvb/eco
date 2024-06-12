@@ -50,7 +50,7 @@ export const companyGet = async (
 }
 
 export const companiesPost = async (
-  {body}: {body: CompanyData},
+  {body}: {body: CompanyData, id: string},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {

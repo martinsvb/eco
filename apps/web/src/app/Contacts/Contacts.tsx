@@ -80,10 +80,7 @@ export const Contacts = () => {
           rowModesModel={rowModesModel}
           {...dataGridHandlers}
           getRowHeight={({id}) => {
-            const mode = apiRef.current.getRowMode(id);
-            return mode === GridRowModes.Edit
-              ? 62
-              : 52
+            return apiRef.current.getRowMode(id) === GridRowModes.Edit ? 62 : 52
           }}
           slots={{
             columnMenu: ContactsColumnMenu,

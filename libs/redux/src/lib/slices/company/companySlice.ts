@@ -137,28 +137,28 @@ const companySlice = createSlice({
     apiPostCompany: create.asyncThunk(
       companiesPost,
       {
-        pending: (state) => {
-          state.loading[ApiOperations.create] = true;
+        pending: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.create}-${id}`] = true;
         },
-        rejected: (state, { error, payload }) => {
-          state.error[ApiOperations.create] = payload ?? error;
+        rejected: (state, { meta: { arg: { id } }, error, payload }) => {
+          state.error[`${ApiOperations.create}-${id}`] = payload ?? error;
         },
         fulfilled: (state, { payload }) => {
           state.companies[0] = payload;
         },
-        settled: (state) => {
-          state.loading[ApiOperations.create] = false;
+        settled: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.create}-${id}`] = false;
         },
       },
     ),
     apiPatchCompany: create.asyncThunk(
       companiesPatch,
       {
-        pending: (state) => {
-          state.loading[ApiOperations.edit] = true;
+        pending: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.edit}-${id}`] = true;
         },
-        rejected: (state, { error, payload }) => {
-          state.error[ApiOperations.edit] = payload ?? error;
+        rejected: (state, { meta: { arg: { id } }, error, payload }) => {
+          state.error[`${ApiOperations.edit}-${id}`] = payload ?? error;
         },
         fulfilled: (state, { meta: { arg }, payload }) => {
           const index = state.companies.findIndex(({id}) => id === arg.id);
@@ -167,8 +167,8 @@ const companySlice = createSlice({
           }
           state.company = payload;
         },
-        settled: (state) => {
-          state.loading[ApiOperations.edit] = false;
+        settled: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.edit}-${id}`] = false;
         },
       },
     ),
@@ -201,6 +201,7 @@ const companySlice = createSlice({
     selectCompany: (state) => state.company,
     selectCompanyFilter: (state) => state.filter,
     selectIsCompaniesLoading: (state, operation: string) => !!state.loading[operation],
+    selectCompaniesLoading: (state) => state.loading,
   },
 });
 
@@ -226,4 +227,5 @@ export const {
   selectCompanies,
   selectCompany,
   selectIsCompaniesLoading,
+  selectCompaniesLoading,
 } = companySlice.selectors

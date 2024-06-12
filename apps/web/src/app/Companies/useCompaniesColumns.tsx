@@ -1,13 +1,16 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CircularProgress } from '@mui/material';
 import {
   GridRowModesModel,
   GridRowModes,
   GridColDef,
   GridRowId,
   GridPreProcessEditCellProps,
-  GridRenderEditCellParams
+  GridRenderEditCellParams,
+  GridEditCellProps
 } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -17,12 +20,28 @@ import dayjs from 'dayjs';
 import { is } from 'ramda';
 import { allowedCountries } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
-import { CompanyFull, CompanyItems } from '@eco/types';
-import { cancelCompany, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { ApiOperations, CompanyFull, CompanyItems } from '@eco/types';
+import {
+  apiGetCompanyAres,
+  cancelCompany,
+  selectCompaniesLoading,
+  selectUserAuth,
+  useAppDispatch,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { getCompanyEditValidationSchema } from '@eco/validation';
-import { AppGridButton, AppGridInputField, DialogClickOpen } from '../components';
+import { AppGridButton, AppGridInputField, AppGridSearchField, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
-import { CompaniesSearchField } from '.';
+
+export interface CompanyErrors {
+  name: string;
+  email: string;
+  ico: string;
+  vat: string;
+  address: string;
+}
+
+export type CompaniesErrors = {[key: string]: Partial<CompanyErrors>};
 
 interface CompaniesColumns {
   columns: GridColDef[];
@@ -32,51 +51,71 @@ interface CompaniesColumns {
 
 const companySchema = getCompanyEditValidationSchema();
 
-export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): CompaniesColumns => {
+export const initCompaniesErrors = {
+  [CompanyItems.Name]: '',
+  [CompanyItems.Email]: '',
+  [CompanyItems.Ico]: '',
+  [CompanyItems.Vat]: '',
+  [CompanyItems.Address]: '',
+}
+
+export const useCompaniesColumns = (
+  apiRef: MutableRefObject<GridApiCommunity>,
+  handleClickOpen: DialogClickOpen,
+  errors: CompaniesErrors,
+  setErrors: Dispatch<SetStateAction<CompaniesErrors>>
+): CompaniesColumns => {
 
   const { t, i18n: { language } } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
 
-  const [ errors, setErrors ] = useState({});
-
   const dispatch = useAppDispatch();
 
   const { rights: { scopes: { companies } } } = useShallowEqualSelector(selectUserAuth);
 
-  const handleSaveClick = useCallback(
-    (id: GridRowId) => () => {
-      setRowModesModel(setRowMode(id, GridRowModes.View));
-    },
-    []
-  );
+  const companiesLoading = useShallowEqualSelector(selectCompaniesLoading);
 
-  const handleEditClick = useCallback(
-    (id: GridRowId) => () => {
-      setRowModesModel(setRowMode(id, GridRowModes.Edit));
-    },
-    []
-  );
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel(setRowMode(id, GridRowModes.View));
+  };
 
-  const handleDeleteClick = useCallback(
-    (id: GridRowId) => () => {
-      handleClickOpen(id);
-    },
-    [handleClickOpen]
-  );
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel(setRowMode(id, GridRowModes.Edit));
+  };
 
-  const handleCancelClick = useCallback(
-    (id: GridRowId) => () => {
-      setRowModesModel((prevRowModesModel) => ({
-        ...prevRowModesModel,
-        [id]: { mode: GridRowModes.View, ignoreModifications: true },
-      }));
-      dispatch(cancelCompany(id));
-    },
-    [dispatch]
-  );
+  const handleDeleteClick = (id: GridRowId) => () => {
+    handleClickOpen(id);
+  };
 
-  const processValidation = async (item: CompanyItems, value?: string) => {
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel((prevRowModesModel) => ({
+      ...prevRowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    }));
+    dispatch(cancelCompany(id));
+    setErrors((prevErrors) => ({
+      ...prevErrors, 
+      [id]: {}
+    }));
+  };
+
+  const handleSearch = (id: GridRowId, value?: string | number) => () => {
+    if (value) {
+      dispatch(apiGetCompanyAres({id, ico: `${value}`, apiRef}));
+    }
+  };
+
+  const processValidation = async (
+    id: GridRowId,
+    item: CompanyItems,
+    {value, error}: GridEditCellProps<string>,
+    hasChanged?: boolean
+  ) => {
+    if (!hasChanged) {
+      return error;
+    }
+
     let message: string | undefined = undefined;
     try {
       await companySchema.validateAt(item, {[item]: value});
@@ -84,7 +123,13 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
     catch (error) {
       ({ message } = error as {message: string});
     }
-    setErrors((prevErrors) => ({...prevErrors, [item]: message}));
+    setErrors((prevErrors) => ({
+      ...prevErrors, 
+      [id]: {
+        ...prevErrors[id],
+        [item]: message
+      }
+    }));
 
     return !!message;
   }
@@ -92,17 +137,41 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
   return {
     columns: [
       {
+        ...columnSettings(CompanyItems.Ico, 150, 'left'),
+        headerName: t('labels:ico'),
+        sortable: false,
+        editable: companies?.edit,
+        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(id, CompanyItems.Ico, props, hasChanged);
+          return { ...props, error };
+        },
+        renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
+          const { id, value } = params;
+          return (
+            <AppGridSearchField
+              {...params}
+              apiRef={apiRef}
+              handleSearch={handleSearch(id, value)}
+              inputWidth={115}
+              isLoading={companiesLoading[`${ApiOperations.getExternalItem}-${params.id}`]}
+              title={t('labels:filterSearch')}
+            />
+          );
+        },
+      },
+      {
         ...columnSettings(CompanyItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(CompanyItems.Name, props.value);
+        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(id, CompanyItems.Name, props, hasChanged);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
+              helperText={errors[params.id]?.name}
             />
           );
         },
@@ -111,24 +180,15 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         ...columnSettings(CompanyItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(CompanyItems.Email, props.value);
-          return { ...props, error };
-        },
-      },
-      {
-        ...columnSettings(CompanyItems.Ico, 150, 'left'),
-        headerName: t('labels:ico'),
-        sortable: false,
-        editable: companies?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(CompanyItems.Ico, props.value);
+        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(id, CompanyItems.Email, props, hasChanged);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
-            <CompaniesSearchField
+            <AppGridInputField
               {...params}
+              helperText={errors[params.id]?.email}
             />
           );
         },
@@ -138,14 +198,15 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         headerName: t('labels:vat'),
         sortable: false,
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(CompanyItems.Vat, props.value);
+        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(id, CompanyItems.Vat, props, hasChanged);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
+              helperText={errors[params.id]?.vat}
             />
           );
         },
@@ -154,14 +215,15 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
         ...columnSettings(CompanyItems.Address, 320, 'left'),
         headerName: t('labels:address'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(CompanyItems.Address, props.value);
+        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(id, CompanyItems.Address, props, hasChanged);
           return { ...props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
             <AppGridInputField
               {...params}
+              helperText={errors[params.id]?.address}
             />
           );
         },
@@ -197,11 +259,24 @@ export const useCompaniesColumns = (handleClickOpen: DialogClickOpen): Companies
             [
               <AppGridButton
                 title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
+                disabled={!!(errors[id] && Object.values(errors[id]).filter((error) => !!error).length)}
                 label={t('labels:save')}
                 onClick={handleSaveClick(id)}
                 color="primary"
               >
-                <SaveIcon />
+                {(companiesLoading[`${ApiOperations.create}-${id}`] || companiesLoading[`${ApiOperations.edit}-${id}`])
+                  ?
+                  <CircularProgress
+                    color="inherit"
+                    size={30}
+                    sx={{
+                      alignSelf: 'center',
+                      mr: 0.5
+                    }}
+                  />
+                  :
+                  <SaveIcon />
+                }
               </AppGridButton>,
               <AppGridButton
                 label={t('labels:cancel')}

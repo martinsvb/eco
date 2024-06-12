@@ -59,7 +59,7 @@ export const useCompaniesHandlers = (
     [dispatch, dialogItemId, setOpen]
   );
 
-  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
     const items = [
       CompanyItems.Name,
       CompanyItems.Email,
@@ -69,13 +69,14 @@ export const useCompaniesHandlers = (
       CompanyItems.Country
     ];
 
+    let result;
     if (newRow.isNew) {
-      dispatch(apiPostCompany({body: pick(items, newRow)}));
+      result = await dispatch(apiPostCompany({body: pick(items, newRow), id: newRow.id}));
     }
     else {
       const body = getObjectDiff<CompanyData>(newRow, oldRow, items);
       if (!isEmpty(body)) {
-        dispatch(
+        result = await dispatch(
           apiPatchCompany({
             body,
             id: newRow.id
@@ -84,7 +85,12 @@ export const useCompaniesHandlers = (
       }
     }
 
-    return { ...newRow, isNew: undefined } as CompanyFull;
+    const isNewCompanyCreated = newRow.isNew && !result?.type.includes('rejected') && result?.payload.id;
+    return {
+      ...newRow,
+      id: isNewCompanyCreated ? result?.payload.id : newRow.id,
+      isNew: isNewCompanyCreated ? undefined : newRow.isNew
+    } as CompanyFull;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {

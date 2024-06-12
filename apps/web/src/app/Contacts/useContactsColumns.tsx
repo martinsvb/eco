@@ -189,6 +189,14 @@ export const useContactsColumns = (
           const error = await processValidation(id, ContactItems.Email, props, hasChanged);
           return { ...props, error };
         },
+        renderEditCell: (params: GridRenderEditCellParams<ContactFull, string | number>) => {
+          return (
+            <AppGridInputField
+              {...params}
+              helperText={errors[params.id]?.email}
+            />
+          );
+        },
       },
       {
         ...columnSettings(ContactItems.Phone, 200),
