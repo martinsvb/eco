@@ -194,7 +194,7 @@ export const useCompaniesColumns = (
         },
       },
       {
-        ...columnSettings(CompanyItems.Vat, 140, 'left'),
+        ...columnSettings(CompanyItems.Vat, 120, 'left'),
         headerName: t('labels:vat'),
         sortable: false,
         editable: companies?.edit,
@@ -241,17 +241,17 @@ export const useCompaniesColumns = (
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(CompanyItems.CreatedAt, 160),
+        ...columnSettings(CompanyItems.CreatedAt, 140),
         headerName: t('labels:createdAt'),
         type: 'string',
-        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),
+        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
         disableColumnMenu: true,
       },
       {
         field: 'actions',
         type: 'actions',
         headerName: t('labels:actions'),
-        width: 100,
+        width: 80,
         cellClassName: 'actions',
         getActions: ({ id }) => {
 
