@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridRowModes, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { UserItems } from '@eco/types';
 import { apiGetUsers, selectUsers, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
-import { useUsersColumns } from './useUsersColumns';
+import { UsersErrors, initUsersErrors, useUsersColumns } from './useUsersColumns';
 import { UsersColumnMenu } from './UsersColumnMenu';
 import UsersButtons from './UsersButtons';
 import UsersDialog from './UsersDialog';
@@ -22,6 +22,8 @@ export const Users = () => {
 
   const isMobilePortrait = useMobilePortraitDetection();
 
+  const [ errors, setErrors ] = useState<UsersErrors>(initUsersErrors);
+
   const dispatch = useAppDispatch();
 
   const { users, isLoading, loaded } = useShallowEqualSelector(selectUsers);
@@ -29,6 +31,8 @@ export const Users = () => {
   const { search } = useLocation();
 
   const filter = qs.parse(search.substring(1));
+
+  const apiRef = useGridApiRef();
 
   useEffect(
     () => { 
@@ -50,20 +54,21 @@ export const Users = () => {
 
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
-  const { columns, rowModesModel, setRowModesModel } = useUsersColumns(handleClickOpen);
+  const { columns, rowModesModel, setRowModesModel } = useUsersColumns(apiRef, handleClickOpen, errors, setErrors);
 
   const {
     dataGridHandlers,
     handleDelete,
     handleRefresh,
     handleNew
-  } = useUsersHandlers(setRowModesModel, setOpen, dialogItemId);
+  } = useUsersHandlers(apiRef, setRowModesModel, setOpen, setErrors, dialogItemId);
 
   return (
     <>
       <Typography variant='h3' mb={3}>{t('users:title')}</Typography>
       <Box sx={getDataGridWrapperSx(theme, isMobilePortrait)}>
         <DataGrid
+          apiRef={apiRef}
           rows={users}
           columns={columns}
           editMode="row"
@@ -71,6 +76,9 @@ export const Users = () => {
           loading={isLoading}
           rowModesModel={rowModesModel}
           {...dataGridHandlers}
+          getRowHeight={({id}) => {
+            return apiRef.current.getRowMode(id) === GridRowModes.Edit ? 62 : 52
+          }}
           slots={{
             columnMenu: UsersColumnMenu,
           }}

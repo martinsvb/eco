@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CircularProgress } from '@mui/material';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -8,17 +9,34 @@ import {
   GridRenderEditCellParams,
   GridPreProcessEditCellProps
 } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import { is, omit } from 'ramda';
-import { UserFull, UserItems, UserRoles } from '@eco/types';
-import { cancelUser, selectUserAuth, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { ApiOperations, UserFull, UserItems, UserRoles } from '@eco/types';
+import { cancelUser, selectUserAuth, selectUsersLoading, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getUserEditValidationSchema } from '@eco/validation';
-import { AppAvatar, AppGridButton, AppGridPhoneField, DialogClickOpen } from '../components';
+import { AppAvatar, AppGridButton, AppGridInputField, AppGridPhoneField, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
+
+export interface UserErrors {
+  name: string;
+  email: string;
+}
+
+export type UsersErrors = {
+  errors: {
+    [key: string]: Partial<UserErrors> | undefined;
+  },
+  valid: {
+    [key: string]: boolean | undefined;
+  },
+};
+
+export type UsersValid = {[key: string]: boolean};
 
 interface UsersColumns {
   columns: GridColDef[];
@@ -26,52 +44,80 @@ interface UsersColumns {
   setRowModesModel: Dispatch<SetStateAction<GridRowModesModel>>
 }
 
-const userSchema = getUserEditValidationSchema();
+export const userSchema = getUserEditValidationSchema();
 
-export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns => {
+export const initUsersErrors = {
+  errors: {},
+  valid: {}
+}
+
+export const useUsersColumns = (
+  apiRef: MutableRefObject<GridApiCommunity>,
+  handleClickOpen: DialogClickOpen,
+  {errors, valid}: UsersErrors,
+  setErrors: Dispatch<SetStateAction<UsersErrors>>
+): UsersColumns => {
 
   const { t } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
 
-  const [ errors, setErrors ] = useState({});
-
   const dispatch = useAppDispatch();
 
   const { rights: { scopes: { users } }, role } = useShallowEqualSelector(selectUserAuth);
 
-  const handleSaveClick = useCallback(
-    (id: GridRowId) => () => {
-      setRowModesModel(setRowMode(id, GridRowModes.View));
-    },
-    []
-  );
+  const usersLoading = useShallowEqualSelector(selectUsersLoading);
 
-  const handleEditClick = useCallback(
-    (id: GridRowId) => () => {
-      setRowModesModel(setRowMode(id, GridRowModes.Edit));
-    },
-    []
-  );
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel(setRowMode(id, GridRowModes.View));
+  };
 
-  const handleDeleteClick = useCallback(
-    (id: GridRowId) => () => {
-      handleClickOpen(id);
-    },
-    [handleClickOpen]
-  );
+  const handleEditClick = (id: GridRowId) => async () => {
+    const row = apiRef.current.getRow(id);
 
-  const handleCancelClick = useCallback(
-    (id: GridRowId) => () => {
-      setErrors({});
-      setRowModesModel((prevRowModesModel) => ({
-        ...prevRowModesModel,
-        [id]: { mode: GridRowModes.View, ignoreModifications: true },
-      }));
-      dispatch(cancelUser(id));
-    },
-    [dispatch]
-  );
+    let isValid = true;
+    try {
+      await userSchema.validate(row, {abortEarly: true, stripUnknown: true});
+    }
+    catch (error) {
+      isValid = false;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      valid: {
+        ...prevErrors.valid,
+        [id]: isValid
+      }
+    }));
+
+    setRowModesModel(setRowMode(id, GridRowModes.Edit));
+  };
+
+  const handleDeleteClick = (id: GridRowId) => () => {
+    handleClickOpen(id);
+  };
+
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel((prevRowModesModel) => ({
+      ...prevRowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    }));
+
+    dispatch(cancelUser(id));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      errors: {
+        ...prevErrors.errors,
+        [id]: undefined
+      },
+      valid: {
+        ...prevErrors.valid,
+        [id]: undefined
+      }
+    }));
+  };
 
   const roles = useMemo(
     () => {
@@ -86,20 +132,49 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
     [t]
   );
 
-  const processValidation = async (row: UserFull, item: UserItems, value?: string) => {
+  const processValidation = async (
+    item: UserItems,
+    {
+      id,
+      hasChanged,
+      props: { error, value }
+    }: GridPreProcessEditCellProps<string, UserFull>
+  ) => {
+    if (!hasChanged) {
+      return error;
+    }
+
+    const updatedRow = apiRef.current.getRowWithUpdatedValues(id, item)
+
     let message: string | undefined = undefined;
+    let isValid = true;
     try {
-      await userSchema.validate({
-        ...row,
-        [item]: value
-      }, {
-        stripUnknown: true
-      });
+      await userSchema.validate(updatedRow, {abortEarly: true, stripUnknown: true});
     }
     catch (error) {
-      ({ message } = error as {message: string});
+      isValid = false;
+      try {
+        await userSchema.validateAt(item, {[item]: value});
+      }
+      catch (error) {
+        ({ message } = error as {message: string});
+      }
     }
-    setErrors((prevErrors) => ({...prevErrors, [item]: message}));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      errors: {
+        ...prevErrors.errors,
+        [id]: {
+          ...prevErrors.errors[id],
+          [item]: message
+        }
+      },
+      valid: {
+        ...prevErrors.valid,
+        [id]: isValid
+      }
+    }));
 
     return !!message;
   }
@@ -127,21 +202,37 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(UserItems.Name, 180, 'left'),
+        ...columnSettings(UserItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: users?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, UserFull>) => {
-          const error = await processValidation(row, UserItems.Name, props.value);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, UserFull>) => {
+          const error = await processValidation(UserItems.Name, params);
+          return { ...params.props, error };
+        },
+        renderEditCell: (params: GridRenderEditCellParams<UserFull, string>) => {
+          return (
+            <AppGridInputField
+              {...params}
+              helperText={errors[params.id]?.name}
+            />
+          );
         },
       },
       {
-        ...columnSettings(UserItems.Email, 220, 'left'),
+        ...columnSettings(UserItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: users?.edit,
-        preProcessEditCellProps: async ({props, row}: GridPreProcessEditCellProps<string, UserFull>) => {
-          const error = await processValidation(row, UserItems.Email, props.value);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, UserFull>) => {
+          const error = await processValidation(UserItems.Email, params);
+          return { ...params.props, error };
+        },
+        renderEditCell: (params: GridRenderEditCellParams<UserFull, string>) => {
+          return (
+            <AppGridInputField
+              {...params}
+              helperText={errors[params.id]?.email}
+            />
+          );
         },
       },
       {
@@ -180,17 +271,17 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(UserItems.CreatedAt, 200),
+        ...columnSettings(UserItems.CreatedAt, 140),
         headerName: t('labels:createdAt'),
         type: 'string',
-        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),
+        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
         disableColumnMenu: true,
       },
       {
         field: 'actions',
         type: 'actions',
         headerName: t('labels:actions'),
-        width: 100,
+        width: 80,
         cellClassName: 'actions',
         getActions: ({ id }) => {
 
@@ -198,11 +289,23 @@ export const useUsersColumns = (handleClickOpen: DialogClickOpen): UsersColumns 
             [
               <AppGridButton
                 title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
+                disabled={!valid[id]}
                 label={t('labels:save')}
                 onClick={handleSaveClick(id)}
                 color="primary"
               >
-                <SaveIcon />
+                {(usersLoading[`${ApiOperations.create}-${id}`] || usersLoading[`${ApiOperations.edit}-${id}`]) ?
+                  <CircularProgress
+                    color="inherit"
+                    size={30}
+                    sx={{
+                      alignSelf: 'center',
+                      mr: 0.5
+                    }}
+                  />
+                  :
+                  <SaveIcon />
+                }
               </AppGridButton>,
               <AppGridButton
                 label={t('labels:cancel')}

@@ -1,4 +1,4 @@
-import { MouseEvent, SetStateAction, useCallback } from 'react';
+import { Dispatch, MouseEvent, MutableRefObject, SetStateAction, useCallback } from 'react';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -8,6 +8,7 @@ import {
   GridEventListener,
   GridRowEditStopReasons
 } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff } from '@eco/config';
 import {
@@ -20,25 +21,47 @@ import {
 } from '@eco/redux';
 import { UserData, UserFull, UserItems, getNewUserData } from '@eco/types';
 import { appGridClasses } from '../components';
+import { UsersErrors, userSchema } from './useUsersColumns';
 
 export const useUsersHandlers = (
+  apiRef: MutableRefObject<GridApiCommunity>,
   setRowModesModel: (value: SetStateAction<GridRowModesModel>) => void,
   setOpen: (value: SetStateAction<boolean>) => void,
+  setErrors: Dispatch<SetStateAction<UsersErrors>>,
   dialogItemId: GridRowId | null
 ) => {
 
   const dispatch = useAppDispatch();
 
   const handleNew = useCallback(
-    () => {
+    async () => {
       const { id, data } = getNewUserData();
-      dispatch(unshiftUser(data as UserFull));
+
+      await dispatch(unshiftUser(data as UserFull));
+
+      const row = apiRef.current.getRow(id);
+      let isValid = true;
+      try {
+        await userSchema.validate(row, {abortEarly: true});
+      }
+      catch (error) {
+        isValid = false;
+      }
+
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        valid: {
+          ...prevErrors.valid,
+          [id]: isValid
+        }
+      }));
+
       setRowModesModel((oldModel) => ({
         [id]: { mode: GridRowModes.Edit, fieldToFocus: UserItems.Name },
         ...oldModel,
       }));
     },
-    [dispatch, setRowModesModel]
+    [apiRef, dispatch, setErrors, setRowModesModel]
   );
 
   const handleRefresh = useCallback(
@@ -59,20 +82,17 @@ export const useUsersHandlers = (
     [dispatch, dialogItemId, setOpen]
   );
 
-  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
-    if (!newRow.name || !newRow.email) {
-      return oldRow as UserFull;
-    }
-
+  const processRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
     const items = [UserItems.Name, UserItems.Email, UserItems.Role, UserItems.Phone];
 
+    let result;
     if (newRow.isNew) {
-      dispatch(apiPostUser({body: pick([...items, UserItems.Origin], newRow)}));
+      result = await dispatch(apiPostUser({body: pick([...items, UserItems.Origin], newRow), id: newRow.id}));
     }
     else {
       const body = getObjectDiff<UserData>(newRow, oldRow, items);
       if (!isEmpty(body)) {
-        dispatch(
+        result = await dispatch(
           apiPatchUser({
             body,
             id: newRow.id
@@ -81,7 +101,12 @@ export const useUsersHandlers = (
       }
     }
 
-    return { ...newRow, isNew: undefined } as UserFull;
+    const isNewContactCreated = newRow.isNew && !result?.type.includes('rejected') && result?.payload.id;
+    return {
+      ...newRow,
+      id: isNewContactCreated ? result?.payload.id : newRow.id,
+      isNew: isNewContactCreated ? undefined : newRow.isNew
+    } as UserFull;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {

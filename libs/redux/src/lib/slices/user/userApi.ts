@@ -53,7 +53,7 @@ export const userGet = async (
 }
 
 export const usersPost = async (
-  {body}: {body: UserData},
+  {body}: {body: UserData, id: string},
   { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {

@@ -91,28 +91,28 @@ const userSlice = createSlice({
     apiPostUser: create.asyncThunk(
       usersPost,
       {
-        pending: (state) => {
-          state.loading[ApiOperations.create] = true;
+        pending: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.getExternalItem}-${id}`] = true;
         },
-        rejected: (state, { error, payload }) => {
-          state.error[ApiOperations.create] = payload ?? error;
+        rejected: (state, { meta: { arg: { id } }, error, payload }) => {
+          state.error[`${ApiOperations.getExternalItem}-${id}`] = payload ?? error;
         },
         fulfilled: (state, { payload }) => {
           state.users[0] = payload;
         },
-        settled: (state) => {
-          state.loading[ApiOperations.create] = false;
+        settled: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.getExternalItem}-${id}`] = false;
         },
       },
     ),
     apiPatchUser: create.asyncThunk(
       usersPatch,
       {
-        pending: (state) => {
-          state.loading[ApiOperations.edit] = true;
+        pending: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.edit}-${id}`] = true;
         },
-        rejected: (state, { error, payload }) => {
-          state.error[ApiOperations.edit] = payload ?? error;
+        rejected: (state, { meta: { arg: { id } }, error, payload }) => {
+          state.error[`${ApiOperations.edit}-${id}`] = payload ?? error;
         },
         fulfilled: (state, { meta: { arg }, payload }) => {
           const index = state.users.findIndex(({id}) => id === arg.id);
@@ -121,8 +121,8 @@ const userSlice = createSlice({
           }
           state.user = payload;
         },
-        settled: (state) => {
-          state.loading[ApiOperations.edit] = false;
+        settled: (state, { meta: { arg: { id } } }) => {
+          state.loading[`${ApiOperations.edit}-${id}`] = false;
         },
       },
     ),
@@ -155,6 +155,7 @@ const userSlice = createSlice({
     selectUser: (state) => state.user,
     selectFilter: (state) => state.filter,
     selectIsUsersLoading: (state, operation: ApiOperations) => !!state.loading[operation],
+    selectUsersLoading: (state) => state.loading,
   },
 });
 
@@ -178,4 +179,5 @@ export const {
   selectUsers,
   selectUser,
   selectIsUsersLoading,
+  selectUsersLoading,
 } = userSlice.selectors

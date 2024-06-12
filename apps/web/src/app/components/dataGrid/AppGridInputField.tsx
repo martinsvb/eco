@@ -1,11 +1,10 @@
 import { ChangeEvent, useCallback } from "react";
 import { GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid";
-import { CompanyFull } from "@eco/types";
 import { Input } from "..";
 
 type AppGridInputFieldProps = {
   helperText?: string;
-} & GridRenderEditCellParams<CompanyFull, string | number>;
+} & GridRenderEditCellParams<any, string | number>;
 
 export const AppGridInputField = ({
   error,
