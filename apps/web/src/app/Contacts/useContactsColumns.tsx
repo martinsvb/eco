@@ -205,7 +205,7 @@ export const useContactsColumns = (
         },
       },
       {
-        ...columnSettings(ContactItems.Vat, 140, 'left'),
+        ...columnSettings(ContactItems.Vat, 120, 'left'),
         headerName: t('labels:vat'),
         sortable: false,
         editable: contacts?.edit,
@@ -252,17 +252,17 @@ export const useContactsColumns = (
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(ContactItems.CreatedAt, 160),
+        ...columnSettings(ContactItems.CreatedAt, 140),
         headerName: t('labels:createdAt'),
         type: 'string',
-        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY HH:mm'),
+        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
         disableColumnMenu: true,
       },
       {
         field: 'actions',
         type: 'actions',
         headerName: t('labels:actions'),
-        width: 100,
+        width: 80,
         cellClassName: 'actions',
         getActions: ({ id }) => {
 

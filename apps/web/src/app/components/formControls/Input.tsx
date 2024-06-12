@@ -17,7 +17,7 @@ export const Input = memo(({
   const id = `toggle-table-filter-input-${inputProps.name}`;
 
   return (
-    <Stack>
+    <Stack justifyContent="center">
       <InputBase
         {...inputProps}
         id={id}

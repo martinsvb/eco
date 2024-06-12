@@ -45,9 +45,13 @@ export const PhoneField: FC<PhoneFieldProps> = memo(forwardRef(({
   return (
     <Stack
       direction="row"
+      alignItems="baseline"
       sx={{
         '& .react-tel-input': {
           width: 'calc(100% - 58px)',
+          '& .MuiFormControl-root': {
+            verticalAlign: "baseline"
+          },
           '& .MuiInputBase-root': {
             borderLeft: 0,
             borderTopLeftRadius: 0,

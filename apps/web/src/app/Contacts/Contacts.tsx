@@ -81,8 +81,7 @@ export const Contacts = () => {
           {...dataGridHandlers}
           getRowHeight={({id}) => {
             const mode = apiRef.current.getRowMode(id);
-            const hasError = !!(errors[id] && Object.values(errors[id]).filter((error) => !!error).length);
-            return mode === GridRowModes.Edit && hasError
+            return mode === GridRowModes.Edit
               ? 62
               : 52
           }}
