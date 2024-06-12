@@ -86,9 +86,11 @@ export const useContactsHandlers = (
       }
     }
 
+    const isNewContactCreated = newRow.isNew && !result?.type.includes('rejected') && result?.payload.id;
     return {
       ...newRow,
-      isNew: newRow.isNew && !result?.type.includes('rejected') ? undefined : newRow.isNew
+      id: isNewContactCreated ? result?.payload.id : newRow.id,
+      isNew: isNewContactCreated ? undefined : newRow.isNew
     } as ContactFull;
   };
 
