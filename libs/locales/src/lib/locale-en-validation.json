@@ -1,7 +1,7 @@
 {
   "email": "Invalid e-mail",
   "equal": "Value must equal with {{Field}}",
-  "icoFormat": "Wrong ico format",
+  "icoFormat": "Wrong crn format",
   "maxLength": "Maximal length must be {{length}} characters",
   "minLength": "Minimal length must be {{length}} characters",
   "required": "{{Field}} is required"
