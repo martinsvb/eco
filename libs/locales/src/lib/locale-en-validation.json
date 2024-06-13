@@ -4,5 +4,6 @@
   "icoFormat": "Wrong crn format",
   "maxLength": "Maximal length must be {{length}} characters",
   "minLength": "Minimal length must be {{length}} characters",
-  "required": "{{Field}} is required"
+  "required": "{{Field}} is required",
+  "vatFormat": "Wrong crn vat format"
 }

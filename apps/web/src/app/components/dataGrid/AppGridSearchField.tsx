@@ -68,7 +68,7 @@ export const AppGridSearchField = ({
       isLoading={isLoading}
       buttonProps={{
         onClick: handleSearch,
-        disabled: !value,
+        disabled: !value || error,
         size: 'small'
       }}
       handleClear={handleClear}

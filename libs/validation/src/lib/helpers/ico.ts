@@ -1,10 +1,10 @@
 export const testIco = (ico?: string | null) => {
 
-  try {
-    if (!ico) {
-      return true;
-    }
+  if (!ico) {
+    return true;
+  }
 
+  try {
     if (ico.length != 8) {
       throw 'wrongIcoLength';
     }
@@ -28,7 +28,7 @@ export const testIco = (ico?: string | null) => {
       compare = 1;
     }
 
-    if (parseInt(parts[ 7]) != compare) {
+    if (parseInt(parts[7]) != compare) {
       throw 'wrongIcoFormat';
     }
   } catch(e) {

@@ -2,6 +2,7 @@ import * as yup from "yup";
 import i18n from '@eco/locales';
 import { ContactItems } from '@eco/types';
 import { testIco } from "./helpers/ico";
+import { testDic } from "./helpers/dic";
 
 export const getContactEditValidationSchema = () => {
   const { t } = i18n;
@@ -20,6 +21,10 @@ export const getContactEditValidationSchema = () => {
       t('validation:icoFormat'),
       testIco
     ),
-    [ContactItems.Vat]: yup.string().nullable(),
+    [ContactItems.Vat]: yup.string().nullable().test(
+      ContactItems.Vat,
+      t('validation:vatFormat'),
+      testDic
+    ),
   });
 }

@@ -2,6 +2,7 @@ import * as yup from "yup";
 import i18n from '@eco/locales';
 import { CompanyItems } from '@eco/types';
 import { testIco } from "./helpers/ico";
+import { testDic } from "./helpers/dic";
 
 export const getCompanyEditValidationSchema = () => {
   const { t } = i18n;
@@ -19,6 +20,10 @@ export const getCompanyEditValidationSchema = () => {
       t('validation:icoFormat'),
       testIco
     ),
-    [CompanyItems.Vat]: yup.string().nullable(),
+    [CompanyItems.Vat]: yup.string().nullable().test(
+      CompanyItems.Vat,
+      t('validation:vatFormat'),
+      testDic
+    ),
   });
 }
