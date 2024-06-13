@@ -13,6 +13,7 @@ import {
   CompaniesColumnMenu,
   CompaniesDialog,
   CompaniesErrors,
+  initCompanieErrors,
   useCompaniesColumns,
   useCompaniesHandlers
 } from '.';
@@ -27,7 +28,7 @@ export const Companies = () => {
 
   const dispatch = useAppDispatch();
 
-  const [ errors, setErrors ] = useState<CompaniesErrors>({});
+  const [ errors, setErrors ] = useState<CompaniesErrors>(initCompanieErrors);
 
   const { companies, isLoading, loaded } = useShallowEqualSelector(selectCompanies);
 
@@ -64,7 +65,7 @@ export const Companies = () => {
     handleDelete,
     handleRefresh,
     handleNew
-  } = useCompaniesHandlers(setRowModesModel, setOpen, dialogItemId);
+  } = useCompaniesHandlers(apiRef, setRowModesModel, setOpen, dialogItemId, setErrors);
 
   return (
     <>

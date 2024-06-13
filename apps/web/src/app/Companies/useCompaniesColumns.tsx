@@ -7,8 +7,7 @@ import {
   GridColDef,
   GridRowId,
   GridPreProcessEditCellProps,
-  GridRenderEditCellParams,
-  GridEditCellProps
+  GridRenderEditCellParams
 } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -41,7 +40,14 @@ export interface CompanyErrors {
   address: string;
 }
 
-export type CompaniesErrors = {[key: string]: Partial<CompanyErrors>};
+export type CompaniesErrors = {
+  errors: {
+    [key: string]: Partial<CompanyErrors> | undefined;
+  },
+  valid: {
+    [key: string]: boolean | undefined;
+  },
+};
 
 interface CompaniesColumns {
   columns: GridColDef[];
@@ -49,20 +55,17 @@ interface CompaniesColumns {
   setRowModesModel: Dispatch<SetStateAction<GridRowModesModel>>
 }
 
-const companySchema = getCompanyEditValidationSchema();
+export const companySchema = getCompanyEditValidationSchema();
 
-export const initCompaniesErrors = {
-  [CompanyItems.Name]: '',
-  [CompanyItems.Email]: '',
-  [CompanyItems.Ico]: '',
-  [CompanyItems.Vat]: '',
-  [CompanyItems.Address]: '',
+export const initCompanieErrors = {
+  errors: {},
+  valid: {}
 }
 
 export const useCompaniesColumns = (
   apiRef: MutableRefObject<GridApiCommunity>,
   handleClickOpen: DialogClickOpen,
-  errors: CompaniesErrors,
+  {errors, valid}: CompaniesErrors,
   setErrors: Dispatch<SetStateAction<CompaniesErrors>>
 ): CompaniesColumns => {
 
@@ -80,7 +83,25 @@ export const useCompaniesColumns = (
     setRowModesModel(setRowMode(id, GridRowModes.View));
   };
 
-  const handleEditClick = (id: GridRowId) => () => {
+  const handleEditClick = (id: GridRowId) => async () => {
+    const row = apiRef.current.getRow(id);
+
+    let isValid = true;
+    try {
+      await companySchema.validate(row, {abortEarly: true, stripUnknown: true});
+    }
+    catch (error) {
+      isValid = false;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      valid: {
+        ...prevErrors.valid,
+        [id]: isValid
+      }
+    }));
+
     setRowModesModel(setRowMode(id, GridRowModes.Edit));
   };
 
@@ -93,10 +114,19 @@ export const useCompaniesColumns = (
       ...prevRowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     }));
+
     dispatch(cancelCompany(id));
+
     setErrors((prevErrors) => ({
-      ...prevErrors, 
-      [id]: {}
+      ...prevErrors,
+      errors: {
+        ...prevErrors.errors,
+        [id]: undefined
+      },
+      valid: {
+        ...prevErrors.valid,
+        [id]: undefined
+      }
     }));
   };
 
@@ -107,27 +137,46 @@ export const useCompaniesColumns = (
   };
 
   const processValidation = async (
-    id: GridRowId,
     item: CompanyItems,
-    {value, error}: GridEditCellProps<string>,
-    hasChanged?: boolean
+    {
+      id,
+      hasChanged,
+      props: { error, value }
+    }: GridPreProcessEditCellProps<string, CompanyFull>
   ) => {
     if (!hasChanged) {
       return error;
     }
 
+    const updatedRow = apiRef.current.getRowWithUpdatedValues(id, item)
+
     let message: string | undefined = undefined;
+    let isValid = true;
     try {
-      await companySchema.validateAt(item, {[item]: value});
+      await companySchema.validate(updatedRow, {abortEarly: true, stripUnknown: true});
     }
     catch (error) {
-      ({ message } = error as {message: string});
+      isValid = false;
+      try {
+        await companySchema.validateAt(item, {[item]: value});
+      }
+      catch (error) {
+        ({ message } = error as {message: string});
+      }
     }
+
     setErrors((prevErrors) => ({
-      ...prevErrors, 
-      [id]: {
-        ...prevErrors[id],
-        [item]: message
+      ...prevErrors,
+      errors: {
+        ...prevErrors.errors,
+        [id]: {
+          ...prevErrors.errors[id],
+          [item]: message
+        }
+      },
+      valid: {
+        ...prevErrors.valid,
+        [id]: isValid
       }
     }));
 
@@ -141,9 +190,9 @@ export const useCompaniesColumns = (
         headerName: t('labels:ico'),
         sortable: false,
         editable: companies?.edit,
-        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(id, CompanyItems.Ico, props, hasChanged);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Ico, params);
+          return { ...params.props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           const { id, value } = params;
@@ -163,9 +212,9 @@ export const useCompaniesColumns = (
         ...columnSettings(CompanyItems.Name, 200, 'left'),
         headerName: t('labels:name'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(id, CompanyItems.Name, props, hasChanged);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Name, params);
+          return { ...params.props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
@@ -180,9 +229,9 @@ export const useCompaniesColumns = (
         ...columnSettings(CompanyItems.Email, 200, 'left'),
         headerName: t('labels:email'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(id, CompanyItems.Email, props, hasChanged);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Email, params);
+          return { ...params.props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
@@ -198,9 +247,9 @@ export const useCompaniesColumns = (
         headerName: t('labels:vat'),
         sortable: false,
         editable: companies?.edit,
-        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(id, CompanyItems.Vat, props, hasChanged);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Vat, params);
+          return { ...params.props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
@@ -215,9 +264,9 @@ export const useCompaniesColumns = (
         ...columnSettings(CompanyItems.Address, 320, 'left'),
         headerName: t('labels:address'),
         editable: companies?.edit,
-        preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, CompanyFull>) => {
-          const error = await processValidation(id, CompanyItems.Address, props, hasChanged);
-          return { ...props, error };
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Address, params);
+          return { ...params.props, error };
         },
         renderEditCell: (params: GridRenderEditCellParams<CompanyFull, string | number>) => {
           return (
@@ -239,6 +288,10 @@ export const useCompaniesColumns = (
         editable: companies?.edit,
         sortable: true,
         disableColumnMenu: true,
+        preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
+          const error = await processValidation(CompanyItems.Country, params);
+          return { ...params.props, error };
+        },
       },
       {
         ...columnSettings(CompanyItems.CreatedAt, 140),
@@ -259,7 +312,7 @@ export const useCompaniesColumns = (
             [
               <AppGridButton
                 title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
-                disabled={!!(errors[id] && Object.values(errors[id]).filter((error) => !!error).length)}
+                disabled={!valid[id]}
                 label={t('labels:save')}
                 onClick={handleSaveClick(id)}
                 color="primary"

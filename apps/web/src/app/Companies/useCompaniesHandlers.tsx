@@ -1,4 +1,4 @@
-import { MouseEvent, SetStateAction, useCallback } from 'react';
+import { Dispatch, MouseEvent, MutableRefObject, SetStateAction, useCallback } from 'react';
 import {
   GridRowModesModel,
   GridRowModes,
@@ -8,6 +8,7 @@ import {
   GridEventListener,
   GridRowEditStopReasons
 } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { isEmpty, pick } from 'ramda';
 import { getObjectDiff } from '@eco/config';
 import {
@@ -20,25 +21,46 @@ import {
 } from '@eco/redux';
 import { CompanyData, CompanyFull, CompanyItems, getNewCompanyData } from '@eco/types';
 import { appGridClasses } from '../components/dataGrid/design';
+import { CompaniesErrors, companySchema } from './useCompaniesColumns';
 
 export const useCompaniesHandlers = (
+  apiRef: MutableRefObject<GridApiCommunity>,
   setRowModesModel: (value: SetStateAction<GridRowModesModel>) => void,
   setOpen: (value: SetStateAction<boolean>) => void,
-  dialogItemId: GridRowId | null
+  dialogItemId: GridRowId | null,
+  setErrors: Dispatch<SetStateAction<CompaniesErrors>>,
 ) => {
 
   const dispatch = useAppDispatch();
 
   const handleNew = useCallback(
-    () => {
+    async () => {
       const { id, data } = getNewCompanyData();
-      dispatch(unshiftCompany(data as CompanyFull));
+      await dispatch(unshiftCompany(data as CompanyFull));
+
+      const row = apiRef.current.getRow(id);
+      let isValid = true;
+      try {
+        await companySchema.validate(row, {abortEarly: true});
+      }
+      catch (error) {
+        isValid = false;
+      }
+
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        valid: {
+          ...prevErrors.valid,
+          [id]: isValid
+        }
+      }));
+
       setRowModesModel((oldModel) => ({
         [id]: { mode: GridRowModes.Edit, fieldToFocus: CompanyItems.Name },
         ...oldModel,
       }));
     },
-    [dispatch, setRowModesModel]
+    [apiRef, dispatch, setErrors, setRowModesModel]
   );
 
   const handleRefresh = useCallback(
