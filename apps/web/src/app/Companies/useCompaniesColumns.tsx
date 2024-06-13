@@ -201,6 +201,7 @@ export const useCompaniesColumns = (
               {...params}
               apiRef={apiRef}
               handleSearch={handleSearch(id, value)}
+              helperText={errors[params.id]?.ico}
               inputWidth={115}
               isLoading={companiesLoading[`${ApiOperations.getExternalItem}-${params.id}`]}
               title={t('labels:filterSearch')}

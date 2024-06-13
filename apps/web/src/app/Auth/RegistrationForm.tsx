@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { UseFormSetValue, useForm } from 'react-hook-form';
 import { compose, filter, isEmpty, not, omit } from 'ramda';
 import { Button, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -8,13 +8,18 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
 import { countries } from 'countries-list';
-import { apiPostRegister, selectIsAuthLoading, useAppDispatch, useAppSelector } from '@eco/redux';
+import {
+  apiGetCompanyFromAres,
+  apiPostRegister,
+  selectIsAuthLoading,
+  useAppDispatch,
+  useAppSelector
+} from '@eco/redux';
 import { AuthOperations, CompanyItems, RegistrationData, RegistrationItems, UserItems } from '@eco/types';
 import { getRegistrationValidationSchema } from '@eco/validation';
 import { allowedCountries } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
-import { ControllerSelect, ControllerTextField } from '../components';
-import { CompanySearchField } from './CompanySearchField';
+import { ControllerSearchField, ControllerSelect, ControllerTextField } from '../components';
 
 interface RegistrationFormProps {
   handleClose: () => void;
@@ -30,7 +35,7 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
 
   const isLoading = useAppSelector((state) => selectIsAuthLoading(state, AuthOperations.register));
 
-  const { control, formState: { isValid }, handleSubmit, setValue, watch } = useForm<RegistrationData>({
+  const { control, formState: { isValid, errors }, handleSubmit, setValue, watch } = useForm<RegistrationData>({
     resolver: yupResolver(getRegistrationValidationSchema()),
     mode: 'onTouched',
     values: {
@@ -65,6 +70,17 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
       submit(data);
     },
     [submit, data]
+  );
+
+  const handleSearch = useCallback(
+    () => {
+      if (data.ico) {
+        dispatch(apiGetCompanyFromAres(
+          {ico: `${data.ico}`, setValue} as {ico: string, setValue: UseFormSetValue<any>}
+        ));
+      }
+    },
+    [dispatch, setValue, data]
   );
 
   return (
@@ -117,11 +133,15 @@ const RegistrationForm = ({handleClose}: RegistrationFormProps) => {
           />
         </Grid>
         <Grid xs={12}>
-          <CompanySearchField
+          <ControllerSearchField
             name={CompanyItems.Ico}
-            label={t('labels:companySearchByIco')}
+            control={control}
             defaultValue={data.ico}
-            setValue={setValue}
+            fieldProps={{
+              label: t('labels:companySearchByIco'),
+              handleSearch,
+              setValue
+            }}
           />
         </Grid>
         <Grid xs={12}>

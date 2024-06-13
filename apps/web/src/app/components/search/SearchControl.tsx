@@ -1,31 +1,14 @@
 import { ForwardedRef, forwardRef, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  CircularProgress,
-  IconButtonProps,
-  InputBase,
-  InputBaseProps,
-  Stack,
-  useTheme
-} from '@mui/material';
+import { CircularProgress, InputBase, Stack, useTheme } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppIconButton } from '../buttons';
 import HelperText from '../formControls/HelperText';
 import { getBaseFormControlShape } from '../formControls/formControlsSettings';
+import { SearchProps } from './Search';
 
-export interface SearchProps {
-  inputProps: InputBaseProps;
-  buttonProps: IconButtonProps;
-  handleClear: () => void;
-  helperText?: string;
-  inputWidth?: string | number;
-  isLoading?: boolean;
-  noBorder?: boolean;
-  title: string;
-}
-
-export const Search = memo(forwardRef((
+export const SearchControl = memo(forwardRef((
   {
     inputProps,
     inputWidth,
@@ -45,16 +28,16 @@ export const Search = memo(forwardRef((
 
   return (
     <Stack
-      direction="row"
-      alignItems="center"
-      sx={{
-        ...getBaseFormControlShape(palette, shape, inputProps.error, noBorder),
-        borderRadius: shape.borderRadius / 4,
-      }}
+      justifyContent="center"
+      width="100%"
     >
       <Stack
-        justifyContent="center"
-        width="100%"
+        direction="row"
+        alignItems="center"
+        sx={{
+          ...getBaseFormControlShape(palette, shape, inputProps.error, noBorder),
+          borderRadius: shape.borderRadius / 4,
+        }}
       >
         <InputBase
           {...inputProps}
@@ -76,39 +59,35 @@ export const Search = memo(forwardRef((
             p: 0.5
           }}
         />
-        {inputProps.error &&
-          <HelperText
-            formHelperTextProps={{
-              sx: {
-                px: 0.5
-              }
+        {isLoading ?
+          <CircularProgress
+            color="inherit"
+            size={30}
+            sx={{
+              alignSelf: 'center',
+              mr: 0.5
             }}
-            id={`toggle-table-filter-input-${inputProps.name}-helperText`}
-            helperText={helperText}
           />
+          :
+          <AppIconButton
+            {...buttonProps}
+            title={title}
+            id={`toggle-table-filter-button-${inputProps.name}`}
+            sx={{
+              alignSelf: 'center',
+              mr: 0.5
+            }}
+          >
+            <SearchIcon />
+          </AppIconButton>
         }
       </Stack>
-      {isLoading ?
-        <CircularProgress
-          color="inherit"
-          size={30}
-          sx={{
-            alignSelf: 'center',
-            mr: 0.5
-          }}
+      {inputProps.error &&
+        <HelperText
+          id={`toggle-table-filter-input-${inputProps.name}-helperText`}
+          helperText={helperText}
+          error={inputProps.error}
         />
-        :
-        <AppIconButton
-          {...buttonProps}
-          title={title}
-          id={`toggle-table-filter-button-${inputProps.name}`}
-          sx={{
-            alignSelf: 'center',
-            mr: 0.5
-          }}
-        >
-          <SearchIcon />
-        </AppIconButton>
       }
     </Stack>
   );

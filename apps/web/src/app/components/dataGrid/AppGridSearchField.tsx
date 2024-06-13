@@ -6,6 +6,7 @@ import { Search } from "..";
 type AppGridSearchFieldProps = {
   apiRef: MutableRefObject<GridApiCommunity>;
   handleSearch: () => void;
+  helperText?: string;
   inputWidth?: string | number;
   isLoading: boolean;
   title: string;
@@ -13,8 +14,10 @@ type AppGridSearchFieldProps = {
 
 export const AppGridSearchField = ({
   apiRef,
+  error,
   field,
   handleSearch,
+  helperText,
   id,
   inputWidth,
   isLoading,
@@ -57,6 +60,7 @@ export const AppGridSearchField = ({
       noBorder
       inputProps={{
         onChange: handleChange,
+        error,
         name: field,
         value: value || '',
       }}
@@ -69,6 +73,7 @@ export const AppGridSearchField = ({
       }}
       handleClear={handleClear}
       title={title}
+      helperText={helperText}
     />
   )
 }

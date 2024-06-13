@@ -1,63 +1,48 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ForwardedRef, forwardRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { UseFormSetValue } from 'react-hook-form';
+import { inputBaseClasses, InputBaseProps, InputLabel, Stack, useTheme } from "@mui/material";
 import { ApiOperations } from "@eco/types";
-import {
-  apiGetCompanyFromAres,
-  selectIsCompaniesLoading,
-  useAppDispatch,
-  useAppSelector
-} from "@eco/redux";
-import { Search } from "../components";
-import { inputBaseClasses, InputLabel, Stack, useTheme } from "@mui/material";
-import { getFocusedBorder } from "../components/formControls/formControlsSettings";
+import { selectIsCompaniesLoading, useAppSelector } from "@eco/redux";
+import { getFocusedBorder } from "../formControls/formControlsSettings";
+import { SearchControl } from "./SearchControl";
 
-interface CompanySearchFieldProps {
+export type SearchFieldProps = {
   name: string;
+  id?: string;
   label: string;
-  defaultValue?: string | null;
+  error?: boolean;
+  helperText?: string;
+  handleSearch: () => void;
   setValue: UseFormSetValue<any>;
-}
+} & Pick<InputBaseProps, 'onChange' | 'value'>
 
-export const CompanySearchField = ({
-  name,
-  label,
-  defaultValue,
-  setValue
-}: CompanySearchFieldProps) => {
+export const SearchField = forwardRef((
+  {
+    name,
+    id,
+    label,
+    error,
+    helperText,
+    value,
+    handleSearch,
+    setValue,
+    ...rest
+  }: SearchFieldProps,
+  ref: ForwardedRef<unknown>
+) => {
 
   const { t } = useTranslation();
 
   const { palette, shape } = useTheme();
 
-  const dispatch = useAppDispatch();
-
-  const [valueState, setValueState] = useState(defaultValue || '');
-
   const isLoading = useAppSelector((state) => selectIsCompaniesLoading(state, ApiOperations.getExternalItem));
-
-  const handleChange = useCallback(
-    async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-      setValueState(value);
-      setValue(name, value);
-    },
-    [name, setValue],
-  );
 
   const handleClear = useCallback(
     () => {
-      setValueState('');
+      setValue(name, '');
     },
-    []
-  );
-
-  const handleSearch = useCallback(
-    () => {
-      if (valueState) {
-        dispatch(apiGetCompanyFromAres({ico: `${valueState}`, setValue}));
-      }
-    },
-    [dispatch, setValue, valueState]
+    [name, setValue]
   );
 
   return (
@@ -81,6 +66,7 @@ export const CompanySearchField = ({
       <InputLabel
         shrink
         htmlFor={name}
+        error={error}
         sx={{
           lineHeight: 1,
           mb: 0.25
@@ -88,22 +74,25 @@ export const CompanySearchField = ({
       >
         {label}
       </InputLabel>
-      <Search
+      <SearchControl
         inputProps={{
-          onChange: handleChange,
+          ...rest,
           name,
-          id: name,
-          value: valueState || '',
+          id: id || name,
+          value,
+          error
         }}
         inputWidth="100%"
         isLoading={isLoading}
         buttonProps={{
           onClick: handleSearch,
-          disabled: !valueState
+          disabled: !value || error
         }}
         handleClear={handleClear}
+        ref={ref}
         title={t('labels:filterSearch')}
+        helperText={helperText}
       />
     </Stack>
   )
-}
+});

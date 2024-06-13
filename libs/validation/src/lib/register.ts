@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import i18n from '@eco/locales';
 import { CompanyItems, RegistrationItems, UserItems, VerificationItems } from '@eco/types';
+import { testIco } from "./helpers/ico";
 
 export const getRegistrationValidationSchema = () => {
   const { t } = i18n;
@@ -23,7 +24,11 @@ export const getRegistrationValidationSchema = () => {
     [CompanyItems.Country]: yup.string()
       .required(t('validation:required', {Field: t('labels:country')})),
     [CompanyItems.Address]: yup.string().nullable(),
-    [CompanyItems.Ico]: yup.string().nullable(),
+    [CompanyItems.Ico]: yup.string().nullable().test(
+      CompanyItems.Ico,
+      t('validation:icoFormat'),
+      testIco
+    ),
     [CompanyItems.Vat]: yup.string().nullable(),
   });
 }

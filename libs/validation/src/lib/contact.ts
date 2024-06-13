@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import i18n from '@eco/locales';
 import { ContactItems } from '@eco/types';
+import { testIco } from "./helpers/ico";
 
 export const getContactEditValidationSchema = () => {
   const { t } = i18n;
@@ -14,7 +15,11 @@ export const getContactEditValidationSchema = () => {
       .email(t('validation:email')),
     [ContactItems.Phone]: yup.string().nullable(),
     [ContactItems.Address]: yup.string().nullable(),
-    [ContactItems.Ico]: yup.string().nullable(),
+    [ContactItems.Ico]: yup.string().nullable().test(
+      ContactItems.Ico,
+      t('validation:icoFormat'),
+      testIco
+    ),
     [ContactItems.Vat]: yup.string().nullable(),
   });
 }

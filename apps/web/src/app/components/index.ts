@@ -6,4 +6,4 @@ export * from './dataGrid';
 export * from './dialog';
 export * from './formControls';
 export * from './editor';
-export * from './search/Search';
+export * from './search';
