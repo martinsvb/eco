@@ -5,7 +5,14 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridRowModes, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { CompanyItems, UserRoles } from '@eco/types';
-import { apiGetCompanies, selectCompanies, selectUserAuth, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import {
+  apiGetCompanies,
+  selectCompanies,
+  selectUserAuth,
+  setFilterData,
+  useAppDispatch,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
 import {
