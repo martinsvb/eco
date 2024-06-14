@@ -1,10 +1,9 @@
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { alpha, Chip, Divider, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { alpha, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { selectRegistration, useAppSelector } from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import { unsplashUrl } from '@eco/config';
-import GoogleLoginCmp from './GoogleLogin';
 import RegistrationForm from './RegistrationForm';
 import VerificationForm from './VerificationForm';
 
@@ -51,15 +50,7 @@ const Registration = ({handleClose, isMobile}: RegistrationProps) => {
         }}
       >
         <Typography variant='h4'>{titles[state] || t('labels:registerButton')}</Typography>
-        {state === RegistrationState.registration &&
-          <Stack
-            divider={<Divider orientation="horizontal" flexItem><Chip label={t('labels:or')} /></Divider>}
-            spacing={2}
-          >
-            <GoogleLoginCmp />
-            <RegistrationForm handleClose={handleClose} />
-          </Stack>
-        }
+        {state === RegistrationState.registration && <RegistrationForm handleClose={handleClose} />}
         {state === RegistrationState.verification && <VerificationForm handleClose={handleClose} />}
       </Stack>
     </Stack>

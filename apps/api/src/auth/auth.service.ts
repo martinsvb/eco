@@ -100,7 +100,7 @@ export class AuthService {
     if (!user && email) {
       const company = await this.prisma.company.create({
         data: {
-          name,
+          name: `${name}-${nanoid()}`,
           country,
         },
       });
@@ -112,8 +112,8 @@ export class AuthService {
           origin: UserOrigins.google,
           picture,
           companyId: company.id,
-          rights: userRights[UserRoles.Admin],
-          role: UserRoles.Admin,
+          rights: userRights[UserRoles.CompanyAdmin],
+          role: UserRoles.CompanyAdmin,
         },
       });
     }
