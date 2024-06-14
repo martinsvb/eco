@@ -19,12 +19,17 @@ import {
   VerificationPayload
 } from '@eco/types';
 import i18n, { getLanguageCode } from '@eco/locales';
-import { initialAuthState, setRegistration, setRegistrationEmail } from './authSlice';
+import { apiGetAuthUser, initialAuthState, setRegistration, setRegistrationEmail } from './authSlice';
 import { successSnackbar } from '../snackbars';
+
+const setAccessToken = (accessToken: any) => {
+  localStorage.setItem(LocalStorageItems.Token, accessToken);
+  dispatchEvent(new Event('storage'));
+}
 
 export const loginPost = async (
   body: LoginData,
-  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+  { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const data = await checkResponse(
@@ -33,6 +38,11 @@ export const loginPost = async (
         postHeaders({body, signal})
       )
     ).json();
+
+    setAccessToken(data.accessToken);
+
+    dispatch(apiGetAuthUser(''));
+
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -41,7 +51,7 @@ export const loginPost = async (
 
 export const loginGooglePost = async (
   body: {idToken?: string, language: string},
-  { rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+  { dispatch, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
 ) => {
   try {
     const data = await checkResponse(
@@ -50,6 +60,11 @@ export const loginGooglePost = async (
         postHeaders({body, signal})
       )
     ).json();
+
+    setAccessToken(data.accessToken);
+
+    dispatch(apiGetAuthUser(''));
+
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));

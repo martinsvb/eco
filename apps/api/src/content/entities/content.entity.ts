@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Content, Prisma } from '@prisma/client';
-import { UserEntity } from '../../users/entities/user.entity';
+import { ContentUserEntity } from '../../users/entities/user.entity';
 import { UserFull } from '@eco/types';
 
 export class ContentEntity implements Content {
@@ -43,8 +43,8 @@ export class ContentEntity implements Content {
   @ApiProperty({ description: 'Content author id' })
   authorId: string;
 
-  @ApiProperty({ description: 'Content author', type: UserEntity })
-  author: UserEntity;
+  @ApiProperty({ description: 'Content author', required: false, type: ContentUserEntity })
+  author?: ContentUserEntity;
 
   @ApiProperty({ description: 'Company id' })
   companyId: string;
@@ -56,7 +56,7 @@ export class ContentEntity implements Content {
     });
 
     if (author) {
-      this.author = new UserEntity(author);
+      this.author = new ContentUserEntity(author);
     }
   }
 }

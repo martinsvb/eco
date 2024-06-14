@@ -37,11 +37,6 @@ export const initialAuthState: AuthState = {
   registrationEmail: null,
 };
 
-const setAccessToken = (accessToken: any) => {
-  localStorage.setItem(LocalStorageItems.Token, accessToken);
-  dispatchEvent(new Event('storage'));
-}
-
 const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
@@ -73,7 +68,6 @@ const authSlice = createSlice({
           state.error[AuthOperations.login] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          setAccessToken(accessToken);
           state.accessToken = accessToken;
           state.user = user;
         },
@@ -92,7 +86,6 @@ const authSlice = createSlice({
           state.error[AuthOperations.loginGoogle] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          setAccessToken(accessToken);
           state.accessToken = accessToken;
           state.user = user;
         },

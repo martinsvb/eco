@@ -46,7 +46,7 @@ const readerScopes = {
   tasks: rights.reader,
   contacts: rights.reader,
   users: rights.reader,
-  companies: rights.none,
+  companies: rights.reader,
 }
 
 const editorScopes = {
@@ -55,7 +55,7 @@ const editorScopes = {
   tasks: rights.editor,
   contacts: rights.editor,
   users: rights.reader,
-  companies: rights.none,
+  companies: rights.editor,
 }
 
 const approvalEditorScopes = {
@@ -64,7 +64,7 @@ const approvalEditorScopes = {
   tasks: rights.approvalEditor,
   contacts: rights.editor,
   users: rights.approvalEditor,
-  companies: rights.none,
+  companies: rights.editor,
 }
 
 const adminScopes = {

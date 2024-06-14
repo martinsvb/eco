@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Company, User } from '@prisma/client';
 import { nanoid } from '@reduxjs/toolkit';
 
 export enum UserItems {
@@ -101,7 +101,9 @@ export type UserDetail = {
 
 export type UserFull = User & UserDetail;
 
-export type BasicUser = Pick<
+export type BasicUser = {
+  companyName?: Company['name'];
+} & Pick<
   UserFull,
   UserItems.Id | UserItems.Name | UserItems.Picture | UserItems.Rights | UserItems.Role
 >;

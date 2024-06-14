@@ -11,7 +11,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import GroupIcon from '@mui/icons-material/Group';
 import { routes } from '@eco/config';
 import { selectIsUserLoggedIn, selectUserAuth, useAppSelector, useShallowEqualSelector } from '@eco/redux';
-import { ScopeItems } from '@eco/types';
+import { ScopeItems, UserRoles } from '@eco/types';
 
 interface NavItemProps {
   icon: ReactNode;
@@ -40,7 +40,7 @@ export const AppNavigation = () => {
 
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
-  const { rights } = useShallowEqualSelector(selectUserAuth);
+  const { rights, role } = useShallowEqualSelector(selectUserAuth);
 
   const { t } = useTranslation();
 
@@ -101,7 +101,7 @@ export const AppNavigation = () => {
             {rights.scopes[ScopeItems.Companies]?.read &&
               <NavItem
                 icon={<BusinessIcon />}
-                text={t('companies')}
+                text={role === UserRoles.Admin ? t('companies') : t('company')}
                 to={routes.companies}
               />
             }

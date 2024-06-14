@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { UserFull, UserFilterData, checkRigts, ScopeItems, RightsItems, getPrismaOrFilter } from '@eco/types';
+import { UserFull, UserFilterData, checkRigts, ScopeItems, RightsItems, getPrismaOrFilter, UserRoles } from '@eco/types';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
@@ -13,10 +13,11 @@ export class CompaniesService {
     return this.prisma.company.create({ data });
   }
 
-  findAll({rights}: UserFull, query: UserFilterData) {
+  findAll({companyId, rights, role}: UserFull, query: UserFilterData) {
     checkRigts(rights, ScopeItems.Companies, RightsItems.Read);
     return this.prisma.company.findMany({
       where: {
+        id: role !== UserRoles.Admin ? companyId : undefined,
         ...getPrismaOrFilter(query)
       }
     });

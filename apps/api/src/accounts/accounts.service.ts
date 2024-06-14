@@ -15,7 +15,14 @@ export class AccountsService {
 
   findAll({ companyId, rights }: UserFull) {
     checkRigts(rights, ScopeItems.Accounts, RightsItems.Read);
-    return this.prisma.account.findMany({ where: { companyId } });
+    return this.prisma.account.findMany({
+      where: {
+        companyId
+      },
+      include: {
+        creator: true,
+      },
+    });
   }
 
   findOne(id: string, { rights }: UserFull) {

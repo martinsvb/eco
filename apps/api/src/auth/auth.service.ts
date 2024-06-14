@@ -223,11 +223,14 @@ export class AuthService {
       throw new NotFoundException('No user found');
     }
 
+    const company = await this.prisma.company.findUnique({ where: { id: user.companyId } });
+
     return {
       name: user.name,
       picture: user.picture,
       rights: user.rights,
       role: user.role,
+      companyName: company.name,
     };
   }
 

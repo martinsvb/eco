@@ -1,7 +1,13 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
 import { Box, IconButton, Stack, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { selectIsUserLoggedIn, selectRegistration, useAppSelector } from '@eco/redux';
+import {
+  selectIsUserLoggedIn,
+  selectRegistration,
+  selectUserAuth,
+  useAppSelector,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import UserMenu from '../user/UserMenu';
 import LoginButton from '../user/LoginButton';
@@ -16,6 +22,8 @@ const AppToolbarMobile = ({setOpen}: AppToolbarMobileProps) => {
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
   const state = useAppSelector(selectRegistration);
+
+  const { companyName } = useShallowEqualSelector(selectUserAuth);
 
   const handleOpen = useCallback(
     () => {
@@ -34,6 +42,7 @@ const AppToolbarMobile = ({setOpen}: AppToolbarMobileProps) => {
       <Box sx={{flexGrow: 1}}>
         <Typography variant="h6" noWrap component="div">
           Eco
+          {companyName && `, ${companyName}`}
         </Typography>
       </Box>
       <Box sx={{flexGrow: 0}}>

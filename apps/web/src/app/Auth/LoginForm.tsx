@@ -39,13 +39,6 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
     [dispatch]
   );
 
-  const handleClick = useCallback(
-    () => {
-      dispatch(apiPostLogin(data));
-    },
-    [dispatch, data]
-  );
-
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Stack>
@@ -83,7 +76,6 @@ const LoginForm = ({handleClose}: LoginFormProps) => {
             loading={isLoading}
             type="submit"
             variant="contained"
-            onClick={handleClick}
           >
             {t('labels:login')}
           </LoadingButton>

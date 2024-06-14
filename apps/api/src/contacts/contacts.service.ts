@@ -13,10 +13,11 @@ export class ContactsService {
     return this.prisma.contact.create({ data: {...data, creatorId: id, companyId} });
   }
 
-  findAll({rights}: UserFull, query: UserFilterData) {
+  findAll({companyId, rights}: UserFull, query: UserFilterData) {
     checkRigts(rights, ScopeItems.Contacts, RightsItems.Read);
     return this.prisma.contact.findMany({
       where: {
+        companyId,
         ...getPrismaOrFilter(query)
       }
     });

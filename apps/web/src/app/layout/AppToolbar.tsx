@@ -1,5 +1,11 @@
 import { Box, Stack, Toolbar, Typography } from '@mui/material';
-import { selectIsUserLoggedIn, selectRegistration, useAppSelector } from '@eco/redux';
+import {
+  selectIsUserLoggedIn,
+  selectRegistration,
+  selectUserAuth,
+  useAppSelector,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { RegistrationState } from '@eco/types';
 import UserMenu from '../user/UserMenu';
 import LoginButton from '../user/LoginButton';
@@ -11,11 +17,14 @@ const AppToolbar = () => {
 
   const state = useAppSelector(selectRegistration);
 
+  const { companyName } = useShallowEqualSelector(selectUserAuth);
+
   return (
     <Toolbar>
       <Box sx={{flexGrow: 1}}>
         <Typography variant="h6" noWrap component="div">
           Eco
+          {companyName && `, ${companyName}`}
         </Typography>
       </Box>
       <Box sx={{flexGrow: 0}}>

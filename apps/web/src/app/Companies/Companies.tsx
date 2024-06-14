@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridRowModes, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
-import { CompanyItems } from '@eco/types';
-import { apiGetCompanies, selectCompanies, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { CompanyItems, UserRoles } from '@eco/types';
+import { apiGetCompanies, selectCompanies, selectUserAuth, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
 import {
@@ -29,6 +29,8 @@ export const Companies = () => {
   const dispatch = useAppDispatch();
 
   const [ errors, setErrors ] = useState<CompaniesErrors>(initCompanieErrors);
+
+  const { role } = useShallowEqualSelector(selectUserAuth);
 
   const { companies, isLoading, loaded } = useShallowEqualSelector(selectCompanies);
 
@@ -69,7 +71,7 @@ export const Companies = () => {
 
   return (
     <>
-      <Typography variant='h3' mb={3}>{t('companies:title')}</Typography>
+      <Typography variant='h3' mb={3}>{role === UserRoles.Admin ? t('companies') : t('company')}</Typography>
       <Box sx={getDataGridWrapperSx(theme, isMobilePortrait)}>
         <DataGrid
           apiRef={apiRef}

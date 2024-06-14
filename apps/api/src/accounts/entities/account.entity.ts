@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Account } from '@prisma/client';
-import { UserEntity } from '../../users/entities/user.entity';
+import { ContentUserEntity } from '../../users/entities/user.entity';
 
 export class AccountEntity implements Account {
   @ApiProperty({ description: 'Id' })
@@ -39,8 +39,8 @@ export class AccountEntity implements Account {
   @ApiProperty({ required: false, nullable: true })
   creatorId: string | null;
 
-  @ApiProperty({ required: false, type: UserEntity })
-  creator?: UserEntity;
+  @ApiProperty({ description: 'Account creator', required: false, type: ContentUserEntity })
+  creator?: ContentUserEntity;
 
   @ApiProperty({ description: 'Company id' })
   companyId: string;
@@ -49,7 +49,7 @@ export class AccountEntity implements Account {
     Object.assign(this, data);
 
     if (creator) {
-      this.creator = new UserEntity(creator);
+      this.creator = new ContentUserEntity(creator);
     }
   }
 }

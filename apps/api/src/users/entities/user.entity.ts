@@ -59,3 +59,54 @@ export class UserEntity extends BasicUserEntity implements User {
   @Exclude()
   password: string;
 }
+
+export class ContentUserEntity extends BasicUserEntity implements User {
+  constructor(partial: Partial<ContentUserEntity>) {
+    super();
+    Object.assign(this, partial);
+  }
+
+  @ApiProperty({ description: 'Id' })
+  readonly id: string;
+
+  @ApiProperty({ description: 'Date of creation' })
+  @Exclude()
+  createdAt: Date;
+
+  @ApiProperty({ description: 'Date of update' })
+  @Exclude()
+  updatedAt: Date | null;
+
+  @ApiProperty({ description: 'User email' })
+  email: string;
+
+  @ApiProperty({ description: 'User email confirmation state', required: false })
+  isEmailConfirmed: boolean;
+
+  @ApiProperty({ description: 'User phone', required: false })
+  phone: string | null;
+
+  @ApiProperty({ description: 'OTP code', required: false })
+  @Exclude()
+  otp: number | null;
+
+  @ApiProperty({ description: 'User origin' })
+  @Exclude()
+  origin: string;
+
+  @ApiProperty({ description: 'Company id' })
+  @Exclude()
+  companyId: string;
+
+  @ApiProperty({ description: 'User rigts' })
+  @Exclude()
+  rights: Prisma.JsonValue;
+
+  @ApiProperty({ description: 'User role' })
+  @Exclude()
+  role: string;
+
+  @ApiProperty({ description: 'User password' })
+  @Exclude()
+  password: string;
+}
