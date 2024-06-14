@@ -82,6 +82,7 @@ export const refreshPost = async (
         postHeaders({signal})
       )
     ).json();
+    setAccessToken(data.accessToken);
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -124,6 +125,8 @@ export const invitationFinishPatch = async (
 
     successSnackbar(i18n.t('authLibs:invitationFinish'));
 
+    setAccessToken(data.accessToken);
+
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
@@ -144,6 +147,7 @@ export const verifyPost = async (
     dispatch(setRegistration(RegistrationState.none));
     dispatch(setRegistrationEmail(null));
     onSuccess();
+    setAccessToken(data.accessToken);
     return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));

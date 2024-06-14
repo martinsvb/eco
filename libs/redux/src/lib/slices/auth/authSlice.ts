@@ -104,7 +104,6 @@ const authSlice = createSlice({
           state.error[AuthOperations.refresh] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken } }) => {
-          setAccessToken(accessToken);
           state.accessToken = accessToken;
         },
         settled: (state) => {
@@ -136,7 +135,6 @@ const authSlice = createSlice({
           state.error[AuthOperations.verify] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          setAccessToken(accessToken);
           state.accessToken = accessToken;
           state.user = user;
         },
@@ -155,7 +153,6 @@ const authSlice = createSlice({
           state.error[AuthOperations.invitationFinished] = payload ?? error;
         },        
         fulfilled: (state, { payload: { accessToken, user } }) => {
-          setAccessToken(accessToken);
           state.accessToken = accessToken;
           state.user = user;
         },
