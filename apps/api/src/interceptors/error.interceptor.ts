@@ -13,13 +13,7 @@ export class ErrorsInterceptor implements NestInterceptor {
   private readonly transporter: nodemailer.Transporter;
 
   constructor() {
-    this.client = new Client({
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: true,
-        ca: process.env.CA_CERT,
-      }
-    });
+    this.client = new Client(process.env.DATABASE_URL.replace('sslmode=require', 'sslmode=no-verify'));
     this.transporter = nodemailer.createTransport(
       `smtps://${process.env.EMAIL_ADDRESS}:${process.env.EMAIL_PASSWORD}@${process.env.EMAIL_SMTP}`,
       {
