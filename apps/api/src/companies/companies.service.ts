@@ -1,6 +1,14 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { UserFull, UserFilterData, checkRigts, ScopeItems, RightsItems, getPrismaOrFilter, UserRoles } from '@eco/types';
+import {
+  UserFull,
+  UserFilterData,
+  checkRigts,
+  ScopeItems,
+  RightsItems,
+  getPrismaOrFilter,
+  UserRoles
+} from '@eco/types';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 

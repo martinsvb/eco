@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ServiceUnavailableException,
-  UnprocessableEntityException
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PrismaService } from 'nestjs-prisma';
 import { equals } from 'ramda';
@@ -249,9 +244,6 @@ export class ContentService {
           text,
           title,
         },
-      })
-      .catch(() => {
-        throw new ServiceUnavailableException(`Notification email failed: ${email}`)
       });
   }
 }
