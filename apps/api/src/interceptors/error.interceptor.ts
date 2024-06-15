@@ -14,8 +14,10 @@ export class ErrorsInterceptor implements NestInterceptor {
 
   constructor() {
     this.client = new Client({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
+      connectionString: process.env.DATABASE_URL.replace('sslmode=require', 'sslmode=no-verify'),
+      ssl: {
+        rejectUnauthorized: false
+      }
     });
     this.transporter = nodemailer.createTransport(
       `smtps://${process.env.EMAIL_ADDRESS}:${process.env.EMAIL_PASSWORD}@${process.env.EMAIL_SMTP}`,
