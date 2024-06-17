@@ -1,6 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { Client } from 'pg';
+import * as qs from 'qs';
 import { omit } from 'ramda';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -52,6 +53,7 @@ export class ErrorsInterceptor implements NestInterceptor {
             const referer = refererIndex > -1 ? rawHeaders[refererIndex + 1] : '';
             const originIndex = rawHeaders.findIndex((value) => value === 'origin');
             const origin = originIndex > -1 ? rawHeaders[originIndex + 1] : '';
+            const queryString = qs.stringify(query);
             errorPayload = {
               ...errorPayload,
               body,
@@ -61,9 +63,8 @@ export class ErrorsInterceptor implements NestInterceptor {
               isEmailConfirmed,
               role,
               companyId,
-              request: `${method} ${origin}${url}`,
+              request: `${method} ${origin}${url}${queryString ? `?${queryString}` : ''}`,
               params,
-              query,
               referer,
             }
           }
@@ -84,7 +85,9 @@ export class ErrorsInterceptor implements NestInterceptor {
         if (error) {
           console.error('Error interceptor getting administrator users failed', error);
         } else {
-          const errorTextParts = Object.entries(omit(['userId', 'companyId'], errorPayload)).map(([key, value]) => (
+          const errorTextParts = Object.entries(
+            omit(['userId', 'companyId', 'params'], errorPayload)
+          ).map(([key, value]) => (
             `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`
           ));
           result.rows.forEach(({email}) => {
