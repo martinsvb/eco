@@ -12,6 +12,7 @@ import { ContentModule } from '../content/content.module';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
 import { AppController } from './app.controller';
+import { ErrorsModule } from '../errors/errors.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AppController } from './app.controller';
     ContentModule,
     EventsModule,
     UsersModule,
+    ErrorsModule,
   ],
   controllers: [AppController],
   providers: [providePrismaClientExceptionFilter(prismaExceptions)],

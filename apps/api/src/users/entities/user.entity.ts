@@ -58,6 +58,9 @@ export class UserEntity extends BasicUserEntity implements User {
   @ApiProperty({ description: 'User password' })
   @Exclude()
   password: string;
+
+  @ApiProperty({ description: 'User note', required: false })
+  note: string | null;
 }
 
 export class ContentUserEntity extends BasicUserEntity implements User {
@@ -109,4 +112,7 @@ export class ContentUserEntity extends BasicUserEntity implements User {
   @ApiProperty({ description: 'User password' })
   @Exclude()
   password: string;
+
+  @ApiProperty({ description: 'User note', required: false })
+  note: string | null;
 }

@@ -52,6 +52,11 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
+  @ApiProperty({ description: 'User note', required: false })
+  note: string | null;
+
+  @IsString()
+  @IsOptional()
   @MinLength(6)
   @ApiProperty({ description: 'User password', required: false })
   password: string | null;

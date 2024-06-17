@@ -7,6 +7,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BusinessIcon from '@mui/icons-material/Business';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import DescriptionIcon from '@mui/icons-material/Description';
+import ErrorIcon from '@mui/icons-material/Error';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import GroupIcon from '@mui/icons-material/Group';
 import { routes } from '@eco/config';
@@ -103,6 +104,13 @@ export const AppNavigation = () => {
                 icon={<BusinessIcon />}
                 text={role === UserRoles.Admin ? t('companies') : t('company')}
                 to={routes.companies}
+              />
+            }
+            {rights.scopes[ScopeItems.Errors]?.read &&
+              <NavItem
+                icon={<ErrorIcon />}
+                text={t('errors')}
+                to={routes.errors}
               />
             }
           </>

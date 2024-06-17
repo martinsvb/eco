@@ -1,0 +1,62 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { GridColDef } from '@mui/x-data-grid';
+import dayjs from 'dayjs';
+import { ErrorItems, UserRoles } from '@eco/types';
+import { columnSettings } from '../helpers';
+
+interface ErrorsColumns {
+  columns: GridColDef[];
+}
+
+export const useErrorsColumns = (): ErrorsColumns => {
+
+  const { t } = useTranslation();
+
+  const roles = useMemo(
+    () => {
+      return {
+        [UserRoles.Reader]: t('users:roleReader'),
+        [UserRoles.Editor]: t('users:roleEditor'),
+        [UserRoles.ApprovalEditor]: t('users:roleApprovalEditor'),
+        [UserRoles.CompanyAdmin]: t('users:roleCompanyAdmin'),
+        [UserRoles.Admin]: t('users:roleAdmin'),
+      } as {[key: string]: string}
+    },
+    [t]
+  );
+
+  return {
+    columns: [
+      {
+        ...columnSettings(ErrorItems.Name, 200, 'left'),
+        headerName: t('labels:name'),
+      },
+      {
+        ...columnSettings(ErrorItems.Email, 200, 'left'),
+        headerName: t('labels:email'),
+      },
+      {
+        ...columnSettings(ErrorItems.IsEmailConfirmed, 80),
+        headerName: t('labels:isEmailConfirmed'),
+        type: 'boolean',
+        sortable: false,
+        disableColumnMenu: true,
+      },
+      {
+        ...columnSettings(ErrorItems.Role, 200),
+        headerName: t('labels:role'),
+        valueFormatter: (value) => roles[value],
+        sortable: false,
+        disableColumnMenu: true,
+      },
+      {
+        ...columnSettings(ErrorItems.CreatedAt, 140),
+        headerName: t('labels:createdAt'),
+        type: 'string',
+        valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
+        disableColumnMenu: true,
+      },
+    ],
+  }
+};

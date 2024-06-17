@@ -37,6 +37,11 @@ export class CreateContactDto {
   @ApiProperty({ description: 'Contact address', required: false })
   address: string;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Contact note', required: false })
+  note: string | null;
+
   @ApiProperty({ description: 'Date of creation' })
   createdAt: Date;
 

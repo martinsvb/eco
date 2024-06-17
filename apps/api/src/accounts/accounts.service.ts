@@ -35,11 +35,11 @@ export class AccountsService {
     });
   }
 
-  update(id: string, updateAccountDto: UpdateAccountDto, { rights }: UserFull) {
+  update(id: string, data: UpdateAccountDto, { rights }: UserFull) {
     checkRigts(rights, ScopeItems.Accounts, RightsItems.Edit);
     return this.prisma.account.update({
       where: { id },
-      data: updateAccountDto,
+      data,
     });
   }
 

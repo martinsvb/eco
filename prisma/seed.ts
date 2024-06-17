@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { allowedCountries } from 'libs/config/src/lib/countries';
 import { exampleRichText } from 'libs/config/src/lib/content';
 import { ContentState, ContentTypes } from 'libs/types/src/lib/content';
+import { exampleError } from 'libs/config/src/lib/error';
 import { UserOrigins } from 'libs/types/src/lib/user';
 import { UserRoles } from '../libs/types/src/lib/user';
 import { userRights } from '../libs/types/src/lib/userRights';
@@ -170,6 +171,22 @@ async function main() {
     },
   });
 
+  const error1 = await prisma.error.create({
+    data: {
+      ...exampleError,
+      userId: user1.id,
+      companyId: company1.id,
+    },
+  });
+
+  const error2 = await prisma.error.create({
+    data: {
+      ...exampleError,
+      userId: user2.id,
+      companyId: company2.id,
+    },
+  });
+
   console.log({
     account1,
     account2,
@@ -181,6 +198,8 @@ async function main() {
     content2,
     content3,
     content4,
+    error1,
+    error2,
     user1,
     user2,
     user3,

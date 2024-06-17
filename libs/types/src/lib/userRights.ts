@@ -38,6 +38,7 @@ const noneScopes = {
   contacts: rights.none,
   users: rights.none,
   companies: rights.none,
+  errors: rights.none,
 }
 
 const readerScopes = {
@@ -47,6 +48,7 @@ const readerScopes = {
   contacts: rights.reader,
   users: rights.reader,
   companies: rights.reader,
+  errors: rights.none,
 }
 
 const editorScopes = {
@@ -55,7 +57,8 @@ const editorScopes = {
   tasks: rights.editor,
   contacts: rights.editor,
   users: rights.reader,
-  companies: rights.editor,
+  companies: rights.reader,
+  errors: rights.none,
 }
 
 const approvalEditorScopes = {
@@ -64,12 +67,14 @@ const approvalEditorScopes = {
   tasks: rights.approvalEditor,
   contacts: rights.editor,
   users: rights.approvalEditor,
-  companies: rights.editor,
+  companies: rights.reader,
+  errors: rights.none,
 }
 
 const adminScopes = {
   ...approvalEditorScopes,
   companies: rights.approvalEditor,
+  errors: rights.approvalEditor,
 }
 
 export const userRights = {

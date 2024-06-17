@@ -28,6 +28,7 @@ export const routes = {
             detail: '/news/detail/:id',
         },
     },
+    errors: '/errors',
     home: '/home',
     invitation: '/invitation',
     users: '/users',

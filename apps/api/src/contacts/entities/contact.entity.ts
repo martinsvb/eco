@@ -41,4 +41,7 @@ export class ContactEntity implements Contact {
 
   @ApiProperty({ description: 'Company id' })
   companyId: string;
+
+  @ApiProperty({ description: 'Contact note', required: false })
+  note: string | null;
 }

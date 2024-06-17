@@ -32,6 +32,11 @@ export class CreateCompanyDto {
   @ApiProperty({ description: 'Company address', required: false })
   address: string;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: 'Company note', required: false })
+  note: string | null;
+
   @ApiProperty({ description: 'Date of creation' })
   createdAt: Date;
 

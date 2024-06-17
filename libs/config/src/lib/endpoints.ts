@@ -4,6 +4,7 @@ export const endPoints = {
   companies: 'companies',
   contacts: 'contacts',
   content: 'content',
+  errors: 'errors',
   login: 'auth/login',
   invitationFinish: 'auth/invitation-finish',
   loginGoogle: 'auth/login-google',

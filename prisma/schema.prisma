@@ -55,6 +55,7 @@ model Contact {
   address          String?
   email            String?
   phone            String?
+  note             String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   creator          User      @relation(fields: [creatorId], references: [id])
@@ -75,11 +76,13 @@ model User {
   password         String?
   rights           Json
   role             String
+  note             String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]
   content          Content[]
   Contact          Contact[]
+  errors           Error[]
   company          Company  @relation(fields: [companyId], references: [id])
   companyId        String
 }
@@ -92,10 +95,35 @@ model Company {
   vat              String?   @unique
   address          String?
   email            String?
+  note             String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @updatedAt
   accounts         Account[]
   content          Content[]
   Contact          Contact[]
   users            User[]
+  errors           Error[]
+}
+
+model Error {
+  id               String    @id @default(uuid())
+  dateTime         String
+  name             String
+  code             String?
+  meta             Json?
+  type             String?
+  user             User?      @relation(fields: [userId], references: [id])
+  userId           String?
+  userName         String?
+  email            String?
+  isEmailConfirmed Boolean?
+  role             String?
+  company          Company?  @relation(fields: [companyId], references: [id])
+  companyId        String?
+  request          String?
+  params           Json?
+  body             Json?
+  referer          String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
 }

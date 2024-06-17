@@ -12,6 +12,7 @@ import { UserEdit } from "../app/user/UserEdit";
 import { Companies } from "../app/Companies/Companies";
 import { Contacts } from "../app/Contacts/Contacts";
 import { NotFound } from "../app/NotFound";
+import { Errors } from "../app/errors/Errors";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: routes.content.record.detail,
         element: <LoginWrapper><ContentDetail type={ContentTypes.Record} /></LoginWrapper>,
+      },
+      {
+        path: routes.errors,
+        element: <LoginWrapper><Errors /></LoginWrapper>,
       },
       {
         path: routes.home,
