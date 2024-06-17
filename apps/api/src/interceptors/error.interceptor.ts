@@ -1,9 +1,10 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
+import { Client } from 'pg';
+import { omit } from 'ramda';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Client } from 'pg';
 import { UserRoles } from '@eco/types';
-import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class ErrorsInterceptor implements NestInterceptor {
@@ -14,6 +15,14 @@ export class ErrorsInterceptor implements NestInterceptor {
 
   constructor() {
     this.client = new Client(process.env.DATABASE_URL.replace('sslmode=require', 'sslmode=no-verify'));
+    this.client
+      .connect()
+      .then(() => {
+        console.log('Error interceptor pg client connected');
+      })
+      .catch((error) => {
+        console.error('Error interceptor pg client connection failed', error);
+      });
     this.transporter = nodemailer.createTransport(
       `smtps://${process.env.EMAIL_ADDRESS}:${process.env.EMAIL_PASSWORD}@${process.env.EMAIL_SMTP}`,
       {
@@ -59,7 +68,7 @@ export class ErrorsInterceptor implements NestInterceptor {
             }
           }
 
-          console.log(errorPayload);
+          console.error(errorPayload);
 
           this.emailLog(errorPayload);
 
@@ -69,38 +78,31 @@ export class ErrorsInterceptor implements NestInterceptor {
   }
 
   emailLog(errorPayload: any) {
-    this.client
-      .connect()
-      .then(() => {
-        this.client.query(
-          `SELECT * FROM public."User" WHERE role = '${UserRoles.Admin}'`,
-          (error, result) => {
-            if (error) {
-              console.error('Error executing query', error);
-            } else {
-              const errorTextParts = Object.entries(errorPayload).map(([key, value]) => (
-                `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`
-              ));
-              result.rows.forEach(({email}) => {
-                this.transporter.sendMail(
-                  {
-                    to: email,
-                    subject: 'Application error',
-                    html: errorTextParts.join('<br/>')
-                  },
-                  (error) => {
-                    if (error) {
-                      console.log('Sending email error log failed', error, email);
-                    }
-                  }
-                );
-              });
-            }
-          }
-        );
-      })
-      .catch((error) => {
-        console.error('Connecting to PostgreSQL database failed', error);
-      });
+    this.client.query(
+      `SELECT * FROM public."User" WHERE role = '${UserRoles.Admin}'`,
+      (error, result) => {
+        if (error) {
+          console.error('Error interceptor getting administrator users failed', error);
+        } else {
+          const errorTextParts = Object.entries(omit(['userId', 'companyId'], errorPayload)).map(([key, value]) => (
+            `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`
+          ));
+          result.rows.forEach(({email}) => {
+            this.transporter.sendMail(
+              {
+                to: email,
+                subject: 'Eco application error',
+                html: errorTextParts.join('<br/>')
+              },
+              (error) => {
+                if (error) {
+                  console.error('Error interceptor sending email error log failed', error, email);
+                }
+              }
+            );
+          });
+        }
+      }
+    );
   }
 }
