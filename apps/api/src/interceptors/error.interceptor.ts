@@ -92,9 +92,12 @@ export class ErrorsInterceptor implements NestInterceptor {
         }
       });
 
+      const errorLink = origin && id
+        ? `<a href='${origin}${routes.errors}?id=${id}' target='_blank'>error</a><br>`
+        : undefined;
+
       const errorTextParts = [
-        '<h3>Eco application error</h3><br>',
-        origin && id ? `<a href='${origin}${routes.errors}?id=${id}' target='_blank'>Error</a><br>` : undefined,
+        `<h3>Eco application ${errorLink ? errorLink : 'error'}</h3>`,
         ...Object.entries(
           omit(['userId', 'companyId', 'params', 'type'], errorPayload)
         ).map(([key, value]) => (
