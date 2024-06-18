@@ -92,21 +92,15 @@ export class ErrorsInterceptor implements NestInterceptor {
         }
       });
 
-      let errorTextParts = [
+      const errorTextParts = [
         '<h3>Eco application error</h3><br>',
+        origin && id ? `<a href='${origin}${routes.errors}?id=${id}' target='_blank'>Error</a><br>` : undefined,
         ...Object.entries(
           omit(['userId', 'companyId', 'params', 'type'], errorPayload)
         ).map(([key, value]) => (
           `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`
         ))
       ];
-
-      if (origin && id) {
-        errorTextParts = [
-          `<a href='${origin}${routes.errors}?id=${id}' target='_blank'>Error</a><br>`,
-          ...errorTextParts
-        ];
-      }
 
       users.forEach(({email}) => {
         this.transporter.sendMail(
