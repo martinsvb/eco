@@ -9,7 +9,7 @@ import {
   apiGetCompanies,
   selectCompanies,
   selectUserAuth,
-  setFilterData,
+  setCompanyFilterData,
   useAppDispatch,
   useShallowEqualSelector
 } from '@eco/redux';
@@ -59,7 +59,7 @@ export const Companies = () => {
   useEffect(
     () => { 
       if (!!filter[CompanyItems.Name] || !!filter[CompanyItems.Country]) {
-        dispatch(setFilterData(filter));
+        dispatch(setCompanyFilterData(filter));
       }
     },
     [filter, dispatch]

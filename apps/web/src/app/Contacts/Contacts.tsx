@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridRowModes, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { ContactItems } from '@eco/types';
-import { apiGetContacts, selectContacts, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { apiGetContacts, selectContacts, setContactFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
 import {
@@ -49,7 +49,7 @@ export const Contacts = () => {
   useEffect(
     () => { 
       if (!!filter[ContactItems.Name] || !!filter[ContactItems.Country]) {
-        dispatch(setFilterData(filter));
+        dispatch(setContactFilterData(filter));
       }
     },
     [filter, dispatch]

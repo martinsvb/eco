@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Error, Prisma } from "@prisma/client";
 import { ContentUserEntity } from "../../users/entities/user.entity";
 import { CompanyContentEntity } from "../../companies/entities/company.entity";
+import { Exclude } from "class-transformer";
 
 export class ErrorEntity implements Error {
   @ApiProperty({ description: 'Id' })
@@ -23,6 +24,7 @@ export class ErrorEntity implements Error {
   type: string | null;
 
   @ApiProperty({ description: 'User id', required: false })
+  @Exclude()
   userId: string | null;
 
   @ApiProperty({ description: 'User name', required: false })
@@ -38,6 +40,7 @@ export class ErrorEntity implements Error {
   role: string | null;
 
   @ApiProperty({ description: 'Company id', required: false })
+  @Exclude()
   companyId: string | null;
 
   @ApiProperty({ description: 'Request method and url', required: false })

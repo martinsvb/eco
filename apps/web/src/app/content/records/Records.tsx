@@ -1,13 +1,15 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, useTheme } from '@mui/material';
 import { DataGrid, GridRowParams, gridClasses } from '@mui/x-data-grid';
+import * as qs from 'qs';
 import { routes } from '@eco/config';
-import { ContentFull, ContentTypes } from '@eco/types';
+import { ContentFull, ContentItems, ContentTypes } from '@eco/types';
 import { useRecordsColumns } from './useRecordsColumns';
 import { RecordsColumnMenu } from './RecordsColumnMenu';
 import { getDataGridWrapperSx, getDataGridSx } from '../../components/dataGrid/design';
 import { useMobilePortraitDetection } from '../../hooks/useMobileDetection';
+import { setContentFilterData, useAppDispatch } from '@eco/redux';
 
 interface RecordsProps {
   data: ContentFull[];
@@ -25,7 +27,22 @@ const Records = ({
 
   const isMobilePortrait = useMobilePortraitDetection();
 
+  const dispatch = useAppDispatch();
+
   const { columns } = useRecordsColumns();
+
+  const { search } = useLocation();
+
+  const filter = qs.parse(search.substring(1));
+
+  useEffect(
+    () => { 
+      if (filter[ContentItems.Title]) {
+        dispatch(setContentFilterData(filter));
+      }
+    },
+    [filter, dispatch]
+  );
 
   const handleRowClick = useCallback(
     ({id}: GridRowParams) => {

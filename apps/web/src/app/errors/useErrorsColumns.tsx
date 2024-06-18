@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
-import { ErrorItems, UserRoles } from '@eco/types';
+import { ErrorItems, UserItems, UserRoles } from '@eco/types';
 import { columnSettings } from '../helpers';
 
 interface ErrorsColumns {
@@ -48,18 +48,18 @@ export const useErrorsColumns = (): ErrorsColumns => {
         headerName: t('labels:userName'),
       },
       {
-        ...columnSettings(ErrorItems.Email, 200, 'left'),
+        ...columnSettings(UserItems.Email, 200, 'left'),
         headerName: t('labels:email'),
       },
       {
-        ...columnSettings(ErrorItems.IsEmailConfirmed, 80),
+        ...columnSettings(UserItems.IsEmailConfirmed, 80),
         headerName: t('labels:isEmailConfirmed'),
         type: 'boolean',
         sortable: false,
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(ErrorItems.Role, 200),
+        ...columnSettings(UserItems.Role, 200),
         headerName: t('labels:role'),
         valueFormatter: (value) => roles[value],
         sortable: false,

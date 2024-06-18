@@ -29,6 +29,7 @@ export const routes = {
         },
     },
     errors: '/errors',
+    errorsDetail: '/errors/:id',
     home: '/home',
     invitation: '/invitation',
     users: '/users',

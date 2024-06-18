@@ -1,5 +1,5 @@
-import { CompanyData } from "./company";
-import { UserData } from "./user";
+import { CompanyFull } from "./company";
+import { UserFull, UserItems } from "./user";
 
 export enum ErrorItems {
   Id = 'id',
@@ -11,16 +11,14 @@ export enum ErrorItems {
   User = 'user',
   UserId = 'userId',
   UserName = 'userName',
-  Email = 'email',
-  IsEmailConfirmed = 'isEmailConfirmed',
-  Role = 'role',
   Company = 'company',
   CompanyId = 'companyId',
   Request = 'request',
   Params = 'params',
   Body = 'body',
   Referer = 'referer',
-  CreatedAt = 'createdAt'
+  CreatedAt = 'createdAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export interface ErrorData {
@@ -30,20 +28,22 @@ export interface ErrorData {
   [ErrorItems.Code]?: string;
   [ErrorItems.Meta]?: any;
   [ErrorItems.Type]?: string;
-  [ErrorItems.User]?: UserData;
+  [ErrorItems.User]?: UserFull;
   [ErrorItems.UserId]?: string;
   [ErrorItems.UserName]?: string;
-  [ErrorItems.Email]?: string;
-  [ErrorItems.IsEmailConfirmed]?: boolean;
-  [ErrorItems.Role]?: string;
-  [ErrorItems.Company]?: CompanyData;
+  [UserItems.Email]?: string;
+  [UserItems.IsEmailConfirmed]?: boolean;
+  [UserItems.Role]?: string;
+  [ErrorItems.Company]?: CompanyFull;
   [ErrorItems.CompanyId]?: string;
   [ErrorItems.Request]?: string;
   [ErrorItems.Params]?: any;
   [ErrorItems.Body]?: any;
   [ErrorItems.Referer]?: string;
+  [ErrorItems.CreatedAt]?: string;
+  [ErrorItems.UpdatedAt]?: string;
   isNew?: boolean;
   isSelected?: boolean;
 }
 
-export type ErrorsFilterData = Partial<Pick<ErrorData, ErrorItems.Name | ErrorItems.Email>>;
+export type ErrorsFilterData = Partial<Pick<ErrorData, ErrorItems.Name | UserItems.Email>>;

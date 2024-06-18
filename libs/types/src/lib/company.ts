@@ -2,6 +2,7 @@ import { Company } from "@prisma/client";
 import { nanoid } from "@reduxjs/toolkit";
 
 export enum CompanyItems {
+  Id = 'id',
   Name = 'name',
   Country = 'country',
   Ico = 'ico',

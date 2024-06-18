@@ -11,11 +11,12 @@ import { routes } from '@eco/config';
 @Injectable()
 export class ErrorsInterceptor implements NestInterceptor {
 
-  private readonly transporter: nodemailer.Transporter;
-
   private readonly prisma: PrismaService;
 
+  private readonly transporter: nodemailer.Transporter;
+
   constructor() {
+    this.prisma = new PrismaService();
     this.transporter = nodemailer.createTransport(
       `smtps://${process.env.EMAIL_ADDRESS}:${process.env.EMAIL_PASSWORD}@${process.env.EMAIL_SMTP}`,
       {
@@ -23,7 +24,6 @@ export class ErrorsInterceptor implements NestInterceptor {
         port: 465,
       }
     );
-    this.prisma = new PrismaService();
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -92,15 +92,18 @@ export class ErrorsInterceptor implements NestInterceptor {
         }
       });
 
-      let errorTextParts = Object.entries(
-        omit(['userId', 'companyId', 'params', 'type'], errorPayload)
-      ).map(([key, value]) => (
-        `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`
-      ));
+      let errorTextParts = [
+        '<h3>Eco application error</h3><br>',
+        ...Object.entries(
+          omit(['userId', 'companyId', 'params', 'type'], errorPayload)
+        ).map(([key, value]) => (
+          `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`
+        ))
+      ];
 
       if (origin && id) {
         errorTextParts = [
-          `<a href='${origin}${routes.errors}?id=${id}' target='_blank'>Error</a>`,
+          `<a href='${origin}${routes.errors}?id=${id}' target='_blank'>Error</a><br>`,
           ...errorTextParts
         ];
       }
@@ -109,7 +112,7 @@ export class ErrorsInterceptor implements NestInterceptor {
         this.transporter.sendMail(
           {
             to: email,
-            subject: 'Eco application error',
+            subject: 'Application error',
             html: errorTextParts.join('<br/>')
           },
           (error) => {

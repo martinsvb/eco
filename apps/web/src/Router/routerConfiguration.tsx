@@ -13,6 +13,7 @@ import { Companies } from "../app/Companies/Companies";
 import { Contacts } from "../app/Contacts/Contacts";
 import { NotFound } from "../app/NotFound";
 import { Errors } from "../app/errors/Errors";
+import { Error } from "../app/errors/Error";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: routes.errors,
         element: <LoginWrapper><Errors /></LoginWrapper>,
+      },
+      {
+        path: routes.errorsDetail,
+        element: <LoginWrapper><Error /></LoginWrapper>,
       },
       {
         path: routes.home,

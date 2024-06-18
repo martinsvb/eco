@@ -106,7 +106,6 @@ export class ContentUserEntity extends BasicUserEntity implements User {
   rights: Prisma.JsonValue;
 
   @ApiProperty({ description: 'User role' })
-  @Exclude()
   role: string;
 
   @ApiProperty({ description: 'User password' })
