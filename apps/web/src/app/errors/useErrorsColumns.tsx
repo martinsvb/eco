@@ -44,6 +44,11 @@ export const useErrorsColumns = (): ErrorsColumns => {
         headerName: t('labels:code'),
       },
       {
+        ...columnSettings(ErrorItems.Type, 100, 'left'),
+        sortable: false,
+        headerName: t('labels:type'),
+      },
+      {
         ...columnSettings(ErrorItems.UserName, 200, 'left'),
         headerName: t('labels:userName'),
       },
@@ -66,7 +71,7 @@ export const useErrorsColumns = (): ErrorsColumns => {
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(ErrorItems.CreatedAt, 180),
+        ...columnSettings(ErrorItems.CreatedAt, 140),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),

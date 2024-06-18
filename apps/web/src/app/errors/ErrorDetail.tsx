@@ -4,6 +4,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { ErrorItemData } from './getErrorData';
 import { is } from 'ramda';
 import { THEME_MODE } from '../../config';
+import { useMobileDetection } from '../hooks';
 
 interface ErrorDetailProps {
   titleWidth: number;
@@ -15,12 +16,17 @@ export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
 
   const { palette, typography } = useTheme();
 
+  const isMobile = useMobileDetection();
+
   return (
     <Box
       component={Paper}
-      mr={2}
+      mr={!isMobile ? 2 : undefined}
+      mb={isMobile ? 2 : undefined}
       sx={{
-        border: palette.mode === THEME_MODE.DARK ? `1px solid ${palette.grey[500]}` : undefined
+        border: palette.mode === THEME_MODE.DARK
+          ? `1px solid ${palette.grey[500]}`
+          : undefined
       }}
     >
       {data.map(({item, value}, index) => (
@@ -38,7 +44,7 @@ export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
           <Typography
             variant="body1"
             mr={2}
-            width={titleWidth}
+            width={!isMobile ? titleWidth : undefined}
             fontWeight={typography.fontWeightBold}
           >
             {item === 'name' && name ? name : item}
@@ -48,7 +54,9 @@ export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
                 {JSON.stringify(value, undefined, 2)}
               </Box>
             : is(Boolean, value)
-              ? value ? <CheckIcon /> : <ClearIcon />
+              ? value
+                ? <CheckIcon />
+                : <ClearIcon />
               : <Typography variant="body1">{value}</Typography>
           }
         </Stack>

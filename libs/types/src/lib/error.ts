@@ -22,7 +22,7 @@ export enum ErrorItems {
 }
 
 export interface ErrorData {
-  [ErrorItems.Id]: string;
+  [ErrorItems.Id]?: string;
   [ErrorItems.DateTime]: string;
   [ErrorItems.Name]: string;
   [ErrorItems.Code]?: string;
@@ -46,4 +46,9 @@ export interface ErrorData {
   isSelected?: boolean;
 }
 
-export type ErrorsFilterData = Partial<Pick<ErrorData, ErrorItems.Name | UserItems.Email>>;
+export type ErrorsFilterData = Partial<
+  Pick<
+    ErrorData,
+    ErrorItems.Id | ErrorItems.Name | ErrorItems.Type | UserItems.Email
+  >
+>;

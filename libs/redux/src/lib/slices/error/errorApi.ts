@@ -5,7 +5,8 @@ import {
   getHeaders,
   getErrorValue,
   patchHeaders,
-  delHeaders
+  delHeaders,
+  postHeaders
 } from '@eco/config';
 import { ErrorData, getUrl } from '@eco/types';
 import { RootState } from '../../store';
@@ -38,6 +39,23 @@ export const errorGet = async (
     const token = await tokenValidation(dispatch, getState);
 
     return await checkResponse(await fetch(`/api/${endPoints.errors}/${id}`, getHeaders({signal, token}))).json();
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorValue(error));
+  }
+}
+
+export const errorPost = async (
+  body: ErrorData,
+  { dispatch, getState, rejectWithValue, signal }: GetThunkAPI<AsyncThunkConfig>
+) => {
+  try {
+    const token = await tokenValidation(dispatch, getState);
+
+    const data = await checkResponse(
+      await fetch(`/api/${endPoints.errors}`, postHeaders({body, signal, token}))
+    ).json();
+
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

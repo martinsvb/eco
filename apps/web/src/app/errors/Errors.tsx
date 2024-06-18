@@ -45,7 +45,12 @@ export const Errors = () => {
 
   useEffect(
     () => { 
-      if (!!filter[ErrorItems.Id] || !!filter[ErrorItems.Name] || !!filter[UserItems.Email]) {
+      if (
+        !!filter[ErrorItems.Id] ||
+        !!filter[ErrorItems.Name] ||
+        !!filter[ErrorItems.Type] ||
+        !!filter[UserItems.Email]
+      ) {
         dispatch(setErrorsFilterData(filter));
       }
     },

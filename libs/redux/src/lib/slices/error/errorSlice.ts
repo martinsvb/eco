@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { ApiOperations, ErrorData, ErrorsFilterData } from '@eco/types';
-import { errorDelete, errorGet, errorsGet, errorsPatch } from "./errorApi";
+import { errorDelete, errorGet, errorPost, errorsGet, errorsPatch } from "./errorApi";
 import { createSlice } from "../createSlice";
 
 export interface ErrorState {
@@ -68,6 +68,20 @@ const errorSlice = createSlice({
         },
       },
     ),
+    apiPostError: create.asyncThunk(
+      errorPost,
+      {
+        pending: (state) => {
+          state.loading[ApiOperations.create] = true;
+        },
+        rejected: (state, { error, payload }) => {
+          state.apiError[ApiOperations.create] = payload ?? error;
+        },
+        settled: (state) => {
+          state.loading[ApiOperations.create] = false;
+        },
+      },
+    ),
     apiPatchError: create.asyncThunk(
       errorsPatch,
       {
@@ -125,6 +139,7 @@ export default errorSlice.reducer;
 export const {
   apiGetError,
   apiGetErrors,
+  apiPostError,
   apiPatchError,
   apiDeleteError,
   resetErrors,

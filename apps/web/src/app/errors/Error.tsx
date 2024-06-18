@@ -2,15 +2,8 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Chip, Stack, Typography } from '@mui/material';
-import {
-  apiGetError,
-  selectError,
-  selectUserAuth,
-  setError,
-  useAppDispatch,
-  useShallowEqualSelector
-} from '@eco/redux';
-import { useMobilePortraitDetection } from '../hooks';
+import { apiGetError, selectError, setError, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { useMobileDetection } from '../hooks';
 import { getErrorData } from './getErrorData';
 import { ErrorDetail } from './ErrorDetail';
 
@@ -18,13 +11,11 @@ export const Error = () => {
 
   const { t } = useTranslation();
 
-  const isMobilePortrait = useMobilePortraitDetection();
+  const isMobile = useMobileDetection();
 
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
-
-  const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
   const error = useShallowEqualSelector(selectError);
 
@@ -41,8 +32,6 @@ export const Error = () => {
     [dispatch, id]
   );
 
-  error && console.log({error, scopes, data: getErrorData(error, 'error')})
-
   return (
     <>
       <Stack
@@ -57,7 +46,7 @@ export const Error = () => {
       </Stack>
       {error &&
         <Stack
-          direction={isMobilePortrait ? 'column' : 'row'}
+          direction={isMobile ? 'column' : 'row'}
           alignItems="start"
           mt={2}
         >
