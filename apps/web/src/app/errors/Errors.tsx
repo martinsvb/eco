@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
 import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
-import { UserItems } from '@eco/types';
-import { apiGetErrors, selectErrors, setFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import { ErrorItems } from '@eco/types';
+import { apiGetErrors, selectErrors, setErrorsFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
 import { useErrorsColumns } from './useErrorsColumns';
 import ErrorsButtons from './ErrorsButtons';
 import { useErrorsHandlers } from './useErrorsHandlers';
+import { ErrorsColumnMenu } from './ErrorsColumnMenu';
 
 export const Errors = () => {
 
@@ -41,8 +42,8 @@ export const Errors = () => {
 
   useEffect(
     () => { 
-      if (!!filter[UserItems.Name] || !!filter[UserItems.Email]) {
-        dispatch(setFilterData(filter));
+      if (!!filter[ErrorItems.Id] || !!filter[ErrorItems.Name] || !!filter[ErrorItems.Email]) {
+        dispatch(setErrorsFilterData(filter));
       }
     },
     [filter, dispatch]
@@ -67,6 +68,9 @@ export const Errors = () => {
           filterMode="server"
           loading={isLoading}
           {...dataGridHandlers}
+          slots={{
+            columnMenu: ErrorsColumnMenu,
+          }}
           sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />
       </Box>

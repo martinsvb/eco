@@ -45,3 +45,5 @@ export interface ErrorData {
   isNew?: boolean;
   isSelected?: boolean;
 }
+
+export type ErrorsFilterData = Partial<Pick<ErrorData, ErrorItems.Name | ErrorItems.Email>>;

@@ -29,8 +29,23 @@ export const useErrorsColumns = (): ErrorsColumns => {
   return {
     columns: [
       {
-        ...columnSettings(ErrorItems.Name, 200, 'left'),
+        ...columnSettings(ErrorItems.Id, 300, 'left'),
+        sortable: false,
+        headerName: t('labels:id'),
+      },
+      {
+        ...columnSettings(ErrorItems.Name, 260, 'left'),
         headerName: t('labels:name'),
+      },
+      {
+        ...columnSettings(ErrorItems.Code, 100, 'left'),
+        sortable: false,
+        disableColumnMenu: true,
+        headerName: t('labels:code'),
+      },
+      {
+        ...columnSettings(ErrorItems.UserName, 200, 'left'),
+        headerName: t('labels:userName'),
       },
       {
         ...columnSettings(ErrorItems.Email, 200, 'left'),
@@ -51,7 +66,7 @@ export const useErrorsColumns = (): ErrorsColumns => {
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(ErrorItems.CreatedAt, 140),
+        ...columnSettings(ErrorItems.CreatedAt, 180),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),

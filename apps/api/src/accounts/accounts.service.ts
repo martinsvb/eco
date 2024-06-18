@@ -19,9 +19,6 @@ export class AccountsService {
       where: {
         companyId
       },
-      include: {
-        creator: true,
-      },
     });
   }
 

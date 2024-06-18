@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete, NotFoundException, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, NotFoundException, Req, UseGuards, Query } from '@nestjs/common';
 import { Request } from 'express';
 import { ErrorsService } from './errors.service';
 import { UpdateErrorDto } from './dto/update-error.dto';
@@ -22,8 +22,8 @@ export class ErrorsController {
     status: 200,
     description: 'Errors has been successfully loaded.',
   })
-  async findAll(@Req() {user}: Request) {
-    const errors = await this.errorsService.findAll(user as UserFull);
+  async findAll(@Req() {user}: Request, @Query() query) {
+    const errors = await this.errorsService.findAll(user as UserFull, query);
     return errors.map((error) => new ErrorEntity(error));
   }
 

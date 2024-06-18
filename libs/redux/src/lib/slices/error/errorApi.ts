@@ -7,7 +7,8 @@ import {
   patchHeaders,
   delHeaders
 } from '@eco/config';
-import { ErrorData } from '@eco/types';
+import { ErrorData, getUrl } from '@eco/types';
+import { RootState } from '../../store';
 import { tokenValidation } from '../../tokenValidation';
 
 export const errorsGet = async (
@@ -17,7 +18,13 @@ export const errorsGet = async (
   try {
     const token = await tokenValidation(dispatch, getState);
 
-    return await checkResponse(await fetch(`/api/${endPoints.errors}`, getHeaders({signal, token}))).json();
+    const { error: { errorsFilter } } = getState() as RootState;
+
+    const url = getUrl(endPoints.errors, errorsFilter);
+
+    const data = await checkResponse(await fetch(url, getHeaders({signal, token}))).json();
+
+    return data;
   } catch (error: unknown) {
     return rejectWithValue(getErrorValue(error));
   }

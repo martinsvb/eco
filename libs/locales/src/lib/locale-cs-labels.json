@@ -5,6 +5,7 @@
   "avatar": "Avatar",
   "cancel": "Zrušit",
   "close": "Zavřít",
+  "code": "kód",
   "colorModeDark": "Tmavý režim",
   "colorModeLight": "Světlý režim",
   "colorModeSystem": "Barevný režim dle nastavení systému",
@@ -26,6 +27,7 @@
   "filterSearchClear": "Vymazat filtr",
   "iban": "Iban",
   "ico": "Ičo",
+  "id": "Id",
   "inProgress": "V řešení: {{length}}",
   "insert": "Vložit",
   "isEmailConfirmed": "Ověřen",
@@ -54,6 +56,7 @@
   "title": "Titulek",
   "unapprove": "Zrušit schválení",
   "userMenu": "Nabídka uživatele",
+  "userName": "Jméno uživatele",
   "vat": "Dič",
   "verify": "Ověřit"
 }

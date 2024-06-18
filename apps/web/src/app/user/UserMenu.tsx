@@ -11,6 +11,7 @@ import {
   resetCompanies,
   resetContacts,
   resetContent,
+  resetErrors,
   resetUsers,
   selectUserAuth,
   useAppDispatch,
@@ -72,6 +73,7 @@ const UserMenu = ({isMobile}: UserMenuProps) => {
       dispatch(resetContent());
       dispatch(resetUsers());
       dispatch(resetCompanies());
+      dispatch(resetErrors());
       navigate(routes.home);
     },
     [dispatch, navigate]

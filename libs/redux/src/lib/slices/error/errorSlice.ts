@@ -1,11 +1,12 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiOperations, ErrorData } from '@eco/types';
+import { ApiOperations, ErrorData, ErrorsFilterData } from '@eco/types';
 import { errorDelete, errorGet, errorsGet, errorsPatch } from "./errorApi";
 import { createSlice } from "../createSlice";
 
 export interface ErrorState {
   error: ErrorData | null;
   errors: ErrorData[];
+  errorsFilter: ErrorsFilterData;
   apiError: {[key: string]: unknown | null};
   loading: {[key: string]: boolean};
   loaded: {[key: string]: boolean};
@@ -14,6 +15,7 @@ export interface ErrorState {
 export const initialErrorState: ErrorState = {
   error: null,
   errors: [],
+  errorsFilter: {},
   apiError: {},
   loading: {},
   loaded: {},
@@ -26,6 +28,9 @@ const errorSlice = createSlice({
     resetErrors: create.reducer(() => initialErrorState),
     setError: create.reducer((state, {payload}: PayloadAction<ErrorData | null>) => {
       state.error = payload;
+    }),
+    setErrorsFilterData: create.reducer((state, {payload}: PayloadAction<ErrorsFilterData>) => {
+      state.errorsFilter = {...state.errorsFilter, ...payload};
     }),
     apiGetErrors: create.asyncThunk(
       errorsGet,
@@ -110,6 +115,7 @@ const errorSlice = createSlice({
       isLoading: !!state.loading[ApiOperations.getList],
       loaded: !!state.loaded[ApiOperations.getItem],
     }),
+    selectErrorsFilter: (state) => state.errorsFilter,
     selectIsErrorsLoading: (state, operation: ApiOperations) => !!state.loading[operation],
   },
 });
@@ -122,11 +128,13 @@ export const {
   apiPatchError,
   apiDeleteError,
   resetErrors,
-  setError
+  setError,
+  setErrorsFilterData
 } = errorSlice.actions;
 
 export const {
   selectError,
   selectErrors,
-  selectIsErrorsLoading
+  selectIsErrorsLoading,
+  selectErrorsFilter
 } = errorSlice.selectors;

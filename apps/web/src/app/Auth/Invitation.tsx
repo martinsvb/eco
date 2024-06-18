@@ -8,6 +8,7 @@ import {
   resetCompanies,
   resetContacts,
   resetContent,
+  resetErrors,
   resetUsers,
   useAppDispatch
 } from '@eco/redux';
@@ -32,6 +33,7 @@ const Invitation = () => {
       dispatch(resetContent());
       dispatch(resetUsers());
       dispatch(resetCompanies());
+      dispatch(resetErrors());
     },
     [dispatch]
   );
