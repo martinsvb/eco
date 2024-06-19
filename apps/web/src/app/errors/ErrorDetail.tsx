@@ -23,6 +23,7 @@ export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
       component={Paper}
       mr={!isMobile ? 2 : undefined}
       mb={isMobile ? 2 : undefined}
+      width={isMobile ? '100%' : undefined}
       sx={{
         border: palette.mode === THEME_MODE.DARK
           ? `1px solid ${palette.grey[500]}`
@@ -50,7 +51,7 @@ export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
             {item === 'name' && name ? name : item}
           </Typography>
           {is(Object, value)
-            ? <Box component="pre" my={0}>
+            ? <Box component="pre" my={0} sx={{'white-space': 'pre-wrap'}}>
                 {JSON.stringify(value, undefined, 2)}
               </Box>
             : is(Boolean, value)

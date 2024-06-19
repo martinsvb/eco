@@ -29,11 +29,6 @@ export const useErrorsColumns = (): ErrorsColumns => {
   return {
     columns: [
       {
-        ...columnSettings(ErrorItems.Id, 300, 'left'),
-        sortable: false,
-        headerName: t('labels:id'),
-      },
-      {
         ...columnSettings(ErrorItems.Name, 260, 'left'),
         headerName: t('labels:name'),
       },

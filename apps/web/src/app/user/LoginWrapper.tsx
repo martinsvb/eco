@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+import { routes } from '@eco/config';
 import { isRouteScopeAvailable } from '@eco/types';
 import { selectIsUserLoggedIn, selectUserAuth, useAppSelector, useShallowEqualSelector } from '@eco/redux';
 import LoginPage from './LoginPage';
@@ -17,15 +18,13 @@ const LoginWrapper = ({children}: LoginWrapperProps) => {
 
   const { rights: { scopes } } = useShallowEqualSelector(selectUserAuth);
 
-  return (
-    isUserLoggedIn && isRouteScopeAvailable(pathname, scopes) ?
-      children
-      :
-      isUserLoggedIn ?
-        <NoRights />
-        :
-        <LoginPage />
-  );
+  if (!isRouteScopeAvailable(pathname.replace(routes.app, ''), scopes)) {
+    return isUserLoggedIn
+      ? <NoRights />
+      : <LoginPage />
+  }
+
+  return children;
 }
 
 export default LoginWrapper;

@@ -4,12 +4,14 @@
   "company": "Společnost",
   "contacts": "Kontakty",
   "error": "Chyba",
+  "errorPageInfo": "V aplikaci nastala chyba, prosím zkuste obnovit stránku tlačítkem níže.",
   "errors": "Chyby",
   "home": "Domů",
   "invitation": "Pozvání",
   "notFoundPage": "Stránka nenalezena",
   "notFoundPageInfo": "Hledaná stránka nebyla nalezena. Odkaz níže Vás přesměruje na domovskou stránku.",
   "records": "Zápisy",
+  "reload": "Obnovit",
   "tasks": "Úkoly",
   "users": "Uživatelé"
 }

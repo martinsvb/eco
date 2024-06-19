@@ -1,4 +1,4 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
+import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import { routes } from "@eco/config";
 import { ContentTypes } from "@eco/types";
 import App from "../app/app";
@@ -14,6 +14,7 @@ import { Contacts } from "../app/Contacts/Contacts";
 import { NotFound } from "../app/NotFound";
 import { Errors } from "../app/errors/Errors";
 import { Error } from "../app/errors/Error";
+import { ErrorBoundary } from "../app/layout/ErrorBoundary";
 
 export const router = createBrowserRouter([
   {
@@ -21,58 +22,6 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Navigate to={routes.home} replace /> },
-      {
-        path: routes.accounts,
-        element: <LoginWrapper><Accounts /></LoginWrapper>,
-      },
-      {
-        path: routes.accountsNew,
-        element: <LoginWrapper><AccountsNew /></LoginWrapper>,
-      },
-      {
-        path: routes.accountsEdit,
-        element: <LoginWrapper><AccountsEdit /></LoginWrapper>,
-      },
-      {
-        path: routes.companies,
-        element: <LoginWrapper><Companies /></LoginWrapper>,
-      },
-      {
-        path: routes.contacts,
-        element: <LoginWrapper><Contacts /></LoginWrapper>,
-      },
-      {
-        path: routes.content.task.list,
-        element: <LoginWrapper><ContentList type={ContentTypes.Task} /></LoginWrapper>,
-      },
-      {
-        path: routes.content.task.new,
-        element: <LoginWrapper><ContentNew type={ContentTypes.Task} /></LoginWrapper>,
-      },
-      {
-        path: routes.content.task.detail,
-        element: <LoginWrapper><ContentDetail type={ContentTypes.Task} /></LoginWrapper>,
-      },
-      {
-        path: routes.content.record.list,
-        element: <LoginWrapper><ContentList type={ContentTypes.Record} /></LoginWrapper>,
-      },
-      {
-        path: routes.content.record.new,
-        element: <LoginWrapper><ContentNew type={ContentTypes.Record} /></LoginWrapper>,
-      },
-      {
-        path: routes.content.record.detail,
-        element: <LoginWrapper><ContentDetail type={ContentTypes.Record} /></LoginWrapper>,
-      },
-      {
-        path: routes.errors,
-        element: <LoginWrapper><Errors /></LoginWrapper>,
-      },
-      {
-        path: routes.errorsDetail,
-        element: <LoginWrapper><Error /></LoginWrapper>,
-      },
       {
         path: routes.home,
         element: <Home />,
@@ -82,16 +31,74 @@ export const router = createBrowserRouter([
         element: <Invitation />,
       },
       {
-        path: routes.users,
-        element: <LoginWrapper><Users /></LoginWrapper>,
-      },
-      {
-        path: routes.usersEdit,
-        element: <LoginWrapper><UserEdit /></LoginWrapper>,
-      },
-      {
         path: routes.notFound,
         element: <NotFound />,
+      },
+      {
+        path: routes.app,
+        element: <ErrorBoundary><LoginWrapper><Outlet /></LoginWrapper></ErrorBoundary>,
+        children: [
+          {
+            path: routes.errors,
+            element: <Errors />,
+          },
+          {
+            path: routes.errorsDetail,
+            element: <Error />,
+          },
+          {
+            path: routes.accounts,
+            element: <Accounts />,
+          },
+          {
+            path: routes.accountsNew,
+            element: <AccountsNew />,
+          },
+          {
+            path: routes.accountsEdit,
+            element: <AccountsEdit />,
+          },
+          {
+            path: routes.companies,
+            element: <Companies />,
+          },
+          {
+            path: routes.contacts,
+            element: <Contacts />,
+          },
+          {
+            path: routes.content.task.list,
+            element: <ContentList type={ContentTypes.Task} />,
+          },
+          {
+            path: routes.content.task.new,
+            element: <ContentNew type={ContentTypes.Task} />,
+          },
+          {
+            path: routes.content.task.detail,
+            element: <ContentDetail type={ContentTypes.Task} />,
+          },
+          {
+            path: routes.content.record.list,
+            element: <ContentList type={ContentTypes.Record} />,
+          },
+          {
+            path: routes.content.record.new,
+            element: <ContentNew type={ContentTypes.Record} />,
+          },
+          {
+            path: routes.content.record.detail,
+            element: <ContentDetail type={ContentTypes.Record} />,
+          },
+          {
+            path: routes.users,
+            element: <Users />,
+          },
+          {
+            path: routes.usersEdit,
+            element: <UserEdit />,
+          },
+        ],
       },
     ],
   },

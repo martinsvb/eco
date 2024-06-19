@@ -3,13 +3,15 @@
   "companies": "Companies",
   "company": "Company",
   "contacts": "Contacts",
-  "error": "__NOT_TRANSLATED__",
+  "error": "Error",
+  "errorPageInfo": "Error occured in application, please try to reload page by bellow button.",
   "errors": "Errors",
   "home": "Home",
   "invitation": "Invitation",
   "notFoundPage": "Page not found",
   "notFoundPageInfo": "Page wasn't found. Link below redirects you to home page.",
   "records": "Records",
+  "reload": "Reload",
   "tasks": "Tasks",
   "users": "Users"
 }

@@ -1,5 +1,6 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { csCZ, enUS } from '@mui/material/locale';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -79,6 +80,7 @@ const MuiProviders: FC<MuiProvidersProps> = ({ children }) => {
           dateAdapter={AdapterDayjs}
           adapterLocale={getLanguageCode(language)}
         >
+          <CssBaseline enableColorScheme />
           {children}
         </LocalizationProvider>
       </SnackbarProvider>

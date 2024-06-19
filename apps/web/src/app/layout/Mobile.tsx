@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { CssBaseline, AppBar, Box, useTheme, Toolbar } from '@mui/material';
+import { AppBar, Box, useTheme, Toolbar } from '@mui/material';
 import { getScrollbarDesign } from '@eco/config';
 import { useAppDispatch, apiGetAuthUser } from '@eco/redux';
 import AppToolbarMobile from './AppToolbarMobile';
@@ -23,7 +23,6 @@ const Mobile = () => {
 
   return (
     <>
-      <CssBaseline enableColorScheme />
       <Box
         component="main"
         sx={{

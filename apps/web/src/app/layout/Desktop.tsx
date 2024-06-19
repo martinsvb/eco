@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { AppBar, Box, CssBaseline, Toolbar, useTheme } from '@mui/material';
-import DesktopNavigationSidebar from './DesktopNavigationSidebar';
-import AppToolbar from './AppToolbar';
+import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 import { getScrollbarDesign } from '@eco/config';
 import { apiGetAuthUser, useAppDispatch } from '@eco/redux';
+import AppToolbar from './AppToolbar';
+import DesktopNavigationSidebar from './DesktopNavigationSidebar';
 
 const Desktop = () => {
 
@@ -21,7 +21,6 @@ const Desktop = () => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline enableColorScheme />
       <AppBar
         position="fixed"
         sx={{
