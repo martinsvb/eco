@@ -120,6 +120,9 @@ const contentSlice = createSlice({
     setContentFilterData: create.reducer((state, {payload}: PayloadAction<ContentFilterData>) => {
       state.filter = {...state.filter, ...payload};
     }),
+    clearContentFilterData: create.reducer((state) => {
+      state.filter = {};
+    }),
     setContentPreview: create.reducer((state, {payload}: PayloadAction<boolean>) => {
       state.preview = payload;
     }),
@@ -301,6 +304,7 @@ export const {
   setContent,
   setContentTemp,
   setContentFilterData,
+  clearContentFilterData,
   setContentPreview
 } = contentSlice.actions;
 

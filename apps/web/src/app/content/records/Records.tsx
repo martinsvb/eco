@@ -5,11 +5,12 @@ import { DataGrid, GridRowParams, gridClasses } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { routes } from '@eco/config';
 import { ContentFull, ContentItems, ContentTypes } from '@eco/types';
-import { useRecordsColumns } from './useRecordsColumns';
-import { RecordsColumnMenu } from './RecordsColumnMenu';
+import { setContentFilterData, useAppDispatch } from '@eco/redux';
 import { getDataGridWrapperSx, getDataGridSx } from '../../components/dataGrid/design';
 import { useMobilePortraitDetection } from '../../hooks/useMobileDetection';
-import { setContentFilterData, useAppDispatch } from '@eco/redux';
+import { useRecordsColumns } from './useRecordsColumns';
+import { RecordsColumnMenu } from './RecordsColumnMenu';
+import { RecordsToolbar } from './RecordsToolbar';
 
 interface RecordsProps {
   data: ContentFull[];
@@ -62,6 +63,7 @@ const Records = ({
         onRowClick={handleRowClick}
         slots={{
           columnMenu: RecordsColumnMenu,
+          toolbar: RecordsToolbar,
         }}
         sx={{
           ...getDataGridSx(theme.palette, isMobilePortrait),

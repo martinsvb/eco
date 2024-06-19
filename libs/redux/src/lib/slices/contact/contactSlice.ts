@@ -37,6 +37,9 @@ const contactSlice = createSlice({
     setContactFilterData: create.reducer((state, {payload}: PayloadAction<ContactFilterData>) => {
       state.filter = {...state.filter, ...payload};
     }),
+    clearContactFilterData: create.reducer((state) => {
+      state.filter = {};
+    }),
     setContact: create.reducer((state, {payload}: PayloadAction<ContactState['contact']>) => {
       state.contact = payload;
     }),
@@ -194,6 +197,7 @@ export const {
   cancelContact,
   resetContacts,
   setContactFilterData,
+  clearContactFilterData,
   setContact,
   unshiftContact,
 } = contactSlice.actions

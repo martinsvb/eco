@@ -24,6 +24,7 @@ import {
   useCompaniesColumns,
   useCompaniesHandlers
 } from '.';
+import { CompaniesToolbar } from './CompaniesToolbar';
 
 export const Companies = () => {
 
@@ -94,6 +95,7 @@ export const Companies = () => {
           }}
           slots={{
             columnMenu: CompaniesColumnMenu,
+            toolbar: CompaniesToolbar,
           }}
           sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />

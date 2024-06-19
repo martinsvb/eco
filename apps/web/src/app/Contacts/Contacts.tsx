@@ -16,6 +16,7 @@ import {
   useContactsColumns,
   useContactsHandlers
 } from '.';
+import { ContactsToolbar } from './ContactsToolbar';
 
 export const Contacts = () => {
 
@@ -84,6 +85,7 @@ export const Contacts = () => {
           }}
           slots={{
             columnMenu: ContactsColumnMenu,
+            toolbar: ContactsToolbar,
           }}
           sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />

@@ -38,6 +38,9 @@ const userSlice = createSlice({
     setFilterData: create.reducer((state, {payload}: PayloadAction<UserFilterData>) => {
       state.filter = {...state.filter, ...payload};
     }),
+    clearFilterData: create.reducer((state) => {
+      state.filter = {};
+    }),
     setUser: create.reducer((state, {payload}: PayloadAction<UserState['user']>) => {
       state.user = payload;
     }),
@@ -170,6 +173,7 @@ export const {
   cancelUser,
   resetUsers,
   setFilterData,
+  clearFilterData,
   setUser,
   unshiftUser
 } = userSlice.actions

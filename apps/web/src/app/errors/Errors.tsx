@@ -13,6 +13,7 @@ import ErrorsButtons from './ErrorsButtons';
 import { useErrorsHandlers } from './useErrorsHandlers';
 import { ErrorsColumnMenu } from './ErrorsColumnMenu';
 import { routes } from '@eco/config';
+import { ErrorsToolbar } from './ErrorsToolbar';
 
 export const Errors = () => {
 
@@ -86,6 +87,7 @@ export const Errors = () => {
           {...dataGridHandlers}
           slots={{
             columnMenu: ErrorsColumnMenu,
+            toolbar: ErrorsToolbar,
           }}
           sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />

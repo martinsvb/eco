@@ -37,6 +37,9 @@ const companySlice = createSlice({
     setCompanyFilterData: create.reducer((state, {payload}: PayloadAction<CompanyFilterData>) => {
       state.filter = {...state.filter, ...payload};
     }),
+    clearCompanyFilterData: create.reducer((state) => {
+      state.filter = {};
+    }),
     setCompany: create.reducer((state, {payload}: PayloadAction<CompanyState['company']>) => {
       state.company = payload;
     }),
@@ -218,6 +221,7 @@ export const {
   cancelCompany,
   resetCompanies,
   setCompanyFilterData,
+  clearCompanyFilterData,
   setCompany,
   unshiftCompany,
 } = companySlice.actions

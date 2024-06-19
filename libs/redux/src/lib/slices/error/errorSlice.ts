@@ -32,6 +32,9 @@ const errorSlice = createSlice({
     setErrorsFilterData: create.reducer((state, {payload}: PayloadAction<ErrorsFilterData>) => {
       state.errorsFilter = {...state.errorsFilter, ...payload};
     }),
+    clearErrorsFilterData: create.reducer((state) => {
+      state.errorsFilter = {};
+    }),
     apiGetErrors: create.asyncThunk(
       errorsGet,
       {
@@ -144,7 +147,8 @@ export const {
   apiDeleteError,
   resetErrors,
   setError,
-  setErrorsFilterData
+  setErrorsFilterData,
+  clearErrorsFilterData
 } = errorSlice.actions;
 
 export const {

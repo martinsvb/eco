@@ -13,6 +13,7 @@ import { UsersColumnMenu } from './UsersColumnMenu';
 import UsersButtons from './UsersButtons';
 import UsersDialog from './UsersDialog';
 import { useUsersHandlers } from './useUsersHandlers';
+import { UsersToolbar } from './UsersToolbar';
 
 export const Users = () => {
 
@@ -81,6 +82,7 @@ export const Users = () => {
           }}
           slots={{
             columnMenu: UsersColumnMenu,
+            toolbar: UsersToolbar,
           }}
           sx={getDataGridSx(theme.palette, isMobilePortrait)}
         />
