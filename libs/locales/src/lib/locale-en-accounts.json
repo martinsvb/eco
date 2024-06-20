@@ -1,8 +1,11 @@
 {
+  "active": "Active",
+  "activeSwitch": "Account state switch",
   "createAccount": "Create new bank account",
   "delete-question-text": "Are you really want to delete chosen bank account?",
   "delete-question-title": "Bank account deletion",
   "editAccountTitle": "Edit bank account",
+  "inActive": "Inactive",
   "newAccountTitle": "New bank account",
   "title": "Bank accounts"
 }

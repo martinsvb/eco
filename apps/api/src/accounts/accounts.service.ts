@@ -19,6 +19,9 @@ export class AccountsService {
       where: {
         companyId
       },
+      orderBy: {
+        active: 'desc'
+      },
     });
   }
 

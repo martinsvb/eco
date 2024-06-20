@@ -1,8 +1,11 @@
 {
+  "active": "Aktivní",
+  "activeSwitch": "Přepínač stavu účtu",
   "createAccount": "Vytvořit nový bankovní účet",
   "delete-question-text": "Opravdu si přejete vymazat vybraný bankovní účet?",
   "delete-question-title": "Smazání bankovního účtu",
   "editAccountTitle": "Úprava bankovního účtu",
+  "inActive": "Neaktivní",
   "newAccountTitle": "Nový bankovní účet",
   "title": "Bankovní účty"
 }

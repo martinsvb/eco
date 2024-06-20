@@ -8,8 +8,9 @@ import { routes } from '@eco/config';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
 import AccountDeleteButton from './AccountDeleteButton';
 import { AppCard, AppIconButton } from '../components';
+import AccountSwitch from './AccountSwitch';
 
-export const AccountItem = ({id, name, iban, number, bic, currency}: Account) => {
+export const AccountItem = ({id, name, iban, number, bic, currency, active}: Account) => {
 
   const { t } = useTranslation();
 
@@ -31,11 +32,17 @@ export const AccountItem = ({id, name, iban, number, bic, currency}: Account) =>
       actions={
         <>
           {accounts.edit &&
-            <AppIconButton
-              title={t('labels:edit')}
-              id='accountEdit'
-              onClick={handleEdit}
-            ><EditIcon /></AppIconButton>
+            <>
+              <AccountSwitch
+                id={id}
+                active={active}
+              />
+              <AppIconButton
+                title={t('labels:edit')}
+                id='accountEdit'
+                onClick={handleEdit}
+              ><EditIcon /></AppIconButton>
+            </>
           }
           {accounts.delete && <AccountDeleteButton id={id} />}
         </>
