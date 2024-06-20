@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Account } from '@prisma/client';
 import { Chip, Stack, Typography, useTheme } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import { routes } from '@eco/config';
 import { useShallowEqualSelector, selectUserAuth } from '@eco/redux';
@@ -31,6 +33,11 @@ export const AccountItem = ({id, name, iban, number, bic, currency, active}: Acc
     <AppCard
       actions={
         <>
+          {accounts.read && !accounts.edit && (
+            active
+              ? <Chip icon={<CheckIcon />} label={t('accounts:active')} variant="outlined" color="success" />
+              : <Chip icon={<ClearIcon />} label={t('accounts:inActive')} variant="outlined" color="error" />
+          )}
           {accounts.edit &&
             <>
               <AccountSwitch
@@ -47,7 +54,7 @@ export const AccountItem = ({id, name, iban, number, bic, currency, active}: Acc
           {accounts.delete && <AccountDeleteButton id={id} />}
         </>
       }
-      actionsAvailable={accounts.edit || accounts.delete}
+      actionsAvailable={accounts.read || accounts.edit || accounts.delete}
       cardTitle={name}
       cmpContent={
         <Stack>
