@@ -1,8 +1,10 @@
 {
+  "accountNumber": "Číslo účtu",
   "actions": "Akce",
   "address": "Adresa",
   "approve": "Schválit",
   "avatar": "Avatar",
+  "bic": "Bic",
   "cancel": "Zrušit",
   "close": "Zavřít",
   "code": "kód",

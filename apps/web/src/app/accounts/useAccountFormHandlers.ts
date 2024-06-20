@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { filter, compose, not, isEmpty, omit } from "ramda";
 import { routes } from "@eco/config";
 import { apiPatchAccount, apiPostAccount, useAppDispatch } from "@eco/redux";
-import { AccountData, AccountItems } from "@eco/types";
+import { AccountData } from "@eco/types";
 
 export const useAccountFormHandlers = (id?: string) => {
 
@@ -12,8 +11,7 @@ export const useAccountFormHandlers = (id?: string) => {
   const navigate = useNavigate();
 
   const submit = useCallback(
-    (data: AccountData) => {
-      const body = filter(compose(not, isEmpty), omit([AccountItems.description], data));
+    (body: AccountData) => {
       if (id) {
         dispatch(
           apiPatchAccount({

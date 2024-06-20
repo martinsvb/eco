@@ -29,15 +29,10 @@ export class CreateAccountDto {
   @ApiProperty({ description: 'Account iban' })
   iban: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({ description: 'Account number' })
-  number: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  @ApiProperty({ description: 'Account bank code' })
-  bankCode: number;
+  number: string;
 
   @IsString()
   @IsNotEmpty()

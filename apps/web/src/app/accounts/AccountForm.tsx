@@ -33,7 +33,14 @@ const AccountForm = () => {
 
   const values = useFormValues<AccountData>(
     account,
-    [AccountItems.iban, AccountItems.name, AccountItems.currency, AccountItems.description]
+    [
+      AccountItems.number,
+      AccountItems.bic,
+      AccountItems.iban,
+      AccountItems.name,
+      AccountItems.currency,
+      AccountItems.description
+    ]
   );
 
   const { control, formState: { isValid }, handleSubmit, watch } = useForm<AccountData>({
@@ -61,10 +68,24 @@ const AccountForm = () => {
           }}
         />
         <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.number, data)}
+          fieldProps={{
+            required: true,
+            label: t('labels:accountNumber')
+          }}
+        />
+        <GridControllerTextField
           {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.iban, data)}
           fieldProps={{
             required: true,
             label: t('labels:iban')
+          }}
+        />
+        <GridControllerTextField
+          {...gridFieldSettings({md: 6, xs: 12}, control, AccountItems.bic, data)}
+          fieldProps={{
+            required: true,
+            label: t('labels:bic')
           }}
         />
         {!!currencies[lngCode] &&

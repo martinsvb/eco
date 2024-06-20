@@ -10,10 +10,7 @@ export class AccountEntity implements Account {
   iban: string;
 
   @ApiProperty({ description: 'Account number' })
-  number: number;
-
-  @ApiProperty({ description: 'Account bank code' })
-  bankCode: number;
+  number: string;
 
   @ApiProperty({ description: 'Account bic' })
   bic: string;

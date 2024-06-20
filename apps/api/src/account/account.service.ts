@@ -7,8 +7,7 @@ export class AccountService {
     return {
       id: 'test',
       iban: 'CZ0000000000000000000000',
-      number: 1000000000,
-      bankCode: 1000,
+      number: '1000000000',
       bic: 'ABCDCZPP',
       name: 'test',
       currency: 'EUR',

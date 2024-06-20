@@ -13,8 +13,7 @@ datasource db {
 model Account {
   id          String    @id @default(uuid())
   iban        String    @unique
-  number      Int
-  bankCode    Int
+  number      String
   bic         String
   name        String
   currency    String

@@ -1,8 +1,10 @@
 {
+  "accountNumber": "Account number",
   "actions": "Actions",
   "address": "Address",
   "approve": "Approve",
   "avatar": "Avatar",
+  "bic": "Bic",
   "cancel": "Cancel",
   "close": "Close",
   "code": "Code",

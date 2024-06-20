@@ -87,8 +87,7 @@ async function main() {
     data: {
       name: 'Account 1',
       iban: 'CZ0000000000000000000001',
-      number: 1000000000,
-      bankCode: 1000,
+      number: '1000000000/0001',
       bic: 'ABCDCZPP',
       currency: 'EUR',
       creatorId: user1.id,
@@ -100,8 +99,7 @@ async function main() {
     data: {
       name: 'Account 2',
       iban: 'CZ0000000000000000000002',
-      number: 2000000000,
-      bankCode: 2000,
+      number: '2000000000/0002',
       bic: 'EFGHCZPP',
       currency: 'EUR',
       creatorId: user2.id,
