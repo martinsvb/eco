@@ -42,7 +42,7 @@ export const AccountItem = ({id, name, iban, number, bic, currency}: Account) =>
       }
       actionsAvailable={accounts.edit || accounts.delete}
       cardTitle={name}
-      content={
+      cmpContent={
         <Stack>
           <Typography fontWeight={typography.fontWeightBold} mb={2}>{t('labels:accountNumber')}: {number}</Typography>
           <Typography>{t('labels:iban')}: {iban}</Typography>

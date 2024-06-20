@@ -10,7 +10,7 @@ interface AppCardProps extends CardProps {
   actionsAvailable?: boolean;
   cardTitle: string;
   label?: ReactNode;
-  content?: ReactNode;
+  cmpContent?: ReactNode;
   textContent?: string;
   htmlContent?: any;
   background?: string;
@@ -22,7 +22,7 @@ export const AppCard = ({
   cardTitle,
   background,
   label,
-  content,
+  cmpContent,
   textContent,
   htmlContent
 }: AppCardProps) => {
@@ -50,7 +50,7 @@ export const AppCard = ({
           </Typography>
           {label}
         </Stack>
-        {content}
+        {cmpContent}
         {!!textContent &&
           <Typography
             variant='body1'
