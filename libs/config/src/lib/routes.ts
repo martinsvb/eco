@@ -10,6 +10,7 @@ export const routes = {
     accountsEdit: '/app/accounts/edit/:id',
     companies: '/app/companies',
     contacts: '/app/contacts',
+    contact: '/app/contacts/:id',
     content: {
         article: {
             list: '/app/articles',

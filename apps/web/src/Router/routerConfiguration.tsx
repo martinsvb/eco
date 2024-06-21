@@ -11,6 +11,7 @@ import Invitation from "../app/Auth/Invitation";
 import { UserEdit } from "../app/user/UserEdit";
 import { Companies } from "../app/Companies/Companies";
 import { Contacts } from "../app/Contacts/Contacts";
+import { Contact } from "../app/Contacts/Contact";
 import { NotFound } from "../app/NotFound";
 import { Errors } from "../app/errors/Errors";
 import { Error } from "../app/errors/Error";
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
           {
             path: routes.contacts,
             element: <Contacts />,
+          },
+          {
+            path: routes.contact,
+            element: <Contact />,
           },
           {
             path: routes.content.task.list,

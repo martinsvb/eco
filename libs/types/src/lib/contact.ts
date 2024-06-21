@@ -2,13 +2,17 @@ import { Contact } from "@prisma/client";
 import { nanoid } from "@reduxjs/toolkit";
 
 export enum ContactItems {
+  Id = 'id',
   Name = 'name',
   Country = 'country',
   Ico = 'ico',
   Vat = 'vat',
   Address = 'address',
   Email = 'email',
+  Note = 'note',
   Phone = 'phone',
+  CreatorId = 'creatorId',
+  CompanyId = 'companyId',
   CreatedAt = 'createdAt',
   UpdatedAt = 'updatedAt',
 }
@@ -20,6 +24,7 @@ export interface ContactData {
   [ContactItems.Vat]?: string | null;
   [ContactItems.Address]?: string | null;
   [ContactItems.Email]?: string | null;
+  [ContactItems.Note]?: string | null;
   [ContactItems.Phone]?: string | null;
   isNew?: boolean;
   isSelected?: boolean;

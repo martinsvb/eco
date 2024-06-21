@@ -67,7 +67,8 @@ export const useContactsHandlers = (
       ContactItems.Ico,
       ContactItems.Vat,
       ContactItems.Address,
-      ContactItems.Country
+      ContactItems.Country,
+      ContactItems.Note
     ];
 
     let result;

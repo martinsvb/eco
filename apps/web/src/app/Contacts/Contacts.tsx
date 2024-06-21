@@ -1,11 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
-import { DataGrid, GridRowModes, useGridApiRef } from '@mui/x-data-grid';
+import { DataGrid, GridRowModes, GridRowParams, useGridApiRef } from '@mui/x-data-grid';
 import * as qs from 'qs';
+import { routes } from '@eco/config';
 import { ContactItems } from '@eco/types';
-import { apiGetContacts, selectContacts, setContactFilterData, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
+import {
+  apiGetContacts,
+  selectContacts,
+  setContactFilterData,
+  useAppDispatch,
+  useShallowEqualSelector
+} from '@eco/redux';
 import { getDataGridSx, getDataGridWrapperSx, useDialog } from '../components';
 import { useMobilePortraitDetection } from '../hooks';
 import {
@@ -31,6 +38,8 @@ export const Contacts = () => {
   const dispatch = useAppDispatch();
 
   const { contacts, isLoading, loaded } = useShallowEqualSelector(selectContacts);
+
+  const navigate = useNavigate();
 
   const { search } = useLocation();
 
@@ -67,6 +76,13 @@ export const Contacts = () => {
     handleNew
   } = useContactsHandlers(setRowModesModel, setOpen, dialogItemId);
 
+  const handleRowClick = useCallback(
+    ({id}: GridRowParams) => {
+      navigate(routes.contact.replace(':id', id as string));
+    },
+    [navigate]
+  );
+
   return (
     <>
       <Typography variant='h3' mb={3}>{t('contacts')}</Typography>
@@ -78,6 +94,7 @@ export const Contacts = () => {
           editMode="row"
           filterMode="server"
           loading={isLoading}
+          onRowClick={handleRowClick}
           rowModesModel={rowModesModel}
           {...dataGridHandlers}
           getRowHeight={({id}) => {

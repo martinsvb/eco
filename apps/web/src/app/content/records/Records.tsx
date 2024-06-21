@@ -65,12 +65,7 @@ const Records = ({
           columnMenu: RecordsColumnMenu,
           toolbar: RecordsToolbar,
         }}
-        sx={{
-          ...getDataGridSx(theme.palette, isMobilePortrait),
-          [`& .${gridClasses.row}`]: {
-            cursor: 'pointer',
-          },
-        }}
+        sx={getDataGridSx(theme.palette, isMobilePortrait)}
       />
     </Box>
   );

@@ -1,23 +1,14 @@
-import { CompanyItems, ErrorData, ErrorItems, UserItems } from "@eco/types";
 import { omit } from "ramda";
-import { ReactNode } from "react";
-
-export interface ErrorItemData {
-  item: string;
-  value: ReactNode;
-}
-
-const getErrorDataPairs = (data: any): ErrorItemData[] => {
-  return Object.entries(data).map(([item, value]) => ({item, value} as ErrorItemData));
-}
+import { CompanyItems, ErrorData, ErrorItems, UserItems } from "@eco/types";
+import { DataListItemData, getDataListPairs } from "../helpers/getDataListPairs";
 
 export const getErrorData = (
   {user, company, id, ...error}: ErrorData,
   type: 'user' | 'company' | 'error'
-): ErrorItemData[] => {
+): DataListItemData[] => {
 
   if (type === 'error') {
-    return getErrorDataPairs(
+    return getDataListPairs(
       omit(
         [
           ErrorItems.DateTime,
@@ -34,13 +25,13 @@ export const getErrorData = (
   }
 
   if (type === 'user' && user) {
-    return getErrorDataPairs(
+    return getDataListPairs(
       omit([UserItems.Id, UserItems.Picture], user)
     );
   }
 
   if (type === 'company' && company) {
-    return getErrorDataPairs(
+    return getDataListPairs(
       omit([CompanyItems.Id, CompanyItems.CreatedAt, CompanyItems.UpdatedAt], company)
     );
   }

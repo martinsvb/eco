@@ -166,7 +166,7 @@ export const useContactsColumns = (
         },
       },
       {
-        ...columnSettings(ContactItems.Name, 200, 'left'),
+        ...columnSettings(ContactItems.Name, 160, 'left'),
         headerName: t('labels:name'),
         editable: contacts?.edit,
         preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
@@ -232,7 +232,7 @@ export const useContactsColumns = (
         },
       },
       {
-        ...columnSettings(ContactItems.Address, 320, 'left'),
+        ...columnSettings(ContactItems.Address, 200, 'left'),
         headerName: t('labels:address'),
         editable: contacts?.edit,
         preProcessEditCellProps: async ({id, hasChanged, props}: GridPreProcessEditCellProps<string, ContactFull>) => {
@@ -258,6 +258,13 @@ export const useContactsColumns = (
         })),
         editable: contacts?.edit,
         sortable: true,
+        disableColumnMenu: true,
+      },
+      {
+        ...columnSettings(ContactItems.Note, 160, 'left'),
+        headerName: t('labels:note'),
+        editable: contacts?.edit,
+        sortable: false,
         disableColumnMenu: true,
       },
       {

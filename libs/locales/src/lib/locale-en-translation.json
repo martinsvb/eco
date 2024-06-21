@@ -2,6 +2,7 @@
   "accounts": "Bank accounts",
   "companies": "Companies",
   "company": "Company",
+  "contact": "Contact",
   "contacts": "Contacts",
   "error": "Error",
   "errorPageInfo": "Error occured in application, please try to reload page by bellow button.",

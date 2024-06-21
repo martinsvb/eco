@@ -42,6 +42,9 @@ export const getDataGridSx = ({background, grey, mode}: Palette, isMobilePortrai
     }
     :
     undefined,
+  [`& .${gridClasses.row}`]: {
+    cursor: 'pointer',
+  },
   [`& .${gridClasses.row}.${appGridClasses.rowSelected}`]: {
     backgroundColor: grey[mode === THEME_MODE.LIGHT ? 300 : 800],
   },

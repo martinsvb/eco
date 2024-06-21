@@ -1,18 +1,18 @@
-import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Box, BoxProps, Paper, Stack, Typography, useTheme } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import { ErrorItemData } from './getErrorData';
 import { is } from 'ramda';
-import { THEME_MODE } from '../../config';
-import { useMobileDetection } from '../hooks';
+import { THEME_MODE } from '../../../config';
+import { DataListItemData } from '../../helpers/getDataListPairs';
+import { useMobileDetection } from '../../hooks';
 
-interface ErrorDetailProps {
+interface DataListProps extends BoxProps {
   titleWidth: number;
-  data: ErrorItemData[];
+  data: DataListItemData[];
   name?: string;
 }
 
-export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
+export const DataList = ({titleWidth, data, name, sx, ...rest}: DataListProps) => {
 
   const { palette, typography } = useTheme();
 
@@ -20,11 +20,12 @@ export const ErrorDetail = ({titleWidth, data, name}: ErrorDetailProps) => {
 
   return (
     <Box
+      {...rest}
       component={Paper}
-      mr={!isMobile ? 2 : undefined}
       mb={isMobile ? 2 : undefined}
       width={isMobile ? '100%' : undefined}
       sx={{
+        ...sx,
         border: palette.mode === THEME_MODE.DARK
           ? `1px solid ${palette.grey[500]}`
           : undefined
