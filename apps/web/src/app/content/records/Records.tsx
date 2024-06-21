@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, useTheme } from '@mui/material';
-import { DataGrid, GridRowParams, gridClasses } from '@mui/x-data-grid';
+import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import * as qs from 'qs';
 import { routes } from '@eco/config';
 import { ContentFull, ContentItems, ContentTypes } from '@eco/types';
@@ -65,7 +65,7 @@ const Records = ({
           columnMenu: RecordsColumnMenu,
           toolbar: RecordsToolbar,
         }}
-        sx={getDataGridSx(theme.palette, isMobilePortrait)}
+        sx={getDataGridSx(theme.palette, isMobilePortrait, {isPointerRow: true})}
       />
     </Box>
   );

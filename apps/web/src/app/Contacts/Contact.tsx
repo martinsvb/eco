@@ -75,6 +75,7 @@ export const Contact = () => {
           )}
           mt={2}
           mr={2}
+          display="inline-block"
         />
       }
     </>

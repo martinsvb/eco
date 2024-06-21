@@ -1,5 +1,5 @@
 import { getScrollbarDesign } from "@eco/config";
-import { Palette, Theme } from "@mui/material";
+import { Palette, SxProps, Theme } from "@mui/material";
 import { gridClasses } from "@mui/x-data-grid";
 import { THEME_MODE } from "../../../config";
 
@@ -28,24 +28,43 @@ export const getDataGridWrapperSx = ({palette: {error}, typography}: Theme, isMo
   }
 });
 
-export const getDataGridSx = ({background, grey, mode}: Palette, isMobilePortrait: boolean) => ({
-  [`& .${gridClasses.scrollbar}`]: {
-    ...getScrollbarDesign({
-      trackColor: background.default,
-      thumbColor: grey[500],
-    }),
-    pr: 0,
-  },
-  [`& .${gridClasses.footerContainer}`]: isMobilePortrait ?
-    {
-      justifyContent: 'start',
+interface DataGridSxConfig {
+  isPointerRow?: boolean;
+}
+
+export const getDataGridSx = (
+  {background, grey, mode}: Palette,
+  isMobilePortrait: boolean,
+  config?: DataGridSxConfig
+) => {
+
+  let dataGridSx: SxProps<Theme> = {
+    [`& .${gridClasses.scrollbar}`]: {
+      ...getScrollbarDesign({
+        trackColor: background.default,
+        thumbColor: grey[500],
+      }),
+      pr: 0,
+    },
+    [`& .${gridClasses.footerContainer}`]: isMobilePortrait ?
+      {
+        justifyContent: 'start',
+      }
+      :
+      undefined,
+    [`& .${gridClasses.row}.${appGridClasses.rowSelected}`]: {
+      backgroundColor: grey[mode === THEME_MODE.LIGHT ? 300 : 800],
+    },
+  };
+
+  if (config?.isPointerRow) {
+    dataGridSx = {
+      ...dataGridSx,
+      [`& .${gridClasses.row}`]: {
+        cursor: 'pointer',
+      },
     }
-    :
-    undefined,
-  [`& .${gridClasses.row}`]: {
-    cursor: 'pointer',
-  },
-  [`& .${gridClasses.row}.${appGridClasses.rowSelected}`]: {
-    backgroundColor: grey[mode === THEME_MODE.LIGHT ? 300 : 800],
-  },
-});
+  }
+
+  return dataGridSx;
+}

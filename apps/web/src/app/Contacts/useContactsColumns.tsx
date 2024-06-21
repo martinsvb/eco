@@ -1,4 +1,5 @@
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@mui/material';
 import {
@@ -15,9 +16,10 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { countries } from 'countries-list';
 import dayjs from 'dayjs';
-import { allowedCountries } from '@eco/config';
+import { allowedCountries, routes } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
 import { ApiOperations, ContactFull, ContactItems } from '@eco/types';
 import {
@@ -80,6 +82,12 @@ export const useContactsColumns = (
   const { rights: { scopes: { contacts } } } = useShallowEqualSelector(selectUserAuth);
 
   const contactsLoading = useShallowEqualSelector(selectContactsLoading);
+
+  const navigate = useNavigate();
+
+  const handleViewClick = (id: GridRowId) => () => {
+    navigate(routes.contact.replace(':id', id as string));
+  };
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel(setRowMode(id, GridRowModes.View));
@@ -261,14 +269,14 @@ export const useContactsColumns = (
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(ContactItems.Note, 160, 'left'),
+        ...columnSettings(ContactItems.Note, 140, 'left'),
         headerName: t('labels:note'),
         editable: contacts?.edit,
         sortable: false,
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(ContactItems.CreatedAt, 140),
+        ...columnSettings(ContactItems.CreatedAt, 130),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
@@ -278,12 +286,12 @@ export const useContactsColumns = (
         field: 'actions',
         type: 'actions',
         headerName: t('labels:actions'),
-        width: 80,
+        width: 120,
         cellClassName: 'actions',
         getActions: ({ id }) => {
 
-          return rowModesModel[id]?.mode === GridRowModes.Edit ?
-            [
+          if (rowModesModel[id]?.mode === GridRowModes.Edit) {
+            return [
               <AppGridButton
                 label={t('labels:save')}
                 disabled={!!(errors[id] && Object.values(errors[id]).filter((error) => !!error).length)}
@@ -310,16 +318,33 @@ export const useContactsColumns = (
               >
                 <CancelIcon />
               </AppGridButton>,
-            ]
-            :
-            [
-              <AppGridButton
-                label={t('labels:edit')}
-                onClick={handleEditClick(id)}
-                className="textPrimary"
-              >
-                <EditIcon />
-              </AppGridButton>,
+            ];
+          }
+
+          const viewButton = (
+            <AppGridButton
+              label={t('labels:view')}
+              onClick={handleViewClick(id)}
+              className="textPrimary"
+            >
+              <VisibilityIcon />
+            </AppGridButton>
+          );
+
+          const editButton = (
+            <AppGridButton
+              label={t('labels:edit')}
+              onClick={handleEditClick(id)}
+              className="textPrimary"
+            >
+              <EditIcon />
+            </AppGridButton>
+          );
+
+          return contacts?.read && contacts?.edit && contacts?.delete
+          ? [
+              viewButton,
+              editButton,
               <AppGridButton
                 label={t('labels:delete')}
                 onClick={handleDeleteClick(id)}
@@ -327,6 +352,11 @@ export const useContactsColumns = (
                 <DeleteIcon />
               </AppGridButton>,
             ]
+            : contacts?.read && contacts?.edit && !contacts?.delete
+              ? [viewButton, editButton]
+              : contacts?.read && !contacts?.edit && !contacts?.delete
+                ? [viewButton]
+                : []
         },
       },
     ],

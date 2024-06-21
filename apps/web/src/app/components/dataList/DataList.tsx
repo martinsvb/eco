@@ -40,12 +40,13 @@ export const DataList = ({titleWidth, data, name, sx, ...rest}: DataListProps) =
             background: index % 2
               ? palette.grey[palette.mode === THEME_MODE.LIGHT ? 300 : 800]
               : palette.background.default,
-            borderBottom: `1px solid ${palette.grey[500]}`
+            borderBottom: index < data.length - 1 ? `1px solid ${palette.grey[500]}` : undefined,
           }}
         >
           <Typography
             variant="body1"
             mr={2}
+            minWidth={80}
             width={!isMobile ? titleWidth : undefined}
             fontWeight={typography.fontWeightBold}
           >
