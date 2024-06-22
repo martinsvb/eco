@@ -88,7 +88,8 @@ export const useCompaniesHandlers = (
       CompanyItems.Ico,
       CompanyItems.Vat,
       CompanyItems.Address,
-      CompanyItems.Country
+      CompanyItems.Country,
+      CompanyItems.Note,
     ];
 
     let result;

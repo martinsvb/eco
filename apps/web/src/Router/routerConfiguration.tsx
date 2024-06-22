@@ -11,6 +11,7 @@ import LoginWrapper from "../app/user/LoginWrapper";
 import Invitation from "../app/Auth/Invitation";
 import { UserEdit } from "../app/user/UserEdit";
 import { Companies } from "../app/Companies/Companies";
+import { Company } from "../app/Companies/Company";
 import { Contacts } from "../app/Contacts/Contacts";
 import { Contact } from "../app/Contacts/Contact";
 import { NotFound } from "../app/NotFound";
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
           {
             path: routes.companies,
             element: <Companies />,
+          },
+          {
+            path: routes.company,
+            element: <Company />,
           },
           {
             path: routes.contacts,

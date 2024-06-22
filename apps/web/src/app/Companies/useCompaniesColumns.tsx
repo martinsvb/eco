@@ -1,4 +1,5 @@
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@mui/material';
 import {
@@ -14,10 +15,10 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { countries } from 'countries-list';
 import dayjs from 'dayjs';
-import { is } from 'ramda';
-import { allowedCountries } from '@eco/config';
+import { allowedCountries, routes } from '@eco/config';
 import { Languages, getLanguageCode } from '@eco/locales';
 import { ApiOperations, CompanyFull, CompanyItems } from '@eco/types';
 import {
@@ -78,6 +79,12 @@ export const useCompaniesColumns = (
   const { rights: { scopes: { companies } } } = useShallowEqualSelector(selectUserAuth);
 
   const companiesLoading = useShallowEqualSelector(selectCompaniesLoading);
+
+  const navigate = useNavigate();
+
+  const handleViewClick = (id: GridRowId) => () => {
+    navigate(routes.company.replace(':id', id as string));
+  };
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel(setRowMode(id, GridRowModes.View));
@@ -262,7 +269,7 @@ export const useCompaniesColumns = (
         },
       },
       {
-        ...columnSettings(CompanyItems.Address, 320, 'left'),
+        ...columnSettings(CompanyItems.Address, 200, 'left'),
         headerName: t('labels:address'),
         editable: companies?.edit,
         preProcessEditCellProps: async (params: GridPreProcessEditCellProps<string, CompanyFull>) => {
@@ -295,7 +302,14 @@ export const useCompaniesColumns = (
         },
       },
       {
-        ...columnSettings(CompanyItems.CreatedAt, 140),
+        ...columnSettings(CompanyItems.Note, 140, 'left'),
+        headerName: t('labels:note'),
+        editable: companies?.edit,
+        sortable: false,
+        disableColumnMenu: true,
+      },
+      {
+        ...columnSettings(CompanyItems.CreatedAt, 130),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
@@ -305,14 +319,13 @@ export const useCompaniesColumns = (
         field: 'actions',
         type: 'actions',
         headerName: t('labels:actions'),
-        width: 80,
+        width: 120,
         cellClassName: 'actions',
         getActions: ({ id }) => {
 
-          return rowModesModel[id]?.mode === GridRowModes.Edit ?
-            [
+          if (rowModesModel[id]?.mode === GridRowModes.Edit) {
+            return [
               <AppGridButton
-                title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
                 disabled={!valid[id]}
                 label={t('labels:save')}
                 onClick={handleSaveClick(id)}
@@ -339,23 +352,45 @@ export const useCompaniesColumns = (
               >
                 <CancelIcon />
               </AppGridButton>,
-            ]
-            :
-            [
-              <AppGridButton
-                label={t('labels:edit')}
-                onClick={handleEditClick(id)}
-                className="textPrimary"
-              >
-                <EditIcon />
-              </AppGridButton>,
-              <AppGridButton
-                label={t('labels:delete')}
-                onClick={handleDeleteClick(id)}
-              >
-                <DeleteIcon />
-              </AppGridButton>,
-            ]
+            ];
+          }
+
+          const viewButton = (
+            <AppGridButton
+              label={t('labels:detail')}
+              onClick={handleViewClick(id)}
+              className="textPrimary"
+            >
+              <VisibilityIcon />
+            </AppGridButton>
+          );
+
+          const editButton = (
+            <AppGridButton
+              label={t('labels:edit')}
+              onClick={handleEditClick(id)}
+              className="textPrimary"
+            >
+              <EditIcon />
+            </AppGridButton>
+          );
+
+          return companies?.read && companies?.edit && companies?.delete
+            ? [
+                viewButton,
+                editButton,
+                <AppGridButton
+                  label={t('labels:delete')}
+                  onClick={handleDeleteClick(id)}
+                >
+                  <DeleteIcon />
+                </AppGridButton>,
+              ]
+              : companies?.read && companies?.edit && !companies?.delete
+                ? [viewButton, editButton]
+                : companies?.read && !companies?.edit && !companies?.delete
+                  ? [viewButton]
+                  : []
         },
       },
     ],

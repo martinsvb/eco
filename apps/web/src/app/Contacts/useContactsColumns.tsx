@@ -342,21 +342,21 @@ export const useContactsColumns = (
           );
 
           return contacts?.read && contacts?.edit && contacts?.delete
-          ? [
-              viewButton,
-              editButton,
-              <AppGridButton
-                label={t('labels:delete')}
-                onClick={handleDeleteClick(id)}
-              >
-                <DeleteIcon />
-              </AppGridButton>,
-            ]
-            : contacts?.read && contacts?.edit && !contacts?.delete
-              ? [viewButton, editButton]
-              : contacts?.read && !contacts?.edit && !contacts?.delete
-                ? [viewButton]
-                : []
+            ? [
+                viewButton,
+                editButton,
+                <AppGridButton
+                  label={t('labels:delete')}
+                  onClick={handleDeleteClick(id)}
+                >
+                  <DeleteIcon />
+                </AppGridButton>,
+              ]
+              : contacts?.read && contacts?.edit && !contacts?.delete
+                ? [viewButton, editButton]
+                : contacts?.read && !contacts?.edit && !contacts?.delete
+                  ? [viewButton]
+                  : []
         },
       },
     ],

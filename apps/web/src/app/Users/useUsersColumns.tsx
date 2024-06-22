@@ -355,21 +355,21 @@ export const useUsersColumns = (
           );
 
           return users?.read && users?.edit && users?.delete
-          ? [
-              viewButton,
-              editButton,
-              <AppGridButton
-                label={t('labels:delete')}
-                onClick={handleDeleteClick(id)}
-              >
-                <DeleteIcon />
-              </AppGridButton>,
-            ]
-            : users?.read && users?.edit && !users?.delete
-              ? [viewButton, editButton]
-              : users?.read && !users?.edit && !users?.delete
-                ? [viewButton]
-                : []
+            ? [
+                viewButton,
+                editButton,
+                <AppGridButton
+                  label={t('labels:delete')}
+                  onClick={handleDeleteClick(id)}
+                >
+                  <DeleteIcon />
+                </AppGridButton>,
+              ]
+              : users?.read && users?.edit && !users?.delete
+                ? [viewButton, editButton]
+                : users?.read && !users?.edit && !users?.delete
+                  ? [viewButton]
+                  : []
         },
       },
     ],

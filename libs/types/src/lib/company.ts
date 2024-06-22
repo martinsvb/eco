@@ -10,6 +10,7 @@ export enum CompanyItems {
   Address = 'address',
   Email = 'email',
   Identification = 'identification',
+  Note = 'note',
   CreatedAt = 'createdAt',
   UpdatedAt = 'updatedAt',
 }
@@ -21,6 +22,7 @@ export interface CompanyData {
   [CompanyItems.Vat]?: string | null;
   [CompanyItems.Address]?: string | null;
   [CompanyItems.Email]?: string | null;
+  [CompanyItems.Note]?: string | null;
   isNew?: boolean;
   isSelected?: boolean;
 }
@@ -48,6 +50,7 @@ export const getNewCompanyData = () => {
       [CompanyItems.Vat]: null,
       [CompanyItems.Address]: null,
       [CompanyItems.Email]: null,
+      [CompanyItems.Note]: null,
       isNew: true,
       isSelected: false
     }

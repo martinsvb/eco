@@ -151,6 +151,7 @@ export const getNewUserData = () => {
       [UserItems.IsEmailConfirmed]: false,
       [UserItems.Origin]: UserOrigins.internal,
       [UserItems.Role]: UserRoles.Reader,
+      [UserItems.Note]: '',
       isNew: true
     }
   }

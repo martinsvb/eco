@@ -9,6 +9,7 @@ export const routes = {
     accountsNew: '/app/accounts/new',
     accountsEdit: '/app/accounts/edit/:id',
     companies: '/app/companies',
+    company: '/app/companies/:id',
     contacts: '/app/contacts',
     contact: '/app/contacts/:id',
     content: {
