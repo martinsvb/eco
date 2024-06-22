@@ -14,13 +14,16 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import dayjs from 'dayjs';
-import { is, omit } from 'ramda';
+import { omit } from 'ramda';
 import { ApiOperations, UserFull, UserItems, UserRoles } from '@eco/types';
 import { cancelUser, selectUserAuth, selectUsersLoading, useAppDispatch, useShallowEqualSelector } from '@eco/redux';
 import { getUserEditValidationSchema } from '@eco/validation';
 import { AppAvatar, AppGridButton, AppGridInputField, AppGridPhoneField, DialogClickOpen } from '../components';
 import { columnSettings, setRowMode } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '@eco/config';
 
 export interface UserErrors {
   name: string;
@@ -68,6 +71,12 @@ export const useUsersColumns = (
 
   const usersLoading = useShallowEqualSelector(selectUsersLoading);
 
+  const navigate = useNavigate();
+
+  const handleViewClick = (id: GridRowId) => () => {
+    navigate(routes.user.replace(':id', id as string));
+  };
+
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel(setRowMode(id, GridRowModes.View));
   };
@@ -81,6 +90,7 @@ export const useUsersColumns = (
     }
     catch (error) {
       isValid = false;
+      console.log({error})
     }
 
     setErrors((prevErrors) => ({
@@ -271,7 +281,14 @@ export const useUsersColumns = (
         disableColumnMenu: true,
       },
       {
-        ...columnSettings(UserItems.CreatedAt, 140),
+        ...columnSettings(UserItems.Note, 140, 'left'),
+        headerName: t('labels:note'),
+        editable: users?.edit,
+        sortable: false,
+        disableColumnMenu: true,
+      },
+      {
+        ...columnSettings(UserItems.CreatedAt, 130),
         headerName: t('labels:createdAt'),
         type: 'string',
         valueFormatter: (value) => dayjs(value).format('DD. MM. YYYY'),
@@ -281,49 +298,66 @@ export const useUsersColumns = (
         field: 'actions',
         type: 'actions',
         headerName: t('labels:actions'),
-        width: 80,
+        width: 120,
         cellClassName: 'actions',
         getActions: ({ id }) => {
 
-          return rowModesModel[id]?.mode === GridRowModes.Edit ?
-            [
-              <AppGridButton
-                title={Object.values(errors).filter(is(String)).join(', ') || t('labels:save')}
-                disabled={!valid[id]}
-                label={t('labels:save')}
-                onClick={handleSaveClick(id)}
-                color="primary"
-              >
-                {(usersLoading[`${ApiOperations.create}-${id}`] || usersLoading[`${ApiOperations.edit}-${id}`]) ?
-                  <CircularProgress
-                    color="inherit"
-                    size={30}
-                    sx={{
-                      alignSelf: 'center',
-                      mr: 0.5
-                    }}
-                  />
-                  :
-                  <SaveIcon />
-                }
-              </AppGridButton>,
-              <AppGridButton
-                label={t('labels:cancel')}
-                onClick={handleCancelClick(id)}
-                className="textPrimary"
-              >
-                <CancelIcon />
-              </AppGridButton>,
+          if (rowModesModel[id]?.mode === GridRowModes.Edit) {
+            return [
+                <AppGridButton
+                  title={t('labels:save')}
+                  disabled={!valid[id]}
+                  label={t('labels:save')}
+                  onClick={handleSaveClick(id)}
+                  color="primary"
+                >
+                  {(usersLoading[`${ApiOperations.create}-${id}`] || usersLoading[`${ApiOperations.edit}-${id}`]) ?
+                    <CircularProgress
+                      color="inherit"
+                      size={30}
+                      sx={{
+                        alignSelf: 'center',
+                        mr: 0.5
+                      }}
+                    />
+                    :
+                    <SaveIcon />
+                  }
+                </AppGridButton>,
+                <AppGridButton
+                  label={t('labels:cancel')}
+                  onClick={handleCancelClick(id)}
+                  className="textPrimary"
+                >
+                  <CancelIcon />
+                </AppGridButton>,
             ]
-            :
-            [
-              <AppGridButton
-                label={t('labels:edit')}
-                onClick={handleEditClick(id)}
-                className="textPrimary"
-              >
-                <EditIcon />
-              </AppGridButton>,
+          }
+
+          const viewButton = (
+            <AppGridButton
+              label={t('labels:detail')}
+              onClick={handleViewClick(id)}
+              className="textPrimary"
+            >
+              <VisibilityIcon />
+            </AppGridButton>
+          );
+
+          const editButton = (
+            <AppGridButton
+              label={t('labels:edit')}
+              onClick={handleEditClick(id)}
+              className="textPrimary"
+            >
+              <EditIcon />
+            </AppGridButton>
+          );
+
+          return users?.read && users?.edit && users?.delete
+          ? [
+              viewButton,
+              editButton,
               <AppGridButton
                 label={t('labels:delete')}
                 onClick={handleDeleteClick(id)}
@@ -331,6 +365,11 @@ export const useUsersColumns = (
                 <DeleteIcon />
               </AppGridButton>,
             ]
+            : users?.read && users?.edit && !users?.delete
+              ? [viewButton, editButton]
+              : users?.read && !users?.edit && !users?.delete
+                ? [viewButton]
+                : []
         },
       },
     ],

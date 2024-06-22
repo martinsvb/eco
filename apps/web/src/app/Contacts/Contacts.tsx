@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -18,7 +18,6 @@ import {
   ContactsButtons,
   ContactsColumnMenu,
   ContactsDialog,
-  ContactsErrors,
   useContactsColumns,
   useContactsHandlers
 } from '.';
@@ -31,8 +30,6 @@ export const Contacts = () => {
   const theme = useTheme();
 
   const isMobilePortrait = useMobilePortraitDetection();
-
-  const [ errors, setErrors ] = useState<ContactsErrors>({});
 
   const dispatch = useAppDispatch();
 
@@ -64,7 +61,7 @@ export const Contacts = () => {
 
   const { open, setOpen, dialogItemId, handleClickOpen, handleClose } = useDialog();
 
-  const { columns, rowModesModel, setRowModesModel } = useContactsColumns(apiRef, handleClickOpen, errors, setErrors);
+  const { columns, rowModesModel, setRowModesModel } = useContactsColumns(apiRef, handleClickOpen);
 
   const {
     dataGridHandlers,

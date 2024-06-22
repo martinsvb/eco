@@ -68,14 +68,14 @@ export const initContactsErrors = {
 
 export const useContactsColumns = (
   apiRef: MutableRefObject<GridApiCommunity>,
-  handleClickOpen: DialogClickOpen,
-  errors: ContactsErrors,
-  setErrors: Dispatch<SetStateAction<ContactsErrors>>
+  handleClickOpen: DialogClickOpen
 ): ContactsColumns => {
 
   const { t, i18n: { language } } = useTranslation();
 
   const [ rowModesModel, setRowModesModel ] = useState<GridRowModesModel>({});
+
+  const [ errors, setErrors ] = useState<ContactsErrors>({});
 
   const dispatch = useAppDispatch();
 
@@ -323,7 +323,7 @@ export const useContactsColumns = (
 
           const viewButton = (
             <AppGridButton
-              label={t('labels:view')}
+              label={t('labels:detail')}
               onClick={handleViewClick(id)}
               className="textPrimary"
             >

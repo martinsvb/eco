@@ -83,7 +83,7 @@ export const useUsersHandlers = (
   );
 
   const processRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
-    const items = [UserItems.Name, UserItems.Email, UserItems.Role, UserItems.Phone];
+    const items = [UserItems.Name, UserItems.Email, UserItems.Role, UserItems.Phone, UserItems.Note];
 
     let result;
     if (newRow.isNew) {
@@ -101,11 +101,11 @@ export const useUsersHandlers = (
       }
     }
 
-    const isNewContactCreated = newRow.isNew && !result?.type.includes('rejected') && result?.payload.id;
+    const isNewUserCreated = newRow.isNew && !result?.type.includes('rejected') && result?.payload.id;
     return {
       ...newRow,
-      id: isNewContactCreated ? result?.payload.id : newRow.id,
-      isNew: isNewContactCreated ? undefined : newRow.isNew
+      id: isNewUserCreated ? result?.payload.id : newRow.id,
+      isNew: isNewUserCreated ? undefined : newRow.isNew
     } as UserFull;
   };
 

@@ -13,6 +13,7 @@ export enum UserItems {
   Otp = 'otp',
   Origin = 'origin',
   CompanyId = 'companyId',
+  Note = 'note',
   Password = 'password',
   PasswordOld = 'passwordOld',
   PasswordConfirmation = 'passwordConfirmation',
@@ -24,10 +25,13 @@ export enum UserItems {
 export interface UserData {
   [UserItems.Name]: string;
   [UserItems.Email]: string;
+  [UserItems.IsEmailConfirmed]: boolean;
+  [UserItems.Origin]: string;
   [UserItems.Phone]?: number;
   [UserItems.Rights]?: UserRights;
   [UserItems.Role]: UserRoles;
   [UserItems.Picture]?: string;
+  [UserItems.Note]?: string;
   isNew?: boolean;
   isSelected?: boolean;
 }

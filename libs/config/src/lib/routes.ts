@@ -36,5 +36,6 @@ export const routes = {
     errors: '/app/errors',
     errorsDetail: '/app/errors/:id',
     users: '/app/users',
+    user: '/app/users/:id',
     usersEdit: '/app/users/edit/:id',
 }
