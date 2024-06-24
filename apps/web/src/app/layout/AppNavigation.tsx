@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import { Link, LinkProps, To, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Box, List, styled } from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, List, styled, Stack } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -13,6 +13,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import { routes } from '@eco/config';
 import { selectIsUserLoggedIn, selectUserAuth, useAppSelector, useShallowEqualSelector } from '@eco/redux';
 import { ScopeItems, UserRoles } from '@eco/types';
+import { Ads } from './Ads';
 
 interface NavItemProps {
   icon: ReactNode;
@@ -59,7 +60,7 @@ export const AppNavigation = () => {
   );
 
   return (
-    <Box sx={{ overflow: 'auto' }}>
+    <Stack sx={{ overflow: 'auto' }} justifyContent="space-between">
       <List>
         {isUserLoggedIn
           ?
@@ -122,7 +123,8 @@ export const AppNavigation = () => {
           />
         }
       </List>
-    </Box>
+      <Ads />
+    </Stack>
   );
 }
 
