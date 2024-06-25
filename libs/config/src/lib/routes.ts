@@ -4,7 +4,6 @@ export const routes = {
     invitation: '/invitation',
     notFound: '*',
     app: '/app',
-    appHome: '/app/home',
     accounts: '/app/accounts',
     accountsNew: '/app/accounts/new',
     accountsEdit: '/app/accounts/edit/:id',

@@ -1,4 +1,6 @@
-import { Box, Stack, Toolbar, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Box, Divider, Stack, Toolbar, Typography, useTheme } from '@mui/material';
+import { routes } from '@eco/config';
 import {
   selectIsUserLoggedIn,
   selectRegistration,
@@ -13,6 +15,8 @@ import RegistrationButton from '../user/RegistrationButton';
 
 const AppToolbar = () => {
 
+  const { palette } = useTheme();
+
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
   const state = useAppSelector(selectRegistration);
@@ -22,18 +26,35 @@ const AppToolbar = () => {
   return (
     <Toolbar>
       <Box sx={{flexGrow: 1}}>
-        <Typography variant="h6" noWrap component="div">
-          Econaw
-          {companyName && `, ${companyName}`}
-        </Typography>
+        <Link
+          to={routes.home}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit'
+          }}
+        >
+          <Typography variant="h6" noWrap component="div">
+            Econaw
+            {companyName && `: ${companyName}`}
+          </Typography>
+        </Link>
       </Box>
       <Box sx={{flexGrow: 0}}>
         {isUserLoggedIn && state === RegistrationState.none ?
           <UserMenu />
           :
-          <Stack direction="row">
+          <Stack
+            direction="row"
+            divider={
+              <Divider
+                flexItem
+                orientation="vertical"
+                color={palette.common.white}
+              />
+            }
+            spacing={1}
+          >
             <LoginButton />
-            <Typography variant='h6' mx={1}>|</Typography>
             <RegistrationButton />
           </Stack>
         }

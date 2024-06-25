@@ -1,8 +1,7 @@
-import { ReactNode, useEffect } from 'react';
-import { Link, LinkProps, To, useLocation, useNavigate } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { Link, LinkProps, To } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, List, styled, Stack } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BusinessIcon from '@mui/icons-material/Business';
 import ContactsIcon from '@mui/icons-material/Contacts';
@@ -21,7 +20,7 @@ interface NavItemProps {
   to: To;
 }
 
-const ListItemButtonLink = styled(ListItemButton)<LinkProps>(({ theme }) => null);
+export const ListItemButtonLink = styled(ListItemButton)<LinkProps>(({ theme }) => null);
 
 const NavItem = ({icon, text, to}: NavItemProps) => {
   return (
@@ -46,83 +45,61 @@ export const AppNavigation = () => {
 
   const { t } = useTranslation();
 
-  const navigate = useNavigate();
-
-  const location = useLocation();
-
-  useEffect(
-    () => {
-      if (isUserLoggedIn && [routes.base, routes.home].includes(location.pathname)) {
-        navigate(routes.content.task.list);
-      }
-    },
-    [isUserLoggedIn, navigate, location]
-  );
-
   return (
     <Stack sx={{ overflow: 'auto' }} justifyContent="space-between">
-      <List>
-        {isUserLoggedIn
-          ?
-          <>
-            {rights.scopes[ScopeItems.Records]?.read &&
-              <NavItem
-                icon={<DescriptionIcon />}
-                text={t('records')}
-                to={routes.content.record.list}
-              />
-            }
-            {rights.scopes[ScopeItems.Tasks]?.read &&
-              <NavItem
-                icon={<FormatListBulletedIcon />}
-                text={t('tasks')}
-                to={routes.content.task.list}
-              />
-            }
-            {rights.scopes[ScopeItems.Accounts]?.read &&
-              <NavItem
-                icon={<AccountBalanceWalletIcon />}
-                text={t('accounts')}
-                to={routes.accounts}
-              />
-            }
-            {rights.scopes[ScopeItems.Contacts]?.read &&
-              <NavItem
-                icon={<ContactsIcon />}
-                text={t('contacts')}
-                to={routes.contacts}
-              />
-            }
-            {rights.scopes[ScopeItems.Users]?.read &&
-              <NavItem
-                icon={<GroupIcon />}
-                text={t('users')}
-                to={routes.users}
-              />
-            }
-            {rights.scopes[ScopeItems.Companies]?.read &&
-              <NavItem
-                icon={<BusinessIcon />}
-                text={role === UserRoles.Admin ? t('companies') : t('company')}
-                to={routes.companies}
-              />
-            }
-            {rights.scopes[ScopeItems.Errors]?.read &&
-              <NavItem
-                icon={<ErrorIcon />}
-                text={t('errors')}
-                to={routes.errors}
-              />
-            }
-          </>
-          :
-          <NavItem
-            icon={<HomeIcon />}
-            text={t('home')}
-            to={routes.home}
-          />
-        }
-      </List>
+      {isUserLoggedIn &&
+        <List>
+          {rights.scopes[ScopeItems.Records]?.read &&
+            <NavItem
+              icon={<DescriptionIcon />}
+              text={t('records')}
+              to={routes.content.record.list}
+            />
+          }
+          {rights.scopes[ScopeItems.Tasks]?.read &&
+            <NavItem
+              icon={<FormatListBulletedIcon />}
+              text={t('tasks')}
+              to={routes.content.task.list}
+            />
+          }
+          {rights.scopes[ScopeItems.Accounts]?.read &&
+            <NavItem
+              icon={<AccountBalanceWalletIcon />}
+              text={t('accounts')}
+              to={routes.accounts}
+            />
+          }
+          {rights.scopes[ScopeItems.Contacts]?.read &&
+            <NavItem
+              icon={<ContactsIcon />}
+              text={t('contacts')}
+              to={routes.contacts}
+            />
+          }
+          {rights.scopes[ScopeItems.Users]?.read &&
+            <NavItem
+              icon={<GroupIcon />}
+              text={t('users')}
+              to={routes.users}
+            />
+          }
+          {rights.scopes[ScopeItems.Companies]?.read &&
+            <NavItem
+              icon={<BusinessIcon />}
+              text={role === UserRoles.Admin ? t('companies') : t('company')}
+              to={routes.companies}
+            />
+          }
+          {rights.scopes[ScopeItems.Errors]?.read &&
+            <NavItem
+              icon={<ErrorIcon />}
+              text={t('errors')}
+              to={routes.errors}
+            />
+          }
+        </List>
+      }
       <Ads />
     </Stack>
   );

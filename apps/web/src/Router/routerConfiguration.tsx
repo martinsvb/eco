@@ -2,7 +2,7 @@ import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import { routes } from "@eco/config";
 import { ContentTypes } from "@eco/types";
 import App from "../app/app";
-import { Home } from "../app/Home";
+import { Home } from "../app/home/Home";
 import { Accounts, AccountsNew, AccountsEdit } from "../app/accounts";
 import { Users } from "../app/Users/Users";
 import { User } from "../app/Users/User";

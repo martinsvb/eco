@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { Box, IconButton, Stack, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { routes } from '@eco/config';
 import {
   selectIsUserLoggedIn,
   selectRegistration,
@@ -40,10 +42,17 @@ const AppToolbarMobile = ({setOpen}: AppToolbarMobileProps) => {
         </IconButton>
       </Box>
       <Box sx={{flexGrow: 1}}>
-        <Typography variant="h6" noWrap component="div">
-          Econaw
-          {companyName && `, ${companyName}`}
-        </Typography>
+        <Link
+          to={routes.home}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit'
+          }}
+        >
+          <Typography variant="h6" noWrap component="div">
+            {companyName ? companyName : 'Econaw'}
+          </Typography>
+        </Link>
       </Box>
       <Box sx={{flexGrow: 0}}>
         {isUserLoggedIn && state === RegistrationState.none ?

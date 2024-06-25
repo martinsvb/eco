@@ -1,9 +1,12 @@
 {
   "accounts": "Bankovní účty",
+  "accountsDescription": "Správa bankovních účtů",
   "companies": "Společnosti",
+  "companiesDescription": "Vaše společnost",
   "company": "Společnost",
   "contact": "Kontakt",
   "contacts": "Kontakty",
+  "contactsDescription": "Správa kontaktu",
   "error": "Chyba",
   "errorPageInfo": "V aplikaci nastala chyba, prosím zkuste obnovit stránku tlačítkem níže.",
   "errors": "Chyby",
@@ -12,8 +15,11 @@
   "notFoundPage": "Stránka nenalezena",
   "notFoundPageInfo": "Hledaná stránka nebyla nalezena. Odkaz níže Vás přesměruje na domovskou stránku.",
   "records": "Zápisy",
+  "recordsDescription": "Vytvořte, schvalte a sdílejte zápisy",
   "reload": "Obnovit",
   "tasks": "Úkoly",
+  "tasksDescription": "Organizace úkolů",
   "user": "Uživatel",
-  "users": "Uživatelé"
+  "users": "Uživatelé",
+  "usersDescription": "Uživatelé společnosti"
 }

@@ -1,9 +1,12 @@
 {
   "accounts": "Bank accounts",
+  "accountsDescription": "Bank accounts management",
   "companies": "Companies",
+  "companiesDescription": "Your company",
   "company": "Company",
   "contact": "Contact",
   "contacts": "Contacts",
+  "contactsDescription": "Contacts management",
   "error": "Error",
   "errorPageInfo": "Error occured in application, please try to reload page by bellow button.",
   "errors": "Errors",
@@ -12,8 +15,11 @@
   "notFoundPage": "Page not found",
   "notFoundPageInfo": "Page wasn't found. Link below redirects you to home page.",
   "records": "Records",
+  "recordsDescription": "Create, approve and share records.",
   "reload": "Reload",
   "tasks": "Tasks",
-  "user": "__NOT_TRANSLATED__",
-  "users": "Users"
+  "tasksDescription": "Tasks management",
+  "user": "Uživatel",
+  "users": "Users",
+  "usersDescription": "Company users"
 }
