@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { ListItem, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material';
+import { ListItem, ListItemText, Paper, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Link, To } from 'react-router-dom';
 import { ListItemButtonLink } from '../layout/AppNavigation';
@@ -8,25 +7,24 @@ interface HomeItemProps {
   to?: To;
   title: string;
   description: string;
-  icon: ReactNode;
 }
 
 export const HomeItem = ({
   to,
   title,
-  description,
-  icon
+  description
 }: HomeItemProps) => {
 
+  const { palette, typography } = useTheme();
+
   const content = (
-    <>
-      <ListItemIcon>
-        {icon}
-      </ListItemIcon>
-      <ListItemText>
-        {title}
-      </ListItemText>
-    </>
+    <ListItemText
+      primaryTypographyProps={{
+        fontSize: typography.h5.fontSize
+      }}
+    >
+      {title}
+    </ListItemText>
   );
 
   return (
@@ -41,7 +39,14 @@ export const HomeItem = ({
             content
           }
         </ListItem>
-        <Typography variant="body1" p={1}>{description}</Typography>
+        <Typography
+          variant="body1"
+          py={1}
+          px={2}
+          color={palette.grey[700]}
+        >
+          {description}
+        </Typography>
       </Paper>
     </Grid>
   );
