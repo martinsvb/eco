@@ -1,4 +1,4 @@
-# Eco
+# Econaw
 
 ## Initialization
 
@@ -46,10 +46,10 @@ npm install --save @nestjs/swagger
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 const config = new DocumentBuilder()
-  .setTitle('Eco api')
-  .setDescription('The Eco API description')
+  .setTitle('Econaw api')
+  .setDescription('The Econaw API description')
   .setVersion('1.0')
-  .addTag('Eco')
+  .addTag('Econaw')
   .build();
 const document = SwaggerModule.createDocument(app, config);
 SwaggerModule.setup(globalPrefix, app, document);

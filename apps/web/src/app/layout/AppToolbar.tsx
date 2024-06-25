@@ -23,7 +23,7 @@ const AppToolbar = () => {
     <Toolbar>
       <Box sx={{flexGrow: 1}}>
         <Typography variant="h6" noWrap component="div">
-          Eco
+          Econaw
           {companyName && `, ${companyName}`}
         </Typography>
       </Box>

@@ -41,7 +41,7 @@ const AppToolbarMobile = ({setOpen}: AppToolbarMobileProps) => {
       </Box>
       <Box sx={{flexGrow: 1}}>
         <Typography variant="h6" noWrap component="div">
-          Eco
+          Econaw
           {companyName && `, ${companyName}`}
         </Typography>
       </Box>

@@ -20,7 +20,7 @@ export class ErrorsInterceptor implements NestInterceptor {
     this.transporter = nodemailer.createTransport(
       `smtps://${process.env.EMAIL_ADDRESS}:${process.env.EMAIL_PASSWORD}@${process.env.EMAIL_SMTP}`,
       {
-        from: `"Eco" <${process.env.EMAIL_ADDRESS}>`,
+        from: `"Econaw" <${process.env.EMAIL_ADDRESS}>`,
         port: 465,
       }
     );
@@ -97,7 +97,7 @@ export class ErrorsInterceptor implements NestInterceptor {
         : undefined;
 
       const errorTextParts = [
-        `<h3>Eco application ${errorLink ? errorLink : 'error'}</h3>`,
+        `<h3>Econaw application ${errorLink ? errorLink : 'error'}</h3>`,
         ...Object.entries(
           omit(['userId', 'companyId', 'params', 'type'], errorPayload)
         ).map(([key, value]) => (
